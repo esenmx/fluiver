@@ -1,0 +1,1 @@
+extension NumMathExtensions on num {}
