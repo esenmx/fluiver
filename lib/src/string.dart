@@ -12,15 +12,23 @@ extension StringModifyExtensions on String {
     }
   }
 
-  String get capitalizeAll => split(' ').map((e) => e.capitalize).join(' ');
+  String splitCapitalizeAll([String separator = ' ']) =>
+      split(separator).map((e) => e.capitalize).join(separator);
 }
 
-extension StringCheckExtensions on String? {
+extension NullStringCheckExtensions on String? {
+  /// [Null] or an empty [String]
   bool get isEmptyOrNull => this == null || (this?.isEmpty ?? true);
+
+  /// Can be [Null] and is a not empty [String]
+  bool get isNotEmptyNullable => this?.isNotEmpty == true;
+
+  /// Can be [Null] and is an empty [String]
+  bool get isEmptyNullable => this?.isEmpty == true;
 }
 
-extension StringConverterExtensions on String? {
-  DateTime? get tryNullParseDateTime =>
+extension NullStringConverterExtensions on String? {
+  DateTime? get tryParseDateTime =>
       this == null ? null : DateTime.tryParse(this!);
 }
 
@@ -40,11 +48,11 @@ extension StringColorExtensions on String {
       stringValue = substring(2);
     }
     if (stringValue != null) {
-      final colorValue = int.tryParse(stringValue, radix: 16);
-      if (colorValue == null) {
+      final hexValue = int.tryParse(stringValue, radix: 16);
+      if (hexValue == null) {
         return null;
       }
-      return Color(colorValue);
+      return Color(hexValue);
     }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 extension TextStyleExtensions on TextStyle {
+  /// [Roboto] is much more suitable for [Text] with special characters
+  /// like currency symbols.
   TextStyle get roboto => copyWith(fontFamily: 'Roboto');
 }
 
@@ -58,6 +60,8 @@ extension TextStyleDecorationExtensions on TextStyle {
   TextStyle get lineThrough => copyWith(decoration: TextDecoration.lineThrough);
 }
 
+/// Numbers mostly chosen from:
+/// [https://material.io/design/typography/the-type-system.html#type-scale]
 extension TextStyleSizeExtensions on TextStyle {
   TextStyle get fs10 => copyWith(fontSize: 10);
 
@@ -76,4 +80,6 @@ extension TextStyleSizeExtensions on TextStyle {
   TextStyle get fs20 => copyWith(fontSize: 20);
 
   TextStyle get fs24 => copyWith(fontSize: 24);
+
+  TextStyle get fs34 => copyWith(fontSize: 34);
 }
