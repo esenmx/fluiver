@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of dashx;
 
 extension DateTimeExtensions on DateTime {
   DateTime copyWith({
@@ -29,9 +29,23 @@ extension DateTimeExtensions on DateTime {
 
   DateTime addMonths(int months) => copyWith(month: month - months);
 
-  DateTime addDays(int days) => copyWith(day: day - days);
+  DateTime addDays(int days) => add(Duration(days: days));
+
+  DateTime addHours(int hours) => add(Duration(hours: hours));
+
+  DateTime addMinutes(int minutes) => add(Duration(minutes: minutes));
+
+  DateTime addSeconds(int seconds) => add(Duration(seconds: seconds));
 }
 
 extension TimeOfDayExtensions on TimeOfDay {
   DateTime get inToday => DateTime.now().copyWith(hour: hour, minute: minute);
+
+  DateTime get inTomorrow => inToday.add(const Duration(days: 1));
+
+  DateTime get inNextWeek => inToday.add(const Duration(days: 7));
+
+  DateTime get inYesterday => inToday.subtract(const Duration(days: 1));
+
+  DateTime get inLastWeek => inToday.subtract(const Duration(days: 7));
 }

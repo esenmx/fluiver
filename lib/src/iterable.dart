@@ -1,16 +1,20 @@
-import 'package:flutter/cupertino.dart';
+part of dashx;
 
-extension IterableExtensions<T> on Iterable<T> {
-  /// [1, 2, 3, 4, 5, 6].convert2D(2) = [[1, 2], [3, 4], [5, 6]]
-  /// [1, 2, 3, 4].convert2D(3) = [[1, 2, 3], [4]]
-  List<Iterable<T>> convertTo2D(int div) =>
-      <Iterable<T>>[take(div), if (length > div) ...skip(div).convertTo2D(div)];
+extension IterableExtensions<E> on Iterable<E> {
+  /// [1, 2, 3, 4, 5, 6].convertTo2D(2) = [[1, 2], [3, 4], [5, 6]]
+  /// [1, 2, 3, 4].convertTo2D(3) = [[1, 2, 3], [4]]
+  List<Iterable<E>> convertTo2D(int div) => isEmpty
+      ? <Iterable<E>>[]
+      : <Iterable<E>>[
+          take(div),
+          if (length > div) ...skip(div).convertTo2D(div)
+        ];
 }
 
-extension DimensionalIterableExtensions<T> on Iterable<Iterable<T>> {
+extension Iterable2DExtensions<E> on Iterable<Iterable<E>> {
   /// More straightforward solution than [expand] in case of all sub-elements
   /// have same type
-  Iterable<T> get flatten2D sync* {
+  Iterable<E> get expand2D sync* {
     for (final current in this) {
       yield* current;
     }

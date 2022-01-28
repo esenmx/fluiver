@@ -1,4 +1,5 @@
-import 'package:dashx/src/string.dart';
+import 'package:dashx/dashx.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,23 +15,23 @@ void main() async {
       expect('', ''.splitCapitalizeAll());
       expect('A', 'a'.splitCapitalizeAll());
       expect('Dart Go', 'dart go'.splitCapitalizeAll());
-      expect('Dart,Go', 'dart,go'.splitCapitalizeAll(','));
+      expect('Dart,Go', 'dart,,go'.splitCapitalizeAll(','));
     });
 
     test('isEmptyOrNull', () {
       expect(''.isEmptyOrNull, null.isEmptyOrNull);
     });
 
-    test('isEmptyNullable', () {
-      expect(true, ''.isEmptyNullable);
-      expect(false, null.isEmptyNullable);
-      expect(false, 'go'.isEmptyNullable);
+    test('isEmptyTrue', () {
+      expect(true, ''.isEmptyTrue);
+      expect(false, null.isEmptyTrue);
+      expect(false, 'go'.isEmptyTrue);
     });
 
-    test('isNotEmptyNullable', () {
-      expect(true, 'dart'.isNotEmptyNullable);
-      expect(false, ''.isNotEmptyNullable);
-      expect(false, null.isNotEmptyNullable);
+    test('isNotEmptyTrue', () {
+      expect(true, 'dart'.isNotEmptyTrue);
+      expect(false, ''.isNotEmptyTrue);
+      expect(false, null.isNotEmptyTrue);
     });
 
     test('tryParseDateTime', () {
@@ -42,9 +43,9 @@ void main() async {
     test('tryParseHexColor', () {
       expect(''.tryParseHexColor, null);
       expect('asd'.tryParseHexColor, null);
-      expect('#26ab1f'.tryParseHexColor, Color(0xff26ab1f));
-      expect('ff26ab1f'.tryParseHexColor, Color(0xff26ab1f));
-      expect('0xff26ab1f'.tryParseHexColor, Color(0xff26ab1f));
+      expect('#7c4dff'.tryParseHexColor, const Color(0xff7c4dff));
+      expect('ff7c4dff'.tryParseHexColor, const Color(0xff7c4dff));
+      expect('0xff7c4dff'.tryParseHexColor, const Color(0xff7c4dff));
     });
   });
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of dashx;
 
 extension NavigatorExtensions on BuildContext {
   Future<T?> navigatorPush<T extends Object?>(Route<T> route) =>

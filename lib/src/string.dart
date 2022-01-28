@@ -1,4 +1,4 @@
-import 'dart:ui';
+part of dashx;
 
 extension StringModifyExtensions on String {
   String get capitalize {
@@ -12,8 +12,10 @@ extension StringModifyExtensions on String {
     }
   }
 
-  String splitCapitalizeAll([String separator = ' ']) =>
-      split(separator).map((e) => e.capitalize).join(separator);
+  String splitCapitalizeAll([String separator = ' ']) => split(separator)
+      .map((element) => element.capitalize)
+      .where((element) => element.isNotEmpty)
+      .join(separator);
 }
 
 extension NullStringCheckExtensions on String? {
@@ -21,10 +23,10 @@ extension NullStringCheckExtensions on String? {
   bool get isEmptyOrNull => this == null || (this?.isEmpty ?? true);
 
   /// Can be [Null] and is a not empty [String]
-  bool get isNotEmptyNullable => this?.isNotEmpty == true;
+  bool get isNotEmptyTrue => this?.isNotEmpty == true;
 
   /// Can be [Null] and is an empty [String]
-  bool get isEmptyNullable => this?.isEmpty == true;
+  bool get isEmptyTrue => this?.isEmpty == true;
 }
 
 extension NullStringConverterExtensions on String? {
@@ -35,24 +37,24 @@ extension NullStringConverterExtensions on String? {
 extension StringColorExtensions on String {
   Color? get tryParseHexColor {
     String? stringValue;
+
+    /// #7916fa format
     if (startsWith('#') && length == 7) {
-      /// #7916fa format
       stringValue = 'FF' + substring(1);
     }
-    if ((startsWith('FF') || startsWith('ff')) && length == 8) {
-      /// ff7916fa format
+
+    /// ff7916fa format
+    else if ((startsWith('FF') || startsWith('ff')) && length == 8) {
       stringValue = this;
     }
-    if ((startsWith('0X') || startsWith('0x')) && length == 10) {
-      /// 0xff7916fa format
+
+    /// 0xff7916fa format
+    else if ((startsWith('0X') || startsWith('0x')) && length == 10) {
       stringValue = substring(2);
     }
-    if (stringValue != null) {
-      final hexValue = int.tryParse(stringValue, radix: 16);
-      if (hexValue == null) {
-        return null;
-      }
-      return Color(hexValue);
-    }
+
+    /// hex value parse
+    final hexValue = int.tryParse(stringValue ?? this, radix: 16);
+    return hexValue != null ? Color(hexValue) : null;
   }
 }

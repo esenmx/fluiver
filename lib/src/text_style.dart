@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of dashx;
 
 extension TextStyleExtensions on TextStyle {
   /// [Roboto] is much more suitable for [Text] with special characters
@@ -60,7 +60,7 @@ extension TextStyleDecorationExtensions on TextStyle {
   TextStyle get lineThrough => copyWith(decoration: TextDecoration.lineThrough);
 }
 
-/// Numbers mostly chosen from:
+/// Numbers have chosen from mostly:
 /// [https://material.io/design/typography/the-type-system.html#type-scale]
 extension TextStyleSizeExtensions on TextStyle {
   TextStyle get fs10 => copyWith(fontSize: 10);
