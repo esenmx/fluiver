@@ -3,17 +3,18 @@ part of dashx;
 extension TextStyleExtensions on TextStyle {
   /// [Roboto] is much more suitable for [Text] with special characters
   /// like currency symbols.
+  /// Useful in case you want to override your default [TextStyle]
   TextStyle get roboto => copyWith(fontFamily: 'Roboto');
 }
 
 extension TextStyleColorExtensions on TextStyle {
-  TextStyle get o20 => copyWith(color: color?.withOpacity(0.20));
+  TextStyle get opc20 => copyWith(color: color?.withOpacity(0.20));
 
-  TextStyle get o40 => copyWith(color: color?.withOpacity(0.40));
+  TextStyle get opc40 => copyWith(color: color?.withOpacity(0.40));
 
-  TextStyle get o60 => copyWith(color: color?.withOpacity(0.60));
+  TextStyle get opc60 => copyWith(color: color?.withOpacity(0.60));
 
-  TextStyle get o80 => copyWith(color: color?.withOpacity(0.80));
+  TextStyle get opc80 => copyWith(color: color?.withOpacity(0.80));
 
   TextStyle get white54 => copyWith(color: Colors.white54);
 
@@ -28,6 +29,20 @@ extension TextStyleColorExtensions on TextStyle {
   TextStyle get black87 => copyWith(color: Colors.black87);
 
   TextStyle get black => copyWith(color: Colors.black);
+
+  TextStyle primary(BuildContext context) =>
+      copyWith(color: context.primaryColor);
+
+  TextStyle secondary(BuildContext context) =>
+      copyWith(color: context.secondaryColor);
+
+  TextStyle surface(BuildContext context) =>
+      copyWith(color: context.surfaceColor);
+
+  TextStyle background(BuildContext context) =>
+      copyWith(color: context.backgroundColor);
+
+  TextStyle error(BuildContext context) => copyWith(color: context.errorColor);
 }
 
 extension TextStyleFontWeightExtensions on TextStyle {
@@ -61,7 +76,7 @@ extension TextStyleDecorationExtensions on TextStyle {
 }
 
 /// Numbers have chosen from mostly:
-/// [https://material.io/design/typography/the-type-system.html#type-scale]
+/// https://material.io/design/typography/the-type-system.html#type-scale
 extension TextStyleSizeExtensions on TextStyle {
   TextStyle get fs10 => copyWith(fontSize: 10);
 

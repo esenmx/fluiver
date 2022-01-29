@@ -14,9 +14,9 @@ extension IterableExtensions<E> on Iterable<E> {
 extension Iterable2DExtensions<E> on Iterable<Iterable<E>> {
   /// More straightforward solution than [expand] in case of all sub-elements
   /// have same type
-  Iterable<E> get expand2D sync* {
-    for (final current in this) {
-      yield* current;
+  Iterable<E> get expandFrom2D sync* {
+    for (final sub in this) {
+      yield* sub;
     }
   }
 }

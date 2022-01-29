@@ -3,7 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
   final twoDimA = [
-    [1, 2]
+    [1],
+    [2]
   ];
   final expandedA = [1, 2];
   final twoDimB = [
@@ -22,18 +23,18 @@ void main() async {
     test('convertTo2D', () {
       expect([].convertTo2D(3), []);
       expect(<int>{}.convertTo2D(1), []);
-      expect(expandedA.convertTo2D(2), twoDimA);
+      expect(expandedA.convertTo2D(1), twoDimA);
       expect(expandedB.convertTo2D(3), twoDimB);
       expect(expandedC.convertTo2D(2), twoDimC);
     });
   });
 
   group('Iterable2DExtensions<E>', () {
-    test('expand2D', () {
-      expect([[]].expand2D, []);
-      expect([twoDimA].expand2D, expandedA);
-      expect([twoDimA].expand2D, expandedA);
-      expect(twoDimC.expand2D, expandedC);
+    test('expandFrom2D', () {
+      expect([[]].expandFrom2D, []);
+      expect(twoDimA.expandFrom2D.toList(), expandedA);
+      expect(twoDimB.expandFrom2D.toList(), expandedB);
+      expect(twoDimC.expandFrom2D.toList(), expandedC);
     });
   });
 }

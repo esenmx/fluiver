@@ -9,8 +9,15 @@ extension NavigatorExtensions on BuildContext {
     return Navigator.of(this).pushNamed(routeName, arguments: arguments);
   }
 
+  Future<T?> pushAndRemoveUntil<T extends Object?>(
+          Route<T> newRoute, RoutePredicate predicate) =>
+      Navigator.of(this).pushAndRemoveUntil(newRoute, predicate);
+
   void navigatorPop<T extends Object?>([T? result]) =>
       Navigator.of(this).pop(result);
+
+  void navigatorPopUntil(RoutePredicate predicate) =>
+      Navigator.of(this).popUntil(predicate);
 }
 
 extension MediaQueryExtensions on BuildContext {
@@ -76,8 +83,20 @@ extension TextThemeExtensions on BuildContext {
   TextStyle get overlineTextStyle => Theme.of(this).textTheme.overline!;
 }
 
-extension BuildContextExtensions on BuildContext {
+extension BuildContextDirectionalityExtensions on BuildContext {
   bool get isLTR => Directionality.of(this) == TextDirection.ltr;
 
   bool get isRTL => Directionality.of(this) == TextDirection.rtl;
+}
+
+extension BuildContextColorExtensions on BuildContext {
+  Color get primaryColor => Theme.of(this).primaryColor;
+
+  Color get secondaryColor => Theme.of(this).colorScheme.secondary;
+
+  Color get surfaceColor => Theme.of(this).colorScheme.surface;
+
+  Color get backgroundColor => Theme.of(this).colorScheme.background;
+
+  Color get errorColor => Theme.of(this).colorScheme.error;
 }
