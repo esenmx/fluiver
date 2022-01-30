@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 part 'src/build_context.dart';
+part 'src/edge_insets.dart';
 part 'src/iterable.dart';
 part 'src/iterable_num.dart';
 part 'src/map.dart';
