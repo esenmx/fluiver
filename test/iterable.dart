@@ -22,7 +22,6 @@ void main() async {
   group('IterableExtensions<E>', () {
     test('convertTo2D', () {
       expect([].convertTo2D(3), []);
-      expect(<int>{}.convertTo2D(1), []);
       expect(expandedA.convertTo2D(1), twoDimA);
       expect(expandedB.convertTo2D(3), twoDimB);
       expect(expandedC.convertTo2D(2), twoDimC);

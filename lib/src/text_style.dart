@@ -8,13 +8,13 @@ extension TextStyleExtensions on TextStyle {
 }
 
 extension TextStyleColorExtensions on TextStyle {
-  TextStyle get opc20 => copyWith(color: color?.withOpacity(0.20));
+  TextStyle get opc20 => copyWith(color: color?.withOpacity(.2));
 
-  TextStyle get opc40 => copyWith(color: color?.withOpacity(0.40));
+  TextStyle get opc40 => copyWith(color: color?.withOpacity(.4));
 
-  TextStyle get opc60 => copyWith(color: color?.withOpacity(0.60));
+  TextStyle get opc60 => copyWith(color: color?.withOpacity(.6));
 
-  TextStyle get opc80 => copyWith(color: color?.withOpacity(0.80));
+  TextStyle get opc80 => copyWith(color: color?.withOpacity(.8));
 
   TextStyle get white54 => copyWith(color: Colors.white54);
 
@@ -25,6 +25,8 @@ extension TextStyleColorExtensions on TextStyle {
   TextStyle get white => copyWith(color: Colors.white);
 
   TextStyle get black54 => copyWith(color: Colors.black54);
+
+  TextStyle get black70 => copyWith(color: const Color(0xB3000000));
 
   TextStyle get black87 => copyWith(color: Colors.black87);
 
