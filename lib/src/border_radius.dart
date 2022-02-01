@@ -1,6 +1,7 @@
 part of dashx;
 
 extension CircularBorderRadiusExtensions on BorderRadius {
+  /// Adders
   BorderRadius addAll(double radius) => this + BorderRadius.circular(radius);
 
   BorderRadius addLeft(double radius) =>
@@ -27,6 +28,7 @@ extension CircularBorderRadiusExtensions on BorderRadius {
   BorderRadius addBottomLeft(double radius) =>
       this + BorderRadius.only(bottomLeft: Radius.circular(radius));
 
+  /// Setters
   BorderRadius setLeft(double radius) =>
       setTopLeft(radius).setBottomLeft(radius);
 
@@ -50,6 +52,7 @@ extension CircularBorderRadiusExtensions on BorderRadius {
   BorderRadius setBottomLeft(double radius) =>
       copyWith(bottomLeft: Radius.circular(radius));
 
+  /// Removers
   BorderRadius get removeLeft => setLeft(0);
 
   BorderRadius get removeTop => setTop(0);

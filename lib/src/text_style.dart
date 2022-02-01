@@ -8,21 +8,33 @@ extension TextStyleExtensions on TextStyle {
 }
 
 extension TextStyleColorExtensions on TextStyle {
-  TextStyle get opc20 => copyWith(color: color?.withOpacity(.2));
+  /// x * .2
+  TextStyle get opacity20 => copyWith(color: color?.withOpacity(.2));
 
-  TextStyle get opc40 => copyWith(color: color?.withOpacity(.4));
+  TextStyle get opacity40 => copyWith(color: color?.withOpacity(.4));
 
-  TextStyle get opc60 => copyWith(color: color?.withOpacity(.6));
+  TextStyle get opacity60 => copyWith(color: color?.withOpacity(.6));
 
-  TextStyle get opc80 => copyWith(color: color?.withOpacity(.8));
+  TextStyle get opacity80 => copyWith(color: color?.withOpacity(.8));
+
+  /// x * .25
+  TextStyle get opacity25 => copyWith(color: color?.withOpacity(.25));
+
+  TextStyle get opacity50 => copyWith(color: color?.withOpacity(.5));
+
+  TextStyle get opacity75 => copyWith(color: color?.withOpacity(.75));
+
+  /// [Colors.white]
+  TextStyle get white38 => copyWith(color: Colors.white38);
 
   TextStyle get white54 => copyWith(color: Colors.white54);
-
-  TextStyle get white60 => copyWith(color: Colors.white60);
 
   TextStyle get white70 => copyWith(color: Colors.white70);
 
   TextStyle get white => copyWith(color: Colors.white);
+
+  /// [Colors.black]
+  TextStyle get black38 => copyWith(color: Colors.black38);
 
   TextStyle get black54 => copyWith(color: Colors.black54);
 
@@ -32,6 +44,7 @@ extension TextStyleColorExtensions on TextStyle {
 
   TextStyle get black => copyWith(color: Colors.black);
 
+  /// [ColorScheme]
   TextStyle primary(BuildContext context) =>
       copyWith(color: context.primaryColor);
 

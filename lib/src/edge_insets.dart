@@ -1,6 +1,7 @@
 part of dashx;
 
 extension EdgeInsetsExtensions on EdgeInsets {
+  /// Adders
   EdgeInsets addAll(double value) => this + EdgeInsets.all(value);
 
   EdgeInsets addLeft(double value) => this + EdgeInsets.only(left: value);
@@ -17,6 +18,7 @@ extension EdgeInsetsExtensions on EdgeInsets {
   EdgeInsets addHorizontal(double value) =>
       this + EdgeInsets.symmetric(horizontal: value);
 
+  /// Setters
   EdgeInsets setLeft(double value) => copyWith(left: value);
 
   EdgeInsets setTop(double value) => copyWith(top: value);
@@ -29,6 +31,7 @@ extension EdgeInsetsExtensions on EdgeInsets {
 
   EdgeInsets setHorizontal(double value) => setLeft(value).setRight(value);
 
+  /// Removers
   EdgeInsets get removeLeft => setLeft(0);
 
   EdgeInsets get removeTop => setTop(0);
