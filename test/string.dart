@@ -19,6 +19,8 @@ void main() async {
     });
 
     test('isEmptyOrNull', () {
+      String? str;
+      expect(str.isEmptyOrNull, true);
       expect(''.isEmptyOrNull, null.isEmptyOrNull);
     });
 

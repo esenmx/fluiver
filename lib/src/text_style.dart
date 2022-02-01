@@ -35,6 +35,12 @@ extension TextStyleColorExtensions on TextStyle {
   TextStyle primary(BuildContext context) =>
       copyWith(color: context.primaryColor);
 
+  TextStyle primaryDark(BuildContext context) =>
+      copyWith(color: context.primaryColorDark);
+
+  TextStyle primaryLight(BuildContext context) =>
+      copyWith(color: context.primaryColorLight);
+
   TextStyle secondary(BuildContext context) =>
       copyWith(color: context.secondaryColor);
 
@@ -48,22 +54,31 @@ extension TextStyleColorExtensions on TextStyle {
 }
 
 extension TextStyleFontWeightExtensions on TextStyle {
+  /// [Thin]
   TextStyle get w100 => copyWith(fontWeight: FontWeight.w100);
 
+  /// [ExtraLight]
   TextStyle get w200 => copyWith(fontWeight: FontWeight.w200);
 
+  /// [Light]
   TextStyle get w300 => copyWith(fontWeight: FontWeight.w300);
 
+  /// [Regular]
   TextStyle get w400 => copyWith(fontWeight: FontWeight.w400);
 
+  /// [Medium]
   TextStyle get w500 => copyWith(fontWeight: FontWeight.w500);
 
+  /// [SemiBold]
   TextStyle get w600 => copyWith(fontWeight: FontWeight.w600);
 
+  /// [Bold]
   TextStyle get w700 => copyWith(fontWeight: FontWeight.w700);
 
+  /// [ExtraBold]
   TextStyle get w800 => copyWith(fontWeight: FontWeight.w800);
 
+  /// [Thick]
   TextStyle get w900 => copyWith(fontWeight: FontWeight.w900);
 }
 

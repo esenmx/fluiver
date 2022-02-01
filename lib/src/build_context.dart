@@ -92,6 +92,10 @@ extension BuildContextDirectionalityExtensions on BuildContext {
 extension BuildContextColorExtensions on BuildContext {
   Color get primaryColor => Theme.of(this).primaryColor;
 
+  Color get primaryColorDark => Theme.of(this).primaryColorDark;
+
+  Color get primaryColorLight => Theme.of(this).primaryColorLight;
+
   Color get secondaryColor => Theme.of(this).colorScheme.secondary;
 
   Color get surfaceColor => Theme.of(this).colorScheme.surface;
@@ -99,4 +103,12 @@ extension BuildContextColorExtensions on BuildContext {
   Color get backgroundColor => Theme.of(this).colorScheme.background;
 
   Color get errorColor => Theme.of(this).colorScheme.error;
+}
+
+extension BuildContextLocaleExtensions on BuildContext {
+  Locale get locale => Localizations.localeOf(this);
+
+  String get langCode => Localizations.localeOf(this).languageCode;
+
+  String? get countryCode => Localizations.localeOf(this).countryCode;
 }
