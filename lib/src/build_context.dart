@@ -1,86 +1,83 @@
 part of dashx;
 
-extension NavigatorExtensions on BuildContext {
-  Future<T?> navigatorPush<T extends Object?>(Route<T> route) =>
-      Navigator.of(this).push(route);
+extension BuildContextShortCutExtensions on BuildContext {
+  ThemeData get _t => Theme.of(this);
 
-  Future<T?> navigatorPushNamed<T extends Object?>(String routeName,
-      {Object? arguments}) {
-    return Navigator.of(this).pushNamed(routeName, arguments: arguments);
+  MediaQueryData get _m => MediaQuery.of(this);
+
+  NavigatorState get _n => Navigator.of(this);
+}
+
+extension NavigatorExtensions on BuildContext {
+  Future<T?> navigatorPush<T extends Object?>(Route<T> route) => _n.push(route);
+
+  Future<T?> navigatorPushNamed<T extends Object?>(
+    String routeName, {
+    Object? arguments,
+  }) {
+    return _n.pushNamed(routeName, arguments: arguments);
   }
 
   Future<T?> pushAndRemoveUntil<T extends Object?>(
-          Route<T> newRoute, RoutePredicate predicate) =>
-      Navigator.of(this).pushAndRemoveUntil(newRoute, predicate);
+    Route<T> newRoute,
+    RoutePredicate predicate,
+  ) {
+    return _n.pushAndRemoveUntil(newRoute, predicate);
+  }
 
-  void navigatorPop<T extends Object?>([T? result]) =>
-      Navigator.of(this).pop(result);
+  void navigatorPop<T extends Object?>([T? result]) => _n.pop(result);
 
-  void navigatorPopUntil(RoutePredicate predicate) =>
-      Navigator.of(this).popUntil(predicate);
+  void navigatorPopUntil(RoutePredicate predicate) => _n.popUntil(predicate);
 }
 
 extension MediaQueryExtensions on BuildContext {
-  double get screenWidth => MediaQuery.of(this).size.width;
+  double get screenWidth => _m.size.width;
 
-  double get screenHeight => MediaQuery.of(this).size.height;
+  double get screenHeight => _m.size.height;
 
-  bool get isPlatformDark =>
-      MediaQuery.of(this).platformBrightness == Brightness.dark;
+  bool get isPlatformDark => _m.platformBrightness == Brightness.dark;
 
-  bool get isPlatformLight =>
-      MediaQuery.of(this).platformBrightness == Brightness.light;
+  bool get isPlatformLight => _m.platformBrightness == Brightness.light;
 
-  bool get isOrientationPortrait =>
-      MediaQuery.of(this).orientation == Orientation.portrait;
+  bool get isOrientationPortrait => _m.orientation == Orientation.portrait;
 
-  bool get isOrientationLandscape =>
-      MediaQuery.of(this).orientation == Orientation.landscape;
+  bool get isOrientationLandscape => _m.orientation == Orientation.landscape;
 
-  double get topPadding => MediaQuery.of(this).padding.top;
+  double get topPadding => _m.padding.top;
 
-  double get bottomPadding => MediaQuery.of(this).padding.bottom;
+  double get bottomPadding => _m.padding.bottom;
 
-  double get topInset => MediaQuery.of(this).viewInsets.top;
+  double get topInset => _m.viewInsets.top;
 
-  double get bottomInset => MediaQuery.of(this).viewInsets.bottom;
-}
-
-extension ThemeExtensions on BuildContext {
-  BottomAppBarTheme get bottomAppBarTheme => Theme.of(this).bottomAppBarTheme;
-
-  BottomNavigationBarThemeData get bottomNavigationBarTheme =>
-      Theme.of(this).bottomNavigationBarTheme;
-
-  SwitchThemeData get switchTheme => Theme.of(this).switchTheme;
+  double get bottomInset => _m.viewInsets.bottom;
 }
 
 extension TextThemeExtensions on BuildContext {
-  TextStyle get headline1TextStyle => Theme.of(this).textTheme.headline1!;
+  TextStyle get headline1TextStyle => _t.textTheme.headline1!;
 
-  TextStyle get headline2TextStyle => Theme.of(this).textTheme.headline2!;
+  TextStyle get headline2TextStyle => _t.textTheme.headline2!;
 
-  TextStyle get headline3TextStyle => Theme.of(this).textTheme.headline3!;
+  TextStyle get headline3TextStyle => _t.textTheme.headline3!;
 
-  TextStyle get headline4TextStyle => Theme.of(this).textTheme.headline4!;
+  TextStyle get headline4TextStyle => _t.textTheme.headline4!;
 
-  TextStyle get headline5TextStyle => Theme.of(this).textTheme.headline5!;
+  TextStyle get headline5TextStyle => _t.textTheme.headline5!;
 
-  TextStyle get headline6TextStyle => Theme.of(this).textTheme.headline6!;
+  TextStyle get headline6TextStyle => _t.textTheme.headline6!;
 
-  TextStyle get subtitle1TextStyle => Theme.of(this).textTheme.subtitle1!;
+  TextStyle get subtitle1TextStyle => _t.textTheme.subtitle1!;
 
-  TextStyle get subtitle2TextStyle => Theme.of(this).textTheme.subtitle2!;
+  TextStyle get subtitle2TextStyle => _t.textTheme.subtitle2!;
 
-  TextStyle get bodyText1TextStyle => Theme.of(this).textTheme.bodyText1!;
+  TextStyle get bodyText1TextStyle => _t.textTheme.bodyText1!;
 
-  TextStyle get bodyText2TextStyle => Theme.of(this).textTheme.bodyText2!;
+  TextStyle get bodyText2TextStyle => _t.textTheme.bodyText2!;
 
-  TextStyle get captionTextStyle => Theme.of(this).textTheme.caption!;
+  TextStyle get captionTextStyle => _t.textTheme.caption!;
 
-  TextStyle get buttonTextStyle => Theme.of(this).textTheme.button!;
+  TextStyle get buttonTextStyle => _t.textTheme.button!;
 
-  TextStyle get overlineTextStyle => Theme.of(this).textTheme.overline!;
+  TextStyle get overlineTextStyle => _t.textTheme.overline!;
 }
 
 extension BuildContextDirectionalityExtensions on BuildContext {
@@ -90,25 +87,25 @@ extension BuildContextDirectionalityExtensions on BuildContext {
 }
 
 extension BuildContextColorExtensions on BuildContext {
-  Color get primaryColor => Theme.of(this).primaryColor;
+  Color get primaryColor => _t.primaryColor;
 
-  Color get primaryColorDark => Theme.of(this).primaryColorDark;
+  Color get primaryColorDark => _t.primaryColorDark;
 
-  Color get primaryColorLight => Theme.of(this).primaryColorLight;
+  Color get primaryColorLight => _t.primaryColorLight;
 
-  Color get secondaryColor => Theme.of(this).colorScheme.secondary;
+  Color get secondaryColor => _t.colorScheme.secondary;
 
-  Color get surfaceColor => Theme.of(this).colorScheme.surface;
+  Color get surfaceColor => _t.colorScheme.surface;
 
-  Color get backgroundColor => Theme.of(this).colorScheme.background;
+  Color get backgroundColor => _t.colorScheme.background;
 
-  Color get errorColor => Theme.of(this).colorScheme.error;
+  Color get errorColor => _t.colorScheme.error;
 }
 
 extension BuildContextLocaleExtensions on BuildContext {
-  Locale get locale => Localizations.localeOf(this);
+  Locale get localeOf => Localizations.localeOf(this);
 
-  String get langCode => Localizations.localeOf(this).languageCode;
+  String get languageCode => Localizations.localeOf(this).languageCode;
 
   String? get countryCode => Localizations.localeOf(this).countryCode;
 }

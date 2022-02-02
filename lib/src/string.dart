@@ -16,10 +16,12 @@ extension StringModifyExtensions on String {
     }
   }
 
-  String splitCapitalizeAll([String separator = ' ']) => split(separator)
-      .map((element) => element.capitalize)
-      .where((element) => element.isNotEmpty)
-      .join(separator);
+  String splitCapitalizeAll([String separator = ' ']) {
+    return split(separator)
+        .map((element) => element.capitalize)
+        .where((element) => element.isNotEmpty)
+        .join(separator);
+  }
 
   ///
   /// Remove

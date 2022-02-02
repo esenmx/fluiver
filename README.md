@@ -1,8 +1,9 @@
 ## dashx
 
-___
 An un-opinionated, dependency free, expressive extensions package. This package focused on productivity rather than
-reducing the amount of written code.
+purely reducing the amount of written code.
+
+Inspired from [leisim/dartx](https://github.com/leisim/dartx)
 
 ##### Examples:
 
@@ -18,18 +19,10 @@ context.subtitle1 // not implemented
 
 ### BuildContext
 
-___
-
 ### Iterable
-
-___
 
 ### String
 
-___
-
 ### TextStyle
-
-___
 
 ### Time

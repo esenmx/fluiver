@@ -2,21 +2,33 @@ part of dashx;
 
 extension EdgeInsetsExtensions on EdgeInsets {
   /// Adders
-  EdgeInsets addAll(double value) => this + EdgeInsets.all(value);
+  EdgeInsets addAll(double value) {
+    return this + EdgeInsets.all(value);
+  }
 
-  EdgeInsets addLeft(double value) => this + EdgeInsets.only(left: value);
+  EdgeInsets addLeft(double value) {
+    return this + EdgeInsets.only(left: value);
+  }
 
-  EdgeInsets addTop(double value) => this + EdgeInsets.only(top: value);
+  EdgeInsets addTop(double value) {
+    return this + EdgeInsets.only(top: value);
+  }
 
-  EdgeInsets addRight(double value) => this + EdgeInsets.only(right: value);
+  EdgeInsets addRight(double value) {
+    return this + EdgeInsets.only(right: value);
+  }
 
-  EdgeInsets addBottom(double value) => this + EdgeInsets.only(bottom: value);
+  EdgeInsets addBottom(double value) {
+    return this + EdgeInsets.only(bottom: value);
+  }
 
-  EdgeInsets addVertical(double value) =>
-      this + EdgeInsets.symmetric(vertical: value);
+  EdgeInsets addVertical(double value) {
+    return this + EdgeInsets.symmetric(vertical: value);
+  }
 
-  EdgeInsets addHorizontal(double value) =>
-      this + EdgeInsets.symmetric(horizontal: value);
+  EdgeInsets addHorizontal(double value) {
+    return this + EdgeInsets.symmetric(horizontal: value);
+  }
 
   /// Setters
   EdgeInsets setLeft(double value) => copyWith(left: value);

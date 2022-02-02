@@ -1,58 +1,86 @@
 part of dashx;
 
 extension CircularBorderRadiusExtensions on BorderRadius {
+  ///
   /// Adders
-  BorderRadius addAll(double radius) => this + BorderRadius.circular(radius);
+  ///
 
-  BorderRadius addLeft(double radius) =>
-      this + BorderRadius.horizontal(left: Radius.circular(radius));
+  BorderRadius addAll(double radius) {
+    return this + BorderRadius.circular(radius);
+  }
 
-  BorderRadius addTop(double radius) =>
-      this + BorderRadius.vertical(top: Radius.circular(radius));
+  BorderRadius addLeft(double radius) {
+    return this + BorderRadius.horizontal(left: Radius.circular(radius));
+  }
 
-  BorderRadius addRight(double radius) =>
-      this + BorderRadius.horizontal(right: Radius.circular(radius));
+  BorderRadius addTop(double radius) {
+    return this + BorderRadius.vertical(top: Radius.circular(radius));
+  }
 
-  BorderRadius addBottom(double radius) =>
-      this + BorderRadius.vertical(bottom: Radius.circular(radius));
+  BorderRadius addRight(double radius) {
+    return this + BorderRadius.horizontal(right: Radius.circular(radius));
+  }
 
-  BorderRadius addTopLeft(double radius) =>
-      this + BorderRadius.only(topLeft: Radius.circular(radius));
+  BorderRadius addBottom(double radius) {
+    return this + BorderRadius.vertical(bottom: Radius.circular(radius));
+  }
 
-  BorderRadius addTopRight(double radius) =>
-      this + BorderRadius.only(topRight: Radius.circular(radius));
+  BorderRadius addTopLeft(double radius) {
+    return this + BorderRadius.only(topLeft: Radius.circular(radius));
+  }
 
-  BorderRadius addBottomRight(double radius) =>
-      this + BorderRadius.only(bottomRight: Radius.circular(radius));
+  BorderRadius addTopRight(double radius) {
+    return this + BorderRadius.only(topRight: Radius.circular(radius));
+  }
 
-  BorderRadius addBottomLeft(double radius) =>
-      this + BorderRadius.only(bottomLeft: Radius.circular(radius));
+  BorderRadius addBottomRight(double radius) {
+    return this + BorderRadius.only(bottomRight: Radius.circular(radius));
+  }
 
+  BorderRadius addBottomLeft(double radius) {
+    return this + BorderRadius.only(bottomLeft: Radius.circular(radius));
+  }
+
+  ///
   /// Setters
-  BorderRadius setLeft(double radius) =>
-      setTopLeft(radius).setBottomLeft(radius);
+  ///
 
-  BorderRadius setTop(double radius) => setTopLeft(radius).setTopRight(radius);
+  BorderRadius setLeft(double radius) {
+    return setTopLeft(radius).setBottomLeft(radius);
+  }
 
-  BorderRadius setRight(double radius) =>
-      setTopRight(radius).setBottomRight(radius);
+  BorderRadius setTop(double radius) {
+    return setTopLeft(radius).setTopRight(radius);
+  }
 
-  BorderRadius setBottom(double radius) =>
-      setBottomRight(radius).setBottomLeft(radius);
+  BorderRadius setRight(double radius) {
+    return setTopRight(radius).setBottomRight(radius);
+  }
 
-  BorderRadius setTopLeft(double radius) =>
-      copyWith(topLeft: Radius.circular(radius));
+  BorderRadius setBottom(double radius) {
+    return setBottomRight(radius).setBottomLeft(radius);
+  }
 
-  BorderRadius setTopRight(double radius) =>
-      copyWith(topRight: Radius.circular(radius));
+  BorderRadius setTopLeft(double radius) {
+    return copyWith(topLeft: Radius.circular(radius));
+  }
 
-  BorderRadius setBottomRight(double radius) =>
-      copyWith(bottomRight: Radius.circular(radius));
+  BorderRadius setTopRight(double radius) {
+    return copyWith(topRight: Radius.circular(radius));
+  }
 
-  BorderRadius setBottomLeft(double radius) =>
-      copyWith(bottomLeft: Radius.circular(radius));
+  BorderRadius setBottomRight(double radius) {
+    return copyWith(bottomRight: Radius.circular(radius));
+  }
 
+  BorderRadius setBottomLeft(double radius) {
+    return copyWith(bottomLeft: Radius.circular(radius));
+  }
+
+  ///
   /// Removers
+  ///
+
   BorderRadius get removeLeft => setLeft(0);
 
   BorderRadius get removeTop => setTop(0);

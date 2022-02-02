@@ -1,4 +1,5 @@
 import 'package:dashx/dashx.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
@@ -36,4 +37,45 @@ void main() async {
       expect(twoDimC.expandFrom2D.toList(), expandedC);
     });
   });
+
+  group('IterableWidgetExtensions', () {
+    test('widgetJoin', () {
+      expect(widgetJoinMock(0), <Widget>[]);
+      expect(widgetJoinMock(1).length, 1);
+      expect(widgetJoinMock(1).single, isA<FlutterLogo>());
+      expect(widgetJoinMock(2).length, 3);
+      expect(widgetJoinMock(2)[0], isA<FlutterLogo>());
+      expect(widgetJoinMock(2)[1], isA<Divider>());
+      expect(widgetJoinMock(2)[2], isA<FlutterLogo>());
+      final values = widgetJoinMock(100);
+      for (int i = 0; i < 100; i++) {
+        if (i % 2 == 0) {
+          expect(values.elementAt(i), isA<FlutterLogo>());
+        } else {
+          expect(values.elementAt(i), isA<Divider>());
+        }
+      }
+    });
+
+    test('mappedChildren', () {
+      expect(mappedChildrenMock(0), <int, Widget>{});
+      expect(mappedChildrenMock(1)[0], isA<SizedBox>());
+      expect(mappedChildrenMock(1).length, 1);
+      final values = mappedChildrenMock(100);
+      for (int i = 0; i < 100; i++) {
+        expect(values[i], isA<SizedBox>());
+      }
+    });
+  });
+}
+
+List<Widget> widgetJoinMock(int length) {
+  return <Widget>[for (int i = 0; i < length; i++) const FlutterLogo()]
+      .widgetJoin(const Divider())
+      .toList();
+}
+
+Map<int, Widget> mappedChildrenMock(int length) {
+  return <Widget>[for (int i = 0; i < length; i++) const SizedBox()]
+      .mappedChildren;
 }

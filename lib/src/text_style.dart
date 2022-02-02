@@ -4,7 +4,7 @@ extension TextStyleExtensions on TextStyle {
   /// [Roboto] is much more suitable for [Text] with special characters
   /// like currency symbols.
   /// Useful in case you want to override your default [TextStyle]
-  TextStyle get roboto => copyWith(fontFamily: 'Roboto');
+  TextStyle get familyRoboto => copyWith(fontFamily: 'Roboto');
 }
 
 extension TextStyleColorExtensions on TextStyle {
@@ -45,54 +45,62 @@ extension TextStyleColorExtensions on TextStyle {
   TextStyle get black => copyWith(color: Colors.black);
 
   /// [ColorScheme]
-  TextStyle primary(BuildContext context) =>
-      copyWith(color: context.primaryColor);
+  TextStyle primary(BuildContext context) {
+    return copyWith(color: context.primaryColor);
+  }
 
-  TextStyle primaryDark(BuildContext context) =>
-      copyWith(color: context.primaryColorDark);
+  TextStyle primaryDark(BuildContext context) {
+    return copyWith(color: context.primaryColorDark);
+  }
 
-  TextStyle primaryLight(BuildContext context) =>
-      copyWith(color: context.primaryColorLight);
+  TextStyle primaryLight(BuildContext context) {
+    return copyWith(color: context.primaryColorLight);
+  }
 
-  TextStyle secondary(BuildContext context) =>
-      copyWith(color: context.secondaryColor);
+  TextStyle secondary(BuildContext context) {
+    return copyWith(color: context.secondaryColor);
+  }
 
-  TextStyle surface(BuildContext context) =>
-      copyWith(color: context.surfaceColor);
+  TextStyle surface(BuildContext context) {
+    return copyWith(color: context.surfaceColor);
+  }
 
-  TextStyle background(BuildContext context) =>
-      copyWith(color: context.backgroundColor);
+  TextStyle background(BuildContext context) {
+    return copyWith(color: context.backgroundColor);
+  }
 
-  TextStyle error(BuildContext context) => copyWith(color: context.errorColor);
+  TextStyle error(BuildContext context) {
+    return copyWith(color: context.errorColor);
+  }
 }
 
 extension TextStyleFontWeightExtensions on TextStyle {
   /// [Thin]
-  TextStyle get w100 => copyWith(fontWeight: FontWeight.w100);
+  TextStyle get weight100 => copyWith(fontWeight: FontWeight.w100);
 
   /// [ExtraLight]
-  TextStyle get w200 => copyWith(fontWeight: FontWeight.w200);
+  TextStyle get weight200 => copyWith(fontWeight: FontWeight.w200);
 
   /// [Light]
-  TextStyle get w300 => copyWith(fontWeight: FontWeight.w300);
+  TextStyle get weight300 => copyWith(fontWeight: FontWeight.w300);
 
   /// [Regular]
-  TextStyle get w400 => copyWith(fontWeight: FontWeight.w400);
+  TextStyle get weight400 => copyWith(fontWeight: FontWeight.w400);
 
   /// [Medium]
-  TextStyle get w500 => copyWith(fontWeight: FontWeight.w500);
+  TextStyle get weight500 => copyWith(fontWeight: FontWeight.w500);
 
   /// [SemiBold]
-  TextStyle get w600 => copyWith(fontWeight: FontWeight.w600);
+  TextStyle get weight600 => copyWith(fontWeight: FontWeight.w600);
 
   /// [Bold]
-  TextStyle get w700 => copyWith(fontWeight: FontWeight.w700);
+  TextStyle get weight700 => copyWith(fontWeight: FontWeight.w700);
 
   /// [ExtraBold]
-  TextStyle get w800 => copyWith(fontWeight: FontWeight.w800);
+  TextStyle get weight800 => copyWith(fontWeight: FontWeight.w800);
 
   /// [Thick]
-  TextStyle get w900 => copyWith(fontWeight: FontWeight.w900);
+  TextStyle get weight900 => copyWith(fontWeight: FontWeight.w900);
 }
 
 extension TextStyleDecorationExtensions on TextStyle {
@@ -108,23 +116,23 @@ extension TextStyleDecorationExtensions on TextStyle {
 /// Numbers have chosen from mostly:
 /// https://material.io/design/typography/the-type-system.html#type-scale
 extension TextStyleSizeExtensions on TextStyle {
-  TextStyle get fs10 => copyWith(fontSize: 10);
+  TextStyle get size10 => copyWith(fontSize: 10);
 
-  TextStyle get fs11 => copyWith(fontSize: 11);
+  TextStyle get size11 => copyWith(fontSize: 11);
 
-  TextStyle get fs12 => copyWith(fontSize: 12);
+  TextStyle get size12 => copyWith(fontSize: 12);
 
-  TextStyle get fs13 => copyWith(fontSize: 13);
+  TextStyle get size13 => copyWith(fontSize: 13);
 
-  TextStyle get fs14 => copyWith(fontSize: 14);
+  TextStyle get size14 => copyWith(fontSize: 14);
 
-  TextStyle get fs16 => copyWith(fontSize: 16);
+  TextStyle get size16 => copyWith(fontSize: 16);
 
-  TextStyle get fs18 => copyWith(fontSize: 18);
+  TextStyle get size18 => copyWith(fontSize: 18);
 
-  TextStyle get fs20 => copyWith(fontSize: 20);
+  TextStyle get size20 => copyWith(fontSize: 20);
 
-  TextStyle get fs24 => copyWith(fontSize: 24);
+  TextStyle get size24 => copyWith(fontSize: 24);
 
-  TextStyle get fs34 => copyWith(fontSize: 34);
+  TextStyle get size34 => copyWith(fontSize: 34);
 }
