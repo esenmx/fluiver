@@ -25,27 +25,49 @@ extension DateTimeExtensions on DateTime {
 
   TimeOfDay get toTimeOfDay => TimeOfDay(hour: hour, minute: minute);
 
-  DateTime addYears(int years) => copyWith(year: year - years);
+  DateTime addYears(int years) {
+    return copyWith(year: year + years);
+  }
 
-  DateTime addMonths(int months) => copyWith(month: month - months);
+  DateTime addMonths(int months) {
+    return copyWith(year: year + months ~/ 12, month: month + months % 12);
+  }
 
-  DateTime addDays(int days) => add(Duration(days: days));
+  DateTime addDays(int days) {
+    return add(Duration(days: days));
+  }
 
-  DateTime addHours(int hours) => add(Duration(hours: hours));
+  DateTime addHours(int hours) {
+    return add(Duration(hours: hours));
+  }
 
-  DateTime addMinutes(int minutes) => add(Duration(minutes: minutes));
+  DateTime addMinutes(int minutes) {
+    return add(Duration(minutes: minutes));
+  }
 
-  DateTime addSeconds(int seconds) => add(Duration(seconds: seconds));
+  DateTime addSeconds(int seconds) {
+    return add(Duration(seconds: seconds));
+  }
 }
 
 extension TimeOfDayExtensions on TimeOfDay {
-  DateTime get inToday => DateTime.now().copyWith(hour: hour, minute: minute);
+  DateTime get inToday {
+    return DateTime.now().copyWith(hour: hour, minute: minute);
+  }
 
-  DateTime get inTomorrow => inToday.add(const Duration(days: 1));
+  DateTime get inTomorrow {
+    return inToday.add(const Duration(days: 1));
+  }
 
-  DateTime get inNextWeek => inToday.add(const Duration(days: 7));
+  DateTime get inNextWeek {
+    return inToday.add(const Duration(days: 7));
+  }
 
-  DateTime get inYesterday => inToday.subtract(const Duration(days: 1));
+  DateTime get inYesterday {
+    return inToday.subtract(const Duration(days: 1));
+  }
 
-  DateTime get inLastWeek => inToday.subtract(const Duration(days: 7));
+  DateTime get inLastWeek {
+    return inToday.subtract(const Duration(days: 7));
+  }
 }
