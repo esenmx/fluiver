@@ -1,7 +1,10 @@
 part of dashx;
 
 extension EdgeInsetsExtensions on EdgeInsets {
+  ///
   /// Adders
+  ///
+
   EdgeInsets addAll(double value) {
     return this + EdgeInsets.all(value);
   }
@@ -30,7 +33,10 @@ extension EdgeInsetsExtensions on EdgeInsets {
     return this + EdgeInsets.symmetric(horizontal: value);
   }
 
+  ///
   /// Setters
+  ///
+
   EdgeInsets setLeft(double value) => copyWith(left: value);
 
   EdgeInsets setTop(double value) => copyWith(top: value);
@@ -39,11 +45,14 @@ extension EdgeInsetsExtensions on EdgeInsets {
 
   EdgeInsets setBottom(double value) => copyWith(bottom: value);
 
-  EdgeInsets setVertical(double value) => setTop(value).setBottom(value);
+  EdgeInsets setVertical(double value) => copyWith(top: value, bottom: value);
 
-  EdgeInsets setHorizontal(double value) => setLeft(value).setRight(value);
+  EdgeInsets setHorizontal(double value) => copyWith(left: value, right: value);
 
+  ///
   /// Removers
+  ///
+
   EdgeInsets get removeLeft => setLeft(0);
 
   EdgeInsets get removeTop => setTop(0);
@@ -55,4 +64,20 @@ extension EdgeInsetsExtensions on EdgeInsets {
   EdgeInsets get removeVertical => setVertical(0);
 
   EdgeInsets get removeHorizontal => setHorizontal(0);
+
+  ///
+  /// Eliminaters
+  ///
+
+  EdgeInsets get onlyLeft => copyWith(left: left);
+
+  EdgeInsets get onlyTop => copyWith(top: top);
+
+  EdgeInsets get onlyRight => copyWith(right: right);
+
+  EdgeInsets get onlyBottom => copyWith(bottom: bottom);
+
+  EdgeInsets get onlyVertical => copyWith(top: top, bottom: bottom);
+
+  EdgeInsets get onlyHorizontal => copyWith(left: left, right: right);
 }

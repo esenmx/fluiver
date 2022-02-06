@@ -96,4 +96,32 @@ extension CircularBorderRadiusExtensions on BorderRadius {
   BorderRadius get removeBottomRight => setBottomRight(0);
 
   BorderRadius get removeBottomLeft => setBottomLeft(0);
+
+  ///
+  /// Eliminaters
+  ///
+
+  BorderRadius get onlyTopLeft => copyWith(topLeft: topLeft);
+
+  BorderRadius get onlyTopRight => copyWith(topRight: topRight);
+
+  BorderRadius get onlyBottomRight => copyWith(bottomRight: bottomRight);
+
+  BorderRadius get onlyBottomLeft => copyWith(bottomLeft: bottomLeft);
+
+  BorderRadius get onlyLeft {
+    return copyWith(topLeft: topLeft, bottomLeft: bottomLeft);
+  }
+
+  BorderRadius get onlyTop {
+    return copyWith(topLeft: topLeft, topRight: topRight);
+  }
+
+  BorderRadius get onlyRight {
+    return copyWith(topRight: topRight, bottomRight: bottomRight);
+  }
+
+  BorderRadius get onlyBottom {
+    return copyWith(bottomRight: bottomRight, bottomLeft: bottomLeft);
+  }
 }
