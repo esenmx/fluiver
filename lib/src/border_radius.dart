@@ -1,10 +1,6 @@
 part of dashx;
 
-extension CircularBorderRadiusExtensions on BorderRadius {
-  ///
-  /// Adders
-  ///
-
+extension AddCircularBorderRadiusExtensions on BorderRadius {
   BorderRadius addAll(double radius) {
     return this + BorderRadius.circular(radius);
   }
@@ -40,11 +36,9 @@ extension CircularBorderRadiusExtensions on BorderRadius {
   BorderRadius addBottomLeft(double radius) {
     return this + BorderRadius.only(bottomLeft: Radius.circular(radius));
   }
+}
 
-  ///
-  /// Setters
-  ///
-
+extension SetCircularBorderRadiusExtensions on BorderRadius {
   BorderRadius setLeft(double radius) {
     return setTopLeft(radius).setBottomLeft(radius);
   }
@@ -76,11 +70,9 @@ extension CircularBorderRadiusExtensions on BorderRadius {
   BorderRadius setBottomLeft(double radius) {
     return copyWith(bottomLeft: Radius.circular(radius));
   }
+}
 
-  ///
-  /// Removers
-  ///
-
+extension RemoveCircularBorderRadiusExtensions on BorderRadius {
   BorderRadius get removeLeft => setLeft(0);
 
   BorderRadius get removeTop => setTop(0);
@@ -96,11 +88,9 @@ extension CircularBorderRadiusExtensions on BorderRadius {
   BorderRadius get removeBottomRight => setBottomRight(0);
 
   BorderRadius get removeBottomLeft => setBottomLeft(0);
+}
 
-  ///
-  /// Eliminaters
-  ///
-
+extension EliminateCircularBorderRadiusExtensions on BorderRadius {
   BorderRadius get onlyTopLeft => copyWith(topLeft: topLeft);
 
   BorderRadius get onlyTopRight => copyWith(topRight: topRight);

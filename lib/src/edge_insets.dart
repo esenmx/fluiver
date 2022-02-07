@@ -1,10 +1,6 @@
 part of dashx;
 
-extension EdgeInsetsExtensions on EdgeInsets {
-  ///
-  /// Adders
-  ///
-
+extension AddEdgeInsetsExtensions on EdgeInsets {
   EdgeInsets addAll(double value) {
     return this + EdgeInsets.all(value);
   }
@@ -32,11 +28,9 @@ extension EdgeInsetsExtensions on EdgeInsets {
   EdgeInsets addHorizontal(double value) {
     return this + EdgeInsets.symmetric(horizontal: value);
   }
+}
 
-  ///
-  /// Setters
-  ///
-
+extension SetEdgeInsetsExtensions on EdgeInsets {
   EdgeInsets setLeft(double value) => copyWith(left: value);
 
   EdgeInsets setTop(double value) => copyWith(top: value);
@@ -48,11 +42,9 @@ extension EdgeInsetsExtensions on EdgeInsets {
   EdgeInsets setVertical(double value) => copyWith(top: value, bottom: value);
 
   EdgeInsets setHorizontal(double value) => copyWith(left: value, right: value);
+}
 
-  ///
-  /// Removers
-  ///
-
+extension RemoveEdgeInsetsExtensions on EdgeInsets {
   EdgeInsets get removeLeft => setLeft(0);
 
   EdgeInsets get removeTop => setTop(0);
@@ -64,11 +56,9 @@ extension EdgeInsetsExtensions on EdgeInsets {
   EdgeInsets get removeVertical => setVertical(0);
 
   EdgeInsets get removeHorizontal => setHorizontal(0);
+}
 
-  ///
-  /// Eliminaters
-  ///
-
+extension OnlyEdgeInsetsExtensions on EdgeInsets {
   EdgeInsets get onlyLeft => copyWith(left: left);
 
   EdgeInsets get onlyTop => copyWith(top: top);
@@ -80,4 +70,18 @@ extension EdgeInsetsExtensions on EdgeInsets {
   EdgeInsets get onlyVertical => copyWith(top: top, bottom: bottom);
 
   EdgeInsets get onlyHorizontal => copyWith(left: left, right: right);
+}
+
+extension MediaQueryEdgeInsetsExtensions on EdgeInsets {
+  EdgeInsets withStatusBarMargin(BuildContext context) {
+    return this + EdgeInsets.only(top: context.topPadding);
+  }
+
+  EdgeInsets withBottomBarMargin(BuildContext context) {
+    return this + EdgeInsets.only(bottom: context.bottomPadding);
+  }
+
+  EdgeInsets withKeyboardInset(BuildContext context) {
+    return this + EdgeInsets.only(bottom: context.bottomInset);
+  }
 }

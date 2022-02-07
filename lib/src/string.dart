@@ -1,10 +1,6 @@
 part of dashx;
 
-extension StringModifyExtensions on String {
-  ///
-  /// Capitalize
-  ///
-
+extension StringCapitalizeExtensions on String {
   String get capitalize {
     switch (length) {
       case 0:
@@ -22,11 +18,9 @@ extension StringModifyExtensions on String {
         .where((element) => element.isNotEmpty)
         .join(separator);
   }
+}
 
-  ///
-  /// Remove
-  ///
-
+extension StringRemoveExtensions on String {
   String? tryRemovePrefix(String prefix) {
     if (startsWith(prefix)) {
       return substring(prefix.length, length);
