@@ -21,7 +21,7 @@ extension StringCapitalizeExtensions on String {
 }
 
 extension StringRemoveExtensions on String {
-  String? tryRemovePrefix(String prefix) {
+  String? removePrefixOrNull(String prefix) {
     if (startsWith(prefix)) {
       return substring(prefix.length, length);
     }
@@ -35,16 +35,16 @@ extension StringRemoveExtensions on String {
     return this;
   }
 
-  String? tryRemoveSuffix(String suffix) {
+  String? removeSuffixOrNull(String suffix) {
     if (endsWith(suffix)) {
-      return substring(length - suffix.length, length);
+      return substring(0, length - suffix.length);
     }
     return null;
   }
 
   String safeRemoveSuffix(String suffix) {
     if (endsWith(suffix)) {
-      return substring(length - suffix.length, length);
+      return substring(0, length - suffix.length);
     }
     return this;
   }

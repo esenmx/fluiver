@@ -91,13 +91,21 @@ extension RemoveCircularBorderRadiusExtensions on BorderRadius {
 }
 
 extension EliminateCircularBorderRadiusExtensions on BorderRadius {
-  BorderRadius get onlyTopLeft => copyWith(topLeft: topLeft);
+  BorderRadius get onlyTopLeft {
+    return copyWith(topLeft: topLeft);
+  }
 
-  BorderRadius get onlyTopRight => copyWith(topRight: topRight);
+  BorderRadius get onlyTopRight {
+    return copyWith(topRight: topRight);
+  }
 
-  BorderRadius get onlyBottomRight => copyWith(bottomRight: bottomRight);
+  BorderRadius get onlyBottomRight {
+    return copyWith(bottomRight: bottomRight);
+  }
 
-  BorderRadius get onlyBottomLeft => copyWith(bottomLeft: bottomLeft);
+  BorderRadius get onlyBottomLeft {
+    return copyWith(bottomLeft: bottomLeft);
+  }
 
   BorderRadius get onlyLeft {
     return copyWith(topLeft: topLeft, bottomLeft: bottomLeft);
