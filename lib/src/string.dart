@@ -28,7 +28,7 @@ extension StringRemoveExtensions on String {
     return null;
   }
 
-  String safeRemovePrefix(String prefix) {
+  String mayRemovePrefix(String prefix) {
     if (startsWith(prefix)) {
       return substring(prefix.length, length);
     }
@@ -42,7 +42,7 @@ extension StringRemoveExtensions on String {
     return null;
   }
 
-  String safeRemoveSuffix(String suffix) {
+  String mayRemoveSuffix(String suffix) {
     if (endsWith(suffix)) {
       return substring(0, length - suffix.length);
     }

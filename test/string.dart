@@ -22,10 +22,10 @@ void main() async {
       expect('bar', 'foobar'.removePrefixOrNull('foo'));
     });
 
-    test('safeRemovePrefix', () {
-      expect('', ''.safeRemovePrefix('foo'));
-      expect('', 'foo'.safeRemovePrefix('foo'));
-      expect('bar', 'foobar'.safeRemovePrefix('foo'));
+    test('mayRemovePrefix', () {
+      expect('', ''.mayRemovePrefix('foo'));
+      expect('', 'foo'.mayRemovePrefix('foo'));
+      expect('bar', 'foobar'.mayRemovePrefix('foo'));
     });
 
     test('removeSuffixOrNull', () {
@@ -34,10 +34,10 @@ void main() async {
       expect('foo', 'foobar'.removeSuffixOrNull('bar'));
     });
 
-    test('safeRemoveSuffix', () {
-      expect('', ''.safeRemoveSuffix('foo'));
-      expect('', 'foo'.safeRemoveSuffix('foo'));
-      expect('foo', 'foobar'.safeRemoveSuffix('bar'));
+    test('mayRemoveSuffix', () {
+      expect('', ''.mayRemoveSuffix('foo'));
+      expect('', 'foo'.mayRemoveSuffix('foo'));
+      expect('foo', 'foobar'.mayRemoveSuffix('bar'));
     });
   });
 }

@@ -1,8 +1,8 @@
 part of dashx;
 
 extension IterableExtensions<E> on Iterable<E> {
-  /// [1, 2, 3, 4, 5, 6].convertTo2D(2) = [[1, 2], [3, 4], [5, 6]]
-  /// [1, 2, 3, 4].convertTo2D(3) = [[1, 2, 3], [4]]
+  /// [1, 2, 3, 4, 5, 6].convertTo2D(2) == [[1, 2], [3, 4], [5, 6]]
+  /// [1, 2, 3, 4].convertTo2D(3) == [[1, 2, 3], [4]]
   List<Iterable<E>> convertTo2D(int div) => isEmpty
       ? <Iterable<E>>[]
       : <Iterable<E>>[
