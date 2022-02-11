@@ -23,12 +23,14 @@ extension DateTimeExtensions on DateTime {
     );
   }
 
-  TimeOfDay get toTimeOfDay => TimeOfDay(hour: hour, minute: minute);
+  DateTime get toDate =>
+      copyWith(hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
+
+  TimeOfDay get toTime => TimeOfDay(hour: hour, minute: minute);
 
   DateTime addYears(int years) => copyWith(year: year + years);
 
-  DateTime addMonths(int months) =>
-      copyWith(year: year + months ~/ 12, month: month + months % 12);
+  DateTime addMonths(int months) => copyWith(month: month + months);
 
   DateTime addDays(int days) => add(Duration(days: days));
 

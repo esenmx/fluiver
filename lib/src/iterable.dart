@@ -21,14 +21,12 @@ extension Iterable2DExtensions<E> on Iterable<Iterable<E>> {
   }
 }
 
-typedef StaggeredWidgetBuilder = Widget Function(Widget child, int index);
+typedef IndexedChildBuilder = Widget Function(Widget child, int index);
 
 extension IterableWidgetExtensions on Iterable<Widget> {
-  /// Similar to [ListView.separated]'s separatedBuilder,
-  /// but you can use it in anywhere like [Column], [Row], [Listview]...
-  /// [Dash(), Dash(), Dash()].widgetJoin(Divider()) =>
-  /// [Dash(), Divider(), Dash(), Divider(), Dash()]
-  /* tearing apart the dashes is not something humankind should do*/
+  /// More versatile version of [ListTile.divideTiles],
+  /// but you can use it in anywhere, possibly [Column], [Row], [Listview]...
+  /// [Dash(), Dash()].widgetJoin(Divider()) == [Dash(), Divider(), Dash()]
   Iterable<Widget> widgetJoin(Widget separator) sync* {
     final Iterator<Widget> iterator = this.iterator;
     if (iterator.moveNext()) {
@@ -42,24 +40,27 @@ extension IterableWidgetExtensions on Iterable<Widget> {
 
   /// For wrapping each child with an index based builder within possibly a
   /// [Scrollable], instead defining exception for specific index
-  Iterable<Widget> staggeredBuild(StaggeredWidgetBuilder builder) sync* {
+  Iterable<Widget> staggeredBuild(IndexedChildBuilder builder) sync* {
     for (int i = 0; i < length; i++) {
       yield builder(elementAt(i), i);
     }
   }
+}
 
+extension WidgetIterableExtensions<E> on Iterable<E> {
   /// Useful for widgets like [CupertinoSegmentedControl]
-  /// [Text('Foo'), Text('Bar'), Text('Baz')].mappedChildren =>
+  /// ['Foo', 'Bar', 'Baz'].mappedChildren((e) => Text(e))
+  /// returns:
   /// {
-  ///   0 : Text('Foo'),
-  ///   1 : Text('Bar'),
-  ///   2 : Text('Baz'),
+  ///   'Foo' : Text('Foo'),
+  ///   'Foo' : Text('Bar'),
+  ///   'Foo' : Text('Baz'),
   /// }
   /// CupertinoSegmentedControl(
   ///   ...
   ///   children: children.mappedChildren
   ///   ...
   /// );
-  Map<int, Widget> get mappedChildren =>
-      {for (int i = 0; i < length; i++) i: elementAt(i)};
+  Map<E, Widget> mappedChildren(Widget Function(E element) builder) =>
+      {for (int i = 0; i < length; i++) elementAt(i): builder(elementAt(i))};
 }

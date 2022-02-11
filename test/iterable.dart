@@ -40,14 +40,14 @@ void main() async {
 
   group('IterableWidgetExtensions', () {
     test('widgetJoin', () {
-      expect(widgetJoinMock(0), <Widget>[]);
-      expect(widgetJoinMock(1).length, 1);
-      expect(widgetJoinMock(1).single, isA<FlutterLogo>());
-      expect(widgetJoinMock(2).length, 3);
-      expect(widgetJoinMock(2)[0], isA<FlutterLogo>());
-      expect(widgetJoinMock(2)[1], isA<Divider>());
-      expect(widgetJoinMock(2)[2], isA<FlutterLogo>());
-      final values = widgetJoinMock(100);
+      expect(mockWidgetJoin(0), <Widget>[]);
+      expect(mockWidgetJoin(1).length, 1);
+      expect(mockWidgetJoin(1).single, isA<FlutterLogo>());
+      expect(mockWidgetJoin(2).length, 3);
+      expect(mockWidgetJoin(2)[0], isA<FlutterLogo>());
+      expect(mockWidgetJoin(2)[1], isA<Divider>());
+      expect(mockWidgetJoin(2)[2], isA<FlutterLogo>());
+      final values = mockWidgetJoin(100);
       for (int i = 0; i < 100; i++) {
         if (i % 2 == 0) {
           expect(values.elementAt(i), isA<FlutterLogo>());
@@ -58,24 +58,24 @@ void main() async {
     });
 
     test('mappedChildren', () {
-      expect(mappedChildrenMock(0), <int, Widget>{});
-      expect(mappedChildrenMock(1)[0], isA<SizedBox>());
-      expect(mappedChildrenMock(1).length, 1);
-      final values = mappedChildrenMock(100);
+      expect(mockMappedChildren(0), <int, Widget>{});
+      expect(mockMappedChildren(1)[0], isA<Text>());
+      expect(mockMappedChildren(1).length, 1);
+      final values = mockMappedChildren(100);
       for (int i = 0; i < 100; i++) {
-        expect(values[i], isA<SizedBox>());
+        expect(values[i], isA<Text>());
       }
     });
   });
 }
 
-List<Widget> widgetJoinMock(int length) {
+List<Widget> mockWidgetJoin(int length) {
   return <Widget>[for (int i = 0; i < length; i++) const FlutterLogo()]
       .widgetJoin(const Divider())
       .toList();
 }
 
-Map<int, Widget> mappedChildrenMock(int length) {
-  return <Widget>[for (int i = 0; i < length; i++) const SizedBox()]
-      .mappedChildren;
+Map<int, Widget> mockMappedChildren(int length) {
+  return List.generate(length, (i) => i)
+      .mappedChildren((i) => Text(i.toString()));
 }

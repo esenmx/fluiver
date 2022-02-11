@@ -118,11 +118,7 @@ extension TextStyleDecorationExtensions on TextStyle {
 extension TextStyleSizeExtensions on TextStyle {
   TextStyle get size10 => copyWith(fontSize: 10);
 
-  TextStyle get size11 => copyWith(fontSize: 11);
-
   TextStyle get size12 => copyWith(fontSize: 12);
-
-  TextStyle get size13 => copyWith(fontSize: 13);
 
   TextStyle get size14 => copyWith(fontSize: 14);
 

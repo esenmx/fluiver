@@ -1,6 +1,6 @@
 ## dashx
 
-Inspired from [leisim/dartx](https://github.com/leisim/dartx).
+Inspired from [leisim/dartx](https://github.com/leisim/dartx)
 
 An un-opinionated, dependency free, expressive extensions package. Focused on productivity with an eye to IDE behaviours
 rather than reducing the amount of written code roughly.
@@ -17,7 +17,7 @@ Does not make any sense, so not implemented. Because:
 * bloats `BuildContext` extensions
 * code readability relatively reduced, because `MediaQuery.of(context)` is more characteristic, hence readable
 
-Let's take another example:
+Let's take another example, the caption `TextStyle` extension in `dashx` is:
 
 ```dart
 context.captionTextStyle // Equivalent of Theme.of(context).textTheme.caption!
@@ -36,11 +36,11 @@ Because:
 
 ### Iterable
 
-### String
-
-### TextStyle
-
-### Time
+```dart
+[1, 2, 3].convertTo2D(2) // [[1, 2], [3]]
+[[1, 2], [3]].expandFrom2D // [1, 2, 3]
+[Container(), Container()].widgetJoin(Divider()) // [Container(), Divider(), Container()]
+```
 
 ### BuildContext
 
