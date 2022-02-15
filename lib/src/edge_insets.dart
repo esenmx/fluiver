@@ -1,87 +1,58 @@
 part of dashx;
 
 extension AddEdgeInsetsExtensions on EdgeInsets {
-  EdgeInsets addAll(double value) {
-    return this + EdgeInsets.all(value);
-  }
+  EdgeInsets addAll(double value) => this + EdgeInsets.all(value);
 
-  EdgeInsets addLeft(double value) {
-    return this + EdgeInsets.only(left: value);
-  }
+  EdgeInsets addLeft(double value) => this + EdgeInsets.only(left: value);
 
-  EdgeInsets addTop(double value) {
-    return this + EdgeInsets.only(top: value);
-  }
+  EdgeInsets addTop(double value) => this + EdgeInsets.only(top: value);
 
-  EdgeInsets addRight(double value) {
-    return this + EdgeInsets.only(right: value);
-  }
+  EdgeInsets addRight(double value) => this + EdgeInsets.only(right: value);
 
-  EdgeInsets addBottom(double value) {
-    return this + EdgeInsets.only(bottom: value);
-  }
+  EdgeInsets addBottom(double value) => this + EdgeInsets.only(bottom: value);
 
-  EdgeInsets addVertical(double value) {
-    return this + EdgeInsets.symmetric(vertical: value);
-  }
+  EdgeInsets addVertical(double value) =>
+      this + EdgeInsets.symmetric(vertical: value);
 
-  EdgeInsets addHorizontal(double value) {
-    return this + EdgeInsets.symmetric(horizontal: value);
-  }
-}
-
-extension SetEdgeInsetsExtensions on EdgeInsets {
-  EdgeInsets setLeft(double value) => copyWith(left: value);
-
-  EdgeInsets setTop(double value) => copyWith(top: value);
-
-  EdgeInsets setRight(double value) => copyWith(right: value);
-
-  EdgeInsets setBottom(double value) => copyWith(bottom: value);
-
-  EdgeInsets setVertical(double value) => copyWith(top: value, bottom: value);
-
-  EdgeInsets setHorizontal(double value) => copyWith(left: value, right: value);
+  EdgeInsets addHorizontal(double value) =>
+      this + EdgeInsets.symmetric(horizontal: value);
 }
 
 extension RemoveEdgeInsetsExtensions on EdgeInsets {
-  EdgeInsets get removeLeft => setLeft(0);
+  EdgeInsets get removeLeft => copyWith(left: 0);
 
-  EdgeInsets get removeTop => setTop(0);
+  EdgeInsets get removeTop => copyWith(top: 0);
 
-  EdgeInsets get removeRight => setRight(0);
+  EdgeInsets get removeRight => copyWith(right: 0);
 
-  EdgeInsets get removeBottom => setBottom(0);
+  EdgeInsets get removeBottom => copyWith(bottom: 0);
 
-  EdgeInsets get removeVertical => setVertical(0);
+  EdgeInsets get removeVertical => copyWith(top: 0, bottom: 0);
 
-  EdgeInsets get removeHorizontal => setHorizontal(0);
+  EdgeInsets get removeHorizontal => copyWith(left: 0, right: 0);
 }
 
 extension OnlyEdgeInsetsExtensions on EdgeInsets {
-  EdgeInsets get onlyLeft => copyWith(left: left);
+  EdgeInsets get onlyLeft => EdgeInsets.only(left: left);
 
-  EdgeInsets get onlyTop => copyWith(top: top);
+  EdgeInsets get onlyTop => EdgeInsets.only(top: top);
 
-  EdgeInsets get onlyRight => copyWith(right: right);
+  EdgeInsets get onlyRight => EdgeInsets.only(right: right);
 
-  EdgeInsets get onlyBottom => copyWith(bottom: bottom);
+  EdgeInsets get onlyBottom => EdgeInsets.only(bottom: bottom);
 
-  EdgeInsets get onlyVertical => copyWith(top: top, bottom: bottom);
+  EdgeInsets get onlyVertical => EdgeInsets.only(top: top, bottom: bottom);
 
-  EdgeInsets get onlyHorizontal => copyWith(left: left, right: right);
+  EdgeInsets get onlyHorizontal => EdgeInsets.only(left: left, right: right);
 }
 
 extension MediaQueryEdgeInsetsExtensions on EdgeInsets {
-  EdgeInsets withStatusBarMargin(BuildContext context) {
-    return this + EdgeInsets.only(top: context.topPadding);
-  }
+  EdgeInsets withStatusBarMargin(BuildContext context) =>
+      this + EdgeInsets.only(top: context.topPadding);
 
-  EdgeInsets withBottomBarMargin(BuildContext context) {
-    return this + EdgeInsets.only(bottom: context.bottomPadding);
-  }
+  EdgeInsets withBottomBarMargin(BuildContext context) =>
+      this + EdgeInsets.only(bottom: context.bottomPadding);
 
-  EdgeInsets withKeyboardInset(BuildContext context) {
-    return this + EdgeInsets.only(bottom: context.bottomInset);
-  }
+  EdgeInsets withKeyboardInset(BuildContext context) =>
+      this + EdgeInsets.only(bottom: context.bottomInset);
 }
