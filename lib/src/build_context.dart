@@ -1,11 +1,11 @@
 part of dashx;
 
-extension BuildContextShortCutExtensions on BuildContext {
-  ThemeData get _t => Theme.of(this);
-
+extension BuildContextInternalExtensions on BuildContext {
   MediaQueryData get _m => MediaQuery.of(this);
 
   NavigatorState get _n => Navigator.of(this);
+
+  ThemeData get _t => Theme.of(this);
 }
 
 extension NavigatorExtensions on BuildContext {
@@ -108,4 +108,8 @@ extension BuildContextLocaleExtensions on BuildContext {
   String get languageCode => Localizations.localeOf(this).languageCode;
 
   String? get countryCode => Localizations.localeOf(this).countryCode;
+}
+
+extension BuildContextFocusScopeExtensions on BuildContext {
+  void dismissKeyboard() => FocusScope.of(this).unfocus();
 }

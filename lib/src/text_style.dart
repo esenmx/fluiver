@@ -132,3 +132,14 @@ extension TextStyleSizeExtensions on TextStyle {
 
   TextStyle get size34 => copyWith(fontSize: 34);
 }
+
+extension TextStyleUtilityExtensions on TextStyle {
+  /// For blanking [DefaultTextStyle] from [ThemeData]
+  /// Useful when you need to completely override default style
+  /// Defaults to [Colors.black87] and [fontSize] to [14]
+  TextStyle get clear => const TextStyle(
+        inherit: false,
+        color: Colors.black87,
+        fontSize: 14,
+      );
+}
