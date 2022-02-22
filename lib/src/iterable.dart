@@ -3,18 +3,18 @@ part of dashx;
 extension IterableExtensions<E> on Iterable<E> {
   /// [1, 2, 3, 4, 5, 6].convertTo2D(2) == [[1, 2], [3, 4], [5, 6]]
   /// [1, 2, 3, 4].convertTo2D(3) == [[1, 2, 3], [4]]
-  List<Iterable<E>> convertTo2D(int div) => isEmpty
-      ? <Iterable<E>>[]
-      : <Iterable<E>>[
-          take(div),
-          if (length > div) ...skip(div).convertTo2D(div)
-        ];
+  Iterable<List<E>> to2D(int div) sync* {
+    RangeError.range(div, 1, 1 << 31);
+    for (int i = 0; i < length; i += div) {
+      yield skip(i).take(div).toList();
+    }
+  }
 }
 
 extension Iterable2DExtensions<E> on Iterable<Iterable<E>> {
   /// More straightforward solution than [expand] in case of all sub-elements
   /// have same type
-  Iterable<E> get expandFrom2D sync* {
+  Iterable<E> get from2D sync* {
     for (final sub in this) {
       yield* sub;
     }

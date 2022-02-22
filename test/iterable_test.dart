@@ -21,20 +21,20 @@ void main() async {
   final expandedC = [1, 2, 3, 4, 5, 6];
 
   group('IterableExtensions<E>', () {
-    test('convertTo2D', () {
-      expect([].convertTo2D(3), []);
-      expect(expandedA.convertTo2D(1), twoDimA);
-      expect(expandedB.convertTo2D(3), twoDimB);
-      expect(expandedC.convertTo2D(2), twoDimC);
+    test('to2D', () {
+      expect([].to2D(3), []);
+      expect(expandedA.to2D(1), twoDimA);
+      expect(expandedB.to2D(3), twoDimB);
+      expect(expandedC.to2D(2), twoDimC);
     });
   });
 
   group('Iterable2DExtensions<E>', () {
-    test('expandFrom2D', () {
-      expect([[]].expandFrom2D, []);
-      expect(twoDimA.expandFrom2D.toList(), expandedA);
-      expect(twoDimB.expandFrom2D.toList(), expandedB);
-      expect(twoDimC.expandFrom2D.toList(), expandedC);
+    test('from2D', () {
+      expect([[]].from2D, []);
+      expect(twoDimA.from2D.toList(), expandedA);
+      expect(twoDimB.from2D.toList(), expandedB);
+      expect(twoDimC.from2D.toList(), expandedC);
     });
   });
 
