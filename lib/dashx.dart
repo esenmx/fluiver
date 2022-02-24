@@ -1,6 +1,5 @@
 library dashx;
 
-import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ part 'src/edge_insets.dart';
 part 'src/iterable.dart';
 part 'src/iterable_num.dart';
 part 'src/map.dart';
-part 'src/num.dart';
+part 'src/set.dart';
 part 'src/space.dart';
 part 'src/string.dart';
 part 'src/text_style.dart';
