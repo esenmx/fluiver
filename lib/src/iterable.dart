@@ -9,6 +9,10 @@ extension IterableExtensions<E> on Iterable<E> {
       yield skip(i).take(div).toList();
     }
   }
+
+  Map<int, E> get toIndexedMap {
+    return <int, E>{for (int i = 0; i < length; i++) i: elementAt(i)};
+  }
 }
 
 extension Iterable2DExtensions<E> on Iterable<Iterable<E>> {

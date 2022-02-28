@@ -27,6 +27,12 @@ void main() async {
       expect(expandedB.to2D(3), twoDimB);
       expect(expandedC.to2D(2), twoDimC);
     });
+
+    test('toIndexedMap', () {
+      expect([].toIndexedMap, {});
+      expect([false, true].toIndexedMap, {0: false, 1: true});
+      expect(['foo', 'bar'].toIndexedMap, {0: 'foo', 1: 'bar'});
+    });
   });
 
   group('Iterable2DExtensions<E>', () {
