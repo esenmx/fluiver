@@ -11,7 +11,16 @@ extension IterableExtensions<E> on Iterable<E> {
   }
 
   Map<int, E> get toIndexedMap {
-    return <int, E>{for (int i = 0; i < length; i++) i: elementAt(i)};
+    if (isEmpty) {
+      return <int, E>{};
+    }
+    final iterator = this.iterator;
+    final map = <int, E>{};
+    int i = 0;
+    while (iterator.moveNext()) {
+      map[i++] = iterator.current;
+    }
+    return map;
   }
 }
 

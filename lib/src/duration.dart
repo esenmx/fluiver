@@ -1,6 +1,8 @@
 part of dashx;
 
 extension IntegerDurationExtensinos on int {
+  Duration get weeks => Duration(days: this * 7);
+
   Duration get days => Duration(days: this);
 
   Duration get hours => Duration(hours: this);

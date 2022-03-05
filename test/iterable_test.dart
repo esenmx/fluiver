@@ -30,6 +30,7 @@ void main() async {
 
     test('toIndexedMap', () {
       expect([].toIndexedMap, {});
+      expect([true].toIndexedMap, {0: true});
       expect([false, true].toIndexedMap, {0: false, 1: true});
       expect(['foo', 'bar'].toIndexedMap, {0: 'foo', 1: 'bar'});
     });
