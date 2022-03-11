@@ -5,9 +5,19 @@ extension IterableExtensions<E> on Iterable<E> {
   /// [1, 2, 3, 4].convertTo2D(3) == [[1, 2, 3], [4]]
   Iterable<List<E>> to2D(int div) sync* {
     RangeError.range(div, 1, 1 << 31);
-    for (int i = 0; i < length; i += div) {
-      yield skip(i).take(div).toList();
+    final iterator = this.iterator;
+    while (iterator.moveNext()) {
+      final subArray = <E>[iterator.current];
+      for (int i = 0; i < div - 1; i++) {
+        if (iterator.moveNext()) {
+          subArray.add(iterator.current);
+        }
+      }
+      yield subArray;
     }
+    // for (int i = 0; i < length; i += div) {
+    //   yield skip(i).take(div).toList();
+    // }
   }
 
   Map<int, E> get toIndexedMap {
