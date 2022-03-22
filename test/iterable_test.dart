@@ -78,7 +78,7 @@ void main() async {
 
 List<Widget> mockWidgetJoin(int length) {
   return <Widget>[for (int i = 0; i < length; i++) const FlutterLogo()]
-      .widgetJoin(const Divider())
+      .widgetJoin(() => const Divider())
       .toList();
 }
 

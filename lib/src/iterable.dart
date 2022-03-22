@@ -50,13 +50,13 @@ extension IterableWidgetExtensions on Iterable<Widget> {
   /// More versatile version of [ListTile.divideTiles],
   /// but you can use it in anywhere, possibly [Column], [Row], [Listview]...
   /// [Dash(), Dash()].widgetJoin(Divider()) == [Dash(), Divider(), Dash()]
-  Iterable<Widget> widgetJoin(Widget separator) sync* {
+  Iterable<Widget> widgetJoin(Widget Function() separator) sync* {
     final Iterator<Widget> iterator = this.iterator;
     if (iterator.moveNext()) {
       yield iterator.current;
     }
     while (iterator.moveNext()) {
-      yield separator;
+      yield separator();
       yield iterator.current;
     }
   }

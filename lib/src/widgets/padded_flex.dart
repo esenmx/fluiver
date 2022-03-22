@@ -53,3 +53,31 @@ class PaddedRow extends Padding {
           ),
         );
 }
+
+class ScrolledColumn extends SingleChildScrollView {
+  /// [crossAxisAlignment] was [CrossAxisAlignment.center]
+  ScrolledColumn({
+    Key? key,
+    required EdgeInsetsGeometry padding,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    MainAxisSize mainAxisSize = MainAxisSize.max,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.stretch,
+    TextDirection? textDirection,
+    VerticalDirection verticalDirection = VerticalDirection.down,
+    TextBaseline? textBaseline,
+    List<Widget> children = const <Widget>[],
+  }) : super(
+          key: key,
+          padding: padding,
+          child: Column(
+            key: key,
+            mainAxisAlignment: mainAxisAlignment,
+            mainAxisSize: mainAxisSize,
+            crossAxisAlignment: crossAxisAlignment,
+            textDirection: textDirection,
+            verticalDirection: verticalDirection,
+            textBaseline: textBaseline,
+            children: children,
+          ),
+        );
+}
