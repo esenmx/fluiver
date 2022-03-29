@@ -1,4 +1,6 @@
-part of dashx;
+part of fluiver;
+
+// coverage:ignore-file
 
 extension AddCircularBorderRadiusExtensions on BorderRadius {
   BorderRadius addAll(double radius) => this + BorderRadius.circular(radius);

@@ -1,4 +1,6 @@
-part of dashx;
+part of fluiver;
+
+// coverage:ignore-file
 
 class PaddedColumn extends Padding {
   PaddedColumn({
@@ -55,13 +57,12 @@ class PaddedRow extends Padding {
 }
 
 class ScrolledColumn extends SingleChildScrollView {
-  /// [crossAxisAlignment] was [CrossAxisAlignment.center]
   ScrolledColumn({
     Key? key,
     required EdgeInsetsGeometry padding,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,
-    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.stretch,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
     TextDirection? textDirection,
     VerticalDirection verticalDirection = VerticalDirection.down,
     TextBaseline? textBaseline,

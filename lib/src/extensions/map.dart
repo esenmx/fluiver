@@ -1,4 +1,4 @@
-part of dashx;
+part of fluiver;
 
 extension MapIterableInterfaceExtensions<K, V> on Map<K, V> {
   bool any(bool Function(K key, V value) test) =>

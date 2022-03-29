@@ -1,48 +1,16 @@
-## dashx
+## fluiver
 
-Inspired from [leisim/dartx](https://github.com/leisim/dartx)
+Name from `Flutter` + `Quiver` = `Fluiver`.
 
-An un-opinionated, dependency free, expressive extensions package. Focused on productivity with an eye to IDE behaviours
-rather than reducing the amount of written code roughly.
+Dependency free; extensions, widgets and helpers package. Focused on productivity with an eye
+to `IDE` behaviours rather than reducing the amount of written code roughly.
 
-To get and idea, let's have a look at this:
+### Widgets
+`TODO`
 
-```dart
-context.mediaQuery // Equivalent of MediaQuery.of(context)
-```
+### Extensions
 
-Does not make any sense, so not implemented. Because:
-
-* quantity of written dots is not reduced
-* bloats `BuildContext` extensions
-* code readability relatively reduced, because `MediaQuery.of(context)` is more characteristic, hence readable
-
-Let's take another example, the caption `TextStyle` extension in `dashx` is:
-
-```dart
-context.captionTextStyle // Equivalent of Theme.of(context).textTheme.caption!
-```
-
-It's not:
-
-```dart
-context.caption
-```
-
-Because:
-
-* improved readability and more characteristic without extra dots
-* better catch on intelli-sense, try and see ;)
-
-### Iterable
-
-```dart
-[1, 2, 3].convertTo2D(2) // [[1, 2], [3]]
-[[1, 2], [3]].expandFrom2D // [1, 2, 3]
-[Container(), Container()].widgetJoin(Divider()) // [Container(), Divider(), Container()]
-```
-
-### BuildContext
+#### BuildContext
 
 ```dart
 // MediaQuery
@@ -65,8 +33,8 @@ contetx.headline5TextStyle // Theme.of(context).textTheme.headline5!
 contetx.headline6TextStyle // Theme.of(context).textTheme.headline6!
 contetx.subtitle1TextStyle // Theme.of(context).textTheme.subtitle1!
 contetx.subtitle2TextStyle // Theme.of(context).textTheme.subtitle2!
-contetx.bodyText1TextStyle // Theme.of(context).textTheme.bodyText1!
-contetx.bodyText2TextStyle // Theme.of(context).textTheme.bodyText2!
+contetx.body1TextStyle // Theme.of(context).textTheme.bodyText1!
+contetx.body2TextStyle // Theme.of(context).textTheme.bodyText2!
 contetx.captionTextStyle // Theme.of(context).textTheme.caption!
 contetx.buttonTextStyle // Theme.of(context).textTheme.button!
 contetx.overlineTextStyle // Theme.of(context).textTheme.overline!
@@ -76,16 +44,77 @@ context.isLTR // Directionality.of(context) == TextDirection.ltr
 context.isRTL // Directionality.of(context) == TextDirection.rtl
 
 // ColorScheme
-context.primaryColor
-context.primaryColorDark
-context.primaryColorLight
-context.secondaryColor
-context.surfaceColor
-context.backgroundColor
-context.errorColor
-
-// Localization
-context.localeOf
-context.languageCode
-context.countryCode
+context.primaryColor // Theme.of(context).colorScheme.primary
+context.primaryContainerColor // Theme.of(context).colorScheme.primaryContainer
+context.secondaryColor // Theme.of(context).colorScheme.secondary
+context.surfaceColor // Theme.of(context).colorScheme.surface
+context.backgroundColor // Theme.of(context).colorScheme.background
+context.errorColor // Theme.of(context).colorScheme.error
 ```
+
+#### Duration
+``TODO``
+
+#### BorderRadius
+``TODO``
+
+#### EdgeInsets
+``TODO``
+
+#### TextStyle
+``TODO``
+
+#### DateTime
+``TODO``
+
+#### Map
+``TODO``
+
+#### Set
+``TODO``
+
+#### String
+``TODO``
+
+#### Iterable
+
+```dart
+[1, 2, 3].to2D(2) // [[1, 2], [3]]
+[[1, 2], [3]].from2D // [1, 2, 3]
+[Foo(), Foo()].widgetJoin(() => Divider()) // [Foo(), Divider(), Foo()]
+```
+
+#### IterableInt
+``TODO``
+
+#### IterableDouble
+``TODO``
+
+
+### Principles
+
+Only commonly needed widgets and helpers implemented.
+
+For extensions, few comparison will explain the motivation behind.
+
+```dart
+context.mediaQuery // BAD: hence, not implemented
+MediaQuery.of(context) // GOOD: better fast read, more characteristic
+```
+
+```dart
+// MediaQuery.of(context).viewInsets.bottom
+context.mediaQuery.viewInsets.bottom // BAD: number of dots is same
+context.bottomInset // GOOD: two dots less and decent readability
+```
+
+```dart
+// Theme.of(context).textTheme.caption!
+context.caption // BAD: less expressive
+context.captionTextStyle // GOOD: more expressive, better auto code-completion
+```
+
+#### Inspirations
+
+* [leisim/dartx](https://github.com/leisim/dartx)
+* [gskinner/flextras](https://github.com/gskinnerTeam/flutter-flextras)

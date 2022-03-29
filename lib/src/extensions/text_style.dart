@@ -1,13 +1,15 @@
-part of dashx;
+part of fluiver;
 
-extension TextStyleExtensions on TextStyle {
+// coverage:ignore-file
+
+extension TextStyleEx on TextStyle {
   /// [Roboto] is much more suitable for [Text] with special characters
   /// like currency symbols.
   /// Useful in case you want to override your default [TextStyle]
   TextStyle get familyRoboto => copyWith(fontFamily: 'Roboto');
 }
 
-extension TextStyleColorExtensions on TextStyle {
+extension TextStyleColorEx on TextStyle {
   /// x * .2
   TextStyle get opacity20 => copyWith(color: color?.withOpacity(.2));
 
@@ -45,36 +47,28 @@ extension TextStyleColorExtensions on TextStyle {
   TextStyle get black => copyWith(color: Colors.black);
 
   /// [ColorScheme]
-  TextStyle primary(BuildContext context) {
+  TextStyle primaryColor(BuildContext context) {
     return copyWith(color: context.primaryColor);
   }
 
-  TextStyle primaryDark(BuildContext context) {
-    return copyWith(color: context.primaryColorDark);
-  }
-
-  TextStyle primaryLight(BuildContext context) {
-    return copyWith(color: context.primaryColorLight);
-  }
-
-  TextStyle secondary(BuildContext context) {
+  TextStyle secondaryColor(BuildContext context) {
     return copyWith(color: context.secondaryColor);
   }
 
-  TextStyle surface(BuildContext context) {
+  TextStyle surfaceColor(BuildContext context) {
     return copyWith(color: context.surfaceColor);
   }
 
-  TextStyle background(BuildContext context) {
+  TextStyle backgroundColor(BuildContext context) {
     return copyWith(color: context.backgroundColor);
   }
 
-  TextStyle error(BuildContext context) {
+  TextStyle errorColor(BuildContext context) {
     return copyWith(color: context.errorColor);
   }
 }
 
-extension TextStyleFontWeightExtensions on TextStyle {
+extension TextStyleFontWeightEx on TextStyle {
   /// [Thin]
   TextStyle get weight100 => copyWith(fontWeight: FontWeight.w100);
 
@@ -103,7 +97,7 @@ extension TextStyleFontWeightExtensions on TextStyle {
   TextStyle get weight900 => copyWith(fontWeight: FontWeight.w900);
 }
 
-extension TextStyleDecorationExtensions on TextStyle {
+extension TextStyleDecorationEx on TextStyle {
   TextStyle get none => copyWith(decoration: TextDecoration.none);
 
   TextStyle get underline => copyWith(decoration: TextDecoration.underline);
@@ -115,7 +109,7 @@ extension TextStyleDecorationExtensions on TextStyle {
 
 /// Numbers have chosen from mostly:
 /// https://material.io/design/typography/the-type-system.html#type-scale
-extension TextStyleSizeExtensions on TextStyle {
+extension TextStyleSizeEx on TextStyle {
   TextStyle get size10 => copyWith(fontSize: 10);
 
   TextStyle get size12 => copyWith(fontSize: 12);

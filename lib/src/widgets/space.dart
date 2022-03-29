@@ -1,4 +1,6 @@
-part of dashx;
+part of fluiver;
+
+// coverage:ignore-file
 
 class Space extends StatelessWidget {
   ///

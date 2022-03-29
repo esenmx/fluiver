@@ -1,4 +1,4 @@
-import 'package:dashx/dashx.dart';
+import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
@@ -6,7 +6,7 @@ void main() async {
     test('capitalize', () {
       expect('', ''.capitalize);
       expect('A', 'a'.capitalize);
-      expect('Dashx', 'dashx'.capitalize);
+      expect('Fluiver', 'fluiver'.capitalize);
     });
 
     test('capitalizeEach', () {

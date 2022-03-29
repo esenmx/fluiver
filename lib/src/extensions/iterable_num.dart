@@ -1,6 +1,6 @@
-part of dashx;
+part of fluiver;
 
-extension IterableDoubleExtensions on Iterable<double> {
+extension IterableDoubleEx on Iterable<double> {
   double get sum => fold(0.0, (previous, element) => previous + element);
 
   Iterable<int> get toIntIterable => map((e) => e.toInt());
@@ -8,7 +8,7 @@ extension IterableDoubleExtensions on Iterable<double> {
   double get average => sum / length;
 }
 
-extension IterableIntExtensions on Iterable<int> {
+extension IterableInt on Iterable<int> {
   int get sum => fold(0, (previous, element) => previous + element);
 
   Iterable<double> get toDoubleIterable => map((e) => e.toDouble());

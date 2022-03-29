@@ -1,4 +1,6 @@
-part of dashx;
+part of fluiver;
+
+// coverage:ignore-file
 
 extension AddEdgeInsetsExtensions on EdgeInsets {
   EdgeInsets addAll(double value) => this + EdgeInsets.all(value);

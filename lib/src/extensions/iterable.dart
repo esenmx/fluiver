@@ -1,4 +1,4 @@
-part of dashx;
+part of fluiver;
 
 extension IterableExtensions<E> on Iterable<E> {
   /// [1, 2, 3, 4, 5, 6].convertTo2D(2) == [[1, 2], [3, 4], [5, 6]]

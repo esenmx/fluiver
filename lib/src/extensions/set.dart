@@ -1,4 +1,4 @@
-part of dashx;
+part of fluiver;
 
 extension SetExtensions<K> on Set<K> {
   Map<K, V> toMap<V>(V Function(K key) valueFromKey) {

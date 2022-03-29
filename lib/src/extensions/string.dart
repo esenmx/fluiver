@@ -1,4 +1,4 @@
-part of dashx;
+part of fluiver;
 
 extension StringCapitalizeExtensions on String {
   String get capitalize {

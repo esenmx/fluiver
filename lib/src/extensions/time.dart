@@ -1,4 +1,4 @@
-part of dashx;
+part of fluiver;
 
 extension DateTimeExtensions on DateTime {
   DateTime copyWith({

@@ -1,4 +1,6 @@
-part of dashx;
+part of fluiver;
+
+// coverage:ignore-file
 
 extension IntegerDurationExtensinos on int {
   Duration get weeks => Duration(days: this * 7);
