@@ -1,5 +1,6 @@
 library fluiver;
 
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -16,5 +17,6 @@ part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
 part 'src/extensions/time.dart';
 part 'src/helpers/focus_node.dart';
+part 'src/helpers/network.dart';
 part 'src/widgets/flex.dart';
 part 'src/widgets/space.dart';
