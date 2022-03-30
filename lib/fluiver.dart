@@ -18,5 +18,6 @@ part 'src/extensions/text_style.dart';
 part 'src/extensions/time.dart';
 part 'src/helpers/focus_node.dart';
 part 'src/helpers/network.dart';
+part 'src/helpers/observer.dart';
 part 'src/widgets/flex.dart';
 part 'src/widgets/space.dart';
