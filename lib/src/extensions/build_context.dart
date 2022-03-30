@@ -28,6 +28,12 @@ extension BuildContextMediaQuery on BuildContext {
   double get bottomInset => _m.viewInsets.bottom;
 }
 
+extension BuildContextTheme on BuildContext {
+  bool get isThemeDark => _t.brightness == Brightness.dark;
+
+  bool get isThemeLight => _t.brightness == Brightness.light;
+}
+
 extension BuildContextTextTheme on BuildContext {
   TextStyle get headline1TextStyle => _t.textTheme.headline1!;
 

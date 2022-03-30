@@ -28,11 +28,10 @@ class LocaleObserver extends WidgetsBindingObserver {
 ///   ref.onDispose(() => WidgetsBinding.instance!.removeObserver(observer));
 /// });
 /// ```
-
 class BrightnessObserver extends WidgetsBindingObserver {
-  final void Function(Brightness) _didChangePlatformBrightness;
-
   BrightnessObserver(this._didChangePlatformBrightness);
+
+  final void Function(Brightness) _didChangePlatformBrightness;
 
   @override
   void didChangePlatformBrightness() {
