@@ -21,9 +21,9 @@ extension BuildContextMediaQuery on BuildContext {
 
   bool get isOrientationLandscape => _m.orientation == Orientation.landscape;
 
-  double get topPadding => _m.padding.top;
+  double get topPadding => _m.viewPadding.top;
 
-  double get bottomPadding => _m.padding.bottom;
+  double get bottomPadding => _m.viewPadding.bottom;
 
   double get bottomInset => _m.viewInsets.bottom;
 }
