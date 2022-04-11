@@ -9,6 +9,7 @@ part 'src/extensions/border_radius.dart';
 part 'src/extensions/build_context.dart';
 part 'src/extensions/duration.dart';
 part 'src/extensions/edge_insets.dart';
+part 'src/extensions/generic.dart';
 part 'src/extensions/iterable.dart';
 part 'src/extensions/iterable_num.dart';
 part 'src/extensions/map.dart';
