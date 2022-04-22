@@ -29,14 +29,15 @@ class LocaleObserver extends WidgetsBindingObserver {
 /// });
 /// ```
 class BrightnessObserver extends WidgetsBindingObserver {
-  BrightnessObserver(this._didChangePlatformBrightness);
+  BrightnessObserver(this.onPlatformBrightnessChanged);
 
-  final void Function(Brightness) _didChangePlatformBrightness;
+  final void Function(Brightness) onPlatformBrightnessChanged;
 
   @override
   void didChangePlatformBrightness() {
-    _didChangePlatformBrightness(
-        WidgetsBinding.instance!.window.platformBrightness);
     super.didChangePlatformBrightness();
+    onPlatformBrightnessChanged(_window.platformBrightness);
   }
 }
+
+get _window => WidgetsBinding.instance!.window;

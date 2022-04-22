@@ -12,12 +12,6 @@ extension AddEdgeInsetsExtensions on EdgeInsets {
   EdgeInsets addRight(double value) => this + EdgeInsets.only(right: value);
 
   EdgeInsets addBottom(double value) => this + EdgeInsets.only(bottom: value);
-
-  EdgeInsets addVertical(double value) =>
-      this + EdgeInsets.symmetric(vertical: value);
-
-  EdgeInsets addHorizontal(double value) =>
-      this + EdgeInsets.symmetric(horizontal: value);
 }
 
 extension RemoveEdgeInsetsExtensions on EdgeInsets {
@@ -42,10 +36,6 @@ extension OnlyEdgeInsetsExtensions on EdgeInsets {
   EdgeInsets get onlyRight => EdgeInsets.only(right: right);
 
   EdgeInsets get onlyBottom => EdgeInsets.only(bottom: bottom);
-
-  EdgeInsets get onlyVertical => EdgeInsets.only(top: top, bottom: bottom);
-
-  EdgeInsets get onlyHorizontal => EdgeInsets.only(left: left, right: right);
 }
 
 extension MediaQueryEdgeInsetsExtensions on EdgeInsets {
