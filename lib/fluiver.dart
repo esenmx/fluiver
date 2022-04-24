@@ -21,4 +21,5 @@ part 'src/helpers/focus_node.dart';
 part 'src/helpers/network.dart';
 part 'src/helpers/observer.dart';
 part 'src/widgets/flex.dart';
+part 'src/widgets/sliver.dart';
 part 'src/widgets/space.dart';

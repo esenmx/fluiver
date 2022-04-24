@@ -59,7 +59,8 @@ class PaddedRow extends Padding {
 class ScrolledColumn extends SingleChildScrollView {
   ScrolledColumn({
     Key? key,
-    required EdgeInsetsGeometry padding,
+    EdgeInsets? padding,
+    ScrollPhysics? physics,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
@@ -70,6 +71,7 @@ class ScrolledColumn extends SingleChildScrollView {
   }) : super(
           key: key,
           padding: padding,
+          physics: physics,
           child: Column(
             key: key,
             mainAxisAlignment: mainAxisAlignment,
