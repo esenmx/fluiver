@@ -23,10 +23,15 @@ extension DateTimeExtensions on DateTime {
     );
   }
 
-  DateTime get toDate =>
-      copyWith(hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
+  DateTime toDate() => copyWith(
+        hour: 0,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+        microsecond: 0,
+      );
 
-  TimeOfDay get toTime => TimeOfDay(hour: hour, minute: minute);
+  TimeOfDay toTime() => TimeOfDay(hour: hour, minute: minute);
 
   DateTime addYears(int years) => copyWith(year: year + years);
 
@@ -42,13 +47,13 @@ extension DateTimeExtensions on DateTime {
 }
 
 extension TimeOfDayExtensions on TimeOfDay {
-  DateTime get inToday => DateTime.now().copyWith(hour: hour, minute: minute);
+  DateTime inToday() => DateTime.now().copyWith(hour: hour, minute: minute);
 
-  DateTime get inTomorrow => inToday.add(const Duration(days: 1));
+  DateTime inTomorrow() => inToday().add(const Duration(days: 1));
 
-  DateTime get inNextWeek => inToday.add(const Duration(days: 7));
+  DateTime inNextWeek() => inToday().add(const Duration(days: 7));
 
-  DateTime get inYesterday => inToday.subtract(const Duration(days: 1));
+  DateTime inYesterday() => inToday().subtract(const Duration(days: 1));
 
-  DateTime get inLastWeek => inToday.subtract(const Duration(days: 7));
+  DateTime inLastWeek() => inToday().subtract(const Duration(days: 7));
 }

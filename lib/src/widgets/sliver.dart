@@ -3,12 +3,12 @@ part of fluiver;
 class FixedExtentSliverPersistentHeaderDelegate
     extends SliverPersistentHeaderDelegate {
   FixedExtentSliverPersistentHeaderDelegate({
-    required this.builder,
     required this.extent,
+    required this.builder,
   });
 
-  final Widget Function(BuildContext context, bool overlapsContent) builder;
   final double extent;
+  final Widget Function(BuildContext context, bool overlapsContent) builder;
 
   @override
   Widget build(context, _, overlapsContent) {

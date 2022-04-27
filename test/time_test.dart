@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() async {
   final value = DateTime(1990, 6, 26, 8, 30);
   test('DateTimeExtensions', () {
-    expect(value.toDate, DateTime(1990, 6, 26));
-    expect(value.toTime, const TimeOfDay(hour: 8, minute: 30));
+    expect(value.toDate(), DateTime(1990, 6, 26));
+    expect(value.toTime(), const TimeOfDay(hour: 8, minute: 30));
     expect(value.addYears(31), value.copyWith(year: 2021));
     expect(value.addYears(-5000), value.copyWith(year: -3010));
     expect(value.addMonths(4), value.copyWith(month: 10));

@@ -22,13 +22,13 @@ extension IterableExtensions<E> on Iterable<E> {
     }
   }
 
-  Map<int, E> get toIndexedMap {
+  Map<int, E> toIndexedMap([int offset = 0]) {
     if (isEmpty) {
       return <int, E>{};
     }
     final iterator = this.iterator;
     final map = <int, E>{};
-    int i = 0;
+    int i = offset;
     while (iterator.moveNext()) {
       map[i++] = iterator.current;
     }
@@ -39,7 +39,7 @@ extension IterableExtensions<E> on Iterable<E> {
 extension Iterable2DExtensions<E> on Iterable<Iterable<E>> {
   /// More straightforward solution than [expand] in case of all sub-elements
   /// have same type
-  Iterable<E> get from2D sync* {
+  Iterable<E> from2D() sync* {
     for (final sub in this) {
       yield* sub;
     }

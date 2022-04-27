@@ -29,19 +29,19 @@ void main() async {
     });
 
     test('toIndexedMap', () {
-      expect([].toIndexedMap, {});
-      expect([true].toIndexedMap, {0: true});
-      expect([false, true].toIndexedMap, {0: false, 1: true});
-      expect(['foo', 'bar'].toIndexedMap, {0: 'foo', 1: 'bar'});
+      expect([].toIndexedMap(), {});
+      expect([true].toIndexedMap(), {0: true});
+      expect([false, true].toIndexedMap(1), {1: false, 2: true});
+      expect(['foo', 'bar'].toIndexedMap(2), {2: 'foo', 3: 'bar'});
     });
   });
 
   group('Iterable2DExtensions<E>', () {
     test('from2D', () {
-      expect([[]].from2D, []);
-      expect(twoDimA.from2D.toList(), expandedA);
-      expect(twoDimB.from2D.toList(), expandedB);
-      expect(twoDimC.from2D.toList(), expandedC);
+      expect([[]].from2D(), []);
+      expect(twoDimA.from2D().toList(), expandedA);
+      expect(twoDimB.from2D().toList(), expandedB);
+      expect(twoDimC.from2D().toList(), expandedC);
     });
   });
 

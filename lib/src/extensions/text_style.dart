@@ -10,21 +10,9 @@ extension TextStyleEx on TextStyle {
 }
 
 extension TextStyleColorEx on TextStyle {
-  /// x * .2
-  TextStyle get opacity20 => copyWith(color: color?.withOpacity(.2));
-
-  TextStyle get opacity40 => copyWith(color: color?.withOpacity(.4));
-
-  TextStyle get opacity60 => copyWith(color: color?.withOpacity(.6));
-
-  TextStyle get opacity80 => copyWith(color: color?.withOpacity(.8));
-
-  /// x * .25
-  TextStyle get opacity25 => copyWith(color: color?.withOpacity(.25));
-
-  TextStyle get opacity50 => copyWith(color: color?.withOpacity(.5));
-
-  TextStyle get opacity75 => copyWith(color: color?.withOpacity(.75));
+  TextStyle withOpacity(double opacity) {
+    return copyWith(color: color?.withOpacity(opacity));
+  }
 
   /// [Colors.white]
   TextStyle get white38 => copyWith(color: Colors.white38);
@@ -110,6 +98,8 @@ extension TextStyleDecorationEx on TextStyle {
 /// Numbers have chosen from mostly:
 /// https://material.io/design/typography/the-type-system.html#type-scale
 extension TextStyleSizeEx on TextStyle {
+  TextStyle withSize(double size) => copyWith(fontSize: size);
+
   TextStyle get size10 => copyWith(fontSize: 10);
 
   TextStyle get size12 => copyWith(fontSize: 12);

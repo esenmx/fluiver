@@ -39,12 +39,15 @@ extension OnlyEdgeInsetsExtensions on EdgeInsets {
 }
 
 extension MediaQueryEdgeInsetsExtensions on EdgeInsets {
-  EdgeInsets withStatusBarMargin(BuildContext context) =>
-      this + EdgeInsets.only(top: context.topPadding);
+  EdgeInsets withStatusBarMargin(BuildContext context) {
+    return this + EdgeInsets.only(top: context.topPadding);
+  }
 
-  EdgeInsets withBottomBarMargin(BuildContext context) =>
-      this + EdgeInsets.only(bottom: context.bottomPadding);
+  EdgeInsets withBottomBarMargin(BuildContext context) {
+    return this + EdgeInsets.only(bottom: context.bottomPadding);
+  }
 
-  EdgeInsets withKeyboardInset(BuildContext context) =>
-      this + EdgeInsets.only(bottom: context.bottomInset);
+  EdgeInsets withKeyboardInset(BuildContext context) {
+    return this + EdgeInsets.only(bottom: context.bottomInset);
+  }
 }
