@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension IterableDoubleEx on Iterable<double> {
+extension IterableDoubleX on Iterable<double> {
   double sum() => fold(0.0, (previous, element) => previous + element);
 
   Iterable<int> toIntIterable() => map((e) => e.toInt());
