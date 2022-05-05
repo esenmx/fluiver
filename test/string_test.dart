@@ -16,6 +16,13 @@ void main() async {
       expect('Dart,Go', 'dart,,go'.capitalizeEach(','));
     });
 
+    test('nameAbbreviation', () {
+      expect('', ''.nameAbbreviation());
+      expect('Asd', 'asd'.nameAbbreviation());
+      expect('John Doe'.nameAbbreviation(), 'J. Doe');
+      expect('john doe'.nameAbbreviation(), 'J. Doe');
+    });
+
     test('removePrefixOrNull', () {
       expect(null, ''.removePrefixOrNull('foo'));
       expect('', 'foo'.removePrefixOrNull('foo'));
