@@ -1,6 +1,7 @@
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rand/rand.dart';
 
 void main() async {
   final twoDimA = [
@@ -74,6 +75,23 @@ void main() async {
       }
     });
   });
+
+  group('ChronographiclySortable', () {
+    test('earliest', () {
+      final es = _randomEntities(1000);
+      final e = es.earliest((e) => e.dateTime);
+      for (var element in es) {
+        expect(e.dateTime.isBefore(element.dateTime), e != element);
+      }
+    });
+    test('latest', () {
+      final es = _randomEntities(1000);
+      final e = es.latest((e) => e.dateTime);
+      for (var element in es) {
+        expect(e.dateTime.isAfter(element.dateTime), e != element);
+      }
+    });
+  });
 }
 
 List<Widget> mockWidgetJoin(int length) {
@@ -85,4 +103,14 @@ List<Widget> mockWidgetJoin(int length) {
 Map<int, Widget> mockMappedChildren(int length) {
   return List.generate(length, (i) => i)
       .mappedChildren((i) => Text(i.toString()));
+}
+
+List<_Entity> _randomEntities(int length) {
+  return List.generate(length, (index) => _Entity(Rand.dateTime()));
+}
+
+class _Entity {
+  final DateTime dateTime;
+
+  const _Entity(this.dateTime);
 }

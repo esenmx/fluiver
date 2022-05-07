@@ -95,3 +95,36 @@ extension WidgetIterableExtensions<E> on Iterable<E> {
   Map<E, Widget> mappedChildren(Widget Function(E element) builder) =>
       {for (int i = 0; i < length; i++) elementAt(i): builder(elementAt(i))};
 }
+
+extension ChronographiclySortableX<E> on Iterable<E> {
+  E earliest(DateTime Function(E e) toDateTime) => _first(toDateTime, true);
+
+  E latest(DateTime Function(E e) toDateTime) => _first(toDateTime, false);
+
+  E _first(DateTime Function(E e) toDateTime, [bool ascending = true]) {
+    final iter = iterator;
+    if (!iter.moveNext()) {
+      throw StateError('no element found in $this');
+    }
+
+    E t = iter.current;
+    DateTime dt = toDateTime(t);
+
+    while (iter.moveNext()) {
+      final cdt = toDateTime(iter.current);
+      if (ascending) {
+        if (cdt.isBefore(dt)) {
+          t = iter.current;
+          dt = cdt;
+        }
+      } else {
+        if (cdt.isAfter(dt)) {
+          t = iter.current;
+          dt = cdt;
+        }
+      }
+    }
+
+    return t;
+  }
+}
