@@ -2,7 +2,7 @@ part of fluiver;
 
 // coverage:ignore-file
 
-extension AddEdgeInsetsExtensions on EdgeInsets {
+extension AddEdgeInsetsX on EdgeInsets {
   EdgeInsets addAll(double value) => this + EdgeInsets.all(value);
 
   EdgeInsets addLeft(double value) => this + EdgeInsets.only(left: value);
@@ -14,7 +14,17 @@ extension AddEdgeInsetsExtensions on EdgeInsets {
   EdgeInsets addBottom(double value) => this + EdgeInsets.only(bottom: value);
 }
 
-extension RemoveEdgeInsetsExtensions on EdgeInsets {
+extension OnlyEdgeInsetsX on EdgeInsets {
+  EdgeInsets get onlyLeft => EdgeInsets.only(left: left);
+
+  EdgeInsets get onlyTop => EdgeInsets.only(top: top);
+
+  EdgeInsets get onlyRight => EdgeInsets.only(right: right);
+
+  EdgeInsets get onlyBottom => EdgeInsets.only(bottom: bottom);
+}
+
+extension RemoveEdgeInsetsX on EdgeInsets {
   EdgeInsets get removeLeft => copyWith(left: 0);
 
   EdgeInsets get removeTop => copyWith(top: 0);
@@ -28,17 +38,17 @@ extension RemoveEdgeInsetsExtensions on EdgeInsets {
   EdgeInsets get removeHorizontal => copyWith(left: 0, right: 0);
 }
 
-extension OnlyEdgeInsetsExtensions on EdgeInsets {
-  EdgeInsets get onlyLeft => EdgeInsets.only(left: left);
+extension SetEdgeInsetsX on EdgeInsets {
+  EdgeInsets setVertical(double value) {
+    return EdgeInsets.symmetric(vertical: value);
+  }
 
-  EdgeInsets get onlyTop => EdgeInsets.only(top: top);
-
-  EdgeInsets get onlyRight => EdgeInsets.only(right: right);
-
-  EdgeInsets get onlyBottom => EdgeInsets.only(bottom: bottom);
+  EdgeInsets sertHorizontal(double value) {
+    return EdgeInsets.symmetric(horizontal: value);
+  }
 }
 
-extension MediaQueryEdgeInsetsExtensions on EdgeInsets {
+extension MediaQueryEdgeInsetsX on EdgeInsets {
   EdgeInsets withStatusBarMargin(BuildContext context) {
     return this + EdgeInsets.only(top: context.topPadding);
   }

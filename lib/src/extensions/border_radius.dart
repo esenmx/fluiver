@@ -2,7 +2,7 @@ part of fluiver;
 
 // coverage:ignore-file
 
-extension AddCircularBorderRadiusExtensions on BorderRadius {
+extension AddCircularBorderRadiusX on BorderRadius {
   BorderRadius addAll(double radius) {
     return this + BorderRadius.circular(radius);
   }
@@ -40,7 +40,7 @@ extension AddCircularBorderRadiusExtensions on BorderRadius {
   }
 }
 
-extension SetCircularBorderRadiusExtensions on BorderRadius {
+extension SetCircularBorderRadiusX on BorderRadius {
   BorderRadius setLeft(double radius) {
     return setTopLeft(radius).setBottomLeft(radius);
   }
@@ -74,7 +74,7 @@ extension SetCircularBorderRadiusExtensions on BorderRadius {
   }
 }
 
-extension RemoveCircularBorderRadiusExtensions on BorderRadius {
+extension RemoveCircularBorderRadiusX on BorderRadius {
   BorderRadius get removeLeft {
     return copyWith(topLeft: Radius.zero, bottomLeft: Radius.zero);
   }
@@ -108,7 +108,7 @@ extension RemoveCircularBorderRadiusExtensions on BorderRadius {
   }
 }
 
-extension EliminateCircularBorderRadiusExtensions on BorderRadius {
+extension EliminateCircularBorderRadiusX on BorderRadius {
   BorderRadius get onlyTopLeft {
     return BorderRadius.only(topLeft: topLeft);
   }

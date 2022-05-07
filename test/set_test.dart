@@ -2,7 +2,7 @@ import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
-  group('SetExtensions', () {
+  group('SetX', () {
     test('toMap', () {
       expect(<int>{}.toMap<bool>((v) => true), <int, bool>{});
       final map = List<int>.generate(1000, (i) => i)
