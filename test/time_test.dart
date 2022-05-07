@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
   final value = DateTime(1990, 6, 26, 8, 30);
-  test('DateTimeExtensions', () {
+  test('DateTimeX', () {
     expect(value.toDate(), DateTime(1990, 6, 26));
     expect(value.toTime(), const TimeOfDay(hour: 8, minute: 30));
     expect(value.addYears(31), value.copyWith(year: 2021));

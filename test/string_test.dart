@@ -20,7 +20,9 @@ void main() async {
       expect('', ''.nameAbbreviation());
       expect('Asd', 'asd'.nameAbbreviation());
       expect('John Doe'.nameAbbreviation(), 'J. Doe');
-      expect('john doe'.nameAbbreviation(), 'J. Doe');
+      expect('jOHN doe'.nameAbbreviation(), 'J. Doe');
+      expect('j dOE'.nameAbbreviation(), 'J Doe');
+      expect('john j dOE'.nameAbbreviation(), 'J. J Doe');
     });
 
     test('removePrefixOrNull', () {

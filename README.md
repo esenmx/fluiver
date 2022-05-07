@@ -8,7 +8,7 @@ to `IDE` behaviours rather than reducing the amount of written code roughly.
 ### Widgets
 `TODO`
 
-### Extensions
+### X
 
 #### BuildContext
 
@@ -16,28 +16,16 @@ to `IDE` behaviours rather than reducing the amount of written code roughly.
 // MediaQuery
 context.screenWidth // MediaQuery.of(context).size.width
 context.screenHeight // MediaQuery.of(context).size.height
+
 context.isPlatformDark // MediaQuery.of(context).platformBrightness == Brightness.dark
 context.isPlatformLight // MediaQuery.of(context).platformBrightness == Brightness.light
+
 context.isOrientationPortrait // MediaQuery.of(context).orientation == Orientation.portrait
 context.isOrientationLandscape // MediaQuery.of(context).orientation == Orientation.landscape
+
 context.topPadding // MediaQuery.of(context).padding.top
 context.bottomPadding // MediaQuery.of(context).padding.bottom
 context.bottomInset // MediaQuery.of(context).viewInsets.bottom
-
-// TextTheme
-contetx.headline1TextStyle // Theme.of(context).textTheme.headline1!
-contetx.headline2TextStyle // Theme.of(context).textTheme.headline2!
-contetx.headline3TextStyle // Theme.of(context).textTheme.headline3!
-contetx.headline4TextStyle // Theme.of(context).textTheme.headline4!
-contetx.headline5TextStyle // Theme.of(context).textTheme.headline5!
-contetx.headline6TextStyle // Theme.of(context).textTheme.headline6!
-contetx.subtitle1TextStyle // Theme.of(context).textTheme.subtitle1!
-contetx.subtitle2TextStyle // Theme.of(context).textTheme.subtitle2!
-contetx.body1TextStyle // Theme.of(context).textTheme.bodyText1!
-contetx.body2TextStyle // Theme.of(context).textTheme.bodyText2!
-contetx.captionTextStyle // Theme.of(context).textTheme.caption!
-contetx.buttonTextStyle // Theme.of(context).textTheme.button!
-contetx.overlineTextStyle // Theme.of(context).textTheme.overline!
 
 // Directionality
 context.isLTR // Directionality.of(context) == TextDirection.ltr
@@ -50,7 +38,23 @@ context.secondaryColor // Theme.of(context).colorScheme.secondary
 context.surfaceColor // Theme.of(context).colorScheme.surface
 context.backgroundColor // Theme.of(context).colorScheme.background
 context.errorColor // Theme.of(context).colorScheme.error
+
+// TextTheme
+context.headline1TextStyle // Theme.of(context).textTheme.headline1!
+context.headline2TextStyle // Theme.of(context).textTheme.headline2!
+context.headline3TextStyle // Theme.of(context).textTheme.headline3!
+context.headline4TextStyle // Theme.of(context).textTheme.headline4!
+context.headline5TextStyle // Theme.of(context).textTheme.headline5!
+context.headline6TextStyle // Theme.of(context).textTheme.headline6!
+context.subtitle1TextStyle // Theme.of(context).textTheme.subtitle1!
+context.subtitle2TextStyle // Theme.of(context).textTheme.subtitle2!
+context.body1TextStyle // Theme.of(context).textTheme.bodyText1!
+context.body2TextStyle // Theme.of(context).textTheme.bodyText2!
+context.captionTextStyle // Theme.of(context).textTheme.caption!
+context.buttonTextStyle // Theme.of(context).textTheme.button!
+context.overlineTextStyle // Theme.of(context).textTheme.overline!
 ```
+
 
 #### Duration
 ``TODO``

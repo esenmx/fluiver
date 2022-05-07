@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension IterableExtensions<E> on Iterable<E> {
+extension IterableX<E> on Iterable<E> {
   /// ```dart
   /// [1].convertTo2D(2) // [[1]]
   /// [1, 2, 3, 4].convertTo2D(2) // [[1, 2], [3, 4]]
@@ -34,9 +34,29 @@ extension IterableExtensions<E> on Iterable<E> {
     }
     return map;
   }
+
+  /// Useful for widgets like [CupertinoSegmentedControl]
+  /// ```dart
+  /// ['Foo', 'Bar', 'Baz'].mappedChildren((e) => Text(e))
+  /// returns:
+  /// {
+  ///   'Foo' : Text('Foo'),
+  ///   'Foo' : Text('Bar'),
+  ///   'Foo' : Text('Baz'),
+  /// }
+  /// ```
+  /// ```dart
+  /// CupertinoSegmentedControl(
+  ///   ...
+  ///   children: children.mappedChildren
+  ///   ...
+  /// );
+  /// ```
+  Map<E, Widget> mappedChildren(Widget Function(E element) builder) =>
+      {for (int i = 0; i < length; i++) elementAt(i): builder(elementAt(i))};
 }
 
-extension Iterable2DExtensions<E> on Iterable<Iterable<E>> {
+extension TwoDIterableX<E> on Iterable<Iterable<E>> {
   /// More straightforward solution than [expand] in case of all sub-elements
   /// have same type
   Iterable<E> from2D() sync* {
@@ -48,7 +68,7 @@ extension Iterable2DExtensions<E> on Iterable<Iterable<E>> {
 
 typedef IndexedChildBuilder = Widget Function(Widget child, int index);
 
-extension IterableWidgetExtensions on Iterable<Widget> {
+extension WidgetIterableX on Iterable<Widget> {
   /// More versatile version of [ListTile.divideTiles],
   /// but you can use it in anywhere, possibly [Column], [Row], [Listview]...
   /// ```dart
@@ -74,57 +94,36 @@ extension IterableWidgetExtensions on Iterable<Widget> {
   }
 }
 
-extension WidgetIterableExtensions<E> on Iterable<E> {
-  /// Useful for widgets like [CupertinoSegmentedControl]
-  /// ```dart
-  /// ['Foo', 'Bar', 'Baz'].mappedChildren((e) => Text(e))
-  /// returns:
-  /// {
-  ///   'Foo' : Text('Foo'),
-  ///   'Foo' : Text('Bar'),
-  ///   'Foo' : Text('Baz'),
-  /// }
-  /// ```
-  /// ```dart
-  /// CupertinoSegmentedControl(
-  ///   ...
-  ///   children: children.mappedChildren
-  ///   ...
-  /// );
-  /// ```
-  Map<E, Widget> mappedChildren(Widget Function(E element) builder) =>
-      {for (int i = 0; i < length; i++) elementAt(i): builder(elementAt(i))};
-}
+typedef _ToDateTimeIter<E> = DateTime Function(E e);
 
-extension ChronographiclySortableX<E> on Iterable<E> {
-  E earliest(DateTime Function(E e) toDateTime) => _first(toDateTime, true);
+extension ChronoIterableX<E> on Iterable<E> {
+  E earliest(_ToDateTimeIter<E> toDateTime) => _first(toDateTime, true);
 
-  E latest(DateTime Function(E e) toDateTime) => _first(toDateTime, false);
+  E latest(_ToDateTimeIter<E> toDateTime) => _first(toDateTime, false);
 
-  E _first(DateTime Function(E e) toDateTime, [bool ascending = true]) {
+  E _first(_ToDateTimeIter<E> toDateTime, [bool ascending = true]) {
     final iter = iterator;
     if (!iter.moveNext()) {
       throw StateError('no element found in $this');
     }
 
-    E t = iter.current;
-    DateTime dt = toDateTime(t);
+    E element = iter.current;
+    DateTime dateTime = toDateTime(element);
 
     while (iter.moveNext()) {
-      final cdt = toDateTime(iter.current);
+      final currentDateTime = toDateTime(iter.current);
       if (ascending) {
-        if (cdt.isBefore(dt)) {
-          t = iter.current;
-          dt = cdt;
+        if (currentDateTime.isBefore(dateTime)) {
+          element = iter.current;
+          dateTime = currentDateTime;
         }
       } else {
-        if (cdt.isAfter(dt)) {
-          t = iter.current;
-          dt = cdt;
+        if (currentDateTime.isAfter(dateTime)) {
+          element = iter.current;
+          dateTime = currentDateTime;
         }
       }
     }
-
-    return t;
+    return element;
   }
 }

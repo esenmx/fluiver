@@ -21,7 +21,7 @@ void main() async {
   ];
   final expandedC = [1, 2, 3, 4, 5, 6];
 
-  group('IterableExtensions<E>', () {
+  group('IterableX<E>', () {
     test('to2D', () {
       expect([].to2D(3), []);
       expect(expandedA.to2D(1), twoDimA);
@@ -37,7 +37,7 @@ void main() async {
     });
   });
 
-  group('Iterable2DExtensions<E>', () {
+  group('Iterable2DX<E>', () {
     test('from2D', () {
       expect([[]].from2D(), []);
       expect(twoDimA.from2D().toList(), expandedA);
@@ -46,7 +46,7 @@ void main() async {
     });
   });
 
-  group('IterableWidgetExtensions', () {
+  group('IterableWidgetX', () {
     test('widgetJoin', () {
       expect(mockWidgetJoin(0), <Widget>[]);
       expect(mockWidgetJoin(1).length, 1);
@@ -78,14 +78,14 @@ void main() async {
 
   group('ChronographiclySortable', () {
     test('earliest', () {
-      final es = _randomEntities(1000);
+      final es = randomChronoIterable(1000);
       final e = es.earliest((e) => e.dateTime);
       for (var element in es) {
         expect(e.dateTime.isBefore(element.dateTime), e != element);
       }
     });
     test('latest', () {
-      final es = _randomEntities(1000);
+      final es = randomChronoIterable(1000);
       final e = es.latest((e) => e.dateTime);
       for (var element in es) {
         expect(e.dateTime.isAfter(element.dateTime), e != element);
@@ -105,12 +105,12 @@ Map<int, Widget> mockMappedChildren(int length) {
       .mappedChildren((i) => Text(i.toString()));
 }
 
-List<_Entity> _randomEntities(int length) {
-  return List.generate(length, (index) => _Entity(Rand.dateTime()));
+List<_ChronoEntity> randomChronoIterable(int length) {
+  return List.generate(length, (index) => _ChronoEntity(Rand.dateTime()));
 }
 
-class _Entity {
+class _ChronoEntity {
   final DateTime dateTime;
 
-  const _Entity(this.dateTime);
+  const _ChronoEntity(this.dateTime);
 }

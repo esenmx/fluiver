@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension DateTimeExtensions on DateTime {
+extension DateTimeX on DateTime {
   DateTime copyWith({
     int? year,
     int? month,
@@ -46,7 +46,7 @@ extension DateTimeExtensions on DateTime {
   DateTime addSeconds(int seconds) => add(Duration(seconds: seconds));
 }
 
-extension TimeOfDayExtensions on TimeOfDay {
+extension TimeOfDayX on TimeOfDay {
   DateTime inToday() => DateTime.now().copyWith(hour: hour, minute: minute);
 
   DateTime inTomorrow() => inToday().add(const Duration(days: 1));

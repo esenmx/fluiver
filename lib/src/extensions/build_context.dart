@@ -2,13 +2,13 @@ part of fluiver;
 
 // coverage:ignore-file
 
-extension _BuildContextInternal on BuildContext {
+extension _BuildContextX on BuildContext {
   MediaQueryData get _m => MediaQuery.of(this);
 
   ThemeData get _t => Theme.of(this);
 }
 
-extension BuildContextMediaQuery on BuildContext {
+extension MediaQueryX on BuildContext {
   double get screenWidth => _m.size.width;
 
   double get screenHeight => _m.size.height;
@@ -28,13 +28,13 @@ extension BuildContextMediaQuery on BuildContext {
   double get bottomInset => _m.viewInsets.bottom;
 }
 
-extension BuildContextTheme on BuildContext {
+extension ThemeDataX on BuildContext {
   bool get isThemeDark => _t.brightness == Brightness.dark;
 
   bool get isThemeLight => _t.brightness == Brightness.light;
 }
 
-extension BuildContextTextTheme on BuildContext {
+extension TextThemeX on BuildContext {
   TextStyle get headline1TextStyle => _t.textTheme.headline1!;
 
   TextStyle get headline2TextStyle => _t.textTheme.headline2!;
@@ -62,13 +62,13 @@ extension BuildContextTextTheme on BuildContext {
   TextStyle get overlineTextStyle => _t.textTheme.overline!;
 }
 
-extension BuildContextDirectionality on BuildContext {
+extension DirectionalityX on BuildContext {
   bool get isLTR => Directionality.of(this) == TextDirection.ltr;
 
   bool get isRTL => Directionality.of(this) == TextDirection.rtl;
 }
 
-extension BuildContextColorScheme on BuildContext {
+extension ColorSchemeX on BuildContext {
   Color get primaryColor => _t.colorScheme.primary;
 
   Color get primaryContainerColor => _t.colorScheme.primaryContainer;

@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension StringCapitalizeExtensions on String {
+extension StringCapitalizeX on String {
   String get capitalize {
     switch (length) {
       case 0:
@@ -19,8 +19,30 @@ extension StringCapitalizeExtensions on String {
         .join(separator);
   }
 
+  /// Also ensures lowercase status of noninitial letters
+  ///
+  /// capitalize: darT => DarT
+  /// enhancedCapitalize: dART => Dart
+  ///
+  String get enhancedCapitalize {
+    switch (length) {
+      case 0:
+        return this;
+      case 1:
+        return toUpperCase();
+      default:
+        final buffer = StringBuffer(this[0].toUpperCase());
+        for (int i = 1; i < length; i++) {
+          buffer.write(this[i].toLowerCase());
+        }
+        return buffer.toString();
+    }
+  }
+
   ///
   /// john doe => J. Doe
+  /// j dOE => J Doe
+  /// john J dOE => J. J Doe
   ///
   String nameAbbreviation() {
     if (trim().isEmpty) {
@@ -30,16 +52,21 @@ extension StringCapitalizeExtensions on String {
     final buffer = StringBuffer();
     for (int i = 0; i < names.length; i++) {
       if (i == names.length - 1) {
-        buffer.write(names.elementAt(i).capitalize);
+        buffer.write(names.elementAt(i).enhancedCapitalize);
       } else {
-        buffer.write('${names.elementAt(i)[0].toUpperCase()}. ');
+        final name = names.elementAt(i);
+        if (name.length == 1) {
+          buffer.write('${name.toUpperCase()} ');
+        } else {
+          buffer.write('${name[0].toUpperCase()}. ');
+        }
       }
     }
     return buffer.toString();
   }
 }
 
-extension StringRemoveExtensions on String {
+extension StringRemoveX on String {
   String? removePrefixOrNull(String prefix) {
     if (startsWith(prefix)) {
       return substring(prefix.length, length);
