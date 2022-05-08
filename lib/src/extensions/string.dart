@@ -19,10 +19,10 @@ extension StringCapitalizeX on String {
         .join(separator);
   }
 
-  /// Also ensures lowercase status of noninitial letters
+  /// Also ensures lowercasing of noninitial letters
   ///
-  /// capitalize: darT => DarT
-  /// enhancedCapitalize: dART => Dart
+  /// capitalize: daRT => DaRT
+  /// enhancedCapitalize: daRT => Dart
   ///
   String get enhancedCapitalize {
     switch (length) {
@@ -31,9 +31,10 @@ extension StringCapitalizeX on String {
       case 1:
         return toUpperCase();
       default:
-        final buffer = StringBuffer(this[0].toUpperCase());
-        for (int i = 1; i < length; i++) {
-          buffer.write(this[i].toLowerCase());
+        final iterator = characters.iterator..moveNext();
+        final buffer = StringBuffer(iterator.current.toUpperCase());
+        while (iterator.moveNext()) {
+          buffer.write(iterator.current.toLowerCase());
         }
         return buffer.toString();
     }

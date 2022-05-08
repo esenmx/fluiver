@@ -16,7 +16,7 @@ void main() async {
       expect('Dart,Go', 'dart,,go'.capitalizeEach(','));
     });
 
-    test('nameAbbreviation', () {
+    test('nameAbbreviation - enhancedCapitalize', () {
       expect('', ''.nameAbbreviation());
       expect('Asd', 'asd'.nameAbbreviation());
       expect('John Doe'.nameAbbreviation(), 'J. Doe');
