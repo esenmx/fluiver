@@ -37,13 +37,28 @@ extension DateTimeX on DateTime {
 
   DateTime addMonths(int months) => copyWith(month: month + months);
 
-  DateTime addDays(int days) => add(Duration(days: days));
+  DateTime addDays(int days) => copyWith(day: day + days);
 
-  DateTime addHours(int hours) => add(Duration(hours: hours));
+  DateTime addHours(int hours) => copyWith(hour: hour + hours);
 
-  DateTime addMinutes(int minutes) => add(Duration(minutes: minutes));
+  DateTime addMinutes(int minutes) => copyWith(minute: minute + minutes);
 
-  DateTime addSeconds(int seconds) => add(Duration(seconds: seconds));
+  DateTime addSeconds(int seconds) => copyWith(second: second + seconds);
+
+  bool get isToday {
+    final n = DateTime.now();
+    return n.day == day && n.month == month && n.year == year;
+  }
+
+  bool get isTomorrow {
+    final t = DateTime.now().addDays(1);
+    return t.day == day && t.month == month && t.year == year;
+  }
+
+  bool get isYesterday {
+    final y = DateTime.now().addDays(-1);
+    return y.day == day && y.month == month && y.year == year;
+  }
 }
 
 extension TimeOfDayX on TimeOfDay {
@@ -55,5 +70,5 @@ extension TimeOfDayX on TimeOfDay {
 
   DateTime inYesterday() => inToday().subtract(const Duration(days: 1));
 
-  DateTime inLastWeek() => inToday().subtract(const Duration(days: 7));
+  DateTime inPreviousWeek() => inToday().subtract(const Duration(days: 7));
 }

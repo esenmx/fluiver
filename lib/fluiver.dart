@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+part 'src/extensions/border.dart';
 part 'src/extensions/border_radius.dart';
 part 'src/extensions/build_context.dart';
 part 'src/extensions/duration.dart';
@@ -23,3 +24,4 @@ part 'src/helpers/observer.dart';
 part 'src/widgets/flex.dart';
 part 'src/widgets/sliver.dart';
 part 'src/widgets/space.dart';
+part 'src/widgets/stack.dart';

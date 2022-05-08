@@ -74,40 +74,6 @@ extension SetCircularBorderRadiusX on BorderRadius {
   }
 }
 
-extension RemoveCircularBorderRadiusX on BorderRadius {
-  BorderRadius get removeLeft {
-    return copyWith(topLeft: Radius.zero, bottomLeft: Radius.zero);
-  }
-
-  BorderRadius get removeTop {
-    return copyWith(topLeft: Radius.zero, topRight: Radius.zero);
-  }
-
-  BorderRadius get removeRight {
-    return copyWith(topRight: Radius.zero, bottomRight: Radius.zero);
-  }
-
-  BorderRadius get removeBottom {
-    return copyWith(bottomRight: Radius.zero, bottomLeft: Radius.zero);
-  }
-
-  BorderRadius get removeTopLeft {
-    return copyWith(topLeft: Radius.zero);
-  }
-
-  BorderRadius get removeTopRight {
-    return copyWith(topRight: Radius.zero);
-  }
-
-  BorderRadius get removeBottomRight {
-    return copyWith(bottomRight: Radius.zero);
-  }
-
-  BorderRadius get removeBottomLeft {
-    return copyWith(bottomLeft: Radius.zero);
-  }
-}
-
 extension EliminateCircularBorderRadiusX on BorderRadius {
   BorderRadius get onlyTopLeft {
     return BorderRadius.only(topLeft: topLeft);

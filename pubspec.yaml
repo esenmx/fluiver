@@ -17,6 +17,7 @@ dev_dependencies:
   flutter_lints: ^1.0.0
   mockito: ^5.1.0
   build_runner: ^2.1.10
+  clock: 1.1.0
   rand:
     git:
       url: https://github.com/esenmx/rand
