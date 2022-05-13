@@ -23,8 +23,7 @@ extension StringCapitalizeX on String {
   ///
   /// capitalize: daRT => DaRT
   /// enhancedCapitalize: daRT => Dart
-  ///
-  String get enhancedCapitalize {
+  String get capitalizeLowerLatter {
     switch (length) {
       case 0:
         return this;
@@ -40,32 +39,38 @@ extension StringCapitalizeX on String {
     }
   }
 
-  ///
   /// john doe => J. Doe
   /// j dOE => J Doe
   /// john J dOE => J. J Doe
-  ///
-  String nameAbbreviation() {
-    if (trim().isEmpty) {
-      return '';
+  String shortPersonalName() {
+    final names = split(' ').where((e) => e.isNotEmpty);
+    switch (names.length) {
+      case 0:
+        return '';
+      case 1:
+        return names.first.capitalizeLowerLatter;
     }
-    final names = split(' ');
     final buffer = StringBuffer();
-    for (int i = 0; i < names.length; i++) {
-      if (i == names.length - 1) {
-        buffer.write(names.elementAt(i).enhancedCapitalize);
-      } else {
-        final name = names.elementAt(i);
-        if (name.length == 1) {
-          buffer.write('${name.toUpperCase()} ');
-        } else {
-          buffer.write('${name[0].toUpperCase()}. ');
-        }
+    for (int i = 0; i < names.length - 1; i++) {
+      final name = names.elementAt(i);
+      switch (name.length) {
+        case 0:
+          break;
+        case 1:
+          buffer.write(name.toUpperCase());
+          break;
+        default:
+          buffer.write(name[0].toUpperCase());
+          buffer.write('.');
       }
+      buffer.write(' ');
     }
+    buffer.write(names.last.capitalizeLowerLatter);
     return buffer.toString();
   }
 }
+
+typedef StringOrElse = String Function(String string);
 
 extension StringRemoveX on String {
   String? removePrefixOrNull(String prefix) {
@@ -75,11 +80,11 @@ extension StringRemoveX on String {
     return null;
   }
 
-  String mayRemovePrefix(String prefix) {
+  String removePrefixOrElse(String prefix, [StringOrElse? orElse]) {
     if (startsWith(prefix)) {
       return substring(prefix.length, length);
     }
-    return this;
+    return orElse?.call(this) ?? this;
   }
 
   String? removeSuffixOrNull(String suffix) {
@@ -89,10 +94,10 @@ extension StringRemoveX on String {
     return null;
   }
 
-  String mayRemoveSuffix(String suffix) {
+  String removeSuffixOrElse(String suffix, [StringOrElse? orElse]) {
     if (endsWith(suffix)) {
       return substring(0, length - suffix.length);
     }
-    return this;
+    return orElse?.call(this) ?? this;
   }
 }
