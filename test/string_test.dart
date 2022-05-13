@@ -6,14 +6,16 @@ void main() async {
     test('capitalize', () {
       expect('', ''.capitalize);
       expect('A', 'a'.capitalize);
-      expect('Fluiver', 'fluiver'.capitalize);
+      expect('Foo', 'foo'.capitalize);
     });
 
     test('capitalizeEach', () {
       expect('', ''.capitalizeEach());
+      expect('', ''.capitalizeEach('', '-'));
       expect('A', 'a'.capitalizeEach());
-      expect('Dart Go', 'dart go'.capitalizeEach());
-      expect('Dart,Go', 'dart,,go'.capitalizeEach(','));
+      expect('Foo Bar', 'foo bar'.capitalizeEach());
+      expect('Foo,Bar', 'foo,,bar'.capitalizeEach(','));
+      expect('Foo Bar', 'foo,,bar'.capitalizeEach(',', ' '));
     });
 
     test('nameAbbreviation - enhancedCapitalize', () {

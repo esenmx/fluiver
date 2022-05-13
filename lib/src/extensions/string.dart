@@ -12,11 +12,11 @@ extension StringCapitalizeX on String {
     }
   }
 
-  String capitalizeEach([String separator = ' ']) {
+  String capitalizeEach([String separator = ' ', String? joiner]) {
     return split(separator)
         .map((element) => element.capitalize)
         .where((element) => element.isNotEmpty)
-        .join(separator);
+        .join(joiner ?? separator);
   }
 
   /// Also ensures lowercasing of noninitial letters
