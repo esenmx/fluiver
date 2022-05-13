@@ -4,51 +4,56 @@ import 'package:flutter_test/flutter_test.dart';
 void main() async {
   group('String', () {
     test('capitalize', () {
-      expect('', ''.capitalize);
-      expect('A', 'a'.capitalize);
-      expect('Foo', 'foo'.capitalize);
+      expect(''.capitalize, '');
+      expect('a'.capitalize, 'A');
+      expect('foo'.capitalize, 'Foo');
     });
 
     test('capitalizeEach', () {
-      expect('', ''.capitalizeEach());
-      expect('', ''.capitalizeEach('', '-'));
-      expect('A', 'a'.capitalizeEach());
-      expect('Foo Bar', 'foo bar'.capitalizeEach());
-      expect('Foo,Bar', 'foo,,bar'.capitalizeEach(','));
-      expect('Foo Bar', 'foo,,bar'.capitalizeEach(',', ' '));
+      expect(''.capitalizeEach(), '');
+      expect(''.capitalizeEach('', '-'), '');
+      expect('a'.capitalizeEach(), 'A');
+      expect('foo bar'.capitalizeEach(), 'Foo Bar');
+      expect('foo,,bar'.capitalizeEach(','), 'Foo,Bar');
+      expect('foo,,bar'.capitalizeEach(',', ' '), 'Foo Bar');
     });
 
-    test('nameAbbreviation - enhancedCapitalize', () {
-      expect('', ''.nameAbbreviation());
-      expect('Asd', 'asd'.nameAbbreviation());
-      expect('John Doe'.nameAbbreviation(), 'J. Doe');
-      expect('jOHN doe'.nameAbbreviation(), 'J. Doe');
-      expect('j dOE'.nameAbbreviation(), 'J Doe');
-      expect('john j dOE'.nameAbbreviation(), 'J. J Doe');
+    test('shortPersonalName - capitalizeLowerLatter', () {
+      expect(''.shortPersonalName(), '');
+      expect('    '.shortPersonalName(), '');
+      expect('foo'.shortPersonalName(), 'Foo');
+      expect('fOO'.shortPersonalName(), 'Foo');
+      expect('John Doe'.shortPersonalName(), 'J. Doe');
+      expect('jOHN doe'.shortPersonalName(), 'J. Doe');
+      expect('j dOE'.shortPersonalName(), 'J Doe');
+      expect('john j dOE'.shortPersonalName(), 'J. J Doe');
+      expect('john  j dOE'.shortPersonalName(), 'J. J Doe');
     });
 
     test('removePrefixOrNull', () {
-      expect(null, ''.removePrefixOrNull('foo'));
-      expect('', 'foo'.removePrefixOrNull('foo'));
-      expect('bar', 'foobar'.removePrefixOrNull('foo'));
+      expect(''.removePrefixOrNull('foo'), null);
+      expect('foo'.removePrefixOrNull('foo'), '');
+      expect('foobar'.removePrefixOrNull('foo'), 'bar');
     });
 
-    test('mayRemovePrefix', () {
-      expect('', ''.mayRemovePrefix('foo'));
-      expect('', 'foo'.mayRemovePrefix('foo'));
-      expect('bar', 'foobar'.mayRemovePrefix('foo'));
+    test('removePrefixOrElse', () {
+      expect(''.removePrefixOrElse('foo'), '');
+      expect('foo'.removePrefixOrElse('foo'), '');
+      expect('foo'.removePrefixOrElse('baz', (s) => s.toUpperCase()), 'FOO');
+      expect('foobar'.removePrefixOrElse('foo'), 'bar');
     });
 
     test('removeSuffixOrNull', () {
-      expect(null, ''.removeSuffixOrNull('foo'));
-      expect('', 'foo'.removeSuffixOrNull('foo'));
-      expect('foo', 'foobar'.removeSuffixOrNull('bar'));
+      expect(''.removeSuffixOrNull('foo'), null);
+      expect('foo'.removeSuffixOrNull('foo'), '');
+      expect('foobar'.removeSuffixOrNull('bar'), 'foo');
     });
 
-    test('mayRemoveSuffix', () {
-      expect('', ''.mayRemoveSuffix('foo'));
-      expect('', 'foo'.mayRemoveSuffix('foo'));
-      expect('foo', 'foobar'.mayRemoveSuffix('bar'));
+    test('removeSuffixOrElse', () {
+      expect(''.removeSuffixOrElse('foo'), '');
+      expect('foo'.removeSuffixOrElse('foo'), '');
+      expect('foo'.removeSuffixOrElse('baz', (s) => s.toUpperCase()), 'FOO');
+      expect('foobar'.removeSuffixOrElse('bar'), 'foo');
     });
   });
 }
