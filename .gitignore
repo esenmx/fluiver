@@ -15,13 +15,10 @@
 *.iws
 .idea/
 
-# VSCode related
-.vscode/
-
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
-#.vscode/
+.vscode/
 
 # Flutter/Dart/Pub related
 # Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
@@ -31,3 +28,6 @@
 .packages
 build/
 coverage/
+
+# don't check in golden failure output
+**/failures/*.png

@@ -20,7 +20,7 @@ void main() async {
 
     test('shortPersonalName - capitalizeLowerLatter', () {
       expect(''.shortPersonalName(), '');
-      expect('    '.shortPersonalName(), '');
+      expect('    '.shortPersonalName(), '    ');
       expect('foo'.shortPersonalName(), 'Foo');
       expect('fOO'.shortPersonalName(), 'Foo');
       expect('John Doe'.shortPersonalName(), 'J. Doe');
