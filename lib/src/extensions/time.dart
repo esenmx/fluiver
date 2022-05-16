@@ -47,6 +47,8 @@ extension DateTimeX on DateTime {
 
   DateTime addMonths(int months) => copyWith(month: month + months);
 
+  DateTime addWeeks(int weeks) => copyWith(day: day + weeks * 7);
+
   DateTime addDays(int days) => copyWith(day: day + days);
 
   DateTime addHours(int hours) => copyWith(hour: hour + hours);
@@ -73,12 +75,4 @@ extension DateTimeX on DateTime {
 
 extension TimeOfDayX on TimeOfDay {
   DateTime inToday() => DateTime.now().copyWith(hour: hour, minute: minute);
-
-  DateTime inTomorrow() => inToday().add(const Duration(days: 1));
-
-  DateTime inNextWeek() => inToday().add(const Duration(days: 7));
-
-  DateTime inYesterday() => inToday().subtract(const Duration(days: 1));
-
-  DateTime inPreviousWeek() => inToday().subtract(const Duration(days: 7));
 }
