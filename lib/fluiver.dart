@@ -1,6 +1,7 @@
 library fluiver;
 
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -23,5 +24,6 @@ part 'src/helpers/network.dart';
 part 'src/helpers/observer.dart';
 part 'src/widgets/flex.dart';
 part 'src/widgets/sliver.dart';
+part 'src/widgets/google_avatar.dart';
 part 'src/widgets/space.dart';
 part 'src/widgets/stack.dart';
