@@ -33,6 +33,16 @@ extension DateTimeX on DateTime {
 
   TimeOfDay toTime() => TimeOfDay(hour: hour, minute: minute);
 
+  DateTime truncate(Duration margin) {
+    final truncated = subtract(Duration(
+      microseconds: microsecondsSinceEpoch % margin.inMicroseconds,
+    ));
+    if (difference(truncated).abs() > timeZoneOffset) {
+      return truncated.subtract(timeZoneOffset);
+    }
+    return truncated;
+  }
+
   DateTime addYears(int years) => copyWith(year: year + years);
 
   DateTime addMonths(int months) => copyWith(month: month + months);
