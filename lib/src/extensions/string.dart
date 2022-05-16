@@ -46,27 +46,42 @@ extension StringCapitalizeX on String {
     final names = split(' ').where((e) => e.isNotEmpty);
     switch (names.length) {
       case 0:
-        return '';
+        return this;
       case 1:
         return names.first.capitalizeLowerLatter;
+      default:
+        final buffer = StringBuffer();
+        for (int i = 0; i < names.length - 1; i++) {
+          final name = names.elementAt(i);
+          switch (name.length) {
+            case 0:
+              break;
+            case 1:
+              buffer.write(name.toUpperCase());
+              break;
+            default:
+              buffer.write(name[0].toUpperCase());
+              buffer.write('.');
+          }
+          buffer.write(' ');
+        }
+        buffer.write(names.last.capitalizeLowerLatter);
+        return buffer.toString();
     }
-    final buffer = StringBuffer();
-    for (int i = 0; i < names.length - 1; i++) {
-      final name = names.elementAt(i);
-      switch (name.length) {
-        case 0:
-          break;
-        case 1:
-          buffer.write(name.toUpperCase());
-          break;
-        default:
-          buffer.write(name[0].toUpperCase());
-          buffer.write('.');
-      }
-      buffer.write(' ');
+  }
+
+  /// Useful when generating avatars based on name(similarly Google account avatars)
+  /// John Doe => JD
+  String avatarLetters() {
+    final names = split(' ').where((e) => e.isNotEmpty);
+    switch (names.length) {
+      case 0:
+        return this;
+      case 1:
+        return names.first[0].toUpperCase();
+      default:
+        return names.first[0].toUpperCase() + names.last[0].toUpperCase();
     }
-    buffer.write(names.last.capitalizeLowerLatter);
-    return buffer.toString();
   }
 }
 
