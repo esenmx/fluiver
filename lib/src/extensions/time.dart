@@ -33,9 +33,9 @@ extension DateTimeX on DateTime {
 
   TimeOfDay toTime() => TimeOfDay(hour: hour, minute: minute);
 
-  DateTime truncate(Duration margin) {
+  DateTime truncate(Duration modulus) {
     final truncated = subtract(Duration(
-      microseconds: microsecondsSinceEpoch % margin.inMicroseconds,
+      microseconds: microsecondsSinceEpoch % modulus.inMicroseconds,
     ));
     if (difference(truncated).abs() > timeZoneOffset) {
       return truncated.subtract(timeZoneOffset);
