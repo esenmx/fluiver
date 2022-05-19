@@ -7,7 +7,7 @@ extension IterableX<E> on Iterable<E> {
   /// [1, 2, 3, 4].convertTo2D(3) // [[1, 2, 3], [4]]
   /// ```
   Iterable<List<E>> to2D(int div) sync* {
-    RangeError.range(div, 1, 1 << 31);
+    RangeError.checkValueInInterval(div, 1, 1 << 31);
     final iterator = this.iterator;
     while (iterator.moveNext()) {
       final subArray = <E>[iterator.current];
@@ -22,15 +22,15 @@ extension IterableX<E> on Iterable<E> {
     }
   }
 
-  Map<int, E> toIndexedMap([int offset = 0]) {
-    if (isEmpty) {
-      return <int, E>{};
-    }
-    final iterator = this.iterator;
-    final map = <int, E>{};
-    int i = offset;
-    while (iterator.moveNext()) {
-      map[i++] = iterator.current;
+  /// Creates a [Map] that has groupped [Iterable] elements as [List] with
+  /// specified [groupper] parameter.
+  /// Useful for categorizing/groupping [Widget]s when data comes as flat [List]
+  Map<G, List<E>> groupAsMap<G>(G Function(E element) groupper) {
+    final map = <G, List<E>>{};
+    for (var e in this) {
+      final key = groupper(e);
+      map[key] ??= <E>[];
+      map[key]!.add(e);
     }
     return map;
   }
@@ -52,11 +52,11 @@ extension IterableX<E> on Iterable<E> {
   ///   ...
   /// );
   /// ```
-  Map<E, Widget> mappedChildren(Widget Function(E element) builder) =>
+  Map<E, Widget> asMapBuilder(Widget Function(E element) builder) =>
       {for (int i = 0; i < length; i++) elementAt(i): builder(elementAt(i))};
 }
 
-extension TwoDIterableX<E> on Iterable<Iterable<E>> {
+extension IterableIterableX<E> on Iterable<Iterable<E>> {
   /// More straightforward solution than [expand] in case of all sub-elements
   /// have same type
   Iterable<E> from2D() sync* {

@@ -14,8 +14,8 @@ extension StringCapitalizeX on String {
 
   String capitalizeEach([String splitter = ' ', String? joiner]) {
     return split(splitter)
-        .map((element) => element.capitalize)
-        .where((element) => element.isNotEmpty)
+        .map((e) => e.capitalize)
+        .where((e) => e.isNotEmpty)
         .join(joiner ?? splitter);
   }
 

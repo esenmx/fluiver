@@ -21,23 +21,25 @@ void main() async {
   ];
   final expandedC = [1, 2, 3, 4, 5, 6];
 
-  group('IterableX<E>', () {
+  group('IterableX', () {
     test('to2D', () {
+      expect(() => [1, 2, 3].to2D(0), throwsA(isA<RangeError>()));
       expect([].to2D(3), []);
       expect(expandedA.to2D(1), twoDimA);
       expect(expandedB.to2D(3), twoDimB);
       expect(expandedC.to2D(2), twoDimC);
     });
 
-    test('toIndexedMap', () {
-      expect([].toIndexedMap(), {});
-      expect([true].toIndexedMap(), {0: true});
-      expect([false, true].toIndexedMap(1), {1: false, 2: true});
-      expect(['foo', 'bar'].toIndexedMap(2), {2: 'foo', 3: 'bar'});
+    test('groupAsMap', () {
+      expect([42].groupAsMap((e) => e), {42: [42]});
+      expect([1, 2, 3, 4].groupAsMap((e) => e % 2 == 0), {
+        true: [2, 4],
+        false: [1, 3]
+      });
     });
   });
 
-  group('Iterable2DX<E>', () {
+  group('IterableIterableX', () {
     test('from2D', () {
       expect([[]].from2D(), []);
       expect(twoDimA.from2D().toList(), expandedA);
@@ -65,11 +67,11 @@ void main() async {
       }
     });
 
-    test('mappedChildren', () {
-      expect(mockMappedChildren(0), <int, Widget>{});
-      expect(mockMappedChildren(1)[0], isA<Text>());
-      expect(mockMappedChildren(1).length, 1);
-      final values = mockMappedChildren(100);
+    test('asMapBuilder', () {
+      expect(mockAsMapBuilder(0), <int, Widget>{});
+      expect(mockAsMapBuilder(1)[0], isA<Text>());
+      expect(mockAsMapBuilder(1).length, 1);
+      final values = mockAsMapBuilder(100);
       for (int i = 0; i < 100; i++) {
         expect(values[i], isA<Text>());
       }
@@ -100,9 +102,9 @@ List<Widget> mockWidgetJoin(int length) {
       .toList();
 }
 
-Map<int, Widget> mockMappedChildren(int length) {
+Map<int, Widget> mockAsMapBuilder(int length) {
   return List.generate(length, (i) => i)
-      .mappedChildren((i) => Text(i.toString()));
+      .asMapBuilder((i) => Text(i.toString()));
 }
 
 List<_ChronoEntity> randomChronoIterable(int length) {
