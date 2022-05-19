@@ -11,7 +11,7 @@ class FixedExtentSliverPersistentHeaderDelegate
   final Widget Function(BuildContext context, bool overlapsContent) builder;
 
   @override
-  Widget build(context, _, overlapsContent) {
+  Widget build(context, shrinkOffset, overlapsContent) {
     return builder(context, overlapsContent);
   }
 
