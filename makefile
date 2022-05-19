@@ -1,4 +1,4 @@
-.PHONY: build
+.PHONY: dry
 
-build:
-	flutter pub run build_runner build
+dry:
+	dart pub publish -n
