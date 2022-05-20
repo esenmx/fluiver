@@ -27,3 +27,4 @@ part 'src/widgets/sliver.dart';
 part 'src/widgets/google_avatar.dart';
 part 'src/widgets/space.dart';
 part 'src/widgets/stack.dart';
+part 'src/widgets/button.dart';
