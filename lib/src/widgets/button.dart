@@ -8,11 +8,13 @@ class FormSuffixButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.radius = 24.0,
+    this.tooltip,
   }) : super(key: key);
 
   final Widget icon;
   final VoidCallback onPressed;
   final double radius;
+  final String? tooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class FormSuffixButton extends StatelessWidget {
         icon: icon,
         splashRadius: radius,
         onPressed: onPressed,
+        tooltip: tooltip,
       ),
     );
   }
