@@ -22,9 +22,12 @@ part 'src/extensions/time.dart';
 part 'src/helpers/focus_node.dart';
 part 'src/helpers/network.dart';
 part 'src/helpers/observer.dart';
-part 'src/widgets/flex.dart';
-part 'src/widgets/sliver.dart';
+part 'src/widgets/flexes.dart';
+part 'src/widgets/slivers.dart';
 part 'src/widgets/google_avatar.dart';
 part 'src/widgets/space.dart';
-part 'src/widgets/stack.dart';
-part 'src/widgets/button.dart';
+part 'src/widgets/staggered_stack.dart';
+part 'src/widgets/form_suffix_button.dart';
+
+/// For auto import feature when extension method import needed
+class FluiveExporter {}
