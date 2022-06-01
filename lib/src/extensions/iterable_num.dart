@@ -6,6 +6,8 @@ extension IterableDoubleX on Iterable<double> {
   Iterable<int> toIntIterable() => map((e) => e.toInt());
 
   double average() => sum() / length;
+
+  double get lowest => reduce((v, e) => e < v ? e : v);
 }
 
 extension IterableInt on Iterable<int> {
@@ -16,4 +18,6 @@ extension IterableInt on Iterable<int> {
   double average() => sum() / length;
 
   Uint8List toBytes() => Uint8List.fromList(toList());
+
+  int get lowest => reduce((v, e) => e < v ? e : v);
 }
