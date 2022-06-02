@@ -19,6 +19,7 @@ void main() async {
 
     test('lowestOrZero', () {
       expect(<int>[].lowestOrZero, 0);
+      expect(<int>[2, 1].lowestOrZero, 1);
     });
   });
 
@@ -40,6 +41,7 @@ void main() async {
 
     test('lowestOrZero', () {
       expect(<double>[].lowestOrZero, 0.0);
+      expect(<double>[2, 1].lowestOrZero, 1);
     });
   });
 }
