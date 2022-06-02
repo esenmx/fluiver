@@ -20,12 +20,7 @@ extension IterableIntX on Iterable<int> {
 
   Uint8List toBytes() => Uint8List.fromList(toList());
 
-  int get lowestOrZero {
-    if (isEmpty) {
-      return 0;
-    }
-    return reduce((v, e) => e < v ? e : v);
-  }
+  int get lowestOrZero => isEmpty ? 0 : lowest;
 }
 
 extension IterableNumX<T extends num> on Iterable<T> {
