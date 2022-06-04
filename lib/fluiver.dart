@@ -20,6 +20,7 @@ part 'src/extensions/set.dart';
 part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
 part 'src/extensions/time.dart';
+part 'src/helpers/typedef.dart';
 part 'src/helpers/focus_node.dart';
 part 'src/helpers/network.dart';
 part 'src/helpers/observer.dart';
