@@ -54,6 +54,9 @@ extension IterableX<E> on Iterable<E> {
   /// ```
   Map<E, Widget> asMapBuilder(Widget Function(E element) builder) =>
       {for (int i = 0; i < length; i++) elementAt(i): builder(elementAt(i))};
+
+  /// Same as [single] but does not throw [StateError], instead returns null
+  E? get singleOrNull => length == 1 ? single : null;
 }
 
 extension IterableIterableX<E> on Iterable<Iterable<E>> {
@@ -62,34 +65,6 @@ extension IterableIterableX<E> on Iterable<Iterable<E>> {
   Iterable<E> from2D() sync* {
     for (final sub in this) {
       yield* sub;
-    }
-  }
-}
-
-typedef IndexedChildBuilder = Widget Function(Widget child, int index);
-
-extension WidgetIterableX on Iterable<Widget> {
-  /// More versatile version of [ListTile.divideTiles],
-  /// but you can use it in anywhere, possibly [Column], [Row], [Listview]...
-  /// ```dart
-  /// [Dash(), Dash()].widgetJoin(Divider()) == [Dash(), Divider(), Dash()]
-  /// ```
-  Iterable<Widget> widgetJoin(Widget Function() separator) sync* {
-    final Iterator<Widget> iterator = this.iterator;
-    if (iterator.moveNext()) {
-      yield iterator.current;
-    }
-    while (iterator.moveNext()) {
-      yield separator();
-      yield iterator.current;
-    }
-  }
-
-  /// For wrapping each child with an index based builder within possibly a
-  /// [Scrollable], instead defining exception for specific index
-  Iterable<Widget> staggeredBuild(IndexedChildBuilder builder) sync* {
-    for (int i = 0; i < length; i++) {
-      yield builder(elementAt(i), i);
     }
   }
 }
