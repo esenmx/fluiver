@@ -1,5 +1,6 @@
 library fluiver;
 
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -21,6 +22,7 @@ part 'src/extensions/set.dart';
 part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
 part 'src/extensions/time.dart';
+part 'src/helpers/reactive.dart';
 part 'src/helpers/focus_node.dart';
 part 'src/helpers/functions.dart';
 part 'src/helpers/observer.dart';
