@@ -7,6 +7,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+part 'src/extensions/bool.dart';
 part 'src/extensions/border.dart';
 part 'src/extensions/border_radius.dart';
 part 'src/extensions/build_context.dart';
