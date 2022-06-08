@@ -25,8 +25,8 @@ extension IterableX<E> on Iterable<E> {
   /// Creates a [Map] that has groupped [Iterable] elements as [List] with
   /// specified [groupper] parameter.
   /// Useful for categorizing/groupping [Widget]s when data comes as flat [List]
-  Map<G, List<E>> groupAsMap<G>(G Function(E element) groupper) {
-    final map = <G, List<E>>{};
+  Map<K, List<E>> groupAsMap<K>(K Function(E element) groupper) {
+    final map = <K, List<E>>{};
     for (var e in this) {
       final key = groupper(e);
       map[key] ??= <E>[];
@@ -35,25 +35,26 @@ extension IterableX<E> on Iterable<E> {
     return map;
   }
 
-  /// Useful for widgets like [CupertinoSegmentedControl]
-  /// ```dart
-  /// ['Foo', 'Bar', 'Baz'].mappedChildren((e) => Text(e))
-  /// returns:
-  /// {
-  ///   'Foo' : Text('Foo'),
-  ///   'Foo' : Text('Bar'),
-  ///   'Foo' : Text('Baz'),
-  /// }
-  /// ```
-  /// ```dart
-  /// CupertinoSegmentedControl(
-  ///   ...
-  ///   children: children.mappedChildren
-  ///   ...
-  /// );
-  /// ```
-  Map<E, Widget> asMapBuilder(Widget Function(E element) builder) =>
-      {for (int i = 0; i < length; i++) elementAt(i): builder(elementAt(i))};
+  /// Similar to [groupAsMap] but instead of groupping, it synchronously
+  /// generates header [Slice\S] widgets.
+  Iterable<Widget> slicedWidgetBuilder<S extends Object>({
+    required BuildContext context,
+    required ValueWidgetBuilder<E> widgetBuilder,
+    required S? Function(E) toSlicer,
+    required Widget Function(BuildContext context, S? slicer) slicerBuilder,
+    Widget? child,
+  }) sync* {
+    final iter = iterator;
+    S? last;
+    while (iter.moveNext()) {
+      final slicer = toSlicer(iter.current);
+      if (slicer != last) {
+        yield slicerBuilder(context, slicer);
+        last = slicer;
+      }
+      yield widgetBuilder(context, iter.current, child);
+    }
+  }
 
   /// Same as [single] but does not throw [StateError], instead returns null
   E? get singleOrNull => length == 1 ? single : null;

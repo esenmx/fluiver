@@ -1,7 +1,5 @@
 part of fluiver;
 
-typedef IndexedChildBuilder = Widget Function(Widget child, int index);
-
 extension WidgetIterableX on Iterable<Widget> {
   /// More versatile version of [ListTile.divideTiles],
   /// but you can use it in anywhere, possibly [Column], [Row], [Listview]...

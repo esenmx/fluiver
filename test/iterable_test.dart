@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_function_declarations_over_variables
+
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:rand/rand.dart';
 
 void main() async {
@@ -31,11 +34,35 @@ void main() async {
     });
 
     test('groupAsMap', () {
-      expect([42].groupAsMap((e) => e), {42: [42]});
+      expect([42].groupAsMap((e) => e), {
+        42: [42]
+      });
       expect([1, 2, 3, 4].groupAsMap((e) => e % 2 == 0), {
         true: [2, 4],
         false: [1, 3]
       });
+    });
+
+    test('slicedWidgetBuilder', () {
+      final dateSeries = (int length) {
+        return List.generate(length, (index) {
+          return DateTime.now().subtract(Duration(hours: index));
+        });
+      };
+
+      final newCase = (int length) {
+        return dateSeries(length).slicedWidgetBuilder<DateTime>(
+          context: MockBuildContext(),
+          widgetBuilder: (_, val, __) => Text(val.toString()),
+          toSlicer: (DateTime e) => e.toDate(),
+          slicerBuilder: (_, slicer) => Text(slicer.toString()),
+          child: const FlutterLogo(),
+        );
+      };
+
+      expect(newCase(0), isEmpty);
+      expect(newCase(24), hasLength(26));
+      expect(newCase(100), hasLength(105));
     });
   });
 
@@ -45,36 +72,6 @@ void main() async {
       expect(twoDimA.from2D().toList(), expandedA);
       expect(twoDimB.from2D().toList(), expandedB);
       expect(twoDimC.from2D().toList(), expandedC);
-    });
-  });
-
-  group('IterableWidgetX', () {
-    test('widgetJoin', () {
-      expect(mockWidgetJoin(0), <Widget>[]);
-      expect(mockWidgetJoin(1).length, 1);
-      expect(mockWidgetJoin(1).single, isA<FlutterLogo>());
-      expect(mockWidgetJoin(2).length, 3);
-      expect(mockWidgetJoin(2)[0], isA<FlutterLogo>());
-      expect(mockWidgetJoin(2)[1], isA<Divider>());
-      expect(mockWidgetJoin(2)[2], isA<FlutterLogo>());
-      final values = mockWidgetJoin(100);
-      for (int i = 0; i < 100; i++) {
-        if (i % 2 == 0) {
-          expect(values.elementAt(i), isA<FlutterLogo>());
-        } else {
-          expect(values.elementAt(i), isA<Divider>());
-        }
-      }
-    });
-
-    test('asMapBuilder', () {
-      expect(mockAsMapBuilder(0), <int, Widget>{});
-      expect(mockAsMapBuilder(1)[0], isA<Text>());
-      expect(mockAsMapBuilder(1).length, 1);
-      final values = mockAsMapBuilder(100);
-      for (int i = 0; i < 100; i++) {
-        expect(values[i], isA<Text>());
-      }
     });
   });
 
@@ -96,17 +93,6 @@ void main() async {
   });
 }
 
-List<Widget> mockWidgetJoin(int length) {
-  return <Widget>[for (int i = 0; i < length; i++) const FlutterLogo()]
-      .widgetJoin(() => const Divider())
-      .toList();
-}
-
-Map<int, Widget> mockAsMapBuilder(int length) {
-  return List.generate(length, (i) => i)
-      .asMapBuilder((i) => Text(i.toString()));
-}
-
 List<_ChronoEntity> randomChronoIterable(int length) {
   return List.generate(length, (index) => _ChronoEntity(Rand.dateTime()));
 }
@@ -116,3 +102,5 @@ class _ChronoEntity {
 
   const _ChronoEntity(this.dateTime);
 }
+
+class MockBuildContext extends Mock implements BuildContext {}
