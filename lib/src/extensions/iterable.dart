@@ -35,35 +35,6 @@ extension IterableX<E> on Iterable<E> {
     return map;
   }
 
-  /// Similar to [groupAsMap] but instead of groupping, it synchronously
-  /// generates header [Slice\S] widgets.
-  Iterable<Widget> slicedWidgetBuilder<S extends Object>({
-    required BuildContext context,
-    required ValueWidgetBuilder<E> widgetBuilder,
-    required S? Function(E) toSlicer,
-    required Widget Function(BuildContext context, S? slicer) slicerBuilder,
-    WidgetBuilder? separatorBuilder,
-    Widget? child,
-  }) sync* {
-    final iter = iterator;
-    Object? last = Object();
-    bool consecutive = false;
-    while (iter.moveNext()) {
-      final slicer = toSlicer(iter.current);
-      if (slicer != last) {
-        yield slicerBuilder(context, slicer);
-        last = slicer;
-        consecutive = false;
-      } else {
-        if (consecutive && separatorBuilder != null) {
-          yield separatorBuilder(context);
-        }
-      }
-      yield widgetBuilder(context, iter.current, child);
-      consecutive = true;
-    }
-  }
-
   /// Same as [single] but does not throw [StateError], instead returns null
   E? get singleOrNull => length == 1 ? single : null;
 }

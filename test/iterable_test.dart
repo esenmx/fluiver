@@ -1,9 +1,5 @@
-// ignore_for_file: prefer_function_declarations_over_variables
-
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:rand/rand.dart';
 
 void main() async {
@@ -41,33 +37,6 @@ void main() async {
         true: [2, 4],
         false: [1, 3]
       });
-    });
-
-    test('slicedWidgetBuilder', () {
-      final dateSeries = (int length) {
-        return List.generate(length, (index) {
-          return DateTime.now().subtract(Duration(hours: index));
-        });
-      };
-
-      final newCase = (int length, bool withSeparator) {
-        return dateSeries(length).slicedWidgetBuilder<DateTime>(
-          context: MockBuildContext(),
-          widgetBuilder: (_, val, __) => Text(val.toString()),
-          toSlicer: (DateTime e) => e.toDate(),
-          slicerBuilder: (_, slicer) => Text(slicer.toString()),
-          child: const FlutterLogo(),
-          separatorBuilder: withSeparator ? (context) => const Divider() : null,
-        );
-      };
-
-      expect(newCase(0, false), isEmpty);
-      expect(newCase(24, false), hasLength(24 + 2));
-      expect(newCase(100, false), hasLength(100 + 5));
-
-      expect(newCase(0, true), isEmpty);
-      expect(newCase(24, true), hasLength(26 + 22));
-      expect(newCase(100, true), hasLength(105 + 95));
     });
   });
 
@@ -107,5 +76,3 @@ class _ChronoEntity {
 
   const _ChronoEntity(this.dateTime);
 }
-
-class MockBuildContext extends Mock implements BuildContext {}
