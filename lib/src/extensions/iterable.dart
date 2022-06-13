@@ -49,14 +49,14 @@ extension IterableIterableX<E> on Iterable<Iterable<E>> {
   }
 }
 
-typedef _ToDateTimeIter<E> = DateTime Function(E e);
+typedef ElementToDateTime<E> = DateTime Function(E e);
 
 extension ChronoIterableX<E> on Iterable<E> {
-  E earliest(_ToDateTimeIter<E> toDateTime) => _first(toDateTime, true);
+  E earliest(ElementToDateTime<E> toDateTime) => _first(toDateTime, true);
 
-  E latest(_ToDateTimeIter<E> toDateTime) => _first(toDateTime, false);
+  E latest(ElementToDateTime<E> toDateTime) => _first(toDateTime, false);
 
-  E _first(_ToDateTimeIter<E> toDateTime, [bool ascending = true]) {
+  E _first(ElementToDateTime<E> toDateTime, [bool ascending = true]) {
     final iter = iterator;
     if (!iter.moveNext()) {
       throw StateError('no element found in $this');

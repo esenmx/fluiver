@@ -67,12 +67,12 @@ void main() async {
   });
 }
 
-List<_ChronoEntity> randomChronoIterable(int length) {
-  return List.generate(length, (index) => _ChronoEntity(Rand.dateTime()));
+List<ChronoEntity> randomChronoIterable(int length) {
+  return List.generate(length, (index) => ChronoEntity(Rand.dateTime()));
 }
 
-class _ChronoEntity {
+class ChronoEntity {
   final DateTime dateTime;
 
-  const _ChronoEntity(this.dateTime);
+  const ChronoEntity(this.dateTime);
 }
