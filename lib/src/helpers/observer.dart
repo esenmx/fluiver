@@ -40,4 +40,4 @@ class BrightnessObserver extends WidgetsBindingObserver {
   }
 }
 
-get _window => WidgetsBinding.instance!.window;
+get _window => WidgetsBinding.instance.window;

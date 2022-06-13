@@ -55,9 +55,9 @@ class StaggeredStack extends StatelessWidget {
     }
     return Stack(
       alignment: alignment,
-      children: [if (background != null) background!, ...c],
       fit: fit,
       clipBehavior: clipBehaviour,
+      children: [if (background != null) background!, ...c],
     );
   }
 }

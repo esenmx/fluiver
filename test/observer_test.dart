@@ -16,8 +16,8 @@ void main() async {
 
   testWidgets('LocaleObserver', (tester) async {
     final observer = MockLocaleObserver();
-    WidgetsBinding.instance?.addObserver(observer);
-    final window = tester.binding.window;
+    WidgetsBinding.instance.addObserver(observer);
+    final window = tester.binding.platformDispatcher;
 
     final value1 = [const Locale('en_AU')];
     window.localesTestValue = value1;
@@ -30,8 +30,8 @@ void main() async {
 
   testWidgets('BrightnessObserver', (tester) async {
     final callback = MockBrightnessObserverCallback();
-    WidgetsBinding.instance?.addObserver(BrightnessObserver(callback));
-    final window = tester.binding.window;
+    WidgetsBinding.instance.addObserver(BrightnessObserver(callback));
+    final window = tester.binding.platformDispatcher;
 
     window.platformBrightnessTestValue = Brightness.dark;
     verify(callback(Brightness.dark)).called(1);
