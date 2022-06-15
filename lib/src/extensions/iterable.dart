@@ -37,6 +37,17 @@ extension IterableX<E> on Iterable<E> {
 
   /// Same as [single] but does not throw [StateError], instead returns null
   E? get singleOrNull => length == 1 ? single : null;
+
+  /// Similar to [Iterable.firstWhere], but does not have [orElse] function and
+  /// does not throw [StateError]
+  E? firstWhereOrNull(bool Function(E element) test) {
+    for (var element in this) {
+      if (test(element)) {
+        return element;
+      }
+    }
+    return null;
+  }
 }
 
 extension IterableIterableX<E> on Iterable<Iterable<E>> {
