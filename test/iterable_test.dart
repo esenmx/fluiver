@@ -38,6 +38,12 @@ void main() async {
         false: [1, 3]
       });
     });
+
+    test('firstWhereOrNull', () {
+      expect([].firstWhereOrNull((element) => element > 0), isNull);
+      expect([1].firstWhereOrNull((element) => element % 2 == 0), isNull);
+      expect([1, 2, 4].firstWhereOrNull((element) => element % 2 == 0), 2);
+    });
   });
 
   group('IterableIterableX', () {
