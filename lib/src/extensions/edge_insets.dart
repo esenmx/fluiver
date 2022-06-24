@@ -22,30 +22,20 @@ extension OnlyEdgeInsetsX on EdgeInsets {
   EdgeInsets get onlyRight => EdgeInsets.only(right: right);
 
   EdgeInsets get onlyBottom => EdgeInsets.only(bottom: bottom);
-}
 
-extension RemoveEdgeInsetsX on EdgeInsets {
-  EdgeInsets get removeLeft => copyWith(left: 0);
+  EdgeInsets get onlyVertical => EdgeInsets.only(top: top, bottom: bottom);
 
-  EdgeInsets get removeTop => copyWith(top: 0);
-
-  EdgeInsets get removeRight => copyWith(right: 0);
-
-  EdgeInsets get removeBottom => copyWith(bottom: 0);
-
-  EdgeInsets get removeVertical => copyWith(top: 0, bottom: 0);
-
-  EdgeInsets get removeHorizontal => copyWith(left: 0, right: 0);
+  EdgeInsets get onlyHorizontal => EdgeInsets.only(left: left, right: right);
 }
 
 extension SetEdgeInsetsX on EdgeInsets {
-  EdgeInsets setVertical(double value) {
-    return EdgeInsets.symmetric(vertical: value);
-  }
+  EdgeInsets setLeft(double value) => copyWith(left: value);
 
-  EdgeInsets sertHorizontal(double value) {
-    return EdgeInsets.symmetric(horizontal: value);
-  }
+  EdgeInsets setTop(double value) => copyWith(top: value);
+
+  EdgeInsets setRight(double value) => copyWith(right: value);
+
+  EdgeInsets setBottom(double value) => copyWith(bottom: value);
 }
 
 extension MediaQueryEdgeInsetsX on EdgeInsets {
