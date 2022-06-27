@@ -23,13 +23,15 @@ extension DateTimeX on DateTime {
     );
   }
 
-  DateTime toDate() => copyWith(
-        hour: 0,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-        microsecond: 0,
-      );
+  DateTime toDate() {
+    return copyWith(
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+      microsecond: 0,
+    );
+  }
 
   TimeOfDay toTime() => TimeOfDay(hour: hour, minute: minute);
 
@@ -70,6 +72,10 @@ extension DateTimeX on DateTime {
   bool get isYesterday {
     final y = DateTime.now().addDays(-1);
     return y.day == day && y.month == month && y.year == year;
+  }
+
+  bool withinFromNow(Duration duration) {
+    return difference(DateTime.now()).inMicroseconds <= duration.inMicroseconds;
   }
 }
 

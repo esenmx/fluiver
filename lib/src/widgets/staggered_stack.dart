@@ -2,7 +2,7 @@ part of fluiver;
 
 /// Works well with [NestedScrollView]
 /// Constructs a [Stack] that behaves like [Column]
-/// My usual usecase is collapsing [AppBar] with [SliverPersistentHeaderDelegate]
+/// My usual use case is collapsing [AppBar] with [SliverPersistentHeaderDelegate]
 /// where centering the middle and transforming into compressed title needed
 class StaggeredStack extends StatelessWidget {
   StaggeredStack({

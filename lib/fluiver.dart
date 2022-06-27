@@ -22,7 +22,7 @@ part 'src/extensions/map.dart';
 part 'src/extensions/set.dart';
 part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
-part 'src/extensions/time.dart';
+part 'src/extensions/date_time.dart';
 part 'src/helpers/focus_node.dart';
 part 'src/helpers/functions.dart';
 part 'src/helpers/observer.dart';
