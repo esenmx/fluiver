@@ -44,6 +44,12 @@ void main() async {
       expect([1].firstWhereOrNull((element) => element % 2 == 0), isNull);
       expect([1, 2, 4].firstWhereOrNull((element) => element % 2 == 0), 2);
     });
+
+    test('lastWhereOrNull', () {
+      expect([].lastWhereOrNull((element) => element > 0), isNull);
+      expect([1].lastWhereOrNull((element) => element % 2 == 0), isNull);
+      expect([1, 2, 4].lastWhereOrNull((element) => element % 2 == 0), 4);
+    });
   });
 
   group('IterableIterableX', () {
@@ -55,7 +61,7 @@ void main() async {
     });
   });
 
-  group('ChronographiclySortable', () {
+  group('ChronoSortable', () {
     test('earliest', () {
       final es = randomChronoIterable(1000);
       final e = es.earliest((e) => e.dateTime);
