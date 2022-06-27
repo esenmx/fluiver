@@ -2,7 +2,7 @@ part of fluiver;
 
 extension IterableWidgetX on Iterable<Widget> {
   /// More versatile version of [ListTile.divideTiles],
-  /// but you can use it in anywhere, possibly [Column], [Row], [Listview]...
+  /// but you can use it in anywhere, possibly [Column], [Row], [ListView]...
   /// ```dart
   /// [Child(), Child()].widgetJoin(Divider()) == [Child(), Divider(), Child()]
   /// ```
@@ -19,7 +19,7 @@ extension IterableWidgetX on Iterable<Widget> {
 }
 
 extension WidgetIterableX<E> on Iterable<E> {
-  /// Similar to [groupAsMap] but instead of groupping, it synchronously
+  /// Similar to [groupAsMap] but instead of grouping, it synchronously
   /// generates header [Slice\S] widgets.
   Iterable<Widget> slicedWidgetBuilder<S extends Object>({
     required BuildContext context,

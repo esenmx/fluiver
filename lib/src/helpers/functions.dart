@@ -15,7 +15,7 @@ class Def {
   /// ```dart
   /// TextField(
   ///   maxLength: 100,
-  ///   buildCounter: Typedefs.disabledInputCounterBuilder,
+  ///   buildCounter: Def.disabledInputCounterBuilder,
   /// );
   /// ```
   static InputCounterWidgetBuilder get disabledInputCounterBuilder {

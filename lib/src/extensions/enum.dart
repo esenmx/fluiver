@@ -19,6 +19,6 @@ extension IterableEnum<T extends Enum> on Iterable<T> {
     if (orElse != null) {
       return orElse();
     }
-    throw StateError('No element or else');
+    throw StateError('No element found, consider using orElse()');
   }
 }

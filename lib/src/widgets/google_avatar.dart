@@ -16,7 +16,7 @@ class GoogleAvatar extends StatelessWidget {
             : _rand.nextInt(colors.length)),
         super(key: key);
 
-  /// Raw fullname, no manipulation required
+  /// Raw full name, no manipulation required
   final String name;
 
   /// Circle size

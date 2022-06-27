@@ -19,7 +19,7 @@ extension StringCapitalizeX on String {
         .join(joiner ?? splitter);
   }
 
-  /// Also ensures lowercasing of noninitial letters
+  /// Also ensures lowercase of non initial letters
   ///
   /// capitalize: daRT => DaRT
   /// enhancedCapitalize: daRT => Dart
