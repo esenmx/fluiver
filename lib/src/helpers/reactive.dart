@@ -1,10 +1,17 @@
 part of fluiver;
 
-class Debounce {
+class _TimerHolder {
+  Timer? _timer;
+
+  void dispose() {
+    _timer?.cancel();
+  }
+}
+
+class Debounce extends _TimerHolder {
   Debounce(this.duration);
 
   final Duration duration;
-  Timer? _timer;
 
   void call(VoidCallback task) {
     if (_timer?.isActive == true) {
@@ -12,8 +19,25 @@ class Debounce {
     }
     _timer = Timer(duration, task);
   }
+}
 
-  void dispose() {
-    _timer?.cancel();
+class ThrottleLatest extends _TimerHolder {
+  ThrottleLatest(this.duration);
+
+  final Duration duration;
+  VoidCallback? _pending;
+
+  void call(VoidCallback task) {
+    if (_timer?.isActive != true) {
+      task.call();
+      _timer = Timer(duration, () {
+        if (_pending != null) {
+          _pending!.call();
+          _pending = null;
+        }
+      });
+    } else {
+      _pending = task;
+    }
   }
 }

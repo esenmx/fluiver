@@ -22,13 +22,13 @@ extension IterableX<E> on Iterable<E> {
     }
   }
 
-  /// Creates a [Map] that has groupped [Iterable] elements as [List] with
-  /// specified [groupper] parameter.
-  /// Useful for categorizing/groupping [Widget]s when data comes as flat [List]
-  Map<K, List<E>> groupAsMap<K>(K Function(E element) groupper) {
+  /// Creates a [Map] that has grouped [Iterable] elements as [List] with
+  /// specified [classifier] parameter.
+  /// Useful for categorizing/grouping [Widget]s when data comes as flat [List]
+  Map<K, List<E>> groupAsMap<K>(K Function(E element) classifier) {
     final map = <K, List<E>>{};
     for (var e in this) {
-      final key = groupper(e);
+      final key = classifier(e);
       map[key] ??= <E>[];
       map[key]!.add(e);
     }
@@ -44,6 +44,18 @@ extension IterableX<E> on Iterable<E> {
     for (var element in this) {
       if (test(element)) {
         return element;
+      }
+    }
+    return null;
+  }
+
+  /// Similar to [Iterable.lastWhere], but does not have [orElse] function and
+  /// does not throw [StateError]
+  E? lastWhereOrNull(bool Function(E element) test) {
+    for (var i = length; i > 0; i--) {
+      final e = elementAt(i - 1);
+      if (test(e)) {
+        return e;
       }
     }
     return null;
