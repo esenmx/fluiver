@@ -35,6 +35,10 @@ extension DateTimeX on DateTime {
 
   TimeOfDay toTime() => TimeOfDay(hour: hour, minute: minute);
 
+  DateTime mergeWithTime(TimeOfDay time) {
+    return copyWith(hour: time.hour, minute: time.minute);
+  }
+
   DateTime truncate(Duration modulus) {
     final truncated = subtract(Duration(
       microseconds: microsecondsSinceEpoch % modulus.inMicroseconds,
