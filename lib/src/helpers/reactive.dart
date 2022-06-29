@@ -1,6 +1,6 @@
 part of fluiver;
 
-class _TimerHolder {
+mixin _TimerMixin {
   Timer? _timer;
 
   void dispose() {
@@ -8,7 +8,7 @@ class _TimerHolder {
   }
 }
 
-class Debounce extends _TimerHolder {
+class Debounce with _TimerMixin {
   Debounce(this.duration);
 
   final Duration duration;
@@ -21,7 +21,7 @@ class Debounce extends _TimerHolder {
   }
 }
 
-class ThrottleLatest extends _TimerHolder {
+class ThrottleLatest with _TimerMixin {
   ThrottleLatest(this.duration);
 
   final Duration duration;

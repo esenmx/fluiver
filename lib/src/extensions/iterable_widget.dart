@@ -19,8 +19,12 @@ extension IterableWidgetX on Iterable<Widget> {
 }
 
 extension WidgetIterableX<E> on Iterable<E> {
+  /// Useful when you need to [map] an iterable into widgets, and need to
+  /// classify them by their property set.
   /// Similar to [groupAsMap] but instead of grouping, it synchronously
-  /// generates header [Slice\S] widgets.
+  /// generates widgets.
+  /// If resource is sorted, use this method. If it's not sorted and needs to be
+  /// better use [groupAsMap] then generate widgets.
   Iterable<Widget> slicedWidgetBuilder<S extends Object>({
     required BuildContext context,
     required ValueWidgetBuilder<E> widgetBuilder,
