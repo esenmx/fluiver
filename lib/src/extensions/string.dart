@@ -4,7 +4,7 @@ extension StringCapitalizeX on String {
   String get capitalize {
     switch (length) {
       case 0:
-        return this;
+        return '';
       case 1:
         return toUpperCase();
       default:
@@ -12,75 +12,43 @@ extension StringCapitalizeX on String {
     }
   }
 
-  String capitalizeEach([String splitter = ' ', String? joiner]) {
-    return split(splitter)
-        .map((e) => e.capitalize)
+  String capitalizeAll({String separator = ' ', String? joiner}) {
+    return split(separator)
         .where((e) => e.isNotEmpty)
-        .join(joiner ?? splitter);
+        .map((e) => e.capitalize)
+        .join(joiner ?? separator);
   }
 
-  /// Also ensures lowercase of non initial letters
-  ///
-  /// capitalize: daRT => DaRT
-  /// enhancedCapitalize: daRT => Dart
-  String get capitalizeLowerLatter {
-    switch (length) {
+  /// Useful when generating avatars based on name(similarly Google account avatars)
+  /// John Doe => JD
+  String initials({String separator = ' ', String joiner = ''}) {
+    final names = split(separator).where((e) => e.isNotEmpty);
+    switch (names.length) {
       case 0:
-        return this;
+        return '';
       case 1:
-        return toUpperCase();
+        return names.first[0];
       default:
-        final iterator = characters.iterator..moveNext();
-        final buffer = StringBuffer(iterator.current.toUpperCase());
-        while (iterator.moveNext()) {
-          buffer.write(iterator.current.toLowerCase());
-        }
-        return buffer.toString();
+        return names.map((e) => e[0]).join(joiner);
     }
   }
 
   /// john doe => J. Doe
   /// j dOE => J Doe
   /// john J dOE => J. J Doe
-  String shortPersonalName() {
-    final names = split(' ').where((e) => e.isNotEmpty);
+  String initialsWithLast({String separator = ' ', String joiner = ''}) {
+    final names = split(separator).where((e) => e.isNotEmpty);
     switch (names.length) {
       case 0:
-        return this;
+        return '';
       case 1:
-        return names.first.capitalizeLowerLatter;
+        return names.first.toLowerCase().capitalize;
       default:
-        final buffer = StringBuffer();
-        for (int i = 0; i < names.length - 1; i++) {
-          final name = names.elementAt(i);
-          switch (name.length) {
-            case 0:
-              break;
-            case 1:
-              buffer.write(name.toUpperCase());
-              break;
-            default:
-              buffer.write(name[0].toUpperCase());
-              buffer.write('.');
-          }
-          buffer.write(' ');
-        }
-        buffer.write(names.last.capitalizeLowerLatter);
-        return buffer.toString();
-    }
-  }
-
-  /// Useful when generating avatars based on name(similarly Google account avatars)
-  /// John Doe => JD
-  String avatarLetters() {
-    final names = split(' ').where((e) => e.isNotEmpty);
-    switch (names.length) {
-      case 0:
-        return this;
-      case 1:
-        return names.first[0].toUpperCase();
-      default:
-        return names.first[0].toUpperCase() + names.last[0].toUpperCase();
+        final initials = names
+            .take(names.length - 1)
+            .map((e) => e[0].toUpperCase())
+            .join(joiner);
+        return '$initials$separator${names.last.toLowerCase().capitalize}';
     }
   }
 }
@@ -114,5 +82,19 @@ extension StringRemoveX on String {
       return substring(0, length - suffix.length);
     }
     return orElse?.call(this) ?? this;
+  }
+}
+
+extension StringSafeX on String {
+  String safeSubstring(int start, [int? end]) {
+    if (start >= length) {
+      return '';
+    }
+    if (end != null) {
+      if (end > length) {
+        return substring(start, length);
+      }
+    }
+    return substring(start, end);
   }
 }

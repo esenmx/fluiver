@@ -10,24 +10,24 @@ void main() async {
     });
 
     test('capitalizeEach', () {
-      expect(''.capitalizeEach(), '');
-      expect(''.capitalizeEach('', '-'), '');
-      expect('a'.capitalizeEach(), 'A');
-      expect('foo bar'.capitalizeEach(), 'Foo Bar');
-      expect('foo,,bar'.capitalizeEach(','), 'Foo,Bar');
-      expect('foo,,bar'.capitalizeEach(',', ' '), 'Foo Bar');
+      expect(''.capitalizeAll(), '');
+      expect(''.capitalizeAll(separator: '', joiner: '-'), '');
+      expect('a'.capitalizeAll(), 'A');
+      expect('foo bar'.capitalizeAll(), 'Foo Bar');
+      expect('foo,,bar'.capitalizeAll(separator: ','), 'Foo,Bar');
+      expect('foo,,bar'.capitalizeAll(separator: ',', joiner: ' '), 'Foo Bar');
     });
 
-    test('shortPersonalName - capitalizeLowerLatter', () {
-      expect(''.shortPersonalName(), '');
-      expect('    '.shortPersonalName(), '    ');
-      expect('foo'.shortPersonalName(), 'Foo');
-      expect('fOO'.shortPersonalName(), 'Foo');
-      expect('John Doe'.shortPersonalName(), 'J. Doe');
-      expect('jOHN doe'.shortPersonalName(), 'J. Doe');
-      expect('j dOE'.shortPersonalName(), 'J Doe');
-      expect('john j dOE'.shortPersonalName(), 'J. J Doe');
-      expect('john  j dOE'.shortPersonalName(), 'J. J Doe');
+    test('initialsLast - capitalizeLowerLatter', () {
+      expect(''.initialsWithLast(), '');
+      expect('    '.initialsWithLast(), '');
+      expect('foo'.initialsWithLast(), 'Foo');
+      expect('fOO'.initialsWithLast(), 'Foo');
+      expect('John Doe'.initialsWithLast(), 'J Doe');
+      expect('jOHN doe'.initialsWithLast(), 'J Doe');
+      expect('j dOE'.initialsWithLast(), 'J Doe');
+      expect('john j dOE'.initialsWithLast(), 'JJ Doe');
+      expect('john  j dOE'.initialsWithLast(), 'JJ Doe');
     });
 
     test('removePrefixOrNull', () {
@@ -54,6 +54,13 @@ void main() async {
       expect('foo'.removeSuffixOrElse('foo'), '');
       expect('foo'.removeSuffixOrElse('baz', (s) => s.toUpperCase()), 'FOO');
       expect('foobar'.removeSuffixOrElse('bar'), 'foo');
+    });
+
+    test('safeSubstring', () {
+      expect('a'.safeSubstring(2), '');
+      expect('abc'.safeSubstring(0), 'abc');
+      expect('abc'.safeSubstring(2, 10), 'c');
+      expect('abcdef'.safeSubstring(2, 3), 'c');
     });
   });
 }

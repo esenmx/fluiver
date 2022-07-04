@@ -1,32 +1,19 @@
 part of fluiver;
 
-final _rand = Random();
-
 class GoogleAvatar extends StatelessWidget {
   GoogleAvatar({
     Key? key,
     required this.name,
     this.size = kMinInteractiveDimension,
-    this.index,
     this.colors = Colors.primaries,
+    int? index,
   })  : assert(name.isNotEmpty),
         assert(colors.isNotEmpty),
-        _color = colors.elementAt(index != null
-            ? index % Colors.primaries.length
-            : _rand.nextInt(colors.length)),
+        _color = colors[index ?? name.hashCode % Colors.primaries.length],
         super(key: key);
 
-  /// Raw full name, no manipulation required
   final String name;
-
-  /// Circle size
   final double size;
-
-  /// To prevent duplicate colors or create a gradual color change in sequential
-  /// widgets, you can provide the index
-  final int? index;
-
-  /// Color palette for generating
   final List<Color> colors;
 
   final Color _color;
@@ -40,10 +27,10 @@ class GoogleAvatar extends StatelessWidget {
       decoration: BoxDecoration(shape: BoxShape.circle, color: _color),
       alignment: Alignment.center,
       child: Text(
-        name.avatarLetters(),
+        name.initials().safeSubstring(0, 2).toUpperCase(),
         maxLines: 1,
         style: TextStyle(
-          fontSize: size * .5,
+          fontSize: size * .6,
           color: _isDark ? Colors.white : Colors.black87,
         ),
       ),
