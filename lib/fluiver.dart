@@ -2,7 +2,6 @@ library fluiver;
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -18,8 +17,8 @@ part 'src/extensions/iterable.dart';
 part 'src/extensions/iterable_num.dart';
 part 'src/extensions/iterable_widget.dart';
 part 'src/extensions/key.dart';
+part 'src/extensions/list.dart';
 part 'src/extensions/map.dart';
-part 'src/extensions/set.dart';
 part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
 part 'src/extensions/date_time.dart';
