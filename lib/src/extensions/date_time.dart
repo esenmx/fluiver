@@ -81,6 +81,14 @@ extension DateTimeX on DateTime {
   bool withinFromNow(Duration duration) {
     return difference(DateTime.now()).inMicroseconds <= duration.inMicroseconds;
   }
+
+  int get age {
+    var diff = DateTime.now().year - year;
+    if (copyWith(year: year + diff).isBefore(DateTime.now())) {
+      diff--;
+    }
+    return diff;
+  }
 }
 
 extension TimeOfDayX on TimeOfDay {

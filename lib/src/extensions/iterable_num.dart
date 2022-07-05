@@ -5,12 +5,7 @@ extension IterableDoubleX on Iterable<double> {
 
   double average() => sum() / length;
 
-  double get lowestOrZero {
-    if (isEmpty) {
-      return 0;
-    }
-    return reduce((v, e) => e < v ? e : v);
-  }
+  double get lowestOrZero => isEmpty ? 0.0 : lowest;
 }
 
 extension IterableIntX on Iterable<int> {
