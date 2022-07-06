@@ -1,7 +1,5 @@
 part of fluiver;
 
-// coverage:ignore-file
-
 extension AddCircularBorderRadiusX on BorderRadius {
   BorderRadius addAll(double radius) {
     return this + BorderRadius.circular(radius);

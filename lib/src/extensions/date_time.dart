@@ -35,7 +35,7 @@ extension DateTimeX on DateTime {
 
   TimeOfDay toTime() => TimeOfDay(hour: hour, minute: minute);
 
-  DateTime mergeWithTime(TimeOfDay time) {
+  DateTime withTimeOfDay(TimeOfDay time) {
     return copyWith(hour: time.hour, minute: time.minute);
   }
 
@@ -78,7 +78,7 @@ extension DateTimeX on DateTime {
     return y.day == day && y.month == month && y.year == year;
   }
 
-  bool withinFromNow(Duration duration) {
+  bool isWithinFromNow(Duration duration) {
     return difference(DateTime.now()).inMicroseconds <= duration.inMicroseconds;
   }
 

@@ -1,12 +1,10 @@
 part of fluiver;
 
-// coverage:ignore-file
-
 extension TextStyleX on TextStyle {
   /// [Roboto] is much more suitable for [Text] with special characters
   /// like currency symbols.
   /// Useful in case you want to override your default [TextStyle]
-  TextStyle get familyRoboto => copyWith(fontFamily: 'Roboto');
+  TextStyle get roboto => copyWith(fontFamily: 'Roboto');
 }
 
 extension TextStyleColorX on TextStyle {
