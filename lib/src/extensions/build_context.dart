@@ -1,7 +1,5 @@
 part of fluiver;
 
-// coverage:ignore-file
-
 extension _BuildContextX on BuildContext {
   MediaQueryData get _m => MediaQuery.of(this);
 

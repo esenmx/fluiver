@@ -1,7 +1,5 @@
 part of fluiver;
 
-// coverage:ignore-file
-
 extension AddEdgeInsetsX on EdgeInsets {
   EdgeInsets addAll(double value) => this + EdgeInsets.all(value);
 
