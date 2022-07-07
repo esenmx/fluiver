@@ -15,7 +15,7 @@ part 'src/extensions/enum.dart';
 part 'src/extensions/future.dart';
 part 'src/extensions/iterable.dart';
 part 'src/extensions/iterable_num.dart';
-part 'src/extensions/iterable_widget.dart';
+part 'src/extensions/widget_iterable.dart';
 part 'src/extensions/key.dart';
 part 'src/extensions/list.dart';
 part 'src/extensions/map.dart';

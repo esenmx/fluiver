@@ -60,6 +60,22 @@ extension IterableX<E> on Iterable<E> {
     }
     return null;
   }
+
+  /// More versatile version of [ListTile.divideTiles],
+  /// but you can use it in anywhere; [Flex], [Scrollable], [InlineSpan]...
+  /// ```dart
+  /// [Child(), Child()].widgetJoin(Divider()) == [Child(), Divider(), Child()]
+  /// ```
+  Iterable<E> separate(E Function() separator) sync* {
+    final iter = iterator;
+    if (iter.moveNext()) {
+      yield iter.current;
+    }
+    while (iter.moveNext()) {
+      yield separator();
+      yield iter.current;
+    }
+  }
 }
 
 extension IterableIterableX<E> on Iterable<Iterable<E>> {

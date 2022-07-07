@@ -1,23 +1,5 @@
 part of fluiver;
 
-extension IterableWidgetX on Iterable<Widget> {
-  /// More versatile version of [ListTile.divideTiles],
-  /// but you can use it in anywhere, possibly [Column], [Row], [ListView]...
-  /// ```dart
-  /// [Child(), Child()].widgetJoin(Divider()) == [Child(), Divider(), Child()]
-  /// ```
-  Iterable<Widget> widgetJoin(Widget Function() separator) sync* {
-    final Iterator<Widget> iterator = this.iterator;
-    if (iterator.moveNext()) {
-      yield iterator.current;
-    }
-    while (iterator.moveNext()) {
-      yield separator();
-      yield iterator.current;
-    }
-  }
-}
-
 extension WidgetIterableX<E> on Iterable<E> {
   /// Useful when you need to [map] an iterable into widgets, and need to
   /// classify them by their property set.
