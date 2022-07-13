@@ -18,6 +18,7 @@ part 'src/extensions/iterable_num.dart';
 part 'src/extensions/widget_iterable.dart';
 part 'src/extensions/key.dart';
 part 'src/extensions/list.dart';
+part 'src/extensions/set.dart';
 part 'src/extensions/map.dart';
 part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
