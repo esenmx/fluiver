@@ -21,6 +21,16 @@ void main() async {
   final expandedC = [1, 2, 3, 4, 5, 6];
 
   group('IterableX', () {
+    test('sub', () {
+      expect(() => [].sub(1), throwsA(isA<RangeError>()));
+      expect(() => [].sub(0, 2), throwsA(isA<RangeError>()));
+      expect([].sub(0, 0).toList(), []);
+      expect([1, 2, 3].sub(0).toList(), [1, 2, 3]);
+      expect([1, 2, 3].sub(1).toList(), [2, 3]);
+      expect([1, 2, 3].sub(1, 2).toList(), [2]);
+      expect([1, 2, 3].sub(2, 2).toList(), []);
+    });
+
     test('to2D', () {
       expect(() => [1, 2, 3].to2D(0), throwsA(isA<RangeError>()));
       expect([].to2D(3), []);
