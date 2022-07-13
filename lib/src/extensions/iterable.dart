@@ -1,6 +1,25 @@
 part of fluiver;
 
 extension IterableX<E> on Iterable<E> {
+  /// Super version of [List.sublist] method
+  Iterable<E> sub(int start, [int? end]) sync* {
+    RangeError.checkValidRange(start, end, length);
+    if (start == end) {
+      return;
+    }
+    var i = 0;
+    final iter = iterator;
+    while (iter.moveNext()) {
+      if (i == end) {
+        return;
+      }
+      if (start <= i) {
+        yield iter.current;
+      }
+      i++;
+    }
+  }
+
   /// ```dart
   /// [1].convertTo2D(2) // [[1]]
   /// [1, 2, 3, 4].convertTo2D(2) // [[1, 2], [3, 4]]
