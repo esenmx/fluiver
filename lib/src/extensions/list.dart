@@ -1,7 +1,7 @@
 part of fluiver;
 
-extension ListX<T> on List<T> {
-  Iterable<T> safeSubList(int start, [int? end]) {
+extension ListX<E> on List<E> {
+  Iterable<E> safeSubList(int start, [int? end]) {
     if (start >= length) {
       return [];
     }
@@ -11,5 +11,12 @@ extension ListX<T> on List<T> {
       }
     }
     return sublist(start, end);
+  }
+
+  E? elementAtOrNull(int index) {
+    if (index < length) {
+      return elementAt(index);
+    }
+    return null;
   }
 }
