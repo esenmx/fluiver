@@ -15,4 +15,11 @@ extension MapX<K, V> on Map<K, V> {
     }
     return null;
   }
+
+  Map<K, V> where(bool Function(K key, V value) test) {
+    return <K, V>{
+      for (var e in entries)
+        if (test(e.key, e.value)) e.key: e.value
+    };
+  }
 }
