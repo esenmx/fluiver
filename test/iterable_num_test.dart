@@ -17,9 +17,9 @@ void main() async {
       expect([1, 2, -1].lowest, -1);
     });
 
-    test('lowestOrZero', () {
-      expect(<int>[].lowestOrZero, 0);
-      expect(<int>[2, 1].lowestOrZero, 1);
+    test('lowestOrElse', () {
+      expect(<int>[].lowestOrElse(0), 0);
+      expect(<int>[2, 1].lowestOrElse(), 1);
     });
   });
 
@@ -28,8 +28,10 @@ void main() async {
       expect(<double>[].sum(), 0.0);
       expect([1.1].sum(), 1.1);
       expect([1.1, 2.2, 3.3].sum(), 6.6);
-      expect(List<double>.generate(100, (i) => i.toDouble()).sum(),
-          (99 * (99 + 1) / 2).toDouble());
+      expect(
+        List<double>.generate(100, (i) => i.toDouble()).sum(),
+        (99 * (99 + 1) / 2).toDouble(),
+      );
     });
 
     test('lowest', () {
@@ -39,9 +41,9 @@ void main() async {
       expect(<double>[1, 2, -1].lowest, -1);
     });
 
-    test('lowestOrZero', () {
-      expect(<double>[].lowestOrZero, 0.0);
-      expect(<double>[2, 1].lowestOrZero, 1);
+    test('lowestOrElse', () {
+      expect(<double>[].lowestOrElse(0.0), 0.0);
+      expect(<double>[2, 1].lowestOrElse(), 1);
     });
   });
 }

@@ -4,8 +4,6 @@ extension IterableDoubleX on Iterable<double> {
   double sum() => fold(0.0, (previous, element) => previous + element);
 
   double average() => sum() / length;
-
-  double get lowestOrZero => isEmpty ? 0.0 : lowest;
 }
 
 extension IterableIntX on Iterable<int> {
@@ -14,10 +12,18 @@ extension IterableIntX on Iterable<int> {
   double average() => sum() / length;
 
   Uint8List toBytes() => Uint8List.fromList(toList());
-
-  int get lowestOrZero => isEmpty ? 0 : lowest;
 }
 
 extension IterableNumX<T extends num> on Iterable<T> {
   T get lowest => reduce((v, e) => e < v ? e : v);
+
+  T lowestOrElse([T? orElse]) {
+    if (isEmpty) {
+      if (orElse == null) {
+        throw StateError('no element found, use `orElse`');
+      }
+      return orElse;
+    }
+    return lowest;
+  }
 }
