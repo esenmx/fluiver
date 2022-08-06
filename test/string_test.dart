@@ -23,11 +23,11 @@ void main() async {
       expect('    '.initialsWithLast(), '');
       expect('foo'.initialsWithLast(), 'Foo');
       expect('fOO'.initialsWithLast(), 'Foo');
-      expect('John Doe'.initialsWithLast(), 'J Doe');
-      expect('jOHN doe'.initialsWithLast(), 'J Doe');
-      expect('j dOE'.initialsWithLast(), 'J Doe');
-      expect('john j dOE'.initialsWithLast(), 'JJ Doe');
-      expect('john  j dOE'.initialsWithLast(), 'JJ Doe');
+      expect('John Doe'.initialsWithLast(), 'J. Doe');
+      expect('jOHN doe'.initialsWithLast(), 'J. Doe');
+      expect('j dOE'.initialsWithLast(), 'J. Doe');
+      expect('john j dOE'.initialsWithLast(), 'J. J. Doe');
+      expect('john  j dOE'.initialsWithLast(), 'J. J. Doe');
     });
 
     test('removePrefixOrNull', () {

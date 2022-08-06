@@ -33,10 +33,14 @@ extension StringCapitalizeX on String {
     }
   }
 
-  /// john doe => J. Doe
+  /// john doe => J Doe
   /// j dOE => J Doe
   /// john J dOE => J. J Doe
-  String initialsWithLast({String separator = ' ', String joiner = ''}) {
+  String initialsWithLast({
+    String separator = ' ',
+    String joiner = ' ',
+    String suffix = '.',
+  }) {
     final names = split(separator).where((e) => e.isNotEmpty);
     switch (names.length) {
       case 0:
@@ -46,7 +50,7 @@ extension StringCapitalizeX on String {
       default:
         final initials = names
             .take(names.length - 1)
-            .map((e) => e[0].toUpperCase())
+            .map((e) => '${e[0].toUpperCase()}$suffix')
             .join(joiner);
         return '$initials$separator${names.last.toLowerCase().capitalize}';
     }
