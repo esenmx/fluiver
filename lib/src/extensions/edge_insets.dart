@@ -34,6 +34,10 @@ extension SetEdgeInsetsX on EdgeInsets {
   EdgeInsets setRight(double value) => copyWith(right: value);
 
   EdgeInsets setBottom(double value) => copyWith(bottom: value);
+
+  EdgeInsets setHorizontal(double value) => copyWith(left: value, right: value);
+
+  EdgeInsets setVertical(double value) => copyWith(bottom: value, top: value);
 }
 
 extension MediaQueryEdgeInsetsX on EdgeInsets {

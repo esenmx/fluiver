@@ -19,7 +19,7 @@ extension IterableEnum<T extends Enum> on Iterable<T> {
     if (orElse != null) {
       return orElse();
     }
-    throw StateError('No element found, consider using orElse()');
+    throw StateError('no element found, consider using orElse()');
   }
 
   List<String> names() => map<String>((e) => e.name).toList();
