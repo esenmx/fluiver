@@ -34,6 +34,14 @@ void main() async {
           value.copyWith(minute: 0, second: 0));
     });
 
+    test('round', () {
+      var v1 = const TimeOfDay(hour: 0, minute: 29).inToday();
+      var v2 = const TimeOfDay(hour: 0, minute: 31).inToday();
+      const modulus = Duration(hours: 1);
+      expect(v1.round(modulus), v1.toDate());
+      expect(v2.round(modulus), v1.toDate().copyWith(hour: 1, minute: 0));
+    });
+
     test('addYears', () {
       expect(value.addYears(31), value.copyWith(year: 2021));
       expect(value.addYears(-5000), value.copyWith(year: -3010));
