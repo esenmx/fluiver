@@ -49,6 +49,15 @@ extension DateTimeX on DateTime {
     return truncated;
   }
 
+  DateTime round(Duration modulus) {
+    final floor = truncate(modulus);
+    final ceil = floor.add(modulus);
+    if (difference(floor) > difference(ceil).abs()) {
+      return ceil;
+    }
+    return floor;
+  }
+
   DateTime addYears(int years) => copyWith(year: year + years);
 
   DateTime addMonths(int months) => copyWith(month: month + months);
