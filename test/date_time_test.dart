@@ -38,8 +38,8 @@ void main() async {
       var v1 = const TimeOfDay(hour: 0, minute: 29).inToday();
       var v2 = const TimeOfDay(hour: 0, minute: 31).inToday();
       const modulus = Duration(hours: 1);
-      expect(v1.round(modulus), v1.toDate());
-      expect(v2.round(modulus), v1.toDate().copyWith(hour: 1, minute: 0));
+      expect(v1.round(modulus), v1.copyWith(minute: 0));
+      expect(v2.round(modulus), v2.copyWith(hour: 1, minute: 0));
     });
 
     test('addYears', () {
