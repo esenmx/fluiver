@@ -101,5 +101,13 @@ extension DateTimeX on DateTime {
 }
 
 extension TimeOfDayX on TimeOfDay {
-  DateTime inToday() => DateTime.now().copyWith(hour: hour, minute: minute);
+  DateTime inToday() {
+    return DateTime.now().copyWith(
+      hour: hour,
+      minute: minute,
+      second: 0,
+      millisecond: 0,
+      microsecond: 0,
+    );
+  }
 }
