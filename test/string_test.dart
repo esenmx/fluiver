@@ -63,4 +63,35 @@ void main() async {
       expect('abcdef'.safeSubstring(2, 3), 'c');
     });
   });
+
+  group('StringSearchX', () {
+    test('textSearch', () {
+      expect(''.textSearch(''), isTrue);
+      expect(''.textSearch('a'), isFalse);
+      expect('a'.textSearch(''), isTrue);
+      expect('Foo'.textSearch('fo'), isTrue);
+      expect('Foo Bar'.textSearch('foo bar'), isTrue);
+      expect('Foo Bar'.textSearch('Foo Bar'), isTrue);
+      expect('Foo Bar'.textSearch('fo'), isTrue);
+      expect('Foo Bar'.textSearch('f b'), isTrue);
+      expect('Foo Bar'.textSearch('o r'), isTrue);
+      expect('Foo Bar'.textSearch('Baz'), isFalse);
+      expect('Foo Bar'.textSearch('foo z'), isFalse);
+    });
+
+    test('textSearchWithSeparator', () {
+      const sep = ',';
+      expect('Foo'.textSearch('fo', sep), isTrue);
+      expect('Foo,Bar'.textSearch('fo', sep), isTrue);
+      expect('Foo Bar'.textSearch('fo', sep), isTrue);
+      // expect('Foo Bar'.textSearch('fo b', sep), isFalse); // FIXME
+      expect('Foo,Bar'.textSearch('fo b', sep), isTrue);
+      expect('Foo,Bar'.textSearch('fo  b', sep), isTrue);
+      expect('Foo,,,,Bar'.textSearch('foo bar', sep), isTrue);
+      expect('Foo,Bar'.textSearch('Foo Bar', sep), isTrue);
+      expect('Foo,Bar'.textSearch('ar', sep), isTrue);
+      expect('Foo,Bar'.textSearch('z', sep), isFalse);
+      expect('Foo,Bar'.textSearch('foo z', sep), isFalse);
+    });
+  });
 }

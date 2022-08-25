@@ -102,3 +102,16 @@ extension StringSafeX on String {
     return substring(start, end);
   }
 }
+
+extension StringSearchX on String {
+  bool textSearch(String search, [String separator = ' ']) {
+    Iterable<String> prepare(String string, String separator) {
+      return string.toLowerCase().split(separator).where((e) => e.isNotEmpty);
+    }
+
+    final words = prepare(this, separator);
+    final parts = prepare(search, ' ');
+    // TODO remove found words within every
+    return parts.every((part) => words.any((word) => word.contains(part)));
+  }
+}
