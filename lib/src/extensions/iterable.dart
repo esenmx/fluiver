@@ -68,6 +68,12 @@ extension IterableX<E> on Iterable<E> {
     return null;
   }
 
+  /// [!] operator is not usable with referential assignment, in that case
+  /// use this method.
+  Iterable<E> whereNot(bool Function(E element) test) {
+    return where((element) => !test(element));
+  }
+
   /// Similar to [Iterable.lastWhere], but does not have [orElse] function and
   /// does not throw [StateError]
   E? lastWhereOrNull(bool Function(E element) test) {
