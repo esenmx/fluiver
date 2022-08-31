@@ -10,8 +10,39 @@ abstract class Def {
   /// );
   /// ```
   static InputCounterWidgetBuilder get disabledInputCounterBuilder {
-    return (context, {int? currentLength, int? maxLength, bool? isFocused}) {
+    return (context, {required currentLength, required isFocused, maxLength}) {
       return null;
+    };
+  }
+
+  static InputCounterWidgetBuilder inputCounterWithMinLength({
+    required int minLength,
+    TextStyle? style,
+    Color? errorColor,
+  }) {
+    return (context, {required currentLength, required isFocused, maxLength}) {
+      final effectiveErrorColor = errorColor ?? Theme.of(context).errorColor;
+      var effectiveStyle = style ?? Theme.of(context).textTheme.caption;
+      void setErrorStyle() {
+        effectiveStyle = effectiveStyle?.copyWith(color: effectiveErrorColor);
+      }
+
+      final String? string;
+      if (currentLength < minLength) {
+        string = '$currentLength / $minLength';
+        setErrorStyle();
+      } else if (maxLength != null) {
+        string = '$currentLength / $maxLength';
+        if (currentLength > maxLength) {
+          setErrorStyle();
+        }
+      } else {
+        string = null;
+      }
+      if (string == null) {
+        return null;
+      }
+      return Text(string, style: effectiveStyle);
     };
   }
 }
