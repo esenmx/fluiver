@@ -1,5 +1,10 @@
 part of fluiver;
 
+mixin ComparableEnum on Enum implements Comparable<Enum> {
+  @override
+  int compareTo(other) => index - other.index;
+}
+
 extension IterableEnum<T extends Enum> on Iterable<T> {
   T? byNameOrNull(String name) {
     for (var e in this) {
