@@ -1,5 +1,16 @@
 part of fluiver;
 
+extension BuildContextX on BuildContext {
+  bool get isMounted {
+    try {
+      (this as Element).widget;
+      return true;
+    } on TypeError catch (_) {
+      return false;
+    }
+  }
+}
+
 extension _BuildContextX on BuildContext {
   MediaQueryData get _m => MediaQuery.of(this);
 
