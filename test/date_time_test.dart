@@ -71,5 +71,16 @@ void main() async {
       expect(value.addSeconds(30), value.copyWith(second: 30));
       expect(value.addSeconds(60), value.copyWith(minute: 31, second: 0));
     });
+
+    test('age', () {
+      final year = DateTime.now().year;
+      final day = DateTime.now().day;
+      const margin = Duration(seconds: 1);
+      expect(DateTime.now().copyWith(year: 1990, month: 1, day: 1).age, 32);
+      expect(DateTime.now().copyWith(year: year - 10, day: day + 1).age, 9);
+      expect(DateTime.now().subtract(margin).age, 0);
+      expect(DateTime.now().copyWith(year: year - 1).subtract(margin).age, 1);
+      expect(DateTime.now().copyWith(year: year - 1).add(margin).age, 0);
+    });
   });
 }
