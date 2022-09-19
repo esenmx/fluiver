@@ -92,11 +92,11 @@ extension DateTimeX on DateTime {
   }
 
   int get age {
-    var diff = DateTime.now().year - year;
-    if (copyWith(year: year + diff).isBefore(DateTime.now())) {
-      diff--;
+    final diff = DateTime.now().year - year;
+    if (DateTime.now().copyWith(year: year).isAfter(this)) {
+      return diff;
     }
-    return diff;
+    return diff - 1;
   }
 }
 
