@@ -25,29 +25,29 @@ class GridColumn<T> extends StatelessWidget {
         final width = constraints.maxWidth -
             padding.horizontal -
             (crossAxisCount - 1) * crossAxisSpacing;
-        final grid = items.to2D(crossAxisCount);
+        final gridItems = items.to2D(crossAxisCount);
         final children = <Widget>[];
-        for (var i = 0; i < grid.length; i++) {
-          final subItems = grid.elementAt(i);
-          final row = <Widget>[];
+        for (var i = 0; i < gridItems.length; i++) {
+          final subItems = gridItems.elementAt(i);
+          final subChildren = <Widget>[];
           for (var j = 0; j < subItems.length; j++) {
-            row.add(SizedBox.square(
+            subChildren.add(SizedBox.square(
               dimension: width / crossAxisCount,
               child: builder(context, subItems[j], i * crossAxisCount + j),
             ));
+            if (j < subItems.length - 1) {
+              subChildren.add(SizedBox(width: crossAxisSpacing));
+            }
           }
-          children.add(Row(
-            children: row.separate(() {
-              return SizedBox(width: crossAxisSpacing);
-            }).toList(),
-          ));
+          children.add(Row(children: subChildren));
+          if (i < gridItems.length - 1) {
+            children.add(SizedBox(height: mainAxisSpacing));
+          }
         }
         return PaddedColumn(
           padding: padding,
           mainAxisSize: MainAxisSize.min,
-          children: children.separate(() {
-            return SizedBox(height: mainAxisSpacing);
-          }).toList(),
+          children: children,
         );
       },
     );
