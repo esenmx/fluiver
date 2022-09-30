@@ -6,7 +6,7 @@ part of fluiver;
 /// where centering the middle and transforming into compressed title needed
 class StaggeredStack extends StatelessWidget {
   StaggeredStack({
-    Key? key,
+    super.key,
     required this.children,
     this.background,
     this.defaultHeight,
@@ -21,8 +21,7 @@ class StaggeredStack extends StatelessWidget {
   })  : assert(children.every((e) =>
             (e.height != null || defaultHeight != null) &&
             (e.bottomPadding != null || defaultGap != null) &&
-            (e.width != null || defaultWidth != null))),
-        super(key: key);
+            (e.width != null || defaultWidth != null)));
 
   final Iterable<StaggeredStackChild> children;
   final Widget? background;

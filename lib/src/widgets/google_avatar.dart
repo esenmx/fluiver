@@ -2,15 +2,14 @@ part of fluiver;
 
 class GoogleAvatar extends StatelessWidget {
   GoogleAvatar({
-    Key? key,
+    super.key,
     required this.name,
     this.size = kMinInteractiveDimension,
     this.colors = Colors.primaries,
     int? index,
   })  : assert(name.isNotEmpty),
         assert(colors.isNotEmpty),
-        _color = colors[index ?? name.hashCode % Colors.primaries.length],
-        super(key: key);
+        _color = colors[index ?? name.hashCode % Colors.primaries.length];
 
   final String name;
   final double size;

@@ -4,8 +4,8 @@ part of fluiver;
 
 class PaddedColumn extends Padding {
   PaddedColumn({
-    Key? key,
-    required EdgeInsetsGeometry padding,
+    super.key,
+    required super.padding,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
@@ -14,8 +14,6 @@ class PaddedColumn extends Padding {
     TextBaseline? textBaseline,
     List<Widget> children = const <Widget>[],
   }) : super(
-          key: key,
-          padding: padding,
           child: Column(
             key: key,
             mainAxisAlignment: mainAxisAlignment,
@@ -31,8 +29,8 @@ class PaddedColumn extends Padding {
 
 class PaddedRow extends Padding {
   PaddedRow({
-    Key? key,
-    required EdgeInsetsGeometry padding,
+    super.key,
+    required super.padding,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
@@ -41,8 +39,6 @@ class PaddedRow extends Padding {
     TextBaseline? textBaseline,
     List<Widget> children = const <Widget>[],
   }) : super(
-          key: key,
-          padding: padding,
           child: Row(
             key: key,
             mainAxisAlignment: mainAxisAlignment,
@@ -58,8 +54,8 @@ class PaddedRow extends Padding {
 
 class ScrollViewColumn extends SingleChildScrollView {
   ScrollViewColumn({
-    Key? key,
-    EdgeInsets? padding,
+    super.key,
+    EdgeInsets? super.padding,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
@@ -68,8 +64,6 @@ class ScrollViewColumn extends SingleChildScrollView {
     TextBaseline? textBaseline,
     List<Widget> children = const <Widget>[],
   }) : super(
-          key: key,
-          padding: padding,
           child: Column(
             key: key,
             mainAxisAlignment: mainAxisAlignment,
