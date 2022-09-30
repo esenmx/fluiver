@@ -1,11 +1,11 @@
 part of fluiver;
 
-class GridColumn<T> extends StatelessWidget {
-  const GridColumn({
+class FlexGrid<T> extends StatelessWidget {
+  const FlexGrid({
     super.key,
     required this.items,
     required this.builder,
-    this.padding = EdgeInsets.zero,
+    this.direction = Axis.vertical,
     required this.crossAxisCount,
     required this.mainAxisSpacing,
     required this.crossAxisSpacing,
@@ -13,18 +13,25 @@ class GridColumn<T> extends StatelessWidget {
 
   final Iterable<T> items;
   final Widget Function(BuildContext context, T value, int index) builder;
-  final EdgeInsets padding;
+  final Axis direction;
   final int crossAxisCount;
   final double mainAxisSpacing;
   final double crossAxisSpacing;
 
   @override
   Widget build(BuildContext context) {
+    final crossGap = direction == Axis.vertical
+        ? SizedBox(width: crossAxisSpacing)
+        : SizedBox(height: crossAxisSpacing);
+    final mainGap = direction == Axis.vertical
+        ? SizedBox(height: mainAxisSpacing)
+        : SizedBox(width: mainAxisSpacing);
+    final crossAxis =
+        direction == Axis.vertical ? Axis.horizontal : Axis.vertical;
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth -
-            padding.horizontal -
-            (crossAxisCount - 1) * crossAxisSpacing;
+        final width =
+            constraints.maxWidth - (crossAxisCount - 1) * crossAxisSpacing;
         final gridItems = items.to2D(crossAxisCount);
         final children = <Widget>[];
         for (var i = 0; i < gridItems.length; i++) {
@@ -36,16 +43,16 @@ class GridColumn<T> extends StatelessWidget {
               child: builder(context, subItems[j], i * crossAxisCount + j),
             ));
             if (j < subItems.length - 1) {
-              subChildren.add(SizedBox(width: crossAxisSpacing));
+              subChildren.add(crossGap);
             }
           }
-          children.add(Row(children: subChildren));
+          children.add(Flex(direction: crossAxis, children: subChildren));
           if (i < gridItems.length - 1) {
-            children.add(SizedBox(height: mainAxisSpacing));
+            children.add(mainGap);
           }
         }
-        return PaddedColumn(
-          padding: padding,
+        return Flex(
+          direction: direction,
           mainAxisSize: MainAxisSize.min,
           children: children,
         );
