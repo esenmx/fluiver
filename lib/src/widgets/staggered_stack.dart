@@ -2,6 +2,7 @@ part of fluiver;
 
 /// Works well with [NestedScrollView]
 /// Constructs a [Stack] that behaves like [Column]
+/// Height of each child must be defined
 /// My usual use case is collapsing [AppBar] with [SliverPersistentHeaderDelegate]
 /// where centering the middle and transforming into compressed title needed
 class StaggeredStack extends StatelessWidget {
@@ -18,7 +19,7 @@ class StaggeredStack extends StatelessWidget {
     this.alignment = Alignment.center,
     this.fit = StackFit.loose,
     this.clipBehaviour = Clip.hardEdge,
-  })  : assert(children.every((e) =>
+  }) : assert(children.every((e) =>
             (e.height != null || defaultHeight != null) &&
             (e.bottomPadding != null || defaultGap != null) &&
             (e.width != null || defaultWidth != null)));
