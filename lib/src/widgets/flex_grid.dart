@@ -1,5 +1,8 @@
 part of fluiver;
 
+/// Using nested [ScrollView]s is not recommended(see [ScrollView.shrinkWrap] docs)
+/// Alternative for [ListView] is [Column] but there is no alternative for [GridView]
+/// FlexGrid solves this, by combining [Flex]es. 
 class FlexGrid<T> extends StatelessWidget {
   const FlexGrid({
     super.key,
@@ -26,8 +29,7 @@ class FlexGrid<T> extends StatelessWidget {
     final mainGap = direction == Axis.vertical
         ? SizedBox(height: mainAxisSpacing)
         : SizedBox(width: mainAxisSpacing);
-    final crossAxis =
-        direction == Axis.vertical ? Axis.horizontal : Axis.vertical;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final width =
@@ -46,7 +48,10 @@ class FlexGrid<T> extends StatelessWidget {
               subChildren.add(crossGap);
             }
           }
-          children.add(Flex(direction: crossAxis, children: subChildren));
+          children.add(Flex(
+            direction: direction.reverse,
+            children: subChildren,
+          ));
           if (i < gridItems.length - 1) {
             children.add(mainGap);
           }
