@@ -4,12 +4,12 @@ part of fluiver;
 /// of the field with default respective size.
 class FormSuffixButton extends StatelessWidget {
   const FormSuffixButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.onPressed,
     this.radius = 24.0,
     this.tooltip,
-  }) : super(key: key);
+  });
 
   final Widget icon;
   final VoidCallback onPressed;
