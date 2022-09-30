@@ -26,9 +26,10 @@ part 'src/extensions/widget_iterable.dart';
 part 'src/helpers/functions.dart';
 part 'src/helpers/observer.dart';
 part 'src/helpers/reactive.dart';
-part 'src/widgets/flexes.dart';
-part 'src/widgets/google_avatar.dart';
 part 'src/widgets/flex_grid.dart';
+part 'src/widgets/flexes.dart';
+part 'src/widgets/form_suffix_button.dart';
+part 'src/widgets/google_avatar.dart';
 part 'src/widgets/slivers.dart';
 part 'src/widgets/staggered_stack.dart';
 
