@@ -22,19 +22,19 @@ extension MediaQueryX on BuildContext {
 
   double get screenHeight => _m.size.height;
 
-  bool get isPlatformDark => _m.platformBrightness == Brightness.dark;
+  bool get isPlatformDark => _m.platformBrightness.isDark;
 
-  bool get isPlatformLight => _m.platformBrightness == Brightness.light;
+  bool get isPlatformLight => _m.platformBrightness.isLight;
 
-  bool get isOrientationPortrait => _m.orientation == Orientation.portrait;
+  bool get isOrientationPortrait => _m.orientation.isPortrait;
 
-  bool get isOrientationLandscape => _m.orientation == Orientation.landscape;
+  bool get isOrientationLandscape => _m.orientation.isLandscape;
 
-  double get topPadding => _m.viewPadding.top;
+  double get topViewPadding => _m.viewPadding.top;
 
-  double get bottomPadding => _m.viewPadding.bottom;
+  double get bottomViewPadding => _m.viewPadding.bottom;
 
-  double get bottomInset => _m.viewInsets.bottom;
+  double get bottomViewInset => _m.viewInsets.bottom;
 }
 
 extension ThemeDataX on BuildContext {
@@ -72,9 +72,9 @@ extension TextThemeX on BuildContext {
 }
 
 extension DirectionalityX on BuildContext {
-  bool get isLTR => Directionality.of(this) == TextDirection.ltr;
+  bool get isDirectionalityLtr => Directionality.of(this).isLtr;
 
-  bool get isRTL => Directionality.of(this) == TextDirection.rtl;
+  bool get isDirectionalityRtl => Directionality.of(this).isRtl;
 }
 
 extension ColorSchemeX on BuildContext {
