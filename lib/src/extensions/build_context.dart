@@ -38,9 +38,9 @@ extension MediaQueryX on BuildContext {
 }
 
 extension ThemeDataX on BuildContext {
-  bool get isThemeDark => _t.brightness == Brightness.dark;
+  bool get isThemeDark => _t.brightness.isDark;
 
-  bool get isThemeLight => _t.brightness == Brightness.light;
+  bool get isThemeLight => _t.brightness.isLight;
 }
 
 extension TextThemeX on BuildContext {
