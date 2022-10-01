@@ -3,6 +3,7 @@ part of fluiver;
 /// Useful for simple use case with Material style [TextField/TextFormField].
 /// Provides splash on top of the field with default respective size.
 class FormSuffixButton extends RawMaterialButton {
+  /// [CircleBorder] splash
   const FormSuffixButton.circle({
     super.key,
     required super.onPressed,
@@ -11,6 +12,7 @@ class FormSuffixButton extends RawMaterialButton {
     super.shape = const CircleBorder(),
   });
 
+  /// [RoundedRectangleBorder] splash
   FormSuffixButton.rectangle({
     super.key,
     required super.onPressed,
