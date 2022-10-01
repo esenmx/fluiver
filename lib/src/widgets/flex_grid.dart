@@ -1,28 +1,30 @@
 part of fluiver;
 
-/// Using nested [ScrollView]s is not recommended(see [ScrollView.shrinkWrap] docs)
-/// Alternative for [ListView] is [Column] but there is no alternative for [GridView]
-/// FlexGrid solves this, by combining [Flex]es. 
+/// Using nested [ScrollView]s is not recommended(see [ScrollView.shrinkWrap])
+/// Alternative of [ListView] is [Column] but there isn't for [GridView]
+/// FlexGrid solves this, by combining [Flex]es.
 class FlexGrid<T> extends StatelessWidget {
   const FlexGrid({
     super.key,
+    this.direction = Axis.vertical,
     required this.items,
     required this.builder,
-    this.direction = Axis.vertical,
     required this.crossAxisCount,
-    required this.mainAxisSpacing,
-    required this.crossAxisSpacing,
+    this.mainAxisSpacing = 0,
+    this.crossAxisSpacing = 0,
   });
 
+  /// Vertical for [Column], Horizontal for [Row]
+  final Axis direction;
   final Iterable<T> items;
   final Widget Function(BuildContext context, T value, int index) builder;
-  final Axis direction;
   final int crossAxisCount;
   final double mainAxisSpacing;
   final double crossAxisSpacing;
 
   @override
   Widget build(BuildContext context) {
+    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount);
     final crossGap = direction == Axis.vertical
         ? SizedBox(width: crossAxisSpacing)
         : SizedBox(height: crossAxisSpacing);
@@ -32,8 +34,10 @@ class FlexGrid<T> extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width =
-            constraints.maxWidth - (crossAxisCount - 1) * crossAxisSpacing;
+        final effectiveWidth = (direction.isVertical
+                ? constraints.maxWidth
+                : constraints.maxHeight) -
+            (crossAxisCount - 1) * crossAxisSpacing;
         final gridItems = items.to2D(crossAxisCount);
         final children = <Widget>[];
         for (var i = 0; i < gridItems.length; i++) {
@@ -41,7 +45,7 @@ class FlexGrid<T> extends StatelessWidget {
           final subChildren = <Widget>[];
           for (var j = 0; j < subItems.length; j++) {
             subChildren.add(SizedBox.square(
-              dimension: width / crossAxisCount,
+              dimension: effectiveWidth / crossAxisCount,
               child: builder(context, subItems[j], i * crossAxisCount + j),
             ));
             if (j < subItems.length - 1) {

@@ -1,12 +1,15 @@
 part of fluiver;
 
 extension WidgetIterableX<E> on Iterable<E> {
-  /// Useful when you need to [map] an iterable into widgets, and need to
-  /// classify them by their property set.
+  /// Lazy way to generate widgets that groups via specific field.
   /// Similar to [groupAsMap] but instead of grouping, it synchronously
   /// generates widgets.
-  /// If resource is sorted, use this method. If it's not sorted and needs to be
-  /// better use [groupAsMap] then generate widgets.
+  /// If resource is sorted, use this method. If it's not sorted and needs to be,
+  /// then use [groupAsMap] to generate widgets.
+  ///
+  /// Typical example would be separating [ListTile] with date titles.
+  /// By using [DateTime.toDate()] extension method(included with this package),
+  /// you can truncate time values and can group.
   Iterable<Widget> slicedWidgetBuilder<S extends Object>({
     required BuildContext context,
     required ValueWidgetBuilder<E> widgetBuilder,
