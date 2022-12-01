@@ -35,9 +35,29 @@ class BrightnessObserver extends WidgetsBindingObserver {
 
   @override
   void didChangePlatformBrightness() {
-    super.didChangePlatformBrightness();
     onPlatformBrightnessChanged(_window.platformBrightness);
+    super.didChangePlatformBrightness();
   }
 }
 
-get _window => WidgetsBinding.instance.window;
+/// Example:
+/// ```dart
+/// final appLifecycleStateProvider = Provider<AppLifecycleState?>((ref) {
+///   final observer = AppLifecycleObserver((state) => ref.state = state);
+///   WidgetsBinding.instance!.addObserver(observer);
+///   ref.onDispose(() => WidgetsBinding.instance!.removeObserver(observer));
+/// });
+/// ```
+class AppLifecycleObserver extends WidgetsBindingObserver {
+  AppLifecycleObserver(this.onAppLifecycleStateChange);
+
+  final void Function(AppLifecycleState state) onAppLifecycleStateChange;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    onAppLifecycleStateChange(state);
+    super.didChangeAppLifecycleState(state);
+  }
+}
+
+ui.SingletonFlutterWindow get _window => WidgetsBinding.instance.window;
