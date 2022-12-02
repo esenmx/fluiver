@@ -2,7 +2,6 @@ library fluiver;
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -27,9 +26,9 @@ part 'src/extensions/widget_iterable.dart';
 part 'src/helpers/functions.dart';
 part 'src/helpers/observer.dart';
 part 'src/helpers/reactive.dart';
+part 'src/helpers/slivers.dart';
 part 'src/widgets/flex_grid.dart';
 part 'src/widgets/flexes.dart';
-part 'src/helpers/slivers.dart';
 
 /// Helps importing the library via IDE auto-import feature
 class FluiverExporter {}

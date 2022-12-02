@@ -9,13 +9,13 @@ part of fluiver;
 ///  });
 /// ```
 class LocaleObserver extends WidgetsBindingObserver {
-  LocaleObserver(this._didChangeLocales);
+  LocaleObserver(this.onLocalesChanged);
 
-  final void Function(List<Locale>? locales) _didChangeLocales;
+  final void Function(List<Locale>? locales) onLocalesChanged;
 
   @override
   void didChangeLocales(List<Locale>? locales) {
-    _didChangeLocales(locales);
+    onLocalesChanged(locales);
     super.didChangeLocales(locales);
   }
 }
@@ -35,7 +35,8 @@ class BrightnessObserver extends WidgetsBindingObserver {
 
   @override
   void didChangePlatformBrightness() {
-    onPlatformBrightnessChanged(_window.platformBrightness);
+    onPlatformBrightnessChanged(
+        WidgetsBinding.instance.window.platformBrightness);
     super.didChangePlatformBrightness();
   }
 }
@@ -59,5 +60,3 @@ class AppLifecycleObserver extends WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
   }
 }
-
-ui.SingletonFlutterWindow get _window => WidgetsBinding.instance.window;
