@@ -1,7 +1,5 @@
 part of fluiver;
 
-// coverage:ignore-file
-
 class PaddedColumn extends Padding {
   PaddedColumn({
     super.key,
@@ -76,6 +74,3 @@ class ScrollViewColumn extends SingleChildScrollView {
           ),
         );
 }
-
-
-/// TODO [FlexGrid]

@@ -22,7 +22,5 @@ class FixedExtentSliverPersistentHeaderDelegate
   double get minExtent => extent;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
-  }
+  bool shouldRebuild(covariant oldDelegate) => false;
 }
