@@ -1,3 +1,4 @@
+import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -5,7 +6,7 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +17,33 @@ class App extends StatelessWidget {
 }
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        padding: const EdgeInsets.all(16),
+        child: FlexGrid(
+          crossAxisCount: 2,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 2,
+          direction: Axis.vertical,
+          children: [
+            for (var i = 0; i < 100; i++)
+              Container(
+                color: Colors.primaries[i % Colors.primaries.length],
+                alignment: Alignment.center,
+                child: Text(
+                  i.toString(),
+                  style: Theme.of(context).textTheme.displayMedium,
+                ),
+              )
+          ],
+        ),
+      ),
+    );
   }
 }

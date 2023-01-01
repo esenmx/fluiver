@@ -51,3 +51,6 @@ macos/
 test/goldens/
 .metadata
 pubspec.lock
+
+
+.macos
