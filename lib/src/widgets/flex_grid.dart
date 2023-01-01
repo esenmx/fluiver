@@ -1,8 +1,8 @@
 part of fluiver;
 
 /// Using nested [ScrollView]s is not recommended(see [ScrollView.shrinkWrap])
-/// Alternative of [ListView] is [Column] but there isn't for [GridView]
-/// FlexGrid solves this, by combining [Flex]es.
+/// Alternative of [ListView] is [Column] but there isn't any for [GridView]
+/// FlexGrid solves this, by combining using simple [Wrap].
 ///
 /// Example: ```dart
 /// Padding(
@@ -25,79 +25,62 @@ part of fluiver;
 class FlexGrid<T> extends StatelessWidget {
   const FlexGrid({
     super.key,
-    this.direction = Axis.vertical,
-    required this.items,
-    required this.builder,
+    required this.children,
     required this.crossAxisCount,
     this.childAspectRatio = 1.0,
     this.mainAxisSpacing = 0,
     this.crossAxisSpacing = 0,
     this.mainAxisExtent = 0,
+    this.direction = Axis.vertical,
   })  : assert(crossAxisCount > 1),
         assert(childAspectRatio >= 0),
         assert(mainAxisSpacing >= 0),
         assert(crossAxisSpacing > 0);
 
+  final List<Widget> children;
+
+  /// Same as [SliverGridDelegateWithFixedCrossAxisCount.crossAxisCount]
+  final int crossAxisCount;
+
+  /// Same as [SliverGridDelegateWithFixedCrossAxisCount.childAspectRatio]
+  final double childAspectRatio;
+
+  /// Same as [SliverGridDelegateWithFixedCrossAxisCount.mainAxisSpacing]
+  final double mainAxisSpacing;
+
+  /// Same as [SliverGridDelegateWithFixedCrossAxisCount.crossAxisSpacing]
+  final double crossAxisSpacing;
+
+  /// Same as [SliverGridDelegateWithFixedCrossAxisCount.mainAxisExtent]
+  final double mainAxisExtent;
+
   /// Vertical for [Column], Horizontal for [Row]
   final Axis direction;
-  final Iterable<T> items;
-  final Widget Function(BuildContext context, T value, int index) builder;
-  final int crossAxisCount;
-  final double childAspectRatio;
-  final double mainAxisSpacing;
-  final double crossAxisSpacing;
-  final double mainAxisExtent;
 
   @override
   Widget build(BuildContext context) {
-    final crossGap = direction == Axis.vertical
-        ? SizedBox(width: crossAxisSpacing)
-        : SizedBox(height: crossAxisSpacing);
-    final mainGap = direction == Axis.vertical
-        ? SizedBox(height: mainAxisSpacing)
-        : SizedBox(width: mainAxisSpacing);
-
     return LayoutBuilder(
       builder: (context, constraints) {
-        final crossAxisSpace = (direction.isVertical
+        final totalCrossAxisSpace = (direction.isVertical
                 ? constraints.maxWidth
                 : constraints.maxHeight) -
             (crossAxisCount - 1) * crossAxisSpacing;
 
-        final itemCrossAxisSpace = crossAxisSpace / crossAxisCount;
+        final itemCrossAxisSpace = totalCrossAxisSpace / crossAxisCount;
         final itemMainAxisSpace =
             itemCrossAxisSpace / childAspectRatio + mainAxisExtent;
+
         final size = Size(
           direction.isVertical ? itemCrossAxisSpace : itemMainAxisSpace,
           direction.isHorizontal ? itemCrossAxisSpace : itemMainAxisSpace,
         );
-
-        final gridItems = items.to2D(crossAxisCount);
-        final children = <Widget>[];
-        for (var i = 0; i < gridItems.length; i++) {
-          final subItems = gridItems.elementAt(i);
-          final subChildren = <Widget>[];
-          for (var j = 0; j < subItems.length; j++) {
-            subChildren.add(SizedBox.fromSize(
-              size: size,
-              child: builder(context, subItems[j], i * crossAxisCount + j),
-            ));
-            if (j < subItems.length - 1) {
-              subChildren.add(crossGap);
-            }
-          }
-          children.add(Flex(
-            direction: direction.reverse,
-            children: subChildren,
-          ));
-          if (i < gridItems.length - 1) {
-            children.add(mainGap);
-          }
-        }
-        return Flex(
-          direction: direction,
-          mainAxisSize: MainAxisSize.min,
-          children: children,
+        return Wrap(
+          spacing: crossAxisSpacing,
+          runSpacing: mainAxisSpacing,
+          direction: direction.reverse,
+          children: children
+              .map((e) => SizedBox.fromSize(size: size, child: e))
+              .toList(),
         );
       },
     );
