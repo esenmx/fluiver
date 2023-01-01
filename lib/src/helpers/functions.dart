@@ -1,6 +1,8 @@
 part of fluiver;
 
-abstract class Def {
+class Def {
+  const Def._();
+
   /// Useful when you need to put a max length for input consistency and do not
   /// want to show [counterBuilder] just because of it.
   /// ```dart
@@ -47,7 +49,9 @@ abstract class Def {
   }
 }
 
-abstract class NetDef {
+class NetDef {
+  const NetDef._();
+
   /// Checks whether device has connection to internet or not
   /// Reference: https://stackoverflow.com/a/49648870/10380182
   Future<bool> hasConnection() async {
