@@ -4,8 +4,9 @@ part of fluiver;
 /// ```dart
 ///  final localesProvider = Provider<List<Locale>?>((ref) {
 ///    final observer = LocaleObserver((locales) => ref.state = locales);
-///    WidgetsBinding.instance!.addObserver(observer);
-///    ref.onDispose(() => WidgetsBinding.instance!.removeObserver(observer));
+///    WidgetsBinding.instance.addObserver(observer);
+///    ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
+///    return WidgetsBinding.instance.window.locales.first;
 ///  });
 /// ```
 class LocaleObserver extends WidgetsBindingObserver {
@@ -22,10 +23,11 @@ class LocaleObserver extends WidgetsBindingObserver {
 
 /// Example:
 /// ```dart
-/// final themesProvider = Provider<Brightness?>((ref) {
+/// final brightnessProvider = Provider<Brightness?>((ref) {
 ///   final observer = BrightnessObserver((brightness) => ref.state = brightness);
-///   WidgetsBinding.instance!.addObserver(observer);
-///   ref.onDispose(() => WidgetsBinding.instance!.removeObserver(observer));
+///   WidgetsBinding.instance.addObserver(observer);
+///   ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
+///   return WidgetsBinding.instance.window.platformBrightness;
 /// });
 /// ```
 class BrightnessObserver extends WidgetsBindingObserver {
@@ -45,8 +47,9 @@ class BrightnessObserver extends WidgetsBindingObserver {
 /// ```dart
 /// final appLifecycleStateProvider = Provider<AppLifecycleState?>((ref) {
 ///   final observer = AppLifecycleObserver((state) => ref.state = state);
-///   WidgetsBinding.instance!.addObserver(observer);
-///   ref.onDispose(() => WidgetsBinding.instance!.removeObserver(observer));
+///   WidgetsBinding.instance.addObserver(observer);
+///   ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
+///   return WidgetsBinding.instance.lifecycleState;
 /// });
 /// ```
 class AppLifecycleObserver extends WidgetsBindingObserver {
