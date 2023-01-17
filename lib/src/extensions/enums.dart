@@ -1,9 +1,7 @@
 part of fluiver;
 
 extension AxisX on Axis {
-  Axis get reverse {
-    return this == Axis.vertical ? Axis.horizontal : Axis.vertical;
-  }
+  Axis get reverse => isVertical ? Axis.horizontal : Axis.vertical;
 
   bool get isVertical => this == Axis.vertical;
 
@@ -11,9 +9,7 @@ extension AxisX on Axis {
 }
 
 extension TextDirectionX on TextDirection {
-  TextDirection get reverse {
-    return this == TextDirection.ltr ? TextDirection.rtl : TextDirection.ltr;
-  }
+  TextDirection get reverse => isLtr ? TextDirection.rtl : TextDirection.ltr;
 
   bool get isLtr => this == TextDirection.ltr;
 
@@ -21,9 +17,7 @@ extension TextDirectionX on TextDirection {
 }
 
 extension BrightnessX on Brightness {
-  Brightness get reverse {
-    return this == Brightness.light ? Brightness.dark : Brightness.light;
-  }
+  Brightness get reverse => isLight ? Brightness.dark : Brightness.light;
 
   bool get isLight => this == Brightness.light;
 
@@ -32,9 +26,7 @@ extension BrightnessX on Brightness {
 
 extension OrientationX on Orientation {
   Orientation get reverse {
-    return this == Orientation.portrait
-        ? Orientation.landscape
-        : Orientation.portrait;
+    return isPortrait ? Orientation.landscape : Orientation.portrait;
   }
 
   bool get isPortrait => this == Orientation.portrait;
