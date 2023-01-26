@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension TextStyleX on TextStyle {
+extension TextStyleFamilyX on TextStyle {
   /// [Roboto] is much more suitable for [Text] with special characters
   /// like `currency symbols`.
   ///
@@ -14,24 +14,24 @@ extension TextStyleColorX on TextStyle {
   }
 
   /// [Colors.white]
-  TextStyle get colorWhite38 => copyWith(color: Colors.white38);
+  TextStyle get withColorWhite38 => copyWith(color: Colors.white38);
 
-  TextStyle get colorWhite54 => copyWith(color: Colors.white54);
+  TextStyle get withColorWhite54 => copyWith(color: Colors.white54);
 
-  TextStyle get colorWhite70 => copyWith(color: Colors.white70);
+  TextStyle get withColorWhite70 => copyWith(color: Colors.white70);
 
-  TextStyle get colorWhite => copyWith(color: Colors.white);
+  TextStyle get withColorWhite => copyWith(color: Colors.white);
 
   /// [Colors.black]
-  TextStyle get colorBlack38 => copyWith(color: Colors.black38);
+  TextStyle get withColorBlack38 => copyWith(color: Colors.black38);
 
-  TextStyle get colorBlack54 => copyWith(color: Colors.black54);
+  TextStyle get withColorBlack54 => copyWith(color: Colors.black54);
 
-  TextStyle get colorBlack70 => copyWith(color: const Color(0xB3000000));
+  TextStyle get withColorBlack70 => copyWith(color: const Color(0xB3000000));
 
-  TextStyle get colorBlack87 => copyWith(color: Colors.black87);
+  TextStyle get withColorBlack87 => copyWith(color: Colors.black87);
 
-  TextStyle get colorBlack => copyWith(color: Colors.black);
+  TextStyle get withColorBlack => copyWith(color: Colors.black);
 
   /// [ColorScheme]
   TextStyle withPrimaryColor(BuildContext context) {
@@ -49,31 +49,31 @@ extension TextStyleColorX on TextStyle {
 
 extension TextStyleFontWeightX on TextStyle {
   /// [Thin]
-  TextStyle get weight100 => copyWith(fontWeight: FontWeight.w100);
+  TextStyle get withWeight100 => copyWith(fontWeight: FontWeight.w100);
 
   /// [ExtraLight]
-  TextStyle get weight200 => copyWith(fontWeight: FontWeight.w200);
+  TextStyle get withWeight200 => copyWith(fontWeight: FontWeight.w200);
 
   /// [Light]
-  TextStyle get weight300 => copyWith(fontWeight: FontWeight.w300);
+  TextStyle get withWeight300 => copyWith(fontWeight: FontWeight.w300);
 
   /// [Regular]
-  TextStyle get weight400 => copyWith(fontWeight: FontWeight.w400);
+  TextStyle get withWeight400 => copyWith(fontWeight: FontWeight.w400);
 
   /// [Medium]
-  TextStyle get weight500 => copyWith(fontWeight: FontWeight.w500);
+  TextStyle get withWeight500 => copyWith(fontWeight: FontWeight.w500);
 
   /// [SemiBold]
-  TextStyle get weight600 => copyWith(fontWeight: FontWeight.w600);
+  TextStyle get withWeight600 => copyWith(fontWeight: FontWeight.w600);
 
   /// [Bold]
-  TextStyle get weight700 => copyWith(fontWeight: FontWeight.w700);
+  TextStyle get withWeight700 => copyWith(fontWeight: FontWeight.w700);
 
   /// [ExtraBold]
-  TextStyle get weight800 => copyWith(fontWeight: FontWeight.w800);
+  TextStyle get withWeight800 => copyWith(fontWeight: FontWeight.w800);
 
   /// [Thick]
-  TextStyle get weight900 => copyWith(fontWeight: FontWeight.w900);
+  TextStyle get withWeight900 => copyWith(fontWeight: FontWeight.w900);
 }
 
 extension TextStyleDecorationX on TextStyle {
