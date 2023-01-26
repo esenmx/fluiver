@@ -4,16 +4,19 @@ extension WidgetIterableX<E> on Iterable<E> {
   /// Lazy way to generate widgets that groups via specific field.
   /// Similar to [groupAsMap] but instead of grouping, it synchronously
   /// generates widgets.
+  ///
   /// If resource is sorted, use this method. If it's not sorted and needs to be,
   /// then use [groupAsMap] to generate widgets.
   ///
-  /// Typical example would be separating [ListTile] with date titles.
-  /// By using [DateTime.toDate()] extension method(included with this package),
-  /// you can truncate time values and can group.
+  /// Typical example would be separating [ListTile] with [DateTime] or
+  /// [TimeOfDay] titles.
+  ///
+  /// By using [DateTimeX.toDate()] or [DateTimeX.toTime()] extension
+  /// method(included with this package), you can truncate time values.
   Iterable<Widget> slicedWidgetBuilder<S extends Object>({
     required BuildContext context,
     required ValueWidgetBuilder<E> widgetBuilder,
-    required S? Function(E) toSlicer,
+    required S? Function(E element) toSlicer,
     required Widget Function(BuildContext context, S? slicer) slicerBuilder,
     WidgetBuilder? separatorBuilder,
     Widget? child,

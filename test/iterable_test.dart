@@ -22,13 +22,13 @@ void main() async {
 
   group('IterableX', () {
     test('sub', () {
-      expect(() => [].sub(1), throwsA(isA<RangeError>()));
-      expect(() => [].sub(0, 2), throwsA(isA<RangeError>()));
-      expect([].sub(0, 0).toList(), []);
-      expect([1, 2, 3].sub(0).toList(), [1, 2, 3]);
-      expect([1, 2, 3].sub(1).toList(), [2, 3]);
-      expect([1, 2, 3].sub(1, 2).toList(), [2]);
-      expect([1, 2, 3].sub(2, 2).toList(), []);
+      expect(() => [].subIteration(1), throwsA(isA<RangeError>()));
+      expect(() => [].subIteration(0, 2), throwsA(isA<RangeError>()));
+      expect([].subIteration(0, 0).toList(), []);
+      expect([1, 2, 3].subIteration(0).toList(), [1, 2, 3]);
+      expect([1, 2, 3].subIteration(1).toList(), [2, 3]);
+      expect([1, 2, 3].subIteration(1, 2).toList(), [2]);
+      expect([1, 2, 3].subIteration(2, 2).toList(), []);
     });
 
     test('to2D', () {
@@ -64,10 +64,10 @@ void main() async {
 
   group('IterableIterableX', () {
     test('from2D', () {
-      expect([[]].from2D(), []);
-      expect(twoDimA.from2D().toList(), expandedA);
-      expect(twoDimB.from2D().toList(), expandedB);
-      expect(twoDimC.from2D().toList(), expandedC);
+      expect([[]].flatten(), []);
+      expect(twoDimA.flatten().toList(), expandedA);
+      expect(twoDimB.flatten().toList(), expandedB);
+      expect(twoDimC.flatten().toList(), expandedC);
     });
   });
 

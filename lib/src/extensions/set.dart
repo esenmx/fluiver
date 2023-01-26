@@ -9,11 +9,4 @@ extension SetX<E> on Set<E> {
     }
     return s;
   }
-
-  E? elementAtOrNull(int index) {
-    if (index < length) {
-      return elementAt(index);
-    }
-    return null;
-  }
 }

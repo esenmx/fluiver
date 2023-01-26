@@ -16,11 +16,6 @@ void main() async {
       expect([1, 2, 3].lowest, 1);
       expect([1, 2, -1].lowest, -1);
     });
-
-    test('lowestOrElse', () {
-      expect(<int>[].lowestOrElse(0), 0);
-      expect(<int>[2, 1].lowestOrElse(), 1);
-    });
   });
 
   group('double', () {
@@ -39,11 +34,6 @@ void main() async {
       expect(<double>[1].lowest, 1);
       expect(<double>[1, 2, 3].lowest, 1);
       expect(<double>[1, 2, -1].lowest, -1);
-    });
-
-    test('lowestOrElse', () {
-      expect(<double>[].lowestOrElse(0.0), 0.0);
-      expect(<double>[2, 1].lowestOrElse(), 1);
     });
   });
 }

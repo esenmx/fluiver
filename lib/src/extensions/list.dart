@@ -12,11 +12,4 @@ extension ListX<E> on List<E> {
     }
     return sublist(start, end);
   }
-
-  E? elementAtOrNull(int index) {
-    if (index < length) {
-      return elementAt(index);
-    }
-    return null;
-  }
 }
