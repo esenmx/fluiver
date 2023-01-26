@@ -1,28 +1,6 @@
 part of fluiver;
 
 extension DateTimeX on DateTime {
-  DateTime copyWith({
-    int? year,
-    int? month,
-    int? day,
-    int? hour,
-    int? minute,
-    int? second,
-    int? millisecond,
-    int? microsecond,
-  }) {
-    return DateTime(
-      year ?? this.year,
-      month ?? this.month,
-      day ?? this.day,
-      hour ?? this.hour,
-      minute ?? this.minute,
-      second ?? this.second,
-      millisecond ?? this.millisecond,
-      microsecond ?? this.microsecond,
-    );
-  }
-
   DateTime toDate() {
     return copyWith(
       hour: 0,
@@ -91,6 +69,7 @@ extension DateTimeX on DateTime {
     return difference(DateTime.now()).inMicroseconds <= duration.inMicroseconds;
   }
 
+  // todo (diff - 2, 3, ... , n) cases
   int get age {
     final diff = DateTime.now().year - year;
     if (DateTime.now().copyWith(year: year).isAfter(this)) {
