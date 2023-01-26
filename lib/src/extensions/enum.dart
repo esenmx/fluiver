@@ -1,11 +1,28 @@
 part of fluiver;
 
-mixin ComparableEnum on Enum implements Comparable<Enum> {
+///
+///
+/// ```dart
+/// enum Enums with ComparableEnum {
+///   one,
+///   two,
+///   three;
+/// }
+/// ```
+mixin IndexComparableEnum on Enum implements Comparable<Enum> {
+  bool operator <(Enum other) => index < other.index;
+
+  bool operator <=(Enum other) => index <= other.index;
+
+  bool operator >(Enum other) => index > other.index;
+
+  bool operator >=(Enum other) => index >= other.index;
+
   @override
   int compareTo(other) => index - other.index;
 }
 
-extension IterableEnum<T extends Enum> on Iterable<T> {
+extension IterableEnumX<T extends Enum> on Iterable<T> {
   T? byNameOrNull(String name) {
     for (var e in this) {
       if (e.name == name) {
