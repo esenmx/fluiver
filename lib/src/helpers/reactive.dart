@@ -41,3 +41,30 @@ class ThrottleLatest with _TimerMixin {
     }
   }
 }
+
+class ThrottleFirst with _TimerMixin {
+  ThrottleFirst(this.duration);
+
+  final Duration duration;
+
+  void call(VoidCallback task) {
+    if (_timer?.isActive != true) {
+      task.call();
+      _timer = Timer(duration, () {});
+    }
+  }
+}
+
+class ThrottleLast with _TimerMixin {
+  ThrottleLast(this.duration);
+
+  final Duration duration;
+  late VoidCallback _last;
+
+  void call(VoidCallback task) {
+    _last = task;
+    if (_timer?.isActive != true) {
+      _timer = Timer(duration, _last);
+    }
+  }
+}
