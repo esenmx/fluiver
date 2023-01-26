@@ -21,6 +21,7 @@ extension StringCapitalizeX on String {
 
   /// Useful when generating avatars based on name(similarly Google account avatars)
   /// John Doe => JD
+  /// John doe => Jd
   String initials({String separator = ' ', String joiner = ''}) {
     final names = split(separator).where((e) => e.isNotEmpty);
     switch (names.length) {
@@ -57,8 +58,6 @@ extension StringCapitalizeX on String {
   }
 }
 
-typedef StringOrElse = String Function(String string);
-
 extension StringRemoveX on String {
   String? removePrefixOrNull(String prefix) {
     if (startsWith(prefix)) {
@@ -67,7 +66,8 @@ extension StringRemoveX on String {
     return null;
   }
 
-  String removePrefixOrElse(String prefix, [StringOrElse? orElse]) {
+  String removePrefixOrElse(String prefix,
+      [String Function(String fallbackValue)? orElse]) {
     if (startsWith(prefix)) {
       return substring(prefix.length, length);
     }
@@ -81,7 +81,8 @@ extension StringRemoveX on String {
     return null;
   }
 
-  String removeSuffixOrElse(String suffix, [StringOrElse? orElse]) {
+  String removeSuffixOrElse(String suffix,
+      [String Function(String fallbackValue)? orElse]) {
     if (endsWith(suffix)) {
       return substring(0, length - suffix.length);
     }

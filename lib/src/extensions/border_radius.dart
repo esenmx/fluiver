@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension AddCircularBorderRadiusX on BorderRadius {
+extension BorderRadiusAddX on BorderRadius {
   BorderRadius addAll(double radius) {
     return this + BorderRadius.circular(radius);
   }
@@ -38,7 +38,7 @@ extension AddCircularBorderRadiusX on BorderRadius {
   }
 }
 
-extension SetCircularBorderRadiusX on BorderRadius {
+extension BorderRadiusSetX on BorderRadius {
   BorderRadius setLeft(double radius) {
     return setTopLeft(radius).setBottomLeft(radius);
   }
@@ -72,7 +72,7 @@ extension SetCircularBorderRadiusX on BorderRadius {
   }
 }
 
-extension EliminateCircularBorderRadiusX on BorderRadius {
+extension BorderRadiusOnlyX on BorderRadius {
   BorderRadius get onlyTopLeft {
     return BorderRadius.only(topLeft: topLeft);
   }
