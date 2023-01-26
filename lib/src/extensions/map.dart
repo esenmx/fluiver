@@ -1,8 +1,6 @@
 part of fluiver;
 
-typedef MapFilterPredicate<K, V> = bool Function(K key, V value);
-
-extension MapX<K, V> on Map<K, V> {
+extension MapPredicateX<K, V> on Map<K, V> {
   bool any(bool Function(K key, V value) test) {
     return entries.any((entry) {
       return test(entry.key, entry.value);
@@ -23,14 +21,9 @@ extension MapX<K, V> on Map<K, V> {
     }
     return null;
   }
+}
 
-  MapEntry<K, V>? entryOf(K k) {
-    if (containsKey(k)) {
-      return MapEntry<K, V>(k, this[k] as V);
-    }
-    return null;
-  }
-
+extension MapFilterX<K, V> on Map<K, V> {
   Map<K, V> where(bool Function(K key, V value) test) {
     return <K, V>{
       for (final e in entries)
@@ -50,5 +43,14 @@ extension MapX<K, V> on Map<K, V> {
       for (final entry in entries)
         if (entry.value is T) entry.key: entry.value as T
     };
+  }
+}
+
+extension EntryMapX<K, V> on Map<K, V> {
+  MapEntry<K, V>? entryOf(K k) {
+    if (containsKey(k)) {
+      return MapEntry<K, V>(k, this[k] as V);
+    }
+    return null;
   }
 }

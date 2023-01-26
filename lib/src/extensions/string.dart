@@ -90,7 +90,7 @@ extension StringRemoveX on String {
   }
 }
 
-extension StringSafeX on String {
+extension SafeStringX on String {
   String safeSubstring(int start, [int? end]) {
     if (start >= length) {
       return '';
