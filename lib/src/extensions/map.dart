@@ -9,6 +9,12 @@ extension MapX<K, V> on Map<K, V> {
     });
   }
 
+  bool every(bool Function(K key, V value) test) {
+    return entries.every((entry) {
+      return test(entry.key, entry.value);
+    });
+  }
+
   MapEntry<K, V>? firstWhereOrNull(bool Function(K key, V value) test) {
     for (final e in entries) {
       if (test(e.key, e.value)) {
@@ -18,7 +24,7 @@ extension MapX<K, V> on Map<K, V> {
     return null;
   }
 
-  MapEntry<K, V>? entry(K k) {
+  MapEntry<K, V>? entryOf(K k) {
     if (containsKey(k)) {
       return MapEntry<K, V>(k, this[k] as V);
     }
