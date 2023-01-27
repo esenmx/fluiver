@@ -33,62 +33,23 @@ extension StringCapitalizeX on String {
         return names.map((e) => e[0]).join(joiner);
     }
   }
-
-  /// john doe => J Doe
-  /// j dOE => J Doe
-  /// john J dOE => J. J Doe
-  String initialsWithLast({
-    String separator = ' ',
-    String joiner = ' ',
-    String suffix = '.',
-  }) {
-    final names = split(separator).where((e) => e.isNotEmpty);
-    switch (names.length) {
-      case 0:
-        return '';
-      case 1:
-        return names.first.toLowerCase().capitalize;
-      default:
-        final initials = names
-            .take(names.length - 1)
-            .map((e) => '${e[0].toUpperCase()}$suffix')
-            .join(joiner);
-        return '$initials$separator${names.last.toLowerCase().capitalize}';
-    }
-  }
 }
 
-extension StringRemoveX on String {
-  String? removePrefixOrNull(String prefix) {
-    if (startsWith(prefix)) {
-      return substring(prefix.length, length);
-    }
-    return null;
-  }
+// extension StringRemoveX on String {
+//   String? removePrefixOrNull(String prefix) {
+//     if (startsWith(prefix)) {
+//       return substring(prefix.length, length);
+//     }
+//     return null;
+//   }
 
-  String removePrefixOrElse(String prefix,
-      [String Function(String fallbackValue)? orElse]) {
-    if (startsWith(prefix)) {
-      return substring(prefix.length, length);
-    }
-    return orElse?.call(this) ?? this;
-  }
-
-  String? removeSuffixOrNull(String suffix) {
-    if (endsWith(suffix)) {
-      return substring(0, length - suffix.length);
-    }
-    return null;
-  }
-
-  String removeSuffixOrElse(String suffix,
-      [String Function(String fallbackValue)? orElse]) {
-    if (endsWith(suffix)) {
-      return substring(0, length - suffix.length);
-    }
-    return orElse?.call(this) ?? this;
-  }
-}
+//   String? removeSuffixOrNull(String suffix) {
+//     if (endsWith(suffix)) {
+//       return substring(0, length - suffix.length);
+//     }
+//     return null;
+//   }
+// }
 
 extension SafeStringX on String {
   String safeSubstring(int start, [int? end]) {
@@ -104,15 +65,15 @@ extension SafeStringX on String {
   }
 }
 
-extension StringSearchX on String {
-  bool textSearch(String search, [String separator = ' ']) {
-    Iterable<String> prepare(String string, String separator) {
-      return string.toLowerCase().split(separator).where((e) => e.isNotEmpty);
-    }
+// extension StringSearchX on String {
+//   bool hasSearchMatch(String search, [String separator = ' ']) {
+//     Iterable<String> prepare(String string, String separator) {
+//       return string.toLowerCase().split(separator).where((e) => e.isNotEmpty);
+//     }
 
-    final words = prepare(this, separator);
-    final parts = prepare(search, ' ');
-    // TODO remove found words within every
-    return parts.every((part) => words.any((word) => word.contains(part)));
-  }
-}
+//     final words = prepare(this, separator);
+//     final parts = prepare(search, ' ');
+//     // TODO remove found words within every
+//     return parts.every((part) => words.any((word) => word.contains(part)));
+//   }
+// }

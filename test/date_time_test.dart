@@ -6,7 +6,7 @@ void main() async {
   final value = DateTime(1990, 6, 26, 8, 30);
   group('DateTimeX', () {
     test('toDate', () {
-      expect(value.toDate(), DateTime(1990, 6, 26));
+      expect(value.onlyDate(), DateTime(1990, 6, 26));
     });
 
     test('toTime', () {
@@ -76,7 +76,8 @@ void main() async {
       final year = DateTime.now().year;
       final day = DateTime.now().day;
       const margin = Duration(seconds: 1);
-      expect(DateTime.now().copyWith(year: 1990, month: 1, day: 1).age, 32);
+      expect(DateTime.now().copyWith(year: 1990, month: 1, day: 1).age,
+          year - 1990);
       expect(DateTime.now().copyWith(year: year - 10, day: day + 1).age, 9);
       expect(DateTime.now().subtract(margin).age, 0);
       expect(DateTime.now().copyWith(year: year - 1).subtract(margin).age, 1);

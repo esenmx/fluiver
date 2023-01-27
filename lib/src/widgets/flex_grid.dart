@@ -2,7 +2,9 @@ part of fluiver;
 
 /// Using nested [ScrollView]s is not recommended(see [ScrollView.shrinkWrap])
 /// Alternative of [ListView] is [Column] but there isn't any for [GridView]
-/// FlexGrid solves this, by combining using simple [Wrap].
+/// FlexGrid solves this by using simple [Wrap].
+///
+/// One important difference with
 ///
 /// Example: ```dart
 /// Padding(
@@ -51,7 +53,10 @@ class FlexGrid<T> extends StatelessWidget {
   /// Same as [SliverGridDelegateWithFixedCrossAxisCount.crossAxisSpacing]
   final double crossAxisSpacing;
 
-  /// Same as [SliverGridDelegateWithFixedCrossAxisCount.mainAxisExtent]
+  /// Similar to [SliverGridDelegateWithFixedCrossAxisCount.mainAxisExtent] but
+  /// on big difference, unlike [SliverGridDelegateWithFixedCrossAxisCount], both
+  /// [mainAxisExtent] and [childAspectRatio] used in calculation regardless off
+  /// their value.
   final double mainAxisExtent;
 
   /// Vertical for [Column], Horizontal for [Row]
@@ -61,18 +66,18 @@ class FlexGrid<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final totalCrossAxisSpace = (direction.isVertical
+        final totalCrossAxisExtent = (direction.isVertical
                 ? constraints.maxWidth
                 : constraints.maxHeight) -
             (crossAxisCount - 1) * crossAxisSpacing;
 
-        final itemCrossAxisSpace = totalCrossAxisSpace / crossAxisCount;
-        final itemMainAxisSpace =
-            itemCrossAxisSpace / childAspectRatio + mainAxisExtent;
+        final childCrossAxisExtent = totalCrossAxisExtent / crossAxisCount;
+        final itemMainAxisExtent =
+            childCrossAxisExtent / childAspectRatio + mainAxisExtent;
 
         final size = Size(
-          direction.isVertical ? itemCrossAxisSpace : itemMainAxisSpace,
-          direction.isHorizontal ? itemCrossAxisSpace : itemMainAxisSpace,
+          direction.isVertical ? childCrossAxisExtent : itemMainAxisExtent,
+          direction.isHorizontal ? childCrossAxisExtent : itemMainAxisExtent,
         );
         return Wrap(
           spacing: crossAxisSpacing,
