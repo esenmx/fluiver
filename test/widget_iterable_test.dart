@@ -36,7 +36,7 @@ void main() {
         return dateSeries(length).slicedWidgetBuilder<DateTime>(
           context: MockBuildContext(),
           widgetBuilder: (_, val, __) => Text(val.toString()),
-          toSlicer: (DateTime e) => e.toDate(),
+          toSlicer: (DateTime e) => e.onlyDate(),
           slicerBuilder: (_, slicer) => Text(slicer.toString()),
           child: const FlutterLogo(),
           separatorBuilder: withSeparator ? (context) => const Divider() : null,

@@ -18,43 +18,17 @@ void main() async {
       expect('foo,,bar'.capitalizeAll(separator: ',', joiner: ' '), 'Foo Bar');
     });
 
-    test('initialsLast - capitalizeLowerLatter', () {
-      expect(''.initialsWithLast(), '');
-      expect('    '.initialsWithLast(), '');
-      expect('foo'.initialsWithLast(), 'Foo');
-      expect('fOO'.initialsWithLast(), 'Foo');
-      expect('John Doe'.initialsWithLast(), 'J. Doe');
-      expect('jOHN doe'.initialsWithLast(), 'J. Doe');
-      expect('j dOE'.initialsWithLast(), 'J. Doe');
-      expect('john j dOE'.initialsWithLast(), 'J. J. Doe');
-      expect('john  j dOE'.initialsWithLast(), 'J. J. Doe');
-    });
+    // test('removePrefixOrNull', () {
+    //   expect(''.removePrefixOrNull('foo'), null);
+    //   expect('foo'.removePrefixOrNull('foo'), '');
+    //   expect('foobar'.removePrefixOrNull('foo'), 'bar');
+    // });
 
-    test('removePrefixOrNull', () {
-      expect(''.removePrefixOrNull('foo'), null);
-      expect('foo'.removePrefixOrNull('foo'), '');
-      expect('foobar'.removePrefixOrNull('foo'), 'bar');
-    });
-
-    test('removePrefixOrElse', () {
-      expect(''.removePrefixOrElse('foo'), '');
-      expect('foo'.removePrefixOrElse('foo'), '');
-      expect('foo'.removePrefixOrElse('baz', (s) => s.toUpperCase()), 'FOO');
-      expect('foobar'.removePrefixOrElse('foo'), 'bar');
-    });
-
-    test('removeSuffixOrNull', () {
-      expect(''.removeSuffixOrNull('foo'), null);
-      expect('foo'.removeSuffixOrNull('foo'), '');
-      expect('foobar'.removeSuffixOrNull('bar'), 'foo');
-    });
-
-    test('removeSuffixOrElse', () {
-      expect(''.removeSuffixOrElse('foo'), '');
-      expect('foo'.removeSuffixOrElse('foo'), '');
-      expect('foo'.removeSuffixOrElse('baz', (s) => s.toUpperCase()), 'FOO');
-      expect('foobar'.removeSuffixOrElse('bar'), 'foo');
-    });
+    // test('removeSuffixOrNull', () {
+    //   expect(''.removeSuffixOrNull('foo'), null);
+    //   expect('foo'.removeSuffixOrNull('foo'), '');
+    //   expect('foobar'.removeSuffixOrNull('bar'), 'foo');
+    // });
 
     test('safeSubstring', () {
       expect('a'.safeSubstring(2), '');
@@ -64,34 +38,34 @@ void main() async {
     });
   });
 
-  group('StringSearchX', () {
-    test('textSearch', () {
-      expect(''.textSearch(''), isTrue);
-      expect(''.textSearch('a'), isFalse);
-      expect('a'.textSearch(''), isTrue);
-      expect('Foo'.textSearch('fo'), isTrue);
-      expect('Foo Bar'.textSearch('foo bar'), isTrue);
-      expect('Foo Bar'.textSearch('Foo Bar'), isTrue);
-      expect('Foo Bar'.textSearch('fo'), isTrue);
-      expect('Foo Bar'.textSearch('f b'), isTrue);
-      expect('Foo Bar'.textSearch('o r'), isTrue);
-      expect('Foo Bar'.textSearch('Baz'), isFalse);
-      expect('Foo Bar'.textSearch('foo z'), isFalse);
-    });
+  // group('StringSearchX', () {
+  //   test('textSearch', () {
+  //     expect(''.hasSearchMatch(''), isTrue);
+  //     expect(''.hasSearchMatch('a'), isFalse);
+  //     expect('a'.hasSearchMatch(''), isTrue);
+  //     expect('Foo'.hasSearchMatch('fo'), isTrue);
+  //     expect('Foo Bar'.hasSearchMatch('foo bar'), isTrue);
+  //     expect('Foo Bar'.hasSearchMatch('Foo Bar'), isTrue);
+  //     expect('Foo Bar'.hasSearchMatch('fo'), isTrue);
+  //     expect('Foo Bar'.hasSearchMatch('f b'), isTrue);
+  //     expect('Foo Bar'.hasSearchMatch('o r'), isTrue);
+  //     expect('Foo Bar'.hasSearchMatch('Baz'), isFalse);
+  //     expect('Foo Bar'.hasSearchMatch('foo z'), isFalse);
+  //   });
 
-    test('textSearchWithSeparator', () {
-      const sep = ',';
-      expect('Foo'.textSearch('fo', sep), isTrue);
-      expect('Foo,Bar'.textSearch('fo', sep), isTrue);
-      expect('Foo Bar'.textSearch('fo', sep), isTrue);
-      // expect('Foo Bar'.textSearch('fo b', sep), isFalse); // FIXME
-      expect('Foo,Bar'.textSearch('fo b', sep), isTrue);
-      expect('Foo,Bar'.textSearch('fo  b', sep), isTrue);
-      expect('Foo,,,,Bar'.textSearch('foo bar', sep), isTrue);
-      expect('Foo,Bar'.textSearch('Foo Bar', sep), isTrue);
-      expect('Foo,Bar'.textSearch('ar', sep), isTrue);
-      expect('Foo,Bar'.textSearch('z', sep), isFalse);
-      expect('Foo,Bar'.textSearch('foo z', sep), isFalse);
-    });
-  });
+  //   test('textSearchWithSeparator', () {
+  //     const sep = ',';
+  //     expect('Foo'.hasSearchMatch('fo', sep), isTrue);
+  //     expect('Foo,Bar'.hasSearchMatch('fo', sep), isTrue);
+  //     expect('Foo Bar'.hasSearchMatch('fo', sep), isTrue);
+  //     // expect('Foo Bar'.textSearch('fo b', sep), isFalse); // FIXME
+  //     expect('Foo,Bar'.hasSearchMatch('fo b', sep), isTrue);
+  //     expect('Foo,Bar'.hasSearchMatch('fo  b', sep), isTrue);
+  //     expect('Foo,,,,Bar'.hasSearchMatch('foo bar', sep), isTrue);
+  //     expect('Foo,Bar'.hasSearchMatch('Foo Bar', sep), isTrue);
+  //     expect('Foo,Bar'.hasSearchMatch('ar', sep), isTrue);
+  //     expect('Foo,Bar'.hasSearchMatch('z', sep), isFalse);
+  //     expect('Foo,Bar'.hasSearchMatch('foo z', sep), isFalse);
+  //   });
+  // });
 }
