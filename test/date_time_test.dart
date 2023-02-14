@@ -6,7 +6,7 @@ void main() async {
   final value = DateTime(1990, 6, 26, 8, 30);
   group('DateTimeX', () {
     test('toDate', () {
-      expect(value.onlyDate(), DateTime(1990, 6, 26));
+      expect(value.truncateTime(), DateTime(1990, 6, 26));
     });
 
     test('toTime', () {

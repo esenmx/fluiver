@@ -1,9 +1,9 @@
 part of fluiver;
 
-extension DateTimeMergeX on DateTime {
+extension DateTimeMerge on DateTime {
   TimeOfDay toTime() => TimeOfDay(hour: hour, minute: minute);
 
-  DateTime onlyDate() {
+  DateTime truncateTime() {
     return copyWith(
       hour: 0,
       minute: 0,
@@ -13,49 +13,38 @@ extension DateTimeMergeX on DateTime {
     );
   }
 
-  DateTime mergeWithTimeOfDay(TimeOfDay time) {
-    return copyWith(hour: time.hour, minute: time.minute);
+  DateTime withTimeOfDay(TimeOfDay time) {
+    return truncateTime().copyWith(hour: time.hour, minute: time.minute);
   }
 }
 
-extension DateTimeAddX on DateTime {
+extension DateTimeAdd on DateTime {
   DateTime addYears(int years) => copyWith(year: year + years);
-
   DateTime addMonths(int months) => copyWith(month: month + months);
-
   DateTime addWeeks(int weeks) => copyWith(day: day + weeks * 7);
-
   DateTime addDays(int days) => copyWith(day: day + days);
-
   DateTime addHours(int hours) => copyWith(hour: hour + hours);
-
   DateTime addMinutes(int minutes) => copyWith(minute: minute + minutes);
-
   DateTime addSeconds(int seconds) => copyWith(second: second + seconds);
 }
 
-extension DateTimeCheckX on DateTime {
-  bool get isToday {
-    final n = DateTime.now();
-    return n.day == day && n.month == month && n.year == year;
+extension DateTimeCheck on DateTime {
+  bool _offsetChecker(int dayOffset) {
+    final l = toLocal();
+    final n = DateTime.now().addDays(dayOffset);
+    return n.day == l.day && n.month == l.month && n.year == l.year;
   }
 
-  bool get isTomorrow {
-    final t = DateTime.now().addDays(1);
-    return t.day == day && t.month == month && t.year == year;
-  }
-
-  bool get isYesterday {
-    final y = DateTime.now().addDays(-1);
-    return y.day == day && y.month == month && y.year == year;
-  }
+  bool get isToday => _offsetChecker(0);
+  bool get isTomorrow => _offsetChecker(1);
+  bool get isYesterday => _offsetChecker(-1);
 
   bool isWithinFromNow(Duration duration) {
     return difference(DateTime.now()).inMicroseconds <= duration.inMicroseconds;
   }
 }
 
-extension DateTimeCalculatorX on DateTime {
+extension DateTimeCalculator on DateTime {
   DateTime truncate(Duration modulus) {
     final truncated = subtract(Duration(
       microseconds: microsecondsSinceEpoch % modulus.inMicroseconds,
