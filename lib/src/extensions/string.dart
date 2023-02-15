@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension StringCapitalizeX on String {
+extension StringCapitalize on String {
   String get capitalize {
     switch (length) {
       case 0:
@@ -35,7 +35,7 @@ extension StringCapitalizeX on String {
   }
 }
 
-// extension StringRemoveX on String {
+// extension StringRemove on String {
 //   String? removePrefixOrNull(String prefix) {
 //     if (startsWith(prefix)) {
 //       return substring(prefix.length, length);
@@ -51,7 +51,7 @@ extension StringCapitalizeX on String {
 //   }
 // }
 
-extension SafeStringX on String {
+extension SafeString on String {
   String safeSubstring(int start, [int? end]) {
     if (start >= length) {
       return '';
@@ -65,7 +65,7 @@ extension SafeStringX on String {
   }
 }
 
-// extension StringSearchX on String {
+// extension StringSearch on String {
 //   bool hasSearchMatch(String search, [String separator = ' ']) {
 //     Iterable<String> prepare(String string, String separator) {
 //       return string.toLowerCase().split(separator).where((e) => e.isNotEmpty);

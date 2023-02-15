@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension SubSetX<E> on Set<E> {
+extension SubSet<E> on Set<E> {
   Set<E> subset(int start, [int? end]) {
     RangeError.checkValidRange(start, end, length);
     final s = <E>{};

@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension TextStyleFamilyX on TextStyle {
+extension TextStyleFamily on TextStyle {
   /// [Roboto] is much more suitable for [Text] with special characters
   /// like `currency symbols`.
   ///
@@ -8,7 +8,7 @@ extension TextStyleFamilyX on TextStyle {
   TextStyle get withRobotoFamily => copyWith(fontFamily: 'Roboto');
 }
 
-extension TextStyleColorX on TextStyle {
+extension TextStyleColor on TextStyle {
   TextStyle withOpacity(double opacity) {
     return copyWith(color: color?.withOpacity(opacity));
   }
@@ -47,7 +47,7 @@ extension TextStyleColorX on TextStyle {
   }
 }
 
-extension TextStyleFontWeightX on TextStyle {
+extension TextStyleFontWeight on TextStyle {
   /// [Thin]
   TextStyle get withWeight100 => copyWith(fontWeight: FontWeight.w100);
 
@@ -76,7 +76,7 @@ extension TextStyleFontWeightX on TextStyle {
   TextStyle get withWeight900 => copyWith(fontWeight: FontWeight.w900);
 }
 
-extension TextStyleDecorationX on TextStyle {
+extension TextStyleDecoration on TextStyle {
   TextStyle get withUnderline => copyWith(decoration: TextDecoration.underline);
 
   TextStyle get withOverline => copyWith(decoration: TextDecoration.overline);
@@ -87,7 +87,7 @@ extension TextStyleDecorationX on TextStyle {
 
 /// Numbers have chosen from mostly:
 /// https://m3.material.io/styles/typography/type-scale-tokens
-extension TextStyleSizeX on TextStyle {
+extension TextStyleSize on TextStyle {
   TextStyle withSize(double size) => copyWith(fontSize: size);
 
   TextStyle get withSize10 => copyWith(fontSize: 10);

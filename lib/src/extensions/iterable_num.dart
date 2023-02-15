@@ -1,12 +1,12 @@
 part of fluiver;
 
-extension IterableDoubleX on Iterable<double> {
+extension IterableDouble on Iterable<double> {
   double sum() => fold(0.0, (previous, element) => previous + element);
 
   double average() => sum() / length;
 }
 
-extension IterableIntX on Iterable<int> {
+extension IterableInt on Iterable<int> {
   int sum() => fold(0, (previous, element) => previous + element);
 
   double average() => sum() / length;
@@ -14,7 +14,7 @@ extension IterableIntX on Iterable<int> {
   Uint8List toBytes() => Uint8List.fromList(toList());
 }
 
-extension IterableNumX<T extends num> on Iterable<T> {
+extension IterableNum<T extends num> on Iterable<T> {
   T get lowest => reduce((v, e) => e < v ? e : v);
 
   T get highest => reduce((v, e) => e > v ? e : v);

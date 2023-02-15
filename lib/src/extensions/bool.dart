@@ -1,5 +1,5 @@
 part of fluiver;
 
-extension BoolIntX on bool {
+extension BoolInt on bool {
   int toInt() => this ? 1 : 0;
 }

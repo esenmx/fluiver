@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension SafeListX<E> on List<E> {
+extension SafeList<E> on List<E> {
   Iterable<E> safeSubList(int start, [int? end]) {
     if (start >= length) {
       return [];

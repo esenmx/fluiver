@@ -31,6 +31,3 @@ part 'src/helpers/reactive.dart';
 part 'src/helpers/slivers.dart';
 part 'src/widgets/flex_grid.dart';
 part 'src/widgets/flexes.dart';
-
-/// Helps importing the library via IDE auto-import feature
-class FluiverExporter {}

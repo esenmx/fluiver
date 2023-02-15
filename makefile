@@ -5,3 +5,4 @@ dry:
 
 golden:
 	cd example; flutter test --update-goldens
+

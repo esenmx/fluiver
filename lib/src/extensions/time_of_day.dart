@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension TimeOfDayX on TimeOfDay {
+extension TimeOfDayDateTime on TimeOfDay {
   DateTime inToday() {
     return DateTime.now().copyWith(
       hour: hour,

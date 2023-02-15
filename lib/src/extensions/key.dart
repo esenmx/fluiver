@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension GlobalKeyFormFieldStateX on GlobalKey<FormFieldState> {
+extension GlobalKeyFormFieldState on GlobalKey<FormFieldState> {
   bool validateAndSave() {
     final isValid = currentState?.validate() == true;
     if (isValid) {
