@@ -4,8 +4,6 @@ part of fluiver;
 /// Alternative of [ListView] is [Column] but there isn't any for [GridView]
 /// FlexGrid solves this by using simple [Wrap].
 ///
-/// One important difference with
-///
 /// Example: ```dart
 /// Padding(
 ///   padding: const EdgeInsets.all(8.0),
@@ -54,12 +52,12 @@ class FlexGrid<T> extends StatelessWidget {
   final double crossAxisSpacing;
 
   /// Similar to [SliverGridDelegateWithFixedCrossAxisCount.mainAxisExtent] but
-  /// on big difference, unlike [SliverGridDelegateWithFixedCrossAxisCount], both
-  /// [mainAxisExtent] and [childAspectRatio] used in calculation regardless off
-  /// their value.
+  /// with a big difference, unlike [SliverGridDelegateWithFixedCrossAxisCount],
+  /// both [mainAxisExtent] and [childAspectRatio] used in calculation regardless
+  /// off their value.
   final double mainAxisExtent;
 
-  /// Vertical for [Column], Horizontal for [Row]
+  /// Same as [Flex.direction]
   final Axis direction;
 
   @override
