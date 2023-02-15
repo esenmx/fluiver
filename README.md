@@ -1,84 +1,99 @@
-## fluiver
-
-Name from `Flutter` + `Quiver` = `Fluiver`.
+# fluiver
 
 Dependency free; extensions, widgets and helpers package. Focused on productivity with an eye
-to `IDE` behaviours rather than reducing the amount of written code roughly.
+to `IDE` behaviors rather than reducing the amount of written code roughly(which most packages do).
 
-### Widgets
-`TODO`
+## [Extensions](https://dart.dev/guides/language/extension-methods)
 
-### X
-
-#### BuildContext
+### [BuildContext](https://api.flutter.dev/flutter/widgets/BuildContext-class.html)
 
 ```dart
-// MediaQuery
-context.screenWidth // MediaQuery.of(context).size.width
-context.screenHeight // MediaQuery.of(context).size.height
+double screenWidth => MediaQuery.of(context).size.width
+double screenHeight => MediaQuery.of(context).size.height
 
-context.isPlatformDark // MediaQuery.of(context).platformBrightness == Brightness.dark
-context.isPlatformLight // MediaQuery.of(context).platformBrightness == Brightness.light
+bool isPlatformDark => MediaQuery.of(context).platformBrightness == Brightness.dark
+bool isPlatformLight => MediaQuery.of(context).platformBrightness == Brightness.light
 
-context.isOrientationPortrait // MediaQuery.of(context).orientation == Orientation.portrait
-context.isOrientationLandscape // MediaQuery.of(context).orientation == Orientation.landscape
+bool isThemeDark => Theme.of(context).brightness == Brightness.dark
+bool isThemeLight => Theme.of(context).brightness == Brightness.light
 
-context.topPadding // MediaQuery.of(context).padding.top
-context.bottomPadding // MediaQuery.of(context).padding.bottom
-context.bottomInset // MediaQuery.of(context).viewInsets.bottom
+bool isOrientationPortrait => MediaQuery.of(context).orientation == Orientation.portrait
+bool isOrientationLandscape => MediaQuery.of(context).orientation == Orientation.landscape
 
-// Directionality
-context.isLTR // Directionality.of(context) == TextDirection.ltr
-context.isRTL // Directionality.of(context) == TextDirection.rtl
+double topViewPadding => MediaQuery.of(context).viewPadding.top
+double bottomViewPadding => MediaQuery.of(context).viewPadding.bottom
+double bottomViewInset => MediaQuery.of(context).viewInsets.bottom
 
-// ColorScheme
-context.primaryColor // Theme.of(context).colorScheme.primary
-context.primaryContainerColor // Theme.of(context).colorScheme.primaryContainer
-context.secondaryColor // Theme.of(context).colorScheme.secondary
-context.surfaceColor // Theme.of(context).colorScheme.surface
-context.backgroundColor // Theme.of(context).colorScheme.background
-context.errorColor // Theme.of(context).colorScheme.error
-
-// TextTheme
-context.headline1TextStyle // Theme.of(context).textTheme.headline1!
-context.headline2TextStyle // Theme.of(context).textTheme.headline2!
-context.headline3TextStyle // Theme.of(context).textTheme.headline3!
-context.headline4TextStyle // Theme.of(context).textTheme.headline4!
-context.headline5TextStyle // Theme.of(context).textTheme.headline5!
-context.headline6TextStyle // Theme.of(context).textTheme.headline6!
-context.subtitle1TextStyle // Theme.of(context).textTheme.subtitle1!
-context.subtitle2TextStyle // Theme.of(context).textTheme.subtitle2!
-context.body1TextStyle // Theme.of(context).textTheme.bodyText1!
-context.body2TextStyle // Theme.of(context).textTheme.bodyText2!
-context.captionTextStyle // Theme.of(context).textTheme.caption!
-context.buttonTextStyle // Theme.of(context).textTheme.button!
-context.overlineTextStyle // Theme.of(context).textTheme.overline!
+bool isLTR => Directionality.of(context) == TextDirection.ltr
+bool isRTL => Directionality.of(context) == TextDirection.rtl
 ```
 
+#### [ColorScheme](https://api.flutter.dev/flutter/material/ColorScheme-class.html)
 
-#### Duration
-``TODO``
+Format:
+
+```dart
+Color {$type}Color => Theme.of(context).colorScheme.{$type}Color!
+```
+
+Examples:
+
+```dart
+Color primaryColor => Theme.of(context).colorScheme.primaryColor
+Color tertiaryColor => Theme.of(context).colorScheme.tertiaryColor
+Color onErrorColor => Theme.of(context).colorScheme.onErrorColor
+```
+
+#### [TextStyle](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
+
+Format:
+
+```dart
+TextStyle {$type}TextStyle => Theme.of(context).textTheme.{$type}!
+```
+
+Examples:
+
+```dart
+TextStyle headlineLargeTextStyle => Theme.of(context).textTheme.headlineLarge!
+TextStyle bodyLargeTextStyle => Theme.of(context).textTheme.bodyLarge!
+TextStyle labelMediumTextStyle => Theme.of(context).textTheme.labelMedium!
+```
 
 #### BorderRadius
+
 ``TODO``
 
 #### EdgeInsets
+
 ``TODO``
 
 #### TextStyle
+
 ``TODO``
 
 #### DateTime
+
 ``TODO``
 
 #### Map
-``TODO``
+
+```dart
+bool any(bool Function(K key, V value) test)
+```
 
 #### Set
+
 ``TODO``
 
-#### String
-``TODO``
+#### [String](https://api.dart.dev/stable/2.19.0/dart-core/String-class.html)
+
+```dart
+String capitalize();
+String capitalizeAll({String separator = ' ', String? joiner});
+/// Retrieves first letters of each word separated by [separator] and merge them with [joiner]
+String initials({String separator = ' ', String joiner = ''});
+```
 
 #### Iterable
 
@@ -89,11 +104,12 @@ context.overlineTextStyle // Theme.of(context).textTheme.overline!
 ```
 
 #### IterableInt
+
 ``TODO``
 
 #### IterableDouble
-``TODO``
 
+``TODO``
 
 ### Principles
 
@@ -109,16 +125,34 @@ MediaQuery.of(context) // GOOD: better fast read, more characteristic
 ```dart
 // MediaQuery.of(context).viewInsets.bottom
 context.mediaQuery.viewInsets.bottom // BAD: number of dots is same
-context.bottomInset // GOOD: two dots less and decent readability
+context.bottomViewInset // GOOD: two dots less and decent readability
 ```
 
 ```dart
-// Theme.of(context).textTheme.caption!
-context.caption // BAD: less expressive
-context.captionTextStyle // GOOD: more expressive, better auto code-completion
+// Theme.of(context).textTheme.bodyMediumTextStyle!
+context.bodyMedium // BAD: less expressive
+context.bodyMediumTextStyle // GOOD: more expressive, better auto code-completion
 ```
 
-#### Inspirations
+## [Widgets](https://api.flutter.dev/flutter/widgets/Widget-class.html)
 
-* [leisim/dartx](https://github.com/leisim/dartx)
-* [gskinner/flextras](https://github.com/gskinnerTeam/flutter-flextras)
+### FlexGrid
+
+A non-scrollable `GridView`. Big performance gains when used inside [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html).
+
+### PaddedColumn
+
+A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) with [Padding](https://api.flutter.dev/flutter/widgets/Padding-class.html).
+
+### PaddedRow
+
+A [Row](https://api.flutter.dev/flutter/widgets/Row-class.html) with [Padding](https://api.flutter.dev/flutter/widgets/Padding-class.html).
+
+### ScrollViewColumn
+
+A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) inside [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html). Easy way to keep alive the children.
+
+
+#### Name
+Name from `Flutter` + `Quiver` = `Fluiver`.
+Inspired from [google/quiver-dart](https://github.com/google/quiver-dart)
