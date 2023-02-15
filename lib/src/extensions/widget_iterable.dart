@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension WidgetIterableX<E> on Iterable<E> {
+extension WidgetIterable<E> on Iterable<E> {
   /// Lazy way to generate widgets that groups via specific field.
   /// Similar to [groupAsMap] but instead of grouping, it synchronously
   /// generates widgets.
@@ -21,11 +21,11 @@ extension WidgetIterableX<E> on Iterable<E> {
     WidgetBuilder? separatorBuilder,
     Widget? child,
   }) sync* {
-    final iter = iterator;
+    final itr = iterator;
     Object? last = Object();
     bool consecutive = false;
-    while (iter.moveNext()) {
-      final slicer = toSlicer(iter.current);
+    while (itr.moveNext()) {
+      final slicer = toSlicer(itr.current);
       if (slicer != last) {
         yield slicerBuilder(context, slicer);
         last = slicer;
@@ -35,7 +35,7 @@ extension WidgetIterableX<E> on Iterable<E> {
           yield separatorBuilder(context);
         }
       }
-      yield widgetBuilder(context, iter.current, child);
+      yield widgetBuilder(context, itr.current, child);
       consecutive = true;
     }
   }

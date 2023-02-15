@@ -1,12 +1,12 @@
 part of fluiver;
 
-extension _BuildContextX on BuildContext {
+extension _BuildContext on BuildContext {
   MediaQueryData get _m => MediaQuery.of(this);
 
   ThemeData get _t => Theme.of(this);
 }
 
-extension BuildContextMediaQueryX on BuildContext {
+extension BuildContextMediaQuery on BuildContext {
   double get screenWidth => _m.size.width;
   double get screenHeight => _m.size.height;
 
@@ -21,17 +21,17 @@ extension BuildContextMediaQueryX on BuildContext {
   double get bottomViewInset => _m.viewInsets.bottom;
 }
 
-extension BuildContextThemeBrightnessX on BuildContext {
+extension BuildContextThemeBrightness on BuildContext {
   bool get isThemeDark => _t.brightness.isDark;
   bool get isThemeLight => _t.brightness.isLight;
 }
 
-extension BuildContextDirectionalityX on BuildContext {
+extension BuildContextDirectionality on BuildContext {
   bool get isDirectionalityLtr => Directionality.of(this).isLtr;
   bool get isDirectionalityRtl => Directionality.of(this).isRtl;
 }
 
-extension BuildContextTextStyleX on BuildContext {
+extension BuildContextTextStyle on BuildContext {
   TextStyle get displayLargeTextStyle => _t.textTheme.displayLarge!;
   TextStyle get displayMediumTextStyle => _t.textTheme.displayMedium!;
   TextStyle get displaySmallTextStyle => _t.textTheme.displaySmall!;
@@ -53,7 +53,7 @@ extension BuildContextTextStyleX on BuildContext {
   TextStyle get labelSmallTextStyle => _t.textTheme.labelSmall!;
 }
 
-extension BuildContextsColorSchemeX on BuildContext {
+extension BuildContextsColorScheme on BuildContext {
   Color get primaryColor => _t.colorScheme.primary;
   Color get onPrimaryColor => _t.colorScheme.onPrimary;
   Color get primaryContainerColor => _t.colorScheme.primaryContainer;

@@ -22,7 +22,7 @@ mixin IndexComparableEnum on Enum implements Comparable<Enum> {
   int compareTo(other) => index - other.index;
 }
 
-extension IterableEnumX<T extends Enum> on Iterable<T> {
+extension IterableEnum<T extends Enum> on Iterable<T> {
   T? byNameOrNull(String name) {
     for (var e in this) {
       if (e.name == name) {
