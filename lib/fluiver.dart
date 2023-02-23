@@ -13,7 +13,6 @@ part 'src/extensions/date_time.dart';
 part 'src/extensions/edge_insets.dart';
 part 'src/extensions/enum.dart';
 part 'src/extensions/enums.dart';
-part 'src/extensions/future.dart';
 part 'src/extensions/iterable.dart';
 part 'src/extensions/iterable_num.dart';
 part 'src/extensions/key.dart';
