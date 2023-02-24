@@ -29,3 +29,10 @@ extension OrientationEnum on Orientation {
   bool get isPortrait => this == Orientation.portrait;
   bool get isLandscape => this == Orientation.landscape;
 }
+
+extension AppLifecycleStateEnum on AppLifecycleState {
+  bool get isResumed => this == AppLifecycleState.resumed;
+  bool get isInactive => this == AppLifecycleState.inactive;
+  bool get isPaused => this == AppLifecycleState.paused;
+  bool get isDetached => this == AppLifecycleState.detached;
+}
