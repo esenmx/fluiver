@@ -138,7 +138,7 @@ context.bodyMediumTextStyle // GOOD: more expressive, better auto code-completio
 
 ### FlexGrid
 
-A non-scrollable `GridView`. Big performance gains when used inside [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html).
+A non-scrollable replacement for `GridView` where nested [ScrollView](https://api.flutter.dev/flutter/widgets/ScrollView-class.html). is a subject.
 
 ### PaddedColumn
 
@@ -150,7 +150,7 @@ A [Row](https://api.flutter.dev/flutter/widgets/Row-class.html) with [Padding](h
 
 ### ScrollViewColumn
 
-A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) inside [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html). Easy way to keep alive the children.
+A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) inside [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html). Easy way to keep children alive.
 
 
 #### Name
