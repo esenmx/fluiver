@@ -42,6 +42,10 @@ extension DateTimeCheck on DateTime {
   bool isWithinFromNow(Duration duration) {
     return difference(DateTime.now()).inMicroseconds <= duration.inMicroseconds;
   }
+
+  bool get inThisYear {
+    return toLocal().year == DateTime.now().year;
+  }
 }
 
 extension DateTimeCalculator on DateTime {
