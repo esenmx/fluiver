@@ -85,22 +85,6 @@ extension TextStyleDecoration on TextStyle {
       copyWith(decoration: TextDecoration.lineThrough);
 }
 
-/// Numbers have chosen from mostly:
-/// https://m3.material.io/styles/typography/type-scale-tokens
 extension TextStyleSize on TextStyle {
   TextStyle withSize(double size) => copyWith(fontSize: size);
-
-  TextStyle get withSize10 => copyWith(fontSize: 10);
-
-  TextStyle get withSize11 => copyWith(fontSize: 11);
-
-  TextStyle get withSize12 => copyWith(fontSize: 12);
-
-  TextStyle get withSize14 => copyWith(fontSize: 14);
-
-  TextStyle get withSize16 => copyWith(fontSize: 16);
-
-  TextStyle get withSize22 => copyWith(fontSize: 22);
-
-  TextStyle get withSize24 => copyWith(fontSize: 24);
 }
