@@ -1,8 +1,10 @@
-.PHONY: dry
+.PHONY: dry publish golden
 
 dry:
-	dart pub publish -n
+	flutter pub publish --dry-run
 
 golden:
 	cd example; flutter test --update-goldens
 
+publish:
+	flutter pub publish

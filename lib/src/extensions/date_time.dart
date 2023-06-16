@@ -1,8 +1,10 @@
 part of fluiver;
 
-extension DateTimeMerge on DateTime {
+extension DateTimeTimeOfDay on DateTime {
   TimeOfDay toTime() => TimeOfDay(hour: hour, minute: minute);
+}
 
+extension DateTimeMerge on DateTime {
   DateTime truncateTime() {
     return copyWith(
       hour: 0,
@@ -14,7 +16,13 @@ extension DateTimeMerge on DateTime {
   }
 
   DateTime withTimeOfDay(TimeOfDay time) {
-    return truncateTime().copyWith(hour: time.hour, minute: time.minute);
+    return truncateTime().copyWith(
+      hour: time.hour,
+      minute: time.minute,
+      second: 0,
+      millisecond: 0,
+      microsecond: 0,
+    );
   }
 }
 
