@@ -44,7 +44,7 @@ Color tertiaryColor => Theme.of(context).colorScheme.tertiaryColor
 Color onErrorColor => Theme.of(context).colorScheme.onErrorColor
 ```
 
-#### [TextStyle](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
+#### [TextTheme](https://api.flutter.dev/flutter/material/TextTheme-class.html)
 
 Format:
 
@@ -60,19 +60,157 @@ TextStyle bodyLargeTextStyle => Theme.of(context).textTheme.bodyLarge!
 TextStyle labelMediumTextStyle => Theme.of(context).textTheme.labelMedium!
 ```
 
-#### BorderRadius
+#### [BorderRadius](https://api.flutter.dev/flutter/painting/BorderRadius-class.html)
 
-``TODO``
+##### add(double value)
 
-#### EdgeInsets
+```dart
+myBorderRadius + BorderRadius.add$type$(double value);
+```
 
-``TODO``
+`addAll`
+`addLeft`
+`addTop`
+`addRight`
+`addBottom`
+`addTopLeft`
+`addTopRight`
+`addBottomRight`
+`addBottomLeft`
 
-#### TextStyle
+#### [EdgeInsets](https://api.flutter.dev/flutter/painting/EdgeInsets-class.html)
 
-``TODO``
+##### Add(double value)
+
+```dart
+myEdgeInsets + EdgeInsets.add$type$($type$: value);
+```
+
+`addAll`
+`addLeft`
+`addTop`
+`addRight`
+`addBottom`
+
+##### Set(double value)
+
+```dart
+myEdgeInsets.copyWith($type$: value);
+```
+
+`setLeft`
+`setTop`
+`setRight`
+`setBottom`
+`setHorizontal`
+`setVertical`
+
+##### Only
+
+```dart
+EdgeInsets.only($type$: value);
+```
+
+`setLeft`
+`setTop`
+`setRight`
+`setBottom`
+`setHorizontal`
+`setVertical`
+
+#### [TextStyle](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
+
+##### [Color](https://api.flutter.dev/flutter/painting/TextStyle/color.html)
+
+Format:
+
+```dart
+TextStyle get withColor{$type} => textStyle.copyWith(color: {$type});
+```
+
+Example:
+
+```dart
+TextStyle get withColorWhite38 => textStyle.copyWith(color: Colors.white38);
+TextStyle get withColorWhite   => textStyle.copyWith(color: Colors.white);
+TextStyle get withColorBlack70 => textStyle.copyWith(color: Colors.black70);
+```
+
+##### [ThemeColor](https://api.flutter.dev/flutter/painting/TextStyle/color.html)
+
+Format:
+
+```dart
+TextStyle get with{$type}Color => textStyle.copyWith(color: Theme.of(context).colorScheme.{$type});
+```
+
+Example:
+
+```dart
+TextStyle get withPrimaryColor(BuildContext context)   => textStyle.copyWith(color: Theme.of(context).colorScheme.primary);
+TextStyle get withSecondaryColor(BuildContext context) => textStyle.copyWith(color: Theme.of(context).colorScheme.secondary);
+TextStyle get withErrorColor(BuildContext context)     => textStyle.copyWith(color: Theme.of(context).colorScheme.error);
+```
+
+##### [FontWeight](https://api.flutter.dev/flutter/painting/TextStyle/fontWeight.html)
+
+Formula:
+
+```dart
+TextStyle get withWeight100 => textStyle.copyWith(fontWeight: FontWeight.w100);
+```
+
+Example:
+
+```dart
+TextStyle get withWeight100 => textStyle.copyWith(fontWeight: FontWeight.w100);
+TextStyle get withWeight400 => textStyle.copyWith(fontWeight: FontWeight.w400);
+TextStyle get withWeight700 => textStyle.copyWith(fontWeight: FontWeight.w700);
+```
+
+##### [TextDecoration](https://api.flutter.dev/flutter/painting/TextStyle/decoration.html)
+
+Formula:
+
+```dart
+with{$type} => textStyle.copyWith(decoration: TextDecoration.{$type});
+```
+
+Example:
+
+```dart
+withUnderline   => textStyle.copyWith(decoration: TextDecoration.underline);
+withOverline    => textStyle.copyWith(decoration: TextDecoration.overline);
+withLineThrough => textStyle.copyWith(decoration: TextDecoration.lineThrough);
+```
+
+##### [Size](https://api.flutter.dev/flutter/painting/TextStyle/fontSize.html)
+
+```dart
+withSize(double size) => textStyle.copyWith(fontSize: size);
+```
 
 #### DateTime
+
+```dart
+TimeOfDay toTime(); /// Creates [TimeOfDay] from [DateTime]
+DateTime truncateTime(); /// Sets '0' everything other than [year, month, day].
+DateTime withTimeOfDay(TimeOfDay time); /// copies [hour, minute] from [time] and sets '0' everything smaller
+
+DateTime addYears(int years);
+DateTime addMonths(int months);
+DateTime addWeeks(int weeks);
+DateTime addDays(int days);
+DateTime addHours(int hours);
+DateTime addMinutes(int minutes);
+DateTime addSeconds(int seconds);
+
+bool get isToday;
+bool get isTomorrow;
+bool get isYesterday;
+
+bool isWithinFromNow(Duration duration); /// Checks is difference between [DateTime.now()] and [DateTime] is smaller than [duration]
+```
 
 ``TODO``
 
@@ -100,7 +238,7 @@ String initials({String separator = ' ', String joiner = ''});
 ```dart
 [1, 2, 3].to2D(2) // [[1, 2], [3]]
 [[1, 2], [3]].from2D // [1, 2, 3]
-[Foo(), Foo()].widgetJoin(() => Divider()) // [Foo(), Divider(), Foo()]
+[Foo(), Foo(), Foo()].widgetJoin(() => Divider()) // [Foo(), Divider(), Foo(), Divider(), Foo()]
 ```
 
 #### IterableInt
@@ -152,7 +290,7 @@ A [Row](https://api.flutter.dev/flutter/widgets/Row-class.html) with [Padding](h
 
 A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) inside [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html). Easy way to keep children alive.
 
-
 #### Name
+
 Name from `Flutter` + `Quiver` = `Fluiver`.
 Inspired from [google/quiver-dart](https://github.com/google/quiver-dart)

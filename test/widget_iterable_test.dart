@@ -33,9 +33,9 @@ void main() {
       }
 
       newCase(int length, bool withSeparator) {
-        return dateSeries(length).slicedWidgetBuilder<DateTime>(
+        return dateSeries(length).slicedWidgetsBuilder<DateTime>(
           context: MockBuildContext(),
-          widgetBuilder: (_, val, __) => Text(val.toString()),
+          valueWidgetBuilder: (_, val, __) => Text(val.toString()),
           toSlicer: (DateTime e) => e.truncateTime(),
           slicerBuilder: (_, slicer) => Text(slicer.toString()),
           child: const FlutterLogo(),
