@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension AddEdgeInsets on EdgeInsets {
+extension EdgeInsetsAdd on EdgeInsets {
   EdgeInsets addAll(double value) => this + EdgeInsets.all(value);
 
   EdgeInsets addLeft(double value) => this + EdgeInsets.only(left: value);
@@ -9,7 +9,7 @@ extension AddEdgeInsets on EdgeInsets {
   EdgeInsets addBottom(double value) => this + EdgeInsets.only(bottom: value);
 }
 
-extension OnlyEdgeInsets on EdgeInsets {
+extension EdgeInsetsOnly on EdgeInsets {
   EdgeInsets get onlyLeft => EdgeInsets.only(left: left);
   EdgeInsets get onlyTop => EdgeInsets.only(top: top);
   EdgeInsets get onlyRight => EdgeInsets.only(right: right);
@@ -19,7 +19,7 @@ extension OnlyEdgeInsets on EdgeInsets {
   EdgeInsets get onlyHorizontal => EdgeInsets.only(left: left, right: right);
 }
 
-extension SetEdgeInsets on EdgeInsets {
+extension EdgeInsetsSet on EdgeInsets {
   EdgeInsets setLeft(double value) => copyWith(left: value);
   EdgeInsets setTop(double value) => copyWith(top: value);
   EdgeInsets setRight(double value) => copyWith(right: value);
@@ -29,7 +29,7 @@ extension SetEdgeInsets on EdgeInsets {
   EdgeInsets setVertical(double value) => copyWith(bottom: value, top: value);
 }
 
-extension MediaQueryEdgeInsets on EdgeInsets {
+extension EdgeInsetsMediaQuery on EdgeInsets {
   EdgeInsets withStatusBarMargin(BuildContext context) {
     return this + EdgeInsets.only(top: context.topViewPadding);
   }

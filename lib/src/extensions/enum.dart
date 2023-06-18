@@ -1,7 +1,6 @@
 part of fluiver;
 
 ///
-///
 /// ```dart
 /// enum Enums with ComparableEnum {
 ///   one,
@@ -9,7 +8,8 @@ part of fluiver;
 ///   three;
 /// }
 /// ```
-mixin IndexComparableEnum on Enum implements Comparable<Enum> {
+///
+mixin EnumIndexComparable on Enum implements Comparable<Enum> {
   bool operator <(Enum other) => index < other.index;
 
   bool operator <=(Enum other) => index <= other.index;

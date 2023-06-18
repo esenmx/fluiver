@@ -1,7 +1,7 @@
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-enum Dump with IndexComparableEnum {
+enum Dump with EnumIndexComparable {
   foo,
   bar,
   baz;

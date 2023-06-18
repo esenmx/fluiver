@@ -10,7 +10,7 @@ void main() async {
     });
 
     test('toTime', () {
-      expect(value.toTime(), const TimeOfDay(hour: 8, minute: 30));
+      expect(value.toTimeOfDay(), const TimeOfDay(hour: 8, minute: 30));
     });
 
     test('addYears', () {

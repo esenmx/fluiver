@@ -23,7 +23,7 @@ class LocaleObserver extends WidgetsBindingObserver {
 
 /// Example:
 /// ```dart
-/// final brightnessProvider = Provider<Brightness?>((ref) {
+/// final brightnessProvider = Provider<Brightness>((ref) {
 ///   final observer = BrightnessObserver((brightness) => ref.state = brightness);
 ///   WidgetsBinding.instance.addObserver(observer);
 ///   ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
@@ -33,7 +33,7 @@ class LocaleObserver extends WidgetsBindingObserver {
 class BrightnessObserver extends WidgetsBindingObserver {
   BrightnessObserver(this.onPlatformBrightnessChanged);
 
-  final void Function(Brightness) onPlatformBrightnessChanged;
+  final void Function(Brightness brightness) onPlatformBrightnessChanged;
 
   @override
   void didChangePlatformBrightness() {

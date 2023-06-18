@@ -6,6 +6,9 @@ extension _BuildContext on BuildContext {
   ThemeData get _t => Theme.of(this);
 }
 
+///
+/// [MediaQuery]
+///
 extension BuildContextMediaQuery on BuildContext {
   double get screenWidth => _m.size.width;
   double get screenHeight => _m.size.height;
@@ -21,6 +24,9 @@ extension BuildContextMediaQuery on BuildContext {
   double get bottomViewInset => _m.viewInsets.bottom;
 }
 
+///
+/// [Theme]
+///
 extension BuildContextThemeBrightness on BuildContext {
   bool get isThemeDark => _t.brightness.isDark;
   bool get isThemeLight => _t.brightness.isLight;
