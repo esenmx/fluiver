@@ -1,27 +1,27 @@
 part of fluiver;
 
-extension AxisEnum on Axis {
+extension EnumAxis on Axis {
   Axis get reverse => isVertical ? Axis.horizontal : Axis.vertical;
 
   bool get isVertical => this == Axis.vertical;
   bool get isHorizontal => this == Axis.horizontal;
 }
 
-extension TextDirectionEnum on TextDirection {
+extension EnumTextDirection on TextDirection {
   TextDirection get reverse => isLtr ? TextDirection.rtl : TextDirection.ltr;
 
   bool get isLtr => this == TextDirection.ltr;
   bool get isRtl => this == TextDirection.rtl;
 }
 
-extension BrightnessEnum on Brightness {
+extension EnumBrightness on Brightness {
   Brightness get reverse => isLight ? Brightness.dark : Brightness.light;
 
   bool get isLight => this == Brightness.light;
   bool get isDark => this == Brightness.dark;
 }
 
-extension OrientationEnum on Orientation {
+extension EnumOrientation on Orientation {
   Orientation get reverse {
     return isPortrait ? Orientation.landscape : Orientation.portrait;
   }
@@ -30,7 +30,7 @@ extension OrientationEnum on Orientation {
   bool get isLandscape => this == Orientation.landscape;
 }
 
-extension AppLifecycleStateEnum on AppLifecycleState {
+extension EnumAppLifecycleState on AppLifecycleState {
   bool get isResumed => this == AppLifecycleState.resumed;
   bool get isInactive => this == AppLifecycleState.inactive;
   bool get isPaused => this == AppLifecycleState.paused;

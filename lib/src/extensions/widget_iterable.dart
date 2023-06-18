@@ -8,8 +8,8 @@ extension WidgetIterable<E> on Iterable<E> {
   /// If resource is sorted, use this method. If it's not sorted and needs to be,
   /// then use [groupAsMap] to generate widgets.
   ///
-  /// Typical example would be separating [ListTile] with [DateTime] or
-  /// [TimeOfDay] titles.
+  /// Typical example would be separating [ListTile]s with
+  /// [DateTime]/[TimeOfDay] tiles.
   ///
   /// By using [DateTimeX.toDate()] or [DateTimeX.toTime()] extension
   /// method(included with this package), you can truncate time values.
@@ -51,20 +51,20 @@ extension WidgetIterable<E> on Iterable<E> {
   }) sync* {
     final itr = iterator;
     Object? last = Object();
-    bool consecutive = false;
+    bool isConsecutive = false;
     while (itr.moveNext()) {
       final slicer = toSlicer(itr.current);
       if (slicer != last) {
         yield slicerBuilder(context, slicer);
         last = slicer;
-        consecutive = false;
+        isConsecutive = false;
       } else {
-        if (consecutive && separatorBuilder != null) {
+        if (isConsecutive && separatorBuilder != null) {
           yield separatorBuilder(context);
         }
       }
       yield valueWidgetBuilder(context, itr.current, child);
-      consecutive = true;
+      isConsecutive = true;
     }
   }
 }
