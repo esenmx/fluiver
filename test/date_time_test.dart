@@ -4,42 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
   final value = DateTime(1990, 6, 26, 8, 30);
-  group('DateTimeX', () {
+  group('DateTime', () {
     test('toDate', () {
       expect(value.truncateTime(), DateTime(1990, 6, 26));
     });
 
     test('toTime', () {
       expect(value.toTime(), const TimeOfDay(hour: 8, minute: 30));
-    });
-
-    test('truncate', () {
-      var value = DateTime(2020, 10, 25, 16, 35, 40);
-      expect(value.truncate(const Duration(days: 1)),
-          value.copyWith(hour: 0, minute: 0, second: 0));
-      expect(value.truncate(const Duration(hours: 1)),
-          value.copyWith(minute: 0, second: 0));
-      expect(value.truncate(const Duration(minutes: 15)),
-          value.copyWith(minute: 30, second: 0));
-      expect(value.truncate(const Duration(minutes: 1)),
-          value.copyWith(second: 0));
-      value = DateTime(1901, 10, 25, 16, 35, 40);
-      expect(value.truncate(const Duration(days: 1)),
-          value.copyWith(hour: 0, minute: 0, second: 0));
-      expect(value.truncate(const Duration(minutes: 15)),
-          value.copyWith(minute: 30, second: 0));
-      expect(value.truncate(const Duration(minutes: 1)),
-          value.copyWith(second: 0));
-      expect(value.truncate(const Duration(hours: 1)),
-          value.copyWith(minute: 0, second: 0));
-    });
-
-    test('round', () {
-      var v1 = const TimeOfDay(hour: 0, minute: 29).inToday();
-      var v2 = const TimeOfDay(hour: 0, minute: 31).inToday();
-      const modulus = Duration(hours: 1);
-      expect(v1.round(modulus), v1.copyWith(minute: 0));
-      expect(v2.round(modulus), v2.copyWith(hour: 1, minute: 0));
     });
 
     test('addYears', () {
@@ -76,12 +47,14 @@ void main() async {
       final year = DateTime.now().year;
       final day = DateTime.now().day;
       const margin = Duration(seconds: 1);
-      expect(DateTime.now().copyWith(year: 1990, month: 1, day: 1).age,
+      expect(DateTime.now().copyWith(year: 1990, month: 1, day: 1).humanAge,
           year - 1990);
-      expect(DateTime.now().copyWith(year: year - 10, day: day + 1).age, 9);
-      expect(DateTime.now().subtract(margin).age, 0);
-      expect(DateTime.now().copyWith(year: year - 1).subtract(margin).age, 1);
-      expect(DateTime.now().copyWith(year: year - 1).add(margin).age, 0);
+      expect(
+          DateTime.now().copyWith(year: year - 10, day: day + 1).humanAge, 9);
+      expect(DateTime.now().subtract(margin).humanAge, 0);
+      expect(
+          DateTime.now().copyWith(year: year - 1).subtract(margin).humanAge, 1);
+      expect(DateTime.now().copyWith(year: year - 1).add(margin).humanAge, 0);
     });
   });
 }

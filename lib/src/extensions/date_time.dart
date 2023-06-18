@@ -1,6 +1,6 @@
 part of fluiver;
 
-extension DateTimeMerge on DateTime {
+extension DateTimeTime on DateTime {
   TimeOfDay toTime() => TimeOfDay(hour: hour, minute: minute);
 
   DateTime truncateTime() {
@@ -38,38 +38,16 @@ extension DateTimeCheck on DateTime {
   bool get isToday => _offsetChecker(0);
   bool get isTomorrow => _offsetChecker(1);
   bool get isYesterday => _offsetChecker(-1);
+  bool get inThisYear => toLocal().year == DateTime.now().year;
 
   bool isWithinFromNow(Duration duration) {
     return difference(DateTime.now()).inMicroseconds <= duration.inMicroseconds;
   }
-
-  bool get inThisYear {
-    return toLocal().year == DateTime.now().year;
-  }
 }
 
 extension DateTimeCalculator on DateTime {
-  DateTime truncate(Duration modulus) {
-    final truncated = subtract(Duration(
-      microseconds: microsecondsSinceEpoch % modulus.inMicroseconds,
-    ));
-    if (difference(truncated).abs() > timeZoneOffset) {
-      return truncated.subtract(timeZoneOffset);
-    }
-    return truncated;
-  }
-
-  DateTime round(Duration modulus) {
-    final floor = truncate(modulus);
-    final ceil = floor.add(modulus);
-    if (difference(floor) > difference(ceil).abs()) {
-      return ceil;
-    }
-    return floor;
-  }
-
   // TODO (diff - 2, 3, ... , n) cases
-  int get age {
+  int get humanAge {
     var diff = DateTime.now().year - year;
     if (DateTime.now().copyWith(year: year).isAfter(this)) {
       return diff;
