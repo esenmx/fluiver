@@ -38,7 +38,7 @@ class BrightnessObserver extends WidgetsBindingObserver {
   @override
   void didChangePlatformBrightness() {
     onPlatformBrightnessChanged(
-        WidgetsBinding.instance.window.platformBrightness);
+        WidgetsBinding.instance.platformDispatcher.platformBrightness);
     super.didChangePlatformBrightness();
   }
 }
