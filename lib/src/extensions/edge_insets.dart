@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension EdgeInsetsAdd on EdgeInsets {
   EdgeInsets addAll(double value) => this + EdgeInsets.all(value);

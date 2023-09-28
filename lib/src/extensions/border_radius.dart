@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension BorderRadiusAdd on BorderRadius {
   BorderRadius addAll(double radius) {

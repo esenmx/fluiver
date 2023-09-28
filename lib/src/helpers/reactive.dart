@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 mixin _TimerMixin {
   Timer? _timer;

@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 /// Using nested [ScrollView]s is not recommended(see [ScrollView.shrinkWrap])
 /// Alternative of [ListView] is [Column] but there isn't any for [GridView]

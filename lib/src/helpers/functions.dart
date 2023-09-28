@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 /// Checks whether the device has a connection to the internet or not
 /// Reference: [https://stackoverflow.com/a/49648870/10380182]

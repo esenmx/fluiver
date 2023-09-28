@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension WidgetIterable<E> on Iterable<E> {
   /// Lazy way to generate widgets that groups/separates via specific getter.

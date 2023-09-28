@@ -25,7 +25,7 @@ void main() async {
       expect([1.1, 2.2, 3.3].sum(), 6.6);
       expect(
         List<double>.generate(100, (i) => i.toDouble()).sum(),
-        (99 * (99 + 1) / 2).toDouble(),
+        99 * (99 + 1) / 2,
       );
     });
 

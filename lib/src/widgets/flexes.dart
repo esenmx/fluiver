@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 class PaddedColumn extends Padding {
   PaddedColumn({

@@ -15,7 +15,7 @@ void main() {
       expect(mockSeparate(2)[2], isA<FlutterLogo>());
       final values = mockSeparate(100);
       for (int i = 0; i < 100; i++) {
-        if (i % 2 == 0) {
+        if (i.isEven) {
           expect(values.elementAt(i), isA<FlutterLogo>());
         } else {
           expect(values.elementAt(i), isA<Divider>());
@@ -26,13 +26,13 @@ void main() {
 
   group('WidgetIterableX', () {
     test('slicedWidgetBuilder', () {
-      dateSeries(int length) {
+      List<DateTime> dateSeries(int length) {
         return List.generate(length, (index) {
           return DateTime.now().subtract(Duration(hours: index));
         });
       }
 
-      newCase(int length, bool withSeparator) {
+      Iterable<Widget> newCase(int length, bool withSeparator) {
         return dateSeries(length).slicedWidgetsBuilder<DateTime>(
           context: MockBuildContext(),
           valueWidgetBuilder: (_, val, __) => Text(val.toString()),

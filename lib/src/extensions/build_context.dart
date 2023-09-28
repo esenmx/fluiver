@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension _BuildContext on BuildContext {
   MediaQueryData get _m => MediaQuery.of(this);

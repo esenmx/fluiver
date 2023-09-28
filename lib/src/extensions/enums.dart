@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension EnumAxis on Axis {
   Axis get reverse => isVertical ? Axis.horizontal : Axis.vertical;

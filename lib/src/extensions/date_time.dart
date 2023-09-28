@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension DateTimeTimeOfDay on DateTime {
   TimeOfDay toTimeOfDay() => TimeOfDay(hour: hour, minute: minute);
@@ -56,7 +56,7 @@ extension DateTimeCheck on DateTime {
 extension DateTimeCalculator on DateTime {
   // TODO (diff - 2, 3, ... , n) cases
   int get humanAge {
-    var diff = DateTime.now().year - year;
+    final diff = DateTime.now().year - year;
     if (DateTime.now().copyWith(year: year).isAfter(this)) {
       return diff;
     }

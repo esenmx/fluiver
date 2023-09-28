@@ -47,13 +47,19 @@ void main() async {
       final year = DateTime.now().year;
       final day = DateTime.now().day;
       const margin = Duration(seconds: 1);
-      expect(DateTime.now().copyWith(year: 1990, month: 1, day: 1).humanAge,
-          year - 1990);
       expect(
-          DateTime.now().copyWith(year: year - 10, day: day + 1).humanAge, 9);
+        DateTime.now().copyWith(year: 1990, month: 1, day: 1).humanAge,
+        year - 1990,
+      );
+      expect(
+        DateTime.now().copyWith(year: year - 10, day: day + 1).humanAge,
+        9,
+      );
       expect(DateTime.now().subtract(margin).humanAge, 0);
       expect(
-          DateTime.now().copyWith(year: year - 1).subtract(margin).humanAge, 1);
+        DateTime.now().copyWith(year: year - 1).subtract(margin).humanAge,
+        1,
+      );
       expect(DateTime.now().copyWith(year: year - 1).add(margin).humanAge, 0);
     });
   });

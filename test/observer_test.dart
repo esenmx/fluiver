@@ -30,7 +30,7 @@ void main() async {
 
   testWidgets('BrightnessObserver', (tester) async {
     final callback = MockBrightnessObserverCallback();
-    WidgetsBinding.instance.addObserver(BrightnessObserver(callback));
+    WidgetsBinding.instance.addObserver(BrightnessObserver(callback.call));
     final window = tester.binding.platformDispatcher;
 
     window.platformBrightnessTestValue = Brightness.dark;

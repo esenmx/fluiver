@@ -1,9 +1,11 @@
 # fluiver
 
-Dependency free; extensions, widgets and helpers package. Focused on productivity with an eye
-to `IDE` behaviors rather than reducing the amount of written code roughly(which most packages do).
+A comprehensive package includes expressive extensions, common helpers and should have widgets.
 
-## [Extensions](https://dart.dev/guides/language/extension-methods)
+The expressiveness the emulation of `IDE` behaviors rather than merely minimizing code verbosity, distinguishing itself from the typical
+approach of many packages in this regard.
+
+## Extensions
 
 ### [BuildContext](https://api.flutter.dev/flutter/widgets/BuildContext-class.html)
 
@@ -68,15 +70,7 @@ TextStyle labelMediumTextStyle => Theme.of(context).textTheme.labelMedium!
 myBorderRadius + BorderRadius.add$type$(double value);
 ```
 
-`addAll`
-`addLeft`
-`addTop`
-`addRight`
-`addBottom`
-`addTopLeft`
-`addTopRight`
-`addBottomRight`
-`addBottomLeft`
+###### Implementations: `addAll` `addLeft` `addTop` `addRight` `addBottom` `addTopLeft` `addTopRight` `addBottomRight` `addBottomLeft`
 
 #### [EdgeInsets](https://api.flutter.dev/flutter/painting/EdgeInsets-class.html)
 
@@ -86,11 +80,7 @@ myBorderRadius + BorderRadius.add$type$(double value);
 myEdgeInsets + EdgeInsets.add$type$($type$: value);
 ```
 
-`addAll`
-`addLeft`
-`addTop`
-`addRight`
-`addBottom`
+###### Implementations: `addAll` `addLeft` `addTop` `addRight` `addBottom`
 
 ##### Set(double value)
 
@@ -98,12 +88,7 @@ myEdgeInsets + EdgeInsets.add$type$($type$: value);
 myEdgeInsets.copyWith($type$: value);
 ```
 
-`setLeft`
-`setTop`
-`setRight`
-`setBottom`
-`setHorizontal`
-`setVertical`
+###### Implementations: `setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`
 
 ##### Only
 
@@ -111,12 +96,7 @@ myEdgeInsets.copyWith($type$: value);
 EdgeInsets.only($type$: value);
 ```
 
-`setLeft`
-`setTop`
-`setRight`
-`setBottom`
-`setHorizontal`
-`setVertical`
+###### Implementations: `setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`
 
 #### [TextStyle](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
 
@@ -190,7 +170,7 @@ withLineThrough => textStyle.copyWith(decoration: TextDecoration.lineThrough);
 withSize(double size) => textStyle.copyWith(fontSize: size);
 ```
 
-#### DateTime
+#### [DateTime](https://api.dart.dev/stable/dart-core/DateTime-class.html)
 
 ```dart
 TimeOfDay toTime(); /// Creates [TimeOfDay] from [DateTime]
@@ -214,17 +194,27 @@ bool isWithinFromNow(Duration duration); /// Checks is difference between [DateT
 
 ``TODO``
 
-#### Map
+#### [Map](https://api.dart.dev/stable/dart-core/Map-class.html)
 
 ```dart
-bool any(bool Function(K key, V value) test)
+bool any(bool Function(K key, V value) test); // Same as [Iterable.any]
+bool every(bool Function(K key, V value) test); // Same as [Iterable.every]
+
+MapEntry<K, V>? firstWhereOrNull(bool Function(K key, V value) test); // Same as [Iterable.firstWhereOrNull]
+Map<K, V> where(bool Function(K key, V value) test); // Same as [Iterable.where]
+Map<T, V> whereKeyType<T>(); // Same as [Iterable.whereType]
+Map<K, T> whereValueType<T>(); // Same as [Iterable.whereType]
+
+MapEntry<K, V>? entryOf(K k); // Similar to `[]` operator but returns [MapEntry]
 ```
 
-#### Set
+#### [Set](https://api.dart.dev/stable/dart-core/Set-class.html)
 
-``TODO``
+```dart
+Set<E> subset(int start, [int? end]); // Creates a new sub [Set]
+```
 
-#### [String](https://api.dart.dev/stable/2.19.0/dart-core/String-class.html)
+#### [String](https://api.dart.dev/stable/dart-core/String-class.html)
 
 ```dart
 String capitalize();
@@ -233,7 +223,7 @@ String capitalizeAll({String separator = ' ', String? joiner});
 String initials({String separator = ' ', String joiner = ''});
 ```
 
-#### Iterable
+#### [Iterable](https://api.dart.dev/stable/dart-core/Iterable-class.html)
 
 ```dart
 [1, 2, 3].to2D(2) // [[1, 2], [3]]
@@ -243,13 +233,45 @@ String initials({String separator = ' ', String joiner = ''});
 
 #### IterableInt
 
-``TODO``
+```dart
+int sum(); // sum of every element
+double average(); // average value of iterable
+Uint8List toBytes(); // Create a byte array from this
+```
 
 #### IterableDouble
 
-``TODO``
+```dart
+double sum(); // sum of every element
+double average(); // average value of iterable
+```
 
-### Principles
+#### IterableNum<T extends num>
+
+```dart
+T get lowest; // lower value in iterable
+T get highest; /// highest value in iterable
+```
+
+## Widgets
+
+### FlexGrid
+
+A non-scrollable replacement for `GridView` where nested [ScrollView](https://api.flutter.dev/flutter/widgets/ScrollView-class.html). is a subject.
+
+### PaddedColumn
+
+A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) with [Padding](https://api.flutter.dev/flutter/widgets/Padding-class.html).
+
+### PaddedRow
+
+A [Row](https://api.flutter.dev/flutter/widgets/Row-class.html) with [Padding](https://api.flutter.dev/flutter/widgets/Padding-class.html).
+
+### ScrollViewColumn
+
+A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) inside [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html). Easy way to keep children alive.
+
+#### Principles
 
 Only commonly needed widgets and helpers implemented.
 
@@ -271,24 +293,6 @@ context.bottomViewInset // GOOD: two dots less and decent readability
 context.bodyMedium // BAD: less expressive
 context.bodyMediumTextStyle // GOOD: more expressive, better auto code-completion
 ```
-
-## [Widgets](https://api.flutter.dev/flutter/widgets/Widget-class.html)
-
-### FlexGrid
-
-A non-scrollable replacement for `GridView` where nested [ScrollView](https://api.flutter.dev/flutter/widgets/ScrollView-class.html). is a subject.
-
-### PaddedColumn
-
-A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) with [Padding](https://api.flutter.dev/flutter/widgets/Padding-class.html).
-
-### PaddedRow
-
-A [Row](https://api.flutter.dev/flutter/widgets/Row-class.html) with [Padding](https://api.flutter.dev/flutter/widgets/Padding-class.html).
-
-### ScrollViewColumn
-
-A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) inside [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html). Easy way to keep children alive.
 
 #### Name
 
