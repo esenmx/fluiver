@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension SetSub<E> on Set<E> {
   Set<E> subset(int start, [int? end]) {

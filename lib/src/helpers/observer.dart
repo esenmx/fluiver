@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 /// Example:
 /// ```dart
@@ -38,7 +38,8 @@ class BrightnessObserver extends WidgetsBindingObserver {
   @override
   void didChangePlatformBrightness() {
     onPlatformBrightnessChanged(
-        WidgetsBinding.instance.platformDispatcher.platformBrightness);
+      WidgetsBinding.instance.platformDispatcher.platformBrightness,
+    );
     super.didChangePlatformBrightness();
   }
 }

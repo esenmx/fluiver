@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension TextStyleFamily on TextStyle {
   /// [Roboto] is much more suitable for [Text] with special characters

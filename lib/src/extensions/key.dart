@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension GlobalKeyFormFieldState on GlobalKey<FormFieldState> {
   bool validateAndSave() {

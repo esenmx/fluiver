@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension IterableElement<E> on Iterable<E> {
   /// Similar to [elementAt] but returns [null] instead of throwing [IndexError]
@@ -15,7 +15,7 @@ extension IterableElement<E> on Iterable<E> {
   /// Similar to [Iterable.firstWhere], but does not have [orElse] function and
   /// does not throw [StateError]
   E? firstWhereOrNull(bool Function(E element) test) {
-    for (var element in this) {
+    for (final element in this) {
       if (test(element)) {
         return element;
       }
@@ -71,7 +71,7 @@ extension IterableSeparator<E> on Iterable<E> {
   /// More versatile version of [ListTile.divideTiles],
   /// but you can use it in anywhere; [Flex], [Scrollable], [InlineSpan]...
   /// ```dart
-  /// [Child(), Child()].widgetJoin(Divider()) == [Child(), Divider(), Child()]
+  /// [Child(), Child()].separate(Divider()) == [Child(), Divider(), Child()]
   /// ```
   Iterable<E> separate(E Function() separator) sync* {
     final itr = iterator;
@@ -91,7 +91,7 @@ extension IterableGroup<E> on Iterable<E> {
   /// Useful for categorizing/grouping [Widget]s when data comes as flat [List]
   Map<K, List<E>> groupAsMap<K>(K Function(E element) classifier) {
     final map = <K, List<E>>{};
-    for (var e in this) {
+    for (final e in this) {
       final key = classifier(e);
       map[key] ??= <E>[];
       map[key]!.add(e);
@@ -134,7 +134,7 @@ extension NestedIterable<E> on Iterable<Iterable<E>> {
 }
 
 extension ChronoIterable<E> on Iterable<E> {
-  E earliest(DateTime Function(E e) toDateTime) => _first(toDateTime, true);
+  E earliest(DateTime Function(E e) toDateTime) => _first(toDateTime);
 
   E latest(DateTime Function(E e) toDateTime) => _first(toDateTime, false);
 

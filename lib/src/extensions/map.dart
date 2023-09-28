@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension MapPredicate<K, V> on Map<K, V> {
   bool any(bool Function(K key, V value) test) {
@@ -27,21 +27,21 @@ extension MapFilter<K, V> on Map<K, V> {
   Map<K, V> where(bool Function(K key, V value) test) {
     return <K, V>{
       for (final e in entries)
-        if (test(e.key, e.value)) e.key: e.value
+        if (test(e.key, e.value)) e.key: e.value,
     };
   }
 
   Map<T, V> whereKeyType<T>() {
     return <T, V>{
       for (final entry in entries)
-        if (entry.key is T) entry.key as T: entry.value
+        if (entry.key is T) entry.key as T: entry.value,
     };
   }
 
   Map<K, T> whereValueType<T>() {
     return <K, T>{
       for (final entry in entries)
-        if (entry.value is T) entry.key: entry.value as T
+        if (entry.value is T) entry.key: entry.value as T,
     };
   }
 }

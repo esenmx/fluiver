@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension IterableDouble on Iterable<double> {
   double sum() => fold(0.0, (previous, element) => previous + element);

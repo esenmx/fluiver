@@ -1,4 +1,4 @@
-part of fluiver;
+part of '../../fluiver.dart';
 
 extension ListSafe<E> on List<E> {
   Iterable<E> safeSubList(int start, [int? end]) {
