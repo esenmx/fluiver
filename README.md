@@ -32,8 +32,6 @@ bool isRTL => Directionality.of(context) == TextDirection.rtl
 
 #### [ColorScheme](https://api.flutter.dev/flutter/material/ColorScheme-class.html)
 
-Format:
-
 ```dart
 Color {$type}Color => Theme.of(context).colorScheme.{$type}Color!
 ```
@@ -47,8 +45,6 @@ Color onErrorColor => Theme.of(context).colorScheme.onErrorColor
 ```
 
 #### [TextTheme](https://api.flutter.dev/flutter/material/TextTheme-class.html)
-
-Format:
 
 ```dart
 TextStyle {$type}TextStyle => Theme.of(context).textTheme.{$type}!
@@ -70,7 +66,8 @@ TextStyle labelMediumTextStyle => Theme.of(context).textTheme.labelMedium!
 myBorderRadius + BorderRadius.add$type$(double value);
 ```
 
-###### Implementations: `addAll` `addLeft` `addTop` `addRight` `addBottom` `addTopLeft` `addTopRight` `addBottomRight` `addBottomLeft`
+###### Implementations
+[`addAll` `addLeft` `addTop` `addRight` `addBottom` `addTopLeft` `addTopRight` `addBottomRight` `addBottomLeft`]
 
 #### [EdgeInsets](https://api.flutter.dev/flutter/painting/EdgeInsets-class.html)
 
@@ -80,7 +77,8 @@ myBorderRadius + BorderRadius.add$type$(double value);
 myEdgeInsets + EdgeInsets.add$type$($type$: value);
 ```
 
-###### Implementations: `addAll` `addLeft` `addTop` `addRight` `addBottom`
+###### Implementations
+[`addAll` `addLeft` `addTop` `addRight` `addBottom`]
 
 ##### Set(double value)
 
@@ -88,7 +86,8 @@ myEdgeInsets + EdgeInsets.add$type$($type$: value);
 myEdgeInsets.copyWith($type$: value);
 ```
 
-###### Implementations: `setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`
+###### Implementations
+[`setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`]
 
 ##### Only
 
@@ -96,13 +95,12 @@ myEdgeInsets.copyWith($type$: value);
 EdgeInsets.only($type$: value);
 ```
 
-###### Implementations: `setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`
+###### Implementations
+[`setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`]
 
 #### [TextStyle](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
 
 ##### [Color](https://api.flutter.dev/flutter/painting/TextStyle/color.html)
-
-Format:
 
 ```dart
 TextStyle get withColor{$type} => textStyle.copyWith(color: {$type});
@@ -118,8 +116,6 @@ TextStyle get withColorBlack70 => textStyle.copyWith(color: Colors.black70);
 
 ##### [ThemeColor](https://api.flutter.dev/flutter/painting/TextStyle/color.html)
 
-Format:
-
 ```dart
 TextStyle get with{$type}Color => textStyle.copyWith(color: Theme.of(context).colorScheme.{$type});
 ```
@@ -134,8 +130,6 @@ TextStyle get withErrorColor(BuildContext context)     => textStyle.copyWith(col
 
 ##### [FontWeight](https://api.flutter.dev/flutter/painting/TextStyle/fontWeight.html)
 
-Formula:
-
 ```dart
 TextStyle get withWeight100 => textStyle.copyWith(fontWeight: FontWeight.w100);
 ```
@@ -149,8 +143,6 @@ TextStyle get withWeight700 => textStyle.copyWith(fontWeight: FontWeight.w700);
 ```
 
 ##### [TextDecoration](https://api.flutter.dev/flutter/painting/TextStyle/decoration.html)
-
-Formula:
 
 ```dart
 with{$type} => textStyle.copyWith(decoration: TextDecoration.{$type});
@@ -191,8 +183,6 @@ bool get isYesterday;
 
 bool isWithinFromNow(Duration duration); /// Checks is difference between [DateTime.now()] and [DateTime] is smaller than [duration]
 ```
-
-``TODO``
 
 #### [Map](https://api.dart.dev/stable/dart-core/Map-class.html)
 
