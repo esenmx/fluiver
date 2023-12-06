@@ -2,14 +2,11 @@ part of '../../fluiver.dart';
 
 extension StringCapitalize on String {
   String get capitalize {
-    switch (length) {
-      case 0:
-        return '';
-      case 1:
-        return toUpperCase();
-      default:
-        return this[0].toUpperCase() + substring(1);
-    }
+    return switch (length) {
+      0 => '',
+      1 => toUpperCase(),
+      _ => this[0].toUpperCase() + substring(1),
+    };
   }
 
   String capitalizeAll({String separator = ' ', String? joiner}) {
@@ -24,32 +21,13 @@ extension StringCapitalize on String {
   /// John doe => Jd
   String initials({String separator = ' ', String joiner = ''}) {
     final names = split(separator).where((e) => e.isNotEmpty);
-    switch (names.length) {
-      case 0:
-        return '';
-      case 1:
-        return names.first[0];
-      default:
-        return names.map((e) => e[0]).join(joiner);
-    }
+    return switch (names.length) {
+      0 => '',
+      1 => names.first[0],
+      _ => names.map((e) => e[0]).join(joiner),
+    };
   }
 }
-
-// extension StringRemove on String {
-//   String? removePrefixOrNull(String prefix) {
-//     if (startsWith(prefix)) {
-//       return substring(prefix.length, length);
-//     }
-//     return null;
-//   }
-
-//   String? removeSuffixOrNull(String suffix) {
-//     if (endsWith(suffix)) {
-//       return substring(0, length - suffix.length);
-//     }
-//     return null;
-//   }
-// }
 
 extension SafeString on String {
   String safeSubstring(int start, [int? end]) {
