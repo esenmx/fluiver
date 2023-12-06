@@ -1,17 +1,6 @@
 part of '../../fluiver.dart';
 
 extension IterableElement<E> on Iterable<E> {
-  /// Similar to [elementAt] but returns [null] instead of throwing [IndexError]
-  E? elementAtOrNull(int index) {
-    if (index < length) {
-      return elementAt(index);
-    }
-    return null;
-  }
-
-  /// Same as [single] but does not throw [StateError], instead returns null
-  E? get singleOrNull => length == 1 ? single : null;
-
   /// Similar to [Iterable.firstWhere], but does not have [orElse] function and
   /// does not throw [StateError]
   E? firstWhereOrNull(bool Function(E element) test) {
