@@ -16,6 +16,3 @@ dev_dependencies:
   lint:
   mockito:
   rand:
-    git:
-      url: https://github.com/esenmx/rand
-      ref: main
