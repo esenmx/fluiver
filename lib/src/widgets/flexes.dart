@@ -13,7 +13,6 @@ class PaddedColumn extends Padding {
     List<Widget> children = const <Widget>[],
   }) : super(
           child: Column(
-            key: key,
             mainAxisAlignment: mainAxisAlignment,
             mainAxisSize: mainAxisSize,
             crossAxisAlignment: crossAxisAlignment,
@@ -38,7 +37,6 @@ class PaddedRow extends Padding {
     List<Widget> children = const <Widget>[],
   }) : super(
           child: Row(
-            key: key,
             mainAxisAlignment: mainAxisAlignment,
             mainAxisSize: mainAxisSize,
             crossAxisAlignment: crossAxisAlignment,
@@ -63,7 +61,6 @@ class ScrollViewColumn extends SingleChildScrollView {
     List<Widget> children = const <Widget>[],
   }) : super(
           child: Column(
-            key: key,
             mainAxisAlignment: mainAxisAlignment,
             mainAxisSize: mainAxisSize,
             crossAxisAlignment: crossAxisAlignment,
