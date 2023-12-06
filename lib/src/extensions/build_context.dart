@@ -1,32 +1,30 @@
 part of '../../fluiver.dart';
 
-extension _BuildContext on BuildContext {
-  MediaQueryData get _m => MediaQuery.of(this);
-
-  ThemeData get _t => Theme.of(this);
-}
-
 ///
 /// [MediaQuery]
 ///
 extension BuildContextMediaQuery on BuildContext {
-  double get screenWidth => _m.size.width;
-  double get screenHeight => _m.size.height;
+  double get screenWidth => MediaQuery.sizeOf(this).width;
+  double get screenHeight => MediaQuery.sizeOf(this).height;
 
-  bool get isPlatformDark => _m.platformBrightness.isDark;
-  bool get isPlatformLight => _m.platformBrightness.isLight;
+  bool get isPlatformDark => MediaQuery.platformBrightnessOf(this).isDark;
+  bool get isPlatformLight => MediaQuery.platformBrightnessOf(this).isLight;
 
-  bool get isOrientationPortrait => _m.orientation.isPortrait;
-  bool get isOrientationLandscape => _m.orientation.isLandscape;
+  bool get isOrientationPortrait => MediaQuery.orientationOf(this).isPortrait;
+  bool get isOrientationLandscape => MediaQuery.orientationOf(this).isLandscape;
 
-  double get topViewPadding => _m.viewPadding.top;
-  double get bottomViewPadding => _m.viewPadding.bottom;
-  double get bottomViewInset => _m.viewInsets.bottom;
+  double get topViewPadding => MediaQuery.viewPaddingOf(this).top;
+  double get bottomViewPadding => MediaQuery.viewPaddingOf(this).bottom;
+  double get bottomViewInset => MediaQuery.viewInsetsOf(this).bottom;
 }
 
 ///
 /// [Theme]
 ///
+extension _BuildContext on BuildContext {
+  ThemeData get _t => Theme.of(this);
+}
+
 extension BuildContextThemeBrightness on BuildContext {
   bool get isThemeDark => _t.brightness.isDark;
   bool get isThemeLight => _t.brightness.isLight;
