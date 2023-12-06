@@ -1,10 +1,10 @@
 name: fluiver
-description: A dependency free, expressive extensions and helpers package focused on productivity.
-version: 1.0.0
+description: An expressive extensions and helpers package focused on productivity.
+version: 1.0.1
 homepage: https://mehmetesen.com
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ^3.2.0
 
 dependencies:
   flutter:
@@ -13,6 +13,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lint:
-  mockito:
-  rand:
+  lint: ^2.2.0
+  mockito: ^5.4.3
+  rand: ^1.0.0
