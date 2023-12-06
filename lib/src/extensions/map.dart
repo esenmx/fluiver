@@ -48,9 +48,10 @@ extension MapFilter<K, V> on Map<K, V> {
 
 extension MapMapEntry<K, V> on Map<K, V> {
   MapEntry<K, V>? entryOf(K k) {
-    if (containsKey(k)) {
-      return MapEntry<K, V>(k, this[k] as V);
+    final value = this[k];
+    if (value == null) {
+      return null;
     }
-    return null;
+    return MapEntry<K, V>(k, value);
   }
 }
