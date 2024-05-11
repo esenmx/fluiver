@@ -259,24 +259,6 @@ T get lowest; // lower value in iterable
 T get highest; /// highest value in iterable
 ```
 
-## Widgets
-
-### FlexGrid
-
-A non-scrollable replacement for `GridView` where nested [ScrollView](https://api.flutter.dev/flutter/widgets/ScrollView-class.html). is a subject.
-
-### PaddedColumn
-
-A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) with [Padding](https://api.flutter.dev/flutter/widgets/Padding-class.html).
-
-### PaddedRow
-
-A [Row](https://api.flutter.dev/flutter/widgets/Row-class.html) with [Padding](https://api.flutter.dev/flutter/widgets/Padding-class.html).
-
-### ScrollViewColumn
-
-A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) inside [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html). Easy way to keep children alive.
-
 ## Principles
 
 Only commonly needed widgets and helpers are implemented.
