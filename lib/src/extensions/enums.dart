@@ -22,9 +22,8 @@ extension EnumBrightness on Brightness {
 }
 
 extension EnumOrientation on Orientation {
-  Orientation get reverse {
-    return isPortrait ? Orientation.landscape : Orientation.portrait;
-  }
+  Orientation get reverse =>
+      isPortrait ? Orientation.landscape : Orientation.portrait;
 
   bool get isPortrait => this == Orientation.portrait;
   bool get isLandscape => this == Orientation.landscape;

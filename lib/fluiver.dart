@@ -29,4 +29,4 @@ part 'src/helpers/observer.dart';
 part 'src/helpers/reactive.dart';
 part 'src/helpers/slivers.dart';
 part 'src/widgets/flex_grid.dart';
-part 'src/widgets/flexes.dart';
+part 'src/widgets/ticker_builder.dart';

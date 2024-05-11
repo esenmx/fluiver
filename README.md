@@ -1,168 +1,184 @@
 # fluiver
 
-A comprehensive package includes expressive extensions, common helpers and should have widgets.
+A comprehensive package that includes expressive extensions, common helpers, and essential widgets.
 
-The expressiveness the emulation of `IDE` behaviors rather than merely minimizing code verbosity, distinguishing itself from the typical
-approach of many packages in this regard.
+The expressiveness emulates IDE behaviors rather than merely minimizing code verbosity, distinguishing it from the typical approaches of many other packages.
 
 ## Extensions
 
 ### [BuildContext](https://api.flutter.dev/flutter/widgets/BuildContext-class.html)
 
+#### Screen Size
+
 ```dart
-double screenWidth => MediaQuery.of(context).size.width
-double screenHeight => MediaQuery.of(context).size.height
-
-bool isPlatformDark => MediaQuery.of(context).platformBrightness == Brightness.dark
-bool isPlatformLight => MediaQuery.of(context).platformBrightness == Brightness.light
-
-bool isThemeDark => Theme.of(context).brightness == Brightness.dark
-bool isThemeLight => Theme.of(context).brightness == Brightness.light
-
-bool isOrientationPortrait => MediaQuery.of(context).orientation == Orientation.portrait
-bool isOrientationLandscape => MediaQuery.of(context).orientation == Orientation.landscape
-
-double topViewPadding => MediaQuery.of(context).viewPadding.top
-double bottomViewPadding => MediaQuery.of(context).viewPadding.bottom
-double bottomViewInset => MediaQuery.of(context).viewInsets.bottom
-
-bool isLTR => Directionality.of(context) == TextDirection.ltr
-bool isRTL => Directionality.of(context) == TextDirection.rtl
+context.screenWidth => MediaQuery.of(context).size.width
+context.screenHeight => MediaQuery.of(context).size.height
 ```
 
-#### [ColorScheme](https://api.flutter.dev/flutter/material/ColorScheme-class.html)
+#### Brightness
 
 ```dart
+context.isPlatformDark => MediaQuery.of(context).platformBrightness == Brightness.dark
+context.isPlatformLight => MediaQuery.of(context).platformBrightness == Brightness.light
+context.isThemeDark => Theme.of(context).brightness == Brightness.dark
+context.isThemeLight => Theme.of(context).brightness == Brightness.light
+```
+
+#### Orientation
+
+```dart
+context.isOrientationPortrait => MediaQuery.of(context).orientation == Orientation.portrait
+context.isOrientationLandscape => MediaQuery.of(context).orientation == Orientation.landscape
+```
+
+#### View Padding
+
+```dart
+context.topViewPadding => MediaQuery.of(context).viewPadding.top
+context.bottomViewPadding => MediaQuery.of(context).viewPadding.bottom
+context.bottomViewInset => MediaQuery.of(context).viewInsets.bottom
+```
+
+#### Directionality
+
+```dart
+context.isLTR => Directionality.of(context) == TextDirection.ltr
+context.isRTL => Directionality.of(context) == TextDirection.rtl
+```
+
+### [ColorScheme](https://api.flutter.dev/flutter/material/ColorScheme-class.html)
+
+```dart
+// Formula
 Color {$type}Color => Theme.of(context).colorScheme.{$type}Color!
 ```
 
-Examples:
-
 ```dart
+// Examples
 Color primaryColor => Theme.of(context).colorScheme.primaryColor
 Color tertiaryColor => Theme.of(context).colorScheme.tertiaryColor
 Color onErrorColor => Theme.of(context).colorScheme.onErrorColor
 ```
 
-#### [TextTheme](https://api.flutter.dev/flutter/material/TextTheme-class.html)
+### [TextTheme](https://api.flutter.dev/flutter/material/TextTheme-class.html)
 
 ```dart
+// Formula
 TextStyle {$type}TextStyle => Theme.of(context).textTheme.{$type}!
 ```
 
-Examples:
-
 ```dart
+// Examples
 TextStyle headlineLargeTextStyle => Theme.of(context).textTheme.headlineLarge!
 TextStyle bodyLargeTextStyle => Theme.of(context).textTheme.bodyLarge!
 TextStyle labelMediumTextStyle => Theme.of(context).textTheme.labelMedium!
 ```
 
-#### [BorderRadius](https://api.flutter.dev/flutter/painting/BorderRadius-class.html)
+### [BorderRadius](https://api.flutter.dev/flutter/painting/BorderRadius-class.html)
 
-##### add(double value)
+#### add(double value)
 
 ```dart
+// Formula
 myBorderRadius + BorderRadius.add$type$(double value);
 ```
 
-###### Implementations
-[`addAll` `addLeft` `addTop` `addRight` `addBottom` `addTopLeft` `addTopRight` `addBottomRight` `addBottomLeft`]
+`addAll` `addLeft` `addTop` `addRight` `addBottom` `addTopLeft` `addTopRight` `addBottomRight` `addBottomLeft`
 
-#### [EdgeInsets](https://api.flutter.dev/flutter/painting/EdgeInsets-class.html)
+### [EdgeInsets](https://api.flutter.dev/flutter/painting/EdgeInsets-class.html)
 
-##### Add(double value)
+#### Add(double value)
 
 ```dart
+// Formula
 myEdgeInsets + EdgeInsets.add$type$($type$: value);
 ```
 
-###### Implementations
-[`addAll` `addLeft` `addTop` `addRight` `addBottom`]
+`addAll` `addLeft` `addTop` `addRight` `addBottom`
 
-##### Set(double value)
+#### Set(double value)
 
 ```dart
+// Formula
 myEdgeInsets.copyWith($type$: value);
 ```
 
-###### Implementations
-[`setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`]
+`setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`
 
-##### Only
+#### Only
 
 ```dart
+// Formula
 EdgeInsets.only($type$: value);
 ```
 
-###### Implementations
-[`setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`]
+`setLeft` `setTop` `setRight` `setBottom` `setHorizontal` `setVertical`
 
-#### [TextStyle](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
+### [TextStyle](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
 
-##### [Color](https://api.flutter.dev/flutter/painting/TextStyle/color.html)
+#### [Color](https://api.flutter.dev/flutter/painting/TextStyle/color.html)
 
 ```dart
+// Formula
 TextStyle get withColor{$type} => textStyle.copyWith(color: {$type});
 ```
 
-Example:
-
 ```dart
+// Examples
 TextStyle get withColorWhite38 => textStyle.copyWith(color: Colors.white38);
 TextStyle get withColorWhite   => textStyle.copyWith(color: Colors.white);
 TextStyle get withColorBlack70 => textStyle.copyWith(color: Colors.black70);
 ```
 
-##### [ThemeColor](https://api.flutter.dev/flutter/painting/TextStyle/color.html)
+#### [ThemeColor](https://api.flutter.dev/flutter/painting/TextStyle/color.html)
 
 ```dart
+// Formula
 TextStyle get with{$type}Color => textStyle.copyWith(color: Theme.of(context).colorScheme.{$type});
 ```
 
-Example:
-
 ```dart
+// Example
 TextStyle get withPrimaryColor(BuildContext context)   => textStyle.copyWith(color: Theme.of(context).colorScheme.primary);
 TextStyle get withSecondaryColor(BuildContext context) => textStyle.copyWith(color: Theme.of(context).colorScheme.secondary);
 TextStyle get withErrorColor(BuildContext context)     => textStyle.copyWith(color: Theme.of(context).colorScheme.error);
 ```
 
-##### [FontWeight](https://api.flutter.dev/flutter/painting/TextStyle/fontWeight.html)
+#### [FontWeight](https://api.flutter.dev/flutter/painting/TextStyle/fontWeight.html)
 
 ```dart
-TextStyle get withWeight100 => textStyle.copyWith(fontWeight: FontWeight.w100);
+// Formula
+TextStyle get withWeight{$type} => textStyle.copyWith(fontWeight: FontWeight.w${type});
 ```
 
-Example:
-
 ```dart
+// Example
 TextStyle get withWeight100 => textStyle.copyWith(fontWeight: FontWeight.w100);
 TextStyle get withWeight400 => textStyle.copyWith(fontWeight: FontWeight.w400);
 TextStyle get withWeight700 => textStyle.copyWith(fontWeight: FontWeight.w700);
 ```
 
-##### [TextDecoration](https://api.flutter.dev/flutter/painting/TextStyle/decoration.html)
+#### [TextDecoration](https://api.flutter.dev/flutter/painting/TextStyle/decoration.html)
 
 ```dart
+// Formula
 with{$type} => textStyle.copyWith(decoration: TextDecoration.{$type});
 ```
 
-Example:
-
 ```dart
+// Examples
 withUnderline   => textStyle.copyWith(decoration: TextDecoration.underline);
 withOverline    => textStyle.copyWith(decoration: TextDecoration.overline);
 withLineThrough => textStyle.copyWith(decoration: TextDecoration.lineThrough);
 ```
 
-##### [Size](https://api.flutter.dev/flutter/painting/TextStyle/fontSize.html)
+#### [Size](https://api.flutter.dev/flutter/painting/TextStyle/fontSize.html)
 
 ```dart
 withSize(double size) => textStyle.copyWith(fontSize: size);
 ```
 
-#### [DateTime](https://api.dart.dev/stable/dart-core/DateTime-class.html)
+### [DateTime](https://api.dart.dev/stable/dart-core/DateTime-class.html)
 
 ```dart
 TimeOfDay toTime(); /// Creates [TimeOfDay] from [DateTime]
@@ -184,27 +200,27 @@ bool get isYesterday;
 bool isWithinFromNow(Duration duration); /// Checks is difference between [DateTime.now()] and [DateTime] is smaller than [duration]
 ```
 
-#### [Map](https://api.dart.dev/stable/dart-core/Map-class.html)
+### [Map](https://api.dart.dev/stable/dart-core/Map-class.html)
 
 ```dart
-bool any(bool Function(K key, V value) test); // Same as [Iterable.any]
-bool every(bool Function(K key, V value) test); // Same as [Iterable.every]
+bool any(bool Function(K key, V value) test); // Similar to [Iterable.any]
+bool every(bool Function(K key, V value) test); // Similar to [Iterable.every]
 
-MapEntry<K, V>? firstWhereOrNull(bool Function(K key, V value) test); // Same as [Iterable.firstWhereOrNull]
-Map<K, V> where(bool Function(K key, V value) test); // Same as [Iterable.where]
-Map<T, V> whereKeyType<T>(); // Same as [Iterable.whereType]
-Map<K, T> whereValueType<T>(); // Same as [Iterable.whereType]
+MapEntry<K, V>? firstWhereOrNull(bool Function(K key, V value) test); // Similar to [Iterable.firstWhereOrNull]
+Map<K, V> where(bool Function(K key, V value) test); // Similar to [Iterable.where]
+Map<T, V> whereKeyType<T>(); // Similar to [Iterable.whereType]
+Map<K, T> whereValueType<T>(); // Similar to [Iterable.whereType]
 
 MapEntry<K, V>? entryOf(K k); // Similar to `[]` operator but returns [MapEntry]
 ```
 
-#### [Set](https://api.dart.dev/stable/dart-core/Set-class.html)
+### [Set](https://api.dart.dev/stable/dart-core/Set-class.html)
 
 ```dart
 Set<E> subset(int start, [int? end]); // Creates a new sub [Set]
 ```
 
-#### [String](https://api.dart.dev/stable/dart-core/String-class.html)
+### [String](https://api.dart.dev/stable/dart-core/String-class.html)
 
 ```dart
 String capitalize();
@@ -213,7 +229,7 @@ String capitalizeAll({String separator = ' ', String? joiner});
 String initials({String separator = ' ', String joiner = ''});
 ```
 
-#### [Iterable](https://api.dart.dev/stable/dart-core/Iterable-class.html)
+### [Iterable](https://api.dart.dev/stable/dart-core/Iterable-class.html)
 
 ```dart
 [1, 2, 3].to2D(2) // [[1, 2], [3]]
@@ -221,7 +237,7 @@ String initials({String separator = ' ', String joiner = ''});
 [Foo(), Foo(), Foo()].widgetJoin(() => Divider()) // [Foo(), Divider(), Foo(), Divider(), Foo()]
 ```
 
-#### IterableInt
+### Iterable\<int>
 
 ```dart
 int sum(); // sum of every element
@@ -229,14 +245,14 @@ double average(); // average value of iterable
 Uint8List toBytes(); // Create a byte array from this
 ```
 
-#### IterableDouble
+### Iterable\<double>
 
 ```dart
 double sum(); // sum of every element
 double average(); // average value of iterable
 ```
 
-#### IterableNum<T extends num>
+### IterableNum\<T extends num>
 
 ```dart
 T get lowest; // lower value in iterable
@@ -261,14 +277,14 @@ A [Row](https://api.flutter.dev/flutter/widgets/Row-class.html) with [Padding](h
 
 A [Column](https://api.flutter.dev/flutter/widgets/Column-class.html) inside [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html). Easy way to keep children alive.
 
-#### Principles
+## Principles
 
-Only commonly needed widgets and helpers implemented.
+Only commonly needed widgets and helpers are implemented.
 
 For extensions, few comparison will explain the motivation behind.
 
 ```dart
-context.mediaQuery // BAD: hence, not implemented
+context.mediaQuery // BAD: therefore, it's not implemented
 MediaQuery.of(context) // GOOD: better fast read, more characteristic
 ```
 
@@ -284,7 +300,8 @@ context.bodyMedium // BAD: less expressive
 context.bodyMediumTextStyle // GOOD: more expressive, better auto code-completion
 ```
 
-#### Name
+### Package Name
 
-Name from `Flutter` + `Quiver` = `Fluiver`.
-Inspired from [google/quiver-dart](https://github.com/google/quiver-dart)
+Inspired by [google/quiver-dart](https://github.com/google/quiver-dart)
+
+`flutter` + `quiver` = `fluiver`
