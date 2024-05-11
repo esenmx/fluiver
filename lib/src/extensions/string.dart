@@ -34,10 +34,8 @@ extension SafeString on String {
     if (start >= length) {
       return '';
     }
-    if (end != null) {
-      if (end > length) {
-        return substring(start, length);
-      }
+    if (end != null && end > length) {
+      return substring(start, length);
     }
     return substring(start, end);
   }
