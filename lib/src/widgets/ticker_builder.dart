@@ -1,9 +1,14 @@
 part of '../../fluiver.dart';
 
 class TickerBuilder extends StatefulWidget {
-  const TickerBuilder({super.key, required this.builder});
+  const TickerBuilder({
+    super.key,
+    required this.builder,
+    this.onTick,
+  });
 
   final Widget Function(BuildContext context, Duration elapsed) builder;
+  final void Function(Duration elapsed)? onTick;
 
   @override
   State<TickerBuilder> createState() => _TickerBuilderState();
@@ -14,6 +19,7 @@ class _TickerBuilderState extends State<TickerBuilder>
   late final tickerProvider = createTicker((elapsed) {
     setState(() {
       this.elapsed = elapsed;
+      widget.onTick?.call(elapsed);
     });
   });
   Duration elapsed = Duration.zero;
