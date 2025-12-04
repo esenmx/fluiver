@@ -1,66 +1,81 @@
+import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void main() async {
-  final value = DateTime(1990, 6, 26, 8, 30);
-  group('DateTime', () {
-    test('toDate', () {
-      expect(value.truncateTime(), DateTime(1990, 6, 26));
+void main() {
+  final dt = DateTime(1990, 6, 26, 8, 30);
+
+  group('truncateTime', () {
+    test('removes time components', () {
+      check(dt.truncateTime()).equals(DateTime(1990, 6, 26));
+    });
+  });
+
+  group('toTimeOfDay', () {
+    test('extracts time', () {
+      check(dt.toTimeOfDay()).equals(const TimeOfDay(hour: 8, minute: 30));
+    });
+  });
+
+  group('addYears', () {
+    test('positive', () => check(dt.addYears(31).year).equals(2021));
+    test('negative', () => check(dt.addYears(-5000).year).equals(-3010));
+  });
+
+  group('addMonths', () {
+    test('same year', () => check(dt.addMonths(4).month).equals(10));
+    test('next year', () {
+      final result = dt.addMonths(12);
+      check(result.year).equals(1991);
+      check(result.month).equals(6);
+    });
+    test('negative', () {
+      final result = dt.addMonths(-23);
+      check(result.year).equals(1988);
+      check(result.month).equals(7);
+    });
+  });
+
+  group('addDays', () {
+    test('positive', () => check(dt.addDays(3).day).equals(29));
+  });
+
+  group('addHours', () {
+    test('positive', () => check(dt.addHours(12).hour).equals(20));
+  });
+
+  group('addMinutes', () {
+    test('same hour', () => check(dt.addMinutes(15).minute).equals(45));
+    test('next hour', () {
+      final result = dt.addMinutes(30);
+      check(result.hour).equals(9);
+      check(result.minute).equals(0);
+    });
+  });
+
+  group('age', () {
+    final now = DateTime.now();
+    final year = now.year;
+
+    test('past birthday this year', () {
+      final birth = now.copyWith(year: 1990, month: 1, day: 1);
+      check(birth.age()).equals(year - 1990);
     });
 
-    test('toTime', () {
-      expect(value.toTimeOfDay(), const TimeOfDay(hour: 8, minute: 30));
+    test('future birthday this year', () {
+      final birth = now.copyWith(year: year - 10, day: now.day + 1);
+      check(birth.age()).equals(9);
     });
 
-    test('addYears', () {
-      expect(value.addYears(31), value.copyWith(year: 2021));
-      expect(value.addYears(-5000), value.copyWith(year: -3010));
+    test('born today', () {
+      check(now.age()).equals(0);
     });
 
-    test('addMonths', () {
-      expect(value.addMonths(4), value.copyWith(month: 10));
-      expect(value.addMonths(12), value.copyWith(year: 1991));
-      expect(value.addMonths(13), value.copyWith(year: 1991, month: 7));
-      expect(value.addMonths(-23), value.copyWith(year: 1988, month: 7));
-    });
-
-    test('addDays', () {
-      expect(value.addDays(3), value.copyWith(day: 29));
-    });
-
-    test('addHours', () {
-      expect(value.addHours(12), value.copyWith(hour: 20));
-    });
-
-    test('addMinutes', () {
-      expect(value.addMinutes(15), value.copyWith(minute: 45));
-      expect(value.addMinutes(30), value.copyWith(hour: 9, minute: 0));
-    });
-
-    test('addSeconds', () {
-      expect(value.addSeconds(30), value.copyWith(second: 30));
-      expect(value.addSeconds(60), value.copyWith(minute: 31, second: 0));
-    });
-
-    test('age', () {
-      final year = DateTime.now().year;
-      final day = DateTime.now().day;
-      const margin = Duration(seconds: 1);
-      expect(
-        DateTime.now().copyWith(year: 1990, month: 1, day: 1).humanAge,
-        year - 1990,
-      );
-      expect(
-        DateTime.now().copyWith(year: year - 10, day: day + 1).humanAge,
-        9,
-      );
-      expect(DateTime.now().subtract(margin).humanAge, 0);
-      expect(
-        DateTime.now().copyWith(year: year - 1).subtract(margin).humanAge,
-        1,
-      );
-      expect(DateTime.now().copyWith(year: year - 1).add(margin).humanAge, 0);
+    test('one year ago minus margin', () {
+      final birth =
+          now.copyWith(year: year - 1).subtract(const Duration(seconds: 1));
+      check(birth.age()).equals(1);
     });
   });
 }

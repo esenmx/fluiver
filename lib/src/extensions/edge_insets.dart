@@ -1,5 +1,7 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// Adding padding values to [EdgeInsets].
 extension EdgeInsetsAdd on EdgeInsets {
   EdgeInsets addAll(double value) => this + EdgeInsets.all(value);
 
@@ -9,6 +11,8 @@ extension EdgeInsetsAdd on EdgeInsets {
   EdgeInsets addBottom(double value) => this + EdgeInsets.only(bottom: value);
 }
 
+/// {@macro extensionFor}
+/// Extracting specific sides from [EdgeInsets].
 extension EdgeInsetsOnly on EdgeInsets {
   EdgeInsets get onlyLeft => EdgeInsets.only(left: left);
   EdgeInsets get onlyTop => EdgeInsets.only(top: top);
@@ -19,6 +23,8 @@ extension EdgeInsetsOnly on EdgeInsets {
   EdgeInsets get onlyHorizontal => EdgeInsets.only(left: left, right: right);
 }
 
+/// {@macro extensionFor}
+/// Setting padding values on [EdgeInsets].
 extension EdgeInsetsSet on EdgeInsets {
   EdgeInsets setLeft(double value) => copyWith(left: value);
   EdgeInsets setTop(double value) => copyWith(top: value);
@@ -29,6 +35,8 @@ extension EdgeInsetsSet on EdgeInsets {
   EdgeInsets setVertical(double value) => copyWith(bottom: value, top: value);
 }
 
+/// {@macro extensionFor}
+/// Applying [MediaQuery] insets to [EdgeInsets].
 extension EdgeInsetsMediaQuery on EdgeInsets {
   EdgeInsets withStatusBarMargin(BuildContext context) {
     return this + EdgeInsets.only(top: context.topViewPadding);

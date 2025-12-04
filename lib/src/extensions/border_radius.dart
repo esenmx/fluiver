@@ -1,5 +1,7 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// Adding radius values to [BorderRadius].
 extension BorderRadiusAdd on BorderRadius {
   BorderRadius addAll(double radius) {
     return this + BorderRadius.circular(radius);
@@ -38,6 +40,8 @@ extension BorderRadiusAdd on BorderRadius {
   }
 }
 
+/// {@macro extensionFor}
+/// Setting radius values on [BorderRadius].
 extension BorderRadiusSet on BorderRadius {
   BorderRadius setLeft(double radius) {
     return setTopLeft(radius).setBottomLeft(radius);
@@ -72,6 +76,8 @@ extension BorderRadiusSet on BorderRadius {
   }
 }
 
+/// {@macro extensionFor}
+/// Extracting specific corners from [BorderRadius].
 extension BorderRadiusOnly on BorderRadius {
   BorderRadius get onlyTopLeft {
     return BorderRadius.only(topLeft: topLeft);

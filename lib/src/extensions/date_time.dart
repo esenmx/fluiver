@@ -1,9 +1,13 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// Converting [DateTime] to [TimeOfDay].
 extension DateTimeTimeOfDay on DateTime {
   TimeOfDay toTimeOfDay() => TimeOfDay(hour: hour, minute: minute);
 }
 
+/// {@macro extensionFor}
+/// Merging time components with [DateTime].
 extension DateTimeMerge on DateTime {
   DateTime truncateTime() {
     return copyWith(
@@ -26,6 +30,8 @@ extension DateTimeMerge on DateTime {
   }
 }
 
+/// {@macro extensionFor}
+/// Adding time units to [DateTime].
 extension DateTimeAdd on DateTime {
   DateTime addYears(int years) => copyWith(year: year + years);
   DateTime addMonths(int months) => copyWith(month: month + months);
@@ -36,6 +42,8 @@ extension DateTimeAdd on DateTime {
   DateTime addSeconds(int seconds) => copyWith(second: second + seconds);
 }
 
+/// {@macro extensionFor}
+/// Checking date conditions on [DateTime].
 extension DateTimeCheck on DateTime {
   bool _offsetChecker(int dayOffset) {
     final l = toLocal();
@@ -53,13 +61,13 @@ extension DateTimeCheck on DateTime {
   }
 }
 
+/// {@macro extensionFor}
+/// Calculating age from [DateTime].
 extension DateTimeCalculator on DateTime {
-  // TODO (diff - 2, 3, ... , n) cases
-  int get humanAge {
-    final diff = DateTime.now().year - year;
-    if (DateTime.now().copyWith(year: year).isAfter(this)) {
-      return diff;
-    }
-    return diff - 1;
+  /// Calculates human age based on birth date.
+  int age() {
+    final now = DateTime.now();
+    final age = now.year - year;
+    return now.copyWith(year: year).isAfter(this) ? age : age - 1;
   }
 }

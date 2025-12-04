@@ -1,5 +1,7 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// String capitalization and formatting.
 extension StringCapitalize on String {
   String get capitalize {
     return switch (length) {
@@ -29,6 +31,8 @@ extension StringCapitalize on String {
   }
 }
 
+/// {@macro extensionFor}
+/// {@macro safeOperation}
 extension SafeString on String {
   String safeSubstring(int start, [int? end]) {
     if (start >= length) {
@@ -40,16 +44,3 @@ extension SafeString on String {
     return substring(start, end);
   }
 }
-
-// extension StringSearch on String {
-//   bool hasSearchMatch(String search, [String separator = ' ']) {
-//     Iterable<String> prepare(String string, String separator) {
-//       return string.toLowerCase().split(separator).where((e) => e.isNotEmpty);
-//     }
-
-//     final words = prepare(this, separator);
-//     final parts = prepare(search, ' ');
-//     // TODO remove found words within every
-//     return parts.every((part) => words.any((word) => word.contains(part)));
-//   }
-// }

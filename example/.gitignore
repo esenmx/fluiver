@@ -52,5 +52,10 @@ test/goldens/
 .metadata
 pubspec.lock
 
-
+# Example platform folders (Flutter related)
+.android
+.ios
 .macos
+.linux
+.windows
+.web

@@ -1,100 +1,145 @@
+import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rand/rand.dart';
 
-void main() async {
-  final twoDimA = [
-    [1],
-    [2],
-  ];
-  final expandedA = [1, 2];
-  final twoDimB = [
-    [1, 2, 3],
-    [4],
-  ];
-  final expandedB = [1, 2, 3, 4];
-  final twoDimC = [
-    [1, 2],
-    [3, 4],
-    [5, 6],
-  ];
-  final expandedC = [1, 2, 3, 4, 5, 6];
-
-  group('IterableX', () {
-    test('sub', () {
-      expect(() => [].subIteration(1), throwsA(isA<RangeError>()));
-      expect(() => [].subIteration(0, 2), throwsA(isA<RangeError>()));
-      expect([].subIteration(0, 0).toList(), []);
-      expect([1, 2, 3].subIteration(0).toList(), [1, 2, 3]);
-      expect([1, 2, 3].subIteration(1).toList(), [2, 3]);
-      expect([1, 2, 3].subIteration(1, 2).toList(), [2]);
-      expect([1, 2, 3].subIteration(2, 2).toList(), []);
+void main() {
+  group('subIteration', () {
+    test('invalid start throws', () {
+      check(() => <int>[].subIteration(1)).throws<RangeError>();
     });
-
-    test('to2D', () {
-      expect(() => [1, 2, 3].to2D(0), throwsA(isA<RangeError>()));
-      expect([].to2D(3), []);
-      expect(expandedA.to2D(1), twoDimA);
-      expect(expandedB.to2D(3), twoDimB);
-      expect(expandedC.to2D(2), twoDimC);
+    test('invalid end throws', () {
+      check(() => <int>[].subIteration(0, 2)).throws<RangeError>();
     });
+    test('empty range', () {
+      check(<int>[].subIteration(0, 0).toList()).deepEquals(<int>[]);
+    });
+    test('full range', () {
+      check([1, 2, 3].subIteration(0).toList()).deepEquals([1, 2, 3]);
+    });
+    test('from index', () {
+      check([1, 2, 3].subIteration(1).toList()).deepEquals([2, 3]);
+    });
+    test('range', () {
+      check([1, 2, 3].subIteration(1, 2).toList()).deepEquals([2]);
+    });
+  });
 
-    test('groupAsMap', () {
-      expect([42].groupAsMap((e) => e), {
+  group('to2D', () {
+    test('invalid div throws', () {
+      check(() => [1, 2, 3].to2D(0)).throws<RangeError>();
+    });
+    test('empty', () {
+      check(<int>[].to2D(3).toList()).deepEquals(<List<int>>[]);
+    });
+    test('div 1', () {
+      check([1, 2].to2D(1).toList()).deepEquals([
+        [1],
+        [2],
+      ]);
+    });
+    test('div 2', () {
+      check([1, 2, 3, 4].to2D(2).toList()).deepEquals([
+        [1, 2],
+        [3, 4],
+      ]);
+    });
+    test('uneven', () {
+      check([1, 2, 3, 4].to2D(3).toList()).deepEquals([
+        [1, 2, 3],
+        [4],
+      ]);
+    });
+  });
+
+  group('groupAsMap', () {
+    test('single element', () {
+      check([42].groupAsMap((e) => e)).deepEquals({
         42: [42],
       });
-      expect([1, 2, 3, 4].groupAsMap((e) => e.isEven), {
+    });
+    test('by predicate', () {
+      check([1, 2, 3, 4].groupAsMap((e) => e.isEven)).deepEquals({
         true: [2, 4],
         false: [1, 3],
       });
     });
+  });
 
-    test('firstWhereOrNull', () {
-      expect(<int>[].firstWhereOrNull((element) => element > 0), isNull);
-      expect([1].firstWhereOrNull((element) => element.isEven), isNull);
-      expect([1, 2, 4].firstWhereOrNull((element) => element.isEven), 2);
+  group('firstWhereOrNull', () {
+    test('empty returns null', () {
+      check(<int>[].firstWhereOrNull((e) => e > 0)).isNull();
     });
-
-    test('lastWhereOrNull', () {
-      expect(<int>[].lastWhereOrNull((element) => element > 0), isNull);
-      expect([1].lastWhereOrNull((element) => element.isEven), isNull);
-      expect([1, 2, 4].lastWhereOrNull((element) => element.isEven), 4);
+    test('no match returns null', () {
+      check([1].firstWhereOrNull((e) => e.isEven)).isNull();
+    });
+    test('returns first match', () {
+      check([1, 2, 4].firstWhereOrNull((e) => e.isEven)).equals(2);
     });
   });
 
-  group('IterableIterableX', () {
-    test('from2D', () {
-      expect([[]].flatten(), []);
-      expect(twoDimA.flatten().toList(), expandedA);
-      expect(twoDimB.flatten().toList(), expandedB);
-      expect(twoDimC.flatten().toList(), expandedC);
+  group('lastWhereOrNull', () {
+    test('empty returns null', () {
+      check(<int>[].lastWhereOrNull((e) => e > 0)).isNull();
+    });
+    test('no match returns null', () {
+      check([1].lastWhereOrNull((e) => e.isEven)).isNull();
+    });
+    test('returns last match', () {
+      check([1, 2, 4].lastWhereOrNull((e) => e.isEven)).equals(4);
     });
   });
 
-  group('ChronoSortable', () {
+  group('flatten', () {
+    test('empty nested', () {
+      check(<List<int>>[[]].flatten().toList()).deepEquals(<int>[]);
+    });
+    test('single level', () {
+      check(
+        [
+          [1],
+          [2],
+        ].flatten().toList(),
+      ).deepEquals([1, 2]);
+    });
+    test('multiple elements', () {
+      check(
+        [
+          [1, 2, 3],
+          [4],
+        ].flatten().toList(),
+      ).deepEquals([1, 2, 3, 4]);
+    });
+  });
+
+  group('ChronoIterable', () {
+    List<_ChronoEntity> randomEntities(int n) {
+      return List.generate(n, (_) => _ChronoEntity(Rand.dateTime()));
+    }
+
     test('earliest', () {
-      final es = randomChronoIterable(1000);
-      final e = es.earliest((e) => e.dateTime);
-      for (final element in es) {
-        expect(e.dateTime.isBefore(element.dateTime), e != element);
+      final entities = randomEntities(100);
+      final earliest = entities.earliest((e) => e.dateTime);
+      for (final e in entities) {
+        if (e != earliest) {
+          check(earliest.dateTime.isBefore(e.dateTime)).isTrue();
+        }
       }
     });
+
     test('latest', () {
-      final es = randomChronoIterable(1000);
-      final e = es.latest((e) => e.dateTime);
-      for (final element in es) {
-        expect(e.dateTime.isAfter(element.dateTime), e != element);
+      final entities = randomEntities(100);
+      final latest = entities.latest((e) => e.dateTime);
+      for (final e in entities) {
+        if (e != latest) {
+          check(latest.dateTime.isAfter(e.dateTime)).isTrue();
+        }
       }
     });
   });
 }
 
-List<ChronoEntity> randomChronoIterable(int length) {
-  return List.generate(length, (index) => ChronoEntity(Rand.dateTime()));
-}
-
-class ChronoEntity {
+class _ChronoEntity {
+  const _ChronoEntity(this.dateTime);
   final DateTime dateTime;
-
-  const ChronoEntity(this.dateTime);
 }

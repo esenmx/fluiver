@@ -1,10 +1,17 @@
 part of '../../fluiver.dart';
 
-extension GlobalKeyFormFieldState on GlobalKey<FormFieldState> {
+/// {@macro extensionFor}
+/// Validating and saving [FormFieldState] via [GlobalKey].
+extension GlobalKeyFormFieldState on GlobalKey<FormFieldState<dynamic>> {
   bool validateAndSave() {
-    final isValid = currentState?.validate() == true;
+    final currentState = this.currentState;
+    assert(currentState != null, 'FormField is not attached to this key');
+    if (currentState == null) {
+      return false;
+    }
+    final isValid = currentState.validate();
     if (isValid) {
-      currentState?.save();
+      currentState.save();
     }
     return isValid;
   }

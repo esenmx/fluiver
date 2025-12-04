@@ -1,5 +1,7 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// Predicate operations on [Map].
 extension MapPredicate<K, V> on Map<K, V> {
   bool any(bool Function(K key, V value) test) {
     return entries.any((entry) {
@@ -23,6 +25,8 @@ extension MapPredicate<K, V> on Map<K, V> {
   }
 }
 
+/// {@macro extensionFor}
+/// Filtering [Map] entries by key or value type.
 extension MapFilter<K, V> on Map<K, V> {
   Map<K, V> where(bool Function(K key, V value) test) {
     return <K, V>{
@@ -46,6 +50,8 @@ extension MapFilter<K, V> on Map<K, V> {
   }
 }
 
+/// {@macro extensionFor}
+/// Getting [MapEntry] from [Map].
 extension MapMapEntry<K, V> on Map<K, V> {
   MapEntry<K, V>? entryOf(K k) {
     final value = this[k];

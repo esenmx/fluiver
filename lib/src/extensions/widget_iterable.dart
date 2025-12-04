@@ -1,70 +1,62 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// Building widgets from [Iterable] with slicing/grouping.
 extension WidgetIterable<E> on Iterable<E> {
-  /// Lazy way to generate widgets that groups/separates via specific getter.
-  /// Similar to [groupAsMap] but instead of grouping, it synchronously
-  /// generates widgets.
+  /// Lazily generates widgets grouped by a selector function.
   ///
-  /// If resource is sorted, use this method. If it's not sorted and needs to be,
-  /// then use [groupAsMap] to generate widgets.
+  /// Unlike [groupAsMap], this synchronously yields widgets during iteration,
+  /// making it ideal for pre-sorted data. For unsorted data that needs
+  /// grouping, use [groupAsMap] instead.
   ///
-  /// Typical example would be separating [ListTile]s with
-  /// [DateTime]/[TimeOfDay] tiles.
+  /// **Example:** Separating [ListTile]s with date headers:
+  /// ```dart
+  /// entities.slicedWidgetsBuilder<DateTime>(
+  ///   context: context,
+  ///   toSlicer: (e) => e.dateTime?.toDate(),
+  ///   slicerBuilder: (ctx, date) => DateHeader(date),
+  ///   valueWidgetBuilder: (ctx, entity, _) => EntityTile(entity),
+  ///   separatorBuilder: (ctx) => const Divider(),
+  /// )
+  /// ```
   ///
-  /// By using [DateTimeX.toDate()] or [DateTimeX.toTime()] extension
-  /// method(included with this package), you can truncate time values.
+  /// Use [DateTimeX.toDate] or [DateTimeX.toTime] to truncate time values.
   Iterable<Widget> slicedWidgetsBuilder<S extends Object>({
     required BuildContext context,
 
-    /// Think about [Iterable] of this model:
-    /// ```dart
-    /// class Entity {
-    ///   // other fields ...
-    ///   // final DateTime? dateTime;
-    /// }
-    /// ```
-    ///
-    /// Typical [valueWidgetBuilder]:
-    /// Widget valueWidgetBuilder<Entity>(Entity entity) => EntityWidget(entity)
-    required ValueWidgetBuilder<E> valueWidgetBuilder,
-
-    /// [toSlicer] will select the getter from the entity.
-    /// Let's say we want to separate elements by their date:
-    /// ```dart
-    /// DateTime? toSlicer(Entity entity) => entity.dateTime?.truncateTime();
-    /// ```
+    /// Extracts the grouping key from each element.
     required S? Function(E element) toSlicer,
 
-    /// Builder for the value that selected by [toSlicer] and put between
-    /// where separation begins in iteration.
-    /// In our case, example would be:
-    /// ```dart
-    /// Widget slicerBuilder(context, DateTime? date) => DateTile(date)
-    /// ```
+    /// Builds the header widget for each new group.
     required Widget Function(BuildContext context, S? slicer) slicerBuilder,
 
-    /// A divider if there is no [slicer]
+    /// Builds the widget for each element.
+    required ValueWidgetBuilder<E> valueWidgetBuilder,
+
+    /// Optional separator between consecutive items within the same group.
     WidgetBuilder? separatorBuilder,
 
-    /// Same as child parameter of [ValueWidgetBuilder<T>]
+    /// Passed to [valueWidgetBuilder] as its child parameter.
     Widget? child,
   }) sync* {
-    final itr = iterator;
-    Object? last = Object();
-    bool isConsecutive = false;
-    while (itr.moveNext()) {
-      final slicer = toSlicer(itr.current);
-      if (slicer != last) {
-        yield slicerBuilder(context, slicer);
-        last = slicer;
-        isConsecutive = false;
-      } else {
-        if (isConsecutive && separatorBuilder != null) {
-          yield separatorBuilder(context);
-        }
+    // Sentinel value that won't match any real slicer value
+    Object? previousSlicer = Object();
+    var hasItemInCurrentGroup = false;
+
+    for (final element in this) {
+      final currentSlicer = toSlicer(element);
+      final isNewGroup = currentSlicer != previousSlicer;
+
+      if (isNewGroup) {
+        yield slicerBuilder(context, currentSlicer);
+        previousSlicer = currentSlicer;
+        hasItemInCurrentGroup = false;
+      } else if (hasItemInCurrentGroup && separatorBuilder != null) {
+        yield separatorBuilder(context);
       }
-      yield valueWidgetBuilder(context, itr.current, child);
-      isConsecutive = true;
+
+      yield valueWidgetBuilder(context, element, child);
+      hasItemInCurrentGroup = true;
     }
   }
 }

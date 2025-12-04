@@ -1,10 +1,25 @@
-library fluiver;
+library;
+
+/// {@template safeOperation}
+/// Safe operation that doesn't throw errors.
+/// {@endtemplate}
+///
+/// {@template similarToButNull}
+/// Similar to the original method, but returns null instead of throwing
+/// [StateError] when no element is found.
+/// {@endtemplate}
+///
+/// {@template extensionFor}
+/// Extension providing convenient access to operations on the target type.
+/// {@endtemplate}
 
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 
 part 'src/extensions/bool.dart';
 part 'src/extensions/border_radius.dart';
@@ -19,6 +34,7 @@ part 'src/extensions/key.dart';
 part 'src/extensions/list.dart';
 part 'src/extensions/map.dart';
 part 'src/extensions/set.dart';
+part 'src/extensions/stream.dart';
 part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
 part 'src/extensions/time_of_day.dart';

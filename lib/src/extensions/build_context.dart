@@ -1,8 +1,7 @@
 part of '../../fluiver.dart';
 
-///
-/// [MediaQuery]
-///
+/// {@macro extensionFor}
+/// Provides convenient access to [MediaQuery] properties.
 extension BuildContextMediaQuery on BuildContext {
   double get screenWidth => MediaQuery.sizeOf(this).width;
   double get screenHeight => MediaQuery.sizeOf(this).height;
@@ -18,23 +17,26 @@ extension BuildContextMediaQuery on BuildContext {
   double get bottomViewInset => MediaQuery.viewInsetsOf(this).bottom;
 }
 
-///
-/// [Theme]
-///
 extension _BuildContext on BuildContext {
   ThemeData get _t => Theme.of(this);
 }
 
+/// {@macro extensionFor}
+/// Checking theme brightness.
 extension BuildContextThemeBrightness on BuildContext {
   bool get isThemeDark => _t.brightness.isDark;
   bool get isThemeLight => _t.brightness.isLight;
 }
 
+/// {@macro extensionFor}
+/// Checking text direction.
 extension BuildContextDirectionality on BuildContext {
   bool get isDirectionalityLtr => Directionality.of(this).isLtr;
   bool get isDirectionalityRtl => Directionality.of(this).isRtl;
 }
 
+/// {@macro extensionFor}
+/// Provides convenient access to [TextTheme] styles.
 extension BuildContextTextStyle on BuildContext {
   TextStyle get displayLargeTextStyle => _t.textTheme.displayLarge!;
   TextStyle get displayMediumTextStyle => _t.textTheme.displayMedium!;
@@ -57,44 +59,65 @@ extension BuildContextTextStyle on BuildContext {
   TextStyle get labelSmallTextStyle => _t.textTheme.labelSmall!;
 }
 
+/// {@macro extensionFor}
+/// Provides convenient access to [ColorScheme] colors.
 extension BuildContextsColorScheme on BuildContext {
-  Color get primaryColor => _t.colorScheme.primary;
-  Color get onPrimaryColor => _t.colorScheme.onPrimary;
-  Color get primaryContainerColor => _t.colorScheme.primaryContainer;
-  Color get onPrimaryContainerColor => _t.colorScheme.onPrimaryContainer;
+  ColorScheme get _cs => _t.colorScheme;
+  Color get primaryColor => _cs.primary;
+  Color get onPrimaryColor => _cs.onPrimary;
+  Color get primaryContainerColor => _cs.primaryContainer;
+  Color get onPrimaryContainerColor => _cs.onPrimaryContainer;
+  Color? get primaryFixedColor => _cs.primaryFixed;
+  Color? get primaryFixedDimColor => _cs.primaryFixedDim;
+  Color? get onPrimaryFixedColor => _cs.onPrimaryFixed;
+  Color? get onPrimaryFixedVariantColor => _cs.onPrimaryFixedVariant;
 
-  Color get secondaryColor => _t.colorScheme.secondary;
-  Color get onSecondaryColor => _t.colorScheme.onSecondary;
-  Color get secondaryContainerColor => _t.colorScheme.secondaryContainer;
-  Color get onSecondaryContainerColor => _t.colorScheme.onSecondaryContainer;
+  Color get secondaryColor => _cs.secondary;
+  Color get onSecondaryColor => _cs.onSecondary;
+  Color get secondaryContainerColor => _cs.secondaryContainer;
+  Color get onSecondaryContainerColor => _cs.onSecondaryContainer;
+  Color? get secondaryFixedColor => _cs.secondaryFixed;
+  Color? get secondaryFixedDimColor => _cs.secondaryFixedDim;
+  Color? get onSecondaryFixedColor => _cs.onSecondaryFixed;
+  Color? get onSecondaryFixedVariantColor => _cs.onSecondaryFixedVariant;
 
-  Color get tertiaryColor => _t.colorScheme.tertiary;
-  Color get onTertiaryColor => _t.colorScheme.onTertiary;
-  Color get tertiaryContainerColor => _t.colorScheme.tertiaryContainer;
-  Color get onTertiaryContainerColor => _t.colorScheme.onTertiaryContainer;
+  Color get tertiaryColor => _cs.tertiary;
+  Color get onTertiaryColor => _cs.onTertiary;
+  Color get tertiaryContainerColor => _cs.tertiaryContainer;
+  Color get onTertiaryContainerColor => _cs.onTertiaryContainer;
+  Color? get tertiaryFixedColor => _cs.tertiaryFixed;
+  Color? get tertiaryFixedDimColor => _cs.tertiaryFixedDim;
+  Color? get onTertiaryFixedColor => _cs.onTertiaryFixed;
+  Color? get onTertiaryFixedVariantColor => _cs.onTertiaryFixedVariant;
 
-  Color get errorColor => _t.colorScheme.error;
-  Color get onErrorColor => _t.colorScheme.onError;
-  Color get errorContainerColor => _t.colorScheme.errorContainer;
-  Color get onErrorContainerColor => _t.colorScheme.onErrorContainer;
+  Color get errorColor => _cs.error;
+  Color get onErrorColor => _cs.onError;
+  Color get errorContainerColor => _cs.errorContainer;
+  Color get onErrorContainerColor => _cs.onErrorContainer;
 
-  Color get outlineColor => _t.colorScheme.outline;
-  Color get outlineVariantColor => _t.colorScheme.outlineVariant;
+  Color get backgroundColor => _cs.surface;
+  Color get onBackgroundColor => _cs.onSurface;
 
-  Color get backgroundColor => _t.colorScheme.background;
-  Color get onBackgroundColor => _t.colorScheme.onBackground;
+  Color get surfaceColor => _cs.surface;
+  Color get onSurfaceColor => _cs.onSurface;
+  Color get surfaceVariantColor => _cs.surfaceContainerHighest;
+  Color get onSurfaceVariantColor => _cs.onSurfaceVariant;
+  Color get inverseSurfaceColor => _cs.inverseSurface;
+  Color get onInverseSurfaceColor => _cs.onInverseSurface;
+  Color get inversePrimaryColor => _cs.inversePrimary;
+  Color? get outlineColor => _cs.outline;
+  Color? get outlineVariantColor => _cs.outlineVariant;
+  Color? get shadowColor => _cs.shadow;
+  Color? get scrimColor => _cs.scrim;
+  Color? get surfaceTintColor => _cs.surfaceTint;
 
-  Color get surfaceColor => _t.colorScheme.surface;
-  Color get onSurfaceColor => _t.colorScheme.onSurface;
+  Color? get surfaceBrightColor => _cs.surfaceBright;
+  Color? get surfaceDimColor => _cs.surfaceDim;
+  Color? get surfaceContainerLowestColor => _cs.surfaceContainerLowest;
+  Color? get surfaceContainerLowColor => _cs.surfaceContainerLow;
+  Color? get surfaceContainerColor => _cs.surfaceContainer;
+  Color? get surfaceContainerHighColor => _cs.surfaceContainerHigh;
+  Color? get surfaceContainerHighestColor => _cs.surfaceContainerHighest;
 
-  Color get surfaceVariantColor => _t.colorScheme.surfaceVariant;
-  Color get onSurfaceVariantColor => _t.colorScheme.onSurfaceVariant;
-
-  Color get inverseSurfaceColor => _t.colorScheme.inverseSurface;
-  Color get onInverseSurfaceColor => _t.colorScheme.onInverseSurface;
-  Color get inversePrimaryColor => _t.colorScheme.inversePrimary;
-
-  Color get shadowColor => _t.colorScheme.shadow;
-  Color get scrimColor => _t.colorScheme.scrim;
-  Color get surfaceTintColor => _t.colorScheme.surfaceTint;
+  Brightness get colorSchemeBrightness => _cs.brightness;
 }

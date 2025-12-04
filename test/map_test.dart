@@ -1,20 +1,31 @@
+import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void main() async {
-  test('whereKeyType', () {
-    expect(map, map.whereKeyType<Object?>());
-    expect(map, map.whereKeyType());
-    expect({0: false, 1: true}, map.whereKeyType<int>());
-    expect({}, map.whereKeyType<List>());
+void main() {
+  final map = {0: false, 1: true, 'foo': 'bar', 'baz': null};
+
+  group('whereKeyType', () {
+    test('Object keeps all', () {
+      check(map.whereKeyType<Object?>()).deepEquals(map);
+    });
+    test('int filters', () {
+      check(map.whereKeyType<int>()).deepEquals({0: false, 1: true});
+    });
+    test('no match returns empty', () {
+      check(map.whereKeyType<List<dynamic>>()).deepEquals({});
+    });
   });
 
-  test('whereValueType', () {
-    expect(map..remove('baz'), map.whereValueType<Object>());
-    expect(map, map.whereValueType());
-    expect({0: false, 1: true}, map.whereValueType<bool>());
-    expect({}, map.whereKeyType<List>());
+  group('whereValueType', () {
+    test('bool filters', () {
+      check(map.whereValueType<bool>()).deepEquals({0: false, 1: true});
+    });
+    test('String filters', () {
+      check(map.whereValueType<String>()).deepEquals({'foo': 'bar'});
+    });
+    test('no match returns empty', () {
+      check(map.whereValueType<List<dynamic>>()).deepEquals({});
+    });
   });
 }
-
-Map get map => {0: false, 1: true, 'foo': 'bar', 'baz': null};

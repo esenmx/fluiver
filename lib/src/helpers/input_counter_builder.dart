@@ -1,7 +1,8 @@
 part of '../../fluiver.dart';
 
-class InputCounterBuilders {
-  const InputCounterBuilders._();
+/// Builders for [TextField] input counter widgets.
+final class InputCounterWidgetBuilders {
+  const InputCounterWidgetBuilders._();
 
   /// Useful when you need to put a max length for input consistency and do not
   /// want to show [counterBuilder] just because of it.
@@ -23,7 +24,7 @@ class InputCounterBuilders {
     Color? errorColor,
   }) {
     return (context, {required currentLength, required isFocused, maxLength}) {
-      final effectiveErrorColor = errorColor ?? context.errorColor;
+      final effectiveErrorColor = errorColor ?? context._cs.error;
       var effectiveStyle = style ?? context.labelSmallTextStyle;
       void setErrorStyle() {
         effectiveStyle = effectiveStyle.copyWith(color: effectiveErrorColor);

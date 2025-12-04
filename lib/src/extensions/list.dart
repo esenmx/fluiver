@@ -1,5 +1,7 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// {@macro safeOperation}
 extension ListSafe<E> on List<E> {
   Iterable<E> safeSubList(int start, [int? end]) {
     if (start >= length) {

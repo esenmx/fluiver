@@ -1,9 +1,10 @@
 part of '../../fluiver.dart';
 
+/// A widget that rebuilds on each tick, providing elapsed [Duration].
 class TickerBuilder extends StatefulWidget {
   const TickerBuilder({
-    super.key,
     required this.builder,
+    super.key,
     this.onTick,
   });
 
@@ -16,7 +17,7 @@ class TickerBuilder extends StatefulWidget {
 
 class _TickerBuilderState extends State<TickerBuilder>
     with SingleTickerProviderStateMixin {
-  late final tickerProvider = createTicker((elapsed) {
+  late final Ticker tickerProvider = createTicker((elapsed) {
     setState(() {
       this.elapsed = elapsed;
       widget.onTick?.call(elapsed);
@@ -26,7 +27,7 @@ class _TickerBuilderState extends State<TickerBuilder>
 
   @override
   void initState() {
-    tickerProvider.start();
+    unawaited(tickerProvider.start());
     super.initState();
   }
 

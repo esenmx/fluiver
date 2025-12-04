@@ -1,5 +1,6 @@
 part of '../../fluiver.dart';
 
+/// A [SliverPersistentHeaderDelegate] with fixed extent.
 class FixedExtentSliverPersistentHeaderDelegate
     extends SliverPersistentHeaderDelegate {
   FixedExtentSliverPersistentHeaderDelegate({
@@ -8,7 +9,10 @@ class FixedExtentSliverPersistentHeaderDelegate
   });
 
   final double extent;
-  final Widget Function(BuildContext context, bool overlapsContent) builder;
+  final Widget Function(
+    BuildContext context, {
+    required bool overlapsContent,
+  }) builder;
 
   @override
   Widget build(
@@ -16,7 +20,7 @@ class FixedExtentSliverPersistentHeaderDelegate
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return builder(context, overlapsContent);
+    return builder(context, overlapsContent: overlapsContent);
   }
 
   @override

@@ -1,5 +1,7 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// Subset operations on [Set].
 extension SetSub<E> on Set<E> {
   Set<E> subset(int start, [int? end]) {
     RangeError.checkValidRange(start, end, length);
