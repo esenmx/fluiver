@@ -1,14 +1,14 @@
 part of '../../fluiver.dart';
 
+/// Mixin for comparing [Enum] values by their index.
 ///
 /// ```dart
-/// enum Enums with ComparableEnum {
+/// enum Enums with EnumIndexComparable {
 ///   one,
 ///   two,
 ///   three;
 /// }
 /// ```
-///
 mixin EnumIndexComparable on Enum implements Comparable<Enum> {
   bool operator <(Enum other) => index < other.index;
 
@@ -22,6 +22,8 @@ mixin EnumIndexComparable on Enum implements Comparable<Enum> {
   int compareTo(Enum other) => index - other.index;
 }
 
+/// {@macro extensionFor}
+/// Working with [Enum] collections.
 extension IterableEnum<T extends Enum> on Iterable<T> {
   T? byNameOrNull(String name) {
     for (final e in this) {

@@ -1,5 +1,7 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// Converting [TimeOfDay] to [DateTime].
 extension TimeOfDayDateTime on TimeOfDay {
   DateTime inToday() {
     return DateTime.now().copyWith(

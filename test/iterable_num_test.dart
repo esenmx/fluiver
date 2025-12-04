@@ -1,39 +1,54 @@
+import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void main() async {
-  group('int', () {
-    test('sum', () {
-      expect(<int>[].sum(), 0);
-      expect([1].sum(), 1);
-      expect([1, 2, 3].sum(), 6);
-      expect(List.generate(100, (i) => i).sum(), 99 * (99 + 1) / 2);
+void main() {
+  group('Iterable<int>', () {
+    group('sum', () {
+      test('empty', () => check(<int>[].sum()).equals(0));
+      test('single', () => check([1].sum()).equals(1));
+      test('multiple', () => check([1, 2, 3].sum()).equals(6));
+      test('formula', () {
+        check(List.generate(100, (i) => i).sum()).equals(99 * 100 ~/ 2);
+      });
     });
 
-    test('lowest', () {
-      expect(() => <int>[].lowest, throwsA(isA<StateError>()));
-      expect([1].lowest, 1);
-      expect([1, 2, 3].lowest, 1);
-      expect([1, 2, -1].lowest, -1);
+    group('lowest', () {
+      test('empty throws', () {
+        check(() => <int>[].lowest()).throws<StateError>();
+      });
+      test('single', () => check([1].lowest()).equals(1));
+      test('positive', () => check([1, 2, 3].lowest()).equals(1));
+      test('negative', () => check([1, 2, -1].lowest()).equals(-1));
+    });
+
+    group('highest', () {
+      test('empty throws', () {
+        check(() => <int>[].highest()).throws<StateError>();
+      });
+      test('single', () => check([1].highest()).equals(1));
+      test('multiple', () => check([1, 2, 3].highest()).equals(3));
     });
   });
 
-  group('double', () {
-    test('sum', () {
-      expect(<double>[].sum(), 0.0);
-      expect([1.1].sum(), 1.1);
-      expect([1.1, 2.2, 3.3].sum(), 6.6);
-      expect(
-        List<double>.generate(100, (i) => i.toDouble()).sum(),
-        99 * (99 + 1) / 2,
-      );
+  group('Iterable<double>', () {
+    group('sum', () {
+      test('empty', () => check(<double>[].sum()).equals(0));
+      test('single', () => check([1.1].sum()).equals(1.1));
+      test('multiple', () => check([1.1, 2.2, 3.3].sum()).equals(6.6));
     });
 
-    test('lowest', () {
-      expect(() => <double>[].lowest, throwsA(isA<StateError>()));
-      expect(<double>[1].lowest, 1);
-      expect(<double>[1, 2, 3].lowest, 1);
-      expect(<double>[1, 2, -1].lowest, -1);
+    group('lowest', () {
+      test('empty throws', () {
+        check(() => <double>[].lowest()).throws<StateError>();
+      });
+      test('positive', () => check(<double>[1, 2, 3].lowest()).equals(1));
+      test('negative', () => check(<double>[1, 2, -1].lowest()).equals(-1));
+    });
+
+    group('average', () {
+      test('single', () => check([2.0].average()).equals(2));
+      test('multiple', () => check([1.0, 2.0, 3.0].average()).equals(2));
     });
   });
 }

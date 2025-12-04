@@ -1,5 +1,6 @@
 part of '../../fluiver.dart';
 
+/// Mixin for managing timer lifecycle.
 mixin _TimerMixin {
   Timer? _timer;
 
@@ -8,19 +9,21 @@ mixin _TimerMixin {
   }
 }
 
+/// Debounces function calls, executing only after a delay period.
 class Debounce with _TimerMixin {
   Debounce(this.duration);
 
   final Duration duration;
 
   void call(VoidCallback task) {
-    if (_timer?.isActive == true) {
+    if (_timer?.isActive ?? false) {
       _timer!.cancel();
     }
     _timer = Timer(duration, task);
   }
 }
 
+/// Throttles function calls, executing immediately and queuing the latest call.
 class ThrottleLatest with _TimerMixin {
   ThrottleLatest(this.duration);
 
@@ -42,6 +45,7 @@ class ThrottleLatest with _TimerMixin {
   }
 }
 
+/// Throttles function calls, executing only the first call within a time period.
 class ThrottleFirst with _TimerMixin {
   ThrottleFirst(this.duration);
 
@@ -55,6 +59,7 @@ class ThrottleFirst with _TimerMixin {
   }
 }
 
+/// Throttles function calls, executing only the last call after a delay.
 class ThrottleLast with _TimerMixin {
   ThrottleLast(this.duration);
 

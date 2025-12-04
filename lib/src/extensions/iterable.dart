@@ -1,8 +1,12 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// {@template iterableElement}
+/// Safe element access on [Iterable].
+/// {@endtemplate}
 extension IterableElement<E> on Iterable<E> {
-  /// Similar to [Iterable.firstWhere], but does not have [orElse] function and
-  /// does not throw [StateError]
+  /// {@macro similarToButNull}
+  /// Nullable runtime safe version of [Iterable.firstWhere].
   E? firstWhereOrNull(bool Function(E element) test) {
     for (final element in this) {
       if (test(element)) {
@@ -12,8 +16,8 @@ extension IterableElement<E> on Iterable<E> {
     return null;
   }
 
-  /// Similar to [Iterable.lastWhere], but does not have [orElse] function and
-  /// does not throw [StateError]
+  /// {@macro similarToButNull}
+  /// Nullable runtime safe version of [Iterable.lastWhere].
   E? lastWhereOrNull(bool Function(E element) test) {
     for (var i = length; i > 0; i--) {
       final e = elementAt(i - 1);
@@ -25,6 +29,8 @@ extension IterableElement<E> on Iterable<E> {
   }
 }
 
+/// {@macro extensionFor}
+/// Filtering and slicing [Iterable].
 extension IterableFilter<E> on Iterable<E> {
   /// [!] operator is useless with referential assignment, in that case
   /// use this method.
@@ -56,6 +62,8 @@ extension IterableFilter<E> on Iterable<E> {
   }
 }
 
+/// {@macro extensionFor}
+/// Separating [Iterable] elements.
 extension IterableSeparator<E> on Iterable<E> {
   /// More versatile version of [ListTile.divideTiles],
   /// but you can use it in anywhere; [Flex], [Scrollable], [InlineSpan]...
@@ -74,6 +82,8 @@ extension IterableSeparator<E> on Iterable<E> {
   }
 }
 
+/// {@macro extensionFor}
+/// Grouping [Iterable] elements into a [Map].
 extension IterableGroup<E> on Iterable<E> {
   /// Creates a [Map] that has grouped [Iterable] elements as [List] with
   /// specified [classifier] parameter.
@@ -89,6 +99,8 @@ extension IterableGroup<E> on Iterable<E> {
   }
 }
 
+/// {@macro extensionFor}
+/// Converting [Iterable] to 2D structure.
 extension TwoDimIterable<E> on Iterable<E> {
   /// ```dart
   /// [1].convertTo2D(2) // [[1]]
@@ -100,7 +112,7 @@ extension TwoDimIterable<E> on Iterable<E> {
     final iterator = this.iterator;
     while (iterator.moveNext()) {
       final subArray = <E>[iterator.current];
-      for (int i = 0; i < div - 1; i++) {
+      for (var i = 0; i < div - 1; i++) {
         if (iterator.moveNext()) {
           subArray.add(iterator.current);
         } else {
@@ -112,6 +124,8 @@ extension TwoDimIterable<E> on Iterable<E> {
   }
 }
 
+/// {@macro extensionFor}
+/// Flattening nested [Iterable].
 extension NestedIterable<E> on Iterable<Iterable<E>> {
   /// More straightforward solution than [expand] in case of all sub-elements
   /// have same type
@@ -122,6 +136,8 @@ extension NestedIterable<E> on Iterable<Iterable<E>> {
   }
 }
 
+/// {@macro extensionFor}
+/// Finding earliest/latest elements by [DateTime].
 extension ChronoIterable<E> on Iterable<E> {
   E earliest(DateTime Function(E e) toDateTime) => _first(toDateTime);
 
@@ -133,8 +149,8 @@ extension ChronoIterable<E> on Iterable<E> {
       throw StateError('no element found in $this');
     }
 
-    E element = itr.current;
-    DateTime dateTime = toDateTime(element);
+    var element = itr.current;
+    var dateTime = toDateTime(element);
 
     while (itr.moveNext()) {
       final currentDateTime = toDateTime(itr.current);

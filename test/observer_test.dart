@@ -11,7 +11,7 @@ class MockBrightnessObserverCallback extends Mock {
 }
 
 @GenerateMocks([LocaleObserver])
-void main() async {
+void main() {
   setUp(TestWidgetsFlutterBinding.ensureInitialized);
 
   testWidgets('LocaleObserver', (tester) async {
@@ -31,9 +31,8 @@ void main() async {
   testWidgets('BrightnessObserver', (tester) async {
     final callback = MockBrightnessObserverCallback();
     WidgetsBinding.instance.addObserver(BrightnessObserver(callback.call));
-    final window = tester.binding.platformDispatcher;
-
-    window.platformBrightnessTestValue = Brightness.dark;
+    final window = tester.binding.platformDispatcher
+      ..platformBrightnessTestValue = Brightness.dark;
     verify(callback(Brightness.dark)).called(1);
 
     window.platformBrightnessTestValue = Brightness.light;

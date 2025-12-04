@@ -1,63 +1,164 @@
+import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 
 void main() {
-  group('IterableWidgetX', () {
-    test('separate', () {
-      expect(mockSeparate(0), <Widget>[]);
-      expect(mockSeparate(1), hasLength(1));
-      expect(mockSeparate(1).single, isA<FlutterLogo>());
-      expect(mockSeparate(2), hasLength(3));
-      expect(mockSeparate(2)[0], isA<FlutterLogo>());
-      expect(mockSeparate(2)[1], isA<Divider>());
-      expect(mockSeparate(2)[2], isA<FlutterLogo>());
-      final values = mockSeparate(100);
-      for (int i = 0; i < 100; i++) {
+  group('separate', () {
+    List<Widget> separated(int n) {
+      return <Widget>[for (var i = 0; i < n; i++) const FlutterLogo()]
+          .separate(() => const Divider())
+          .toList();
+    }
+
+    test('empty', () => check(separated(0)).isEmpty());
+    test('single', () {
+      final result = separated(1);
+      check(result).length.equals(1);
+      check(result.single).isA<FlutterLogo>();
+    });
+    test('two elements', () {
+      final result = separated(2);
+      check(result).length.equals(3);
+      check(result[0]).isA<FlutterLogo>();
+      check(result[1]).isA<Divider>();
+      check(result[2]).isA<FlutterLogo>();
+    });
+    test('alternates correctly', () {
+      final result = separated(100);
+      for (var i = 0; i < result.length; i++) {
         if (i.isEven) {
-          expect(values.elementAt(i), isA<FlutterLogo>());
+          check(result[i]).isA<FlutterLogo>();
         } else {
-          expect(values.elementAt(i), isA<Divider>());
+          check(result[i]).isA<Divider>();
         }
       }
     });
   });
 
-  group('WidgetIterableX', () {
-    test('slicedWidgetBuilder', () {
-      List<DateTime> dateSeries(int length) {
-        return List.generate(length, (index) {
-          return DateTime.now().subtract(Duration(hours: index));
-        });
-      }
+  group('slicedWidgetsBuilder', () {
+    List<DateTime> dateSeries(int length) {
+      return List.generate(
+        length,
+        (i) => DateTime.now().subtract(Duration(hours: i)),
+      );
+    }
 
-      Iterable<Widget> newCase(int length, bool withSeparator) {
-        return dateSeries(length).slicedWidgetsBuilder<DateTime>(
-          context: MockBuildContext(),
-          valueWidgetBuilder: (_, val, __) => Text(val.toString()),
-          toSlicer: (DateTime e) => e.truncateTime(),
-          slicerBuilder: (_, slicer) => Text(slicer.toString()),
-          child: const FlutterLogo(),
-          separatorBuilder: withSeparator ? (context) => const Divider() : null,
-        );
-      }
+    testWidgets('empty', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final result = dateSeries(0).slicedWidgetsBuilder<DateTime>(
+                context: context,
+                valueWidgetBuilder: (_, val, __) => Text(val.toString()),
+                toSlicer: (e) => e.truncateTime(),
+                slicerBuilder: (_, slicer) => Text(slicer.toString()),
+              );
+              check(result).isEmpty();
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+    });
 
-      expect(newCase(0, false), isEmpty);
-      expect(newCase(24, false), hasLength(24 + 2));
-      expect(newCase(100, false), hasLength(100 + 5));
+    testWidgets('24 hours spans 2 days', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final result = dateSeries(24).slicedWidgetsBuilder<DateTime>(
+                context: context,
+                valueWidgetBuilder: (_, val, __) => Text(val.toString()),
+                toSlicer: (e) => e.truncateTime(),
+                slicerBuilder: (_, slicer) => Text(slicer.toString()),
+              );
+              check(result).length.equals(24 + 2);
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+    });
 
-      expect(newCase(0, true), isEmpty);
-      expect(newCase(24, true), hasLength(26 + 22));
-      expect(newCase(100, true), hasLength(105 + 95));
+    testWidgets('100 hours spans 5 days', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final result = dateSeries(100).slicedWidgetsBuilder<DateTime>(
+                context: context,
+                valueWidgetBuilder: (_, val, __) => Text(val.toString()),
+                toSlicer: (e) => e.truncateTime(),
+                slicerBuilder: (_, slicer) => Text(slicer.toString()),
+              );
+              check(result).length.equals(100 + 5);
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+    });
+
+    testWidgets('with separator empty', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final result = dateSeries(0).slicedWidgetsBuilder<DateTime>(
+                context: context,
+                valueWidgetBuilder: (_, val, __) => Text(val.toString()),
+                toSlicer: (e) => e.truncateTime(),
+                slicerBuilder: (_, slicer) => Text(slicer.toString()),
+                separatorBuilder: (_) => const Divider(),
+              );
+              check(result).isEmpty();
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+    });
+
+    testWidgets('with separator 24h', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final result = dateSeries(24).slicedWidgetsBuilder<DateTime>(
+                context: context,
+                valueWidgetBuilder: (_, val, __) => Text(val.toString()),
+                toSlicer: (e) => e.truncateTime(),
+                slicerBuilder: (_, slicer) => Text(slicer.toString()),
+                separatorBuilder: (_) => const Divider(),
+              );
+              check(result).length.equals(26 + 22);
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+    });
+
+    testWidgets('with separator 100h', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final result = dateSeries(100).slicedWidgetsBuilder<DateTime>(
+                context: context,
+                valueWidgetBuilder: (_, val, __) => Text(val.toString()),
+                toSlicer: (e) => e.truncateTime(),
+                slicerBuilder: (_, slicer) => Text(slicer.toString()),
+                separatorBuilder: (_) => const Divider(),
+              );
+              check(result).length.equals(105 + 95);
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
     });
   });
 }
-
-List<Widget> mockSeparate(int length) {
-  return <Widget>[for (int i = 0; i < length; i++) const FlutterLogo()]
-      .separate(() => const Divider())
-      .toList();
-}
-
-class MockBuildContext extends Mock implements BuildContext {}
