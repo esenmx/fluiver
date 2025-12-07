@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.0
+
+- Added `PaddedFlex`, `PaddedRow` and `PaddedColumn` wrappers
+
 ## 2.0.0
 
 ### Breaking
