@@ -4,8 +4,8 @@ part of '../../fluiver.dart';
 class TickerBuilder extends StatefulWidget {
   const TickerBuilder({
     required this.builder,
-    super.key,
     this.onTick,
+    super.key,
   });
 
   final Widget Function(BuildContext context, Duration elapsed) builder;
