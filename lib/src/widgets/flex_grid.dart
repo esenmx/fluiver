@@ -19,7 +19,6 @@ part of '../../fluiver.dart';
 class FlexGrid extends MultiChildRenderObjectWidget {
   const FlexGrid({
     required this.crossAxisCount,
-    super.key,
     super.children,
     this.childAspectRatio = 1.0,
     this.mainAxisSpacing = 0.0,
@@ -27,6 +26,7 @@ class FlexGrid extends MultiChildRenderObjectWidget {
     this.mainAxisExtent = 0.0,
     this.direction = Axis.vertical,
     this.padding = EdgeInsets.zero,
+    super.key,
   })  : assert(crossAxisCount > 0, 'crossAxisCount must be greater than 0'),
         assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0'),
         assert(mainAxisSpacing >= 0, 'mainAxisSpacing must be 0 or positive'),
