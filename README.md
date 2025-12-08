@@ -5,144 +5,135 @@
 
 **Write less. Build more.**
 
-Stop typing `Theme.of(context).colorScheme.primary` or `MediaQuery.of(context).size.width`. Fluiver gives you expressive, IDE-friendly extensions that feel native to Flutter.
+Fluiver keeps everyday Flutter reads to a single dot (`context.` / `list.`) without sacrificing clarity. Extensions feel native, stay autocomplete-friendly, and avoid boilerplate.
 
 ```yaml
 dependencies:
-  fluiver: ^2.0.0
+  fluiver: ^2.2.0
 ```
 
 ---
 
-## Why fluiver?
+## Install
+
+Add `fluiver` to your `pubspec.yaml`, then import `package:fluiver/fluiver.dart`.
+
+---
+
+## Quickstart
 
 ```dart
-// ❌ Before
-final color = Theme.of(context).colorScheme.primary;
-final width = MediaQuery.of(context).size.width;
-final style = Theme.of(context).textTheme.bodyLarge!;
-
-// ✅ After
+// Single-dot reads
 final color = context.primaryColor;
 final width = context.screenWidth;
-final style = context.bodyLargeTextStyle;
+final title = context.titleLargeTextStyle;
+
+// Padded row with spacing
+PaddedRow(
+  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  spacing: 8,
+  children: const [Icon(Icons.home), Text('Home')],
+);
 ```
 
-Every extension is designed for **discoverability** — just type `context.` and let autocomplete do the rest.
-
----
-
-## Showcase
-
-### ⏱️ Build a stopwatch in 5 lines
+### Fluiver vs. vanilla Flutter (single-dot wins)
 
 ```dart
-TickerBuilder(
-  builder: (context, elapsed) => Text(
-    '${elapsed.inMinutes}:${(elapsed.inSeconds % 60).toString().padLeft(2, '0')}',
-    style: context.displayLargeTextStyle,
-  ),
-)
+// ❌ Vanilla Flutter
+final primary = Theme.of(context).colorScheme.primary;
+final width = MediaQuery.of(context).size.width;
+final title = Theme.of(context).textTheme.titleLarge!;
+
+// ✅ With fluiver (one dot, cleaner, readable)
+final primary = context.primaryColor;
+final width = context.screenWidth;
+final title = context.titleLargeTextStyle;
+final widgets = items.separated(() => const Divider()).toList();
 ```
 
-### 🔍 Debounced search — the right way
+### Debounced search — the right way
 
 ```dart
-final _debounce = Debounce(Duration(milliseconds: 400));
+final _debounce = Debounce(const Duration(milliseconds: 400));
 
 TextField(
   onChanged: (query) => _debounce(() => searchApi(query)),
 )
 ```
 
-### 📐 Nested grids without performance issues
+### Nested grids without performance issues
 
 ```dart
-// ❌ GridView with shrinkWrap: true rebuilds everything
-// ✅ FlexGrid uses custom RenderObject — zero overhead
-
-SingleChildScrollView(
-  child: Column(
-    children: [
-      Text('Featured'),
-      FlexGrid(
-        crossAxisCount: 3,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        children: products.map((p) => ProductCard(p)).toList(),
-      ),
-      Text('Recent'),
-      FlexGrid(
-        crossAxisCount: 2,
-        children: recentItems.map((r) => ItemTile(r)).toList(),
-      ),
-    ],
-  ),
-)
+ListView(
+  children: [
+    const Text('Featured'),
+    FlexGrid(
+      crossAxisCount: 3,
+      crossAxisSpacing: 8,
+      mainAxisSpacing: 8,
+      children: products.map((p) => ProductCard(p)).toList(),
+    ),
+    const Text('Recent'),
+    FlexGrid(
+      crossAxisCount: 2,
+      children: recentItems.map((r) => ItemTile(r)).toList(),
+    ),
+  ],
+);
 ```
 
 ---
 
-## Extensions
+## Extensions at a glance
 
 ### BuildContext
 
 ```dart
-// Screen
-context.screenWidth
-context.screenHeight
-
-// Brightness
-context.isPlatformDark
-context.isThemeDark
-
-// Colors (includes all ColorScheme colors)
-context.primaryColor
-context.surfaceColor
-context.errorColor
-
-// TextStyles (includes all TextTheme styles)
-context.bodyLargeTextStyle
-context.titleMediumTextStyle
+context.screenWidth; context.screenHeight;
+context.isPlatformDark; context.isThemeDark;
+context.primaryColor; context.surfaceColor; context.errorColor;
+context.bodyLargeTextStyle; context.titleMediumTextStyle;
 ```
 
 ### DateTime
 
 ```dart
-dateTime.addDays(7)
-dateTime.addMonths(1)
-dateTime.truncateTime()
-dateTime.isToday
-dateTime.isTomorrow
-birthDate.age()  // Accurate age calculation
+dateTime.addDays(7);
+dateTime.addMonths(1);
+dateTime.truncateTime();
+dateTime.isToday;
+birthDate.age();
 ```
 
 ### String
 
 ```dart
-'hello'.capitalize          // Hello
-'john doe'.capitalizeAll    // John Doe
-'John Doe'.initials()       // JD
+'hello'.capitalize;          // Hello
+'john doe'.capitalizeAll;    // John Doe
+'John Doe'.initials();       // JD
 ```
 
 ### Iterable
 
 ```dart
-list.firstWhereOrNull((e) => e.id == 1)
-list.groupAsMap((e) => e.category)  // {category: [e1, e2, e3]}
-list.separate(() => Divider())  // [e1, Divider(), e2, Divider(), e3]
-[1, 2, 3, 4].to2D(2)  // [[1, 2], [3, 4]]
-
-// Numeric
-[1, 2, 3].sum()       // 6
-[1, 2, 3].average()   // 2
-[5, 1, 3].lowest()      // 1
-[5, 1, 3].highest()     // 5
+list.separated(() => Divider());
 ```
 
 ---
 
 ## Widgets
+
+### PaddedFlex / PaddedRow / PaddedColumn
+
+Apply padding before layout while keeping the full `Flex` API (spacing, alignment, direction, clip behavior).
+
+```dart
+PaddedColumn(
+  padding: const EdgeInsets.all(12),
+  spacing: 6,
+  children: const [Text('Title'), Text('Subtitle')],
+);
+```
 
 ### FlexGrid
 
@@ -196,10 +187,10 @@ AppLifecycleObserver((state) => ...);
 
 ## Philosophy
 
-- **Expressive** — APIs that read like English
-- **Discoverable** — IDE autocomplete friendly
-- **Minimal** — Only what you'll actually use
-- **Performant** — Custom render objects where it matters
+- **Single-dot first** — one autocomplete hit (`context.` / `list.`) for common needs without sacrificing clarity.
+- **Expressive** — names read like English and stay concise.
+- **Minimal** — only the helpers you actually reach for.
+- **Performant** — custom render objects where it matters.
 
 ---
 

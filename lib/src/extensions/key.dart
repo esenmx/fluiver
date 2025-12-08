@@ -2,6 +2,7 @@ part of '../../fluiver.dart';
 
 /// {@macro extensionFor}
 /// Validating and saving [FormFieldState] via [GlobalKey].
+/// If not validated, value is not saved.
 extension GlobalKeyFormFieldState<T> on GlobalKey<FormFieldState<T>> {
   bool validateAndSave() {
     final currentState = this.currentState;
