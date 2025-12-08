@@ -15,7 +15,6 @@ library;
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -29,16 +28,12 @@ part 'src/extensions/edge_insets.dart';
 part 'src/extensions/enum.dart';
 part 'src/extensions/enums.dart';
 part 'src/extensions/iterable.dart';
-part 'src/extensions/iterable_num.dart';
 part 'src/extensions/key.dart';
-part 'src/extensions/list.dart';
 part 'src/extensions/map.dart';
-part 'src/extensions/set.dart';
 part 'src/extensions/stream.dart';
 part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
 part 'src/extensions/time_of_day.dart';
-part 'src/extensions/widget_iterable.dart';
 part 'src/helpers/functions.dart';
 part 'src/helpers/input_counter_builder.dart';
 part 'src/helpers/observer.dart';

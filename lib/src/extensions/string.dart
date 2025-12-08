@@ -34,6 +34,7 @@ extension StringCapitalize on String {
 /// {@macro extensionFor}
 /// {@macro safeOperation}
 extension SafeString on String {
+  /// Does not throw [RangeError] when start is beyond length or end is beyond length.
   String safeSubstring(int start, [int? end]) {
     if (start >= length) {
       return '';

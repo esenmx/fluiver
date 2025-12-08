@@ -42,6 +42,4 @@ extension IterableEnum<T extends Enum> on Iterable<T> {
     }
     return orElse();
   }
-
-  List<String> names() => map<String>((e) => e.name).toList();
 }
