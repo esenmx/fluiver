@@ -7,4 +7,5 @@ analyzer:
 
 linter:
   rules:
+    avoid_js_rounded_ints: false
     public_member_api_docs: false

@@ -1,22 +1,29 @@
 # Changelog
 
+## 2.3.0
+
+- Added `index` parameter to `separator` in `Iterable.separated` extension method.
+- Added `let<R>(R Function(T it) fn)` extension to `Object` for scope functions.
+- Renamed `deviceHasConnection` to `hasDeviceConnection` for clarity.
+- Added `fastHash` function.
+
 ## 2.2.0
 
-Removed these methods since they are already in `package:collection`.
-Here removed methods and their equivalents in `package:collection`:
+Refactored `Iterable` extensions to complement the `package:collection` methods instead of duplicating them.
+Here removed extension methods and their equivalents in `package:collection` as follows:
 
-- `Iterable<Widget>.slicedWidgetsBuilder` => Use `Iterable.groupListsBy` instead.
-- `Iterable.firstWhereOrNull`, `Iterable.lastWhereOrNull`, `Iterable.whereNot` => Use `Iterable.firstWhereOrNull`, `Iterable.lastWhereOrNull`, `Iterable.whereNot` instead.
-- `Iterable.groupAsMap` => Use `Iterable.groupFoldBy`, `Iterable.groupListsBy`, `Iterable.groupSetsBy`
-- `Iterable.to2D` => Use `Iterable.slices`
-- `Iterable.earliest`, `Iterable.latest` => Use `Iterable.minBy` and `Iterable.maxBy`
-- `Iterable<num>.sum`, `Iterable<num>.average`, `Iterable<num>.lowest`, `Iterable<num>.highest` => Use `Iterable<num>.sum`, `Iterable<num>.average`, `Iterable<num>.min`, `Iterable<num>.max`
+- `Iterable<Widget>.slicedWidgetsBuilder` => `Iterable.groupListsBy`
+- `Iterable.firstWhereOrNull`, `Iterable.lastWhereOrNull`, `Iterable.whereNot` =>  `Iterable.firstWhereOrNull`, `Iterable.lastWhereOrNull`, `Iterable.whereNo`.
+- `Iterable.groupAsMap` => `Iterable.groupFoldBy`, `Iterable.groupListsBy`, `Iterable.groupSetsBy`
+- `Iterable.to2D` => `Iterable.slices`
+- `Iterable.earliest`, `Iterable.latest` => `Iterable.minBy`, `Iterable.maxBy`
+- `Iterable<num>.sum`, `Iterable<num>.average`, `Iterable<num>.lowest`, `Iterable<num>.highest` => `Iterable<num>.sum`, `Iterable<num>.average`, `Iterable<num>.min`, `Iterable<num>.max`
 - `Iterable<Iterable>.flatten` => `Iterable<Iterable>.flattened`, `Iterable<Iterable>.flattenedToList`, `Iterable<Iterable>.flattenedToSet`
-- `Iterable.sliced` => Use `Iterable.skip()` + `Iterable.take()` combination instead.
-- `List.safeSubList` => Use `Iterable.skip()` + `Iterable.take()` combination instead.
-- `Set.subSet` => Use `Iterable.skip()` + `Iterable.take() + .toSet()` combination instead.
+- `Iterable.sliced` => `Iterable.skip()` + `Iterable.take()` combination
+- `List.safeSubList` => `Iterable.skip()` + `Iterable.take()` combination
+- `Set.subSet` => `Iterable.skip()` + `Iterable.take()` + `Iterable.toSet()` combination
 
-Renamed these methods:
+Renamed these extension methods:
 
 - `Iterable.separate` => `Iterable.separated`
 
