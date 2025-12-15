@@ -7,7 +7,7 @@ void main() {
   group('separated', () {
     List<Widget> separated(int n) {
       return <Widget>[for (var i = 0; i < n; i++) const FlutterLogo()]
-          .separated(() => const Divider())
+          .separated((_) => const Divider())
           .toList();
     }
 

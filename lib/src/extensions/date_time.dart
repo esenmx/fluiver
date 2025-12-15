@@ -33,12 +33,25 @@ extension DateTimeMerge on DateTime {
 /// {@macro extensionFor}
 /// Adding time units to [DateTime].
 extension DateTimeAdd on DateTime {
+  /// {@macro returns_datetime}
   DateTime addYears(int years) => copyWith(year: year + years);
+
+  /// {@macro returns_datetime}
   DateTime addMonths(int months) => copyWith(month: month + months);
+
+  /// {@macro returns_datetime}
   DateTime addWeeks(int weeks) => copyWith(day: day + weeks * 7);
+
+  /// {@macro returns_datetime}
   DateTime addDays(int days) => copyWith(day: day + days);
+
+  /// {@macro returns_datetime}
   DateTime addHours(int hours) => copyWith(hour: hour + hours);
+
+  /// {@macro returns_datetime}
   DateTime addMinutes(int minutes) => copyWith(minute: minute + minutes);
+
+  /// {@macro returns_datetime}
   DateTime addSeconds(int seconds) => copyWith(second: second + seconds);
 }
 
@@ -67,7 +80,12 @@ extension DateTimeCalculator on DateTime {
   /// Calculates human age based on birth date.
   int age() {
     final now = DateTime.now();
-    final age = now.year - year;
-    return now.copyWith(year: year).isAfter(this) ? age : age - 1;
+    final birth = toLocal();
+    var age = now.year - birth.year;
+    if (now.month < birth.month ||
+        (now.month == birth.month && now.day < birth.day)) {
+      age--;
+    }
+    return age;
   }
 }

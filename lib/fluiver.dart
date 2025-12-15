@@ -12,6 +12,10 @@ library;
 /// {@template extensionFor}
 /// Extension providing convenient access to operations on the target type.
 /// {@endtemplate}
+///
+/// {@template returns_datetime}
+/// Returns a new [DateTime] with the modification.
+/// {@endtemplate}
 
 import 'dart:async';
 import 'dart:io';
@@ -30,15 +34,14 @@ part 'src/extensions/enums.dart';
 part 'src/extensions/iterable.dart';
 part 'src/extensions/key.dart';
 part 'src/extensions/map.dart';
+part 'src/extensions/object.dart';
 part 'src/extensions/stream.dart';
 part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
 part 'src/extensions/time_of_day.dart';
 part 'src/helpers/functions.dart';
-part 'src/helpers/input_counter_builder.dart';
 part 'src/helpers/observer.dart';
 part 'src/helpers/reactive.dart';
-part 'src/helpers/slivers.dart';
 part 'src/widgets/flex_grid.dart';
 part 'src/widgets/padded_flex.dart';
 part 'src/widgets/ticker_builder.dart';
