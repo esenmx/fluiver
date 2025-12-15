@@ -113,10 +113,23 @@ birthDate.age();
 'John Doe'.initials();       // JD
 ```
 
+### Object
+
+```dart
+// Scope function
+int? value = 'not42'.let(int.tryParse);
+```
+
 ### Iterable
 
 ```dart
 list.separated(() => Divider());
+```
+
+### Map & Stream
+
+```dart
+stream.whereType<int>();
 ```
 
 ---
@@ -183,6 +196,14 @@ BrightnessObserver((brightness) => ...);
 AppLifecycleObserver((state) => ...);
 ```
 
+### Connectivity
+
+```dart
+if (await hasDeviceConnection()) {
+  // Online
+}
+```
+
 ---
 
 ## Philosophy
@@ -194,6 +215,22 @@ AppLifecycleObserver((state) => ...);
 
 ---
 
-## License
+## Agent Rules
 
-MIT
+Add these rules to your Cursor/Claude Code/AntiGravity "Rules for AI" to generate optimal `fluiver` code:
+
+@fluiver_rules
+
+**Context Access**: ALWAYS use `context.extension` formula.
+
+- ❌ `Theme.of(context).colorScheme.primary`
+- ✅ `context.primaryColor`
+- ❌ `Theme.of(context).textTheme.titleLarge`
+- ✅ `context.titleLargeTextStyle`
+- ❌ `MediaQuery.of(context).size.width`
+- ✅ `context.screenWidth`
+
+**Layout Efficiency**: Prefer declarative widgets over imperative nesting.
+
+- ❌ `Padding(padding: EdgeInsets.all(16), child: Column(...))`
+- ✅ `PaddedColumn(padding: EdgeInsets.all(16), ...)`
