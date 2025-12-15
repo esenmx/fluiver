@@ -11,7 +11,7 @@ part of '../../fluiver.dart';
 ///   crossAxisCount: 2,
 ///   mainAxisSpacing: 8,
 ///   crossAxisSpacing: 8,
-///   childAspectRatio: 0.8,
+///   childAspectRatio: .8,
 ///   padding: EdgeInsets.all(16),
 ///   children: List.generate(10, (i) => ColoredBox(color: Colors.blue)),
 /// )
