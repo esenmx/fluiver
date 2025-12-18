@@ -20,6 +20,7 @@ library;
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -30,7 +31,7 @@ part 'src/extensions/build_context.dart';
 part 'src/extensions/date_time.dart';
 part 'src/extensions/edge_insets.dart';
 part 'src/extensions/enum.dart';
-part 'src/extensions/enums.dart';
+part 'src/extensions/flutter_enums.dart';
 part 'src/extensions/iterable.dart';
 part 'src/extensions/key.dart';
 part 'src/extensions/map.dart';
