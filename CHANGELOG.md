@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.4.0
+
+- Added `platformSpecific` utility function.
+- Modernized `LocaleObserver` and `BrightnessObserver` using `PlatformDispatcher`.
+- Adopted shorthand enum values throughout the library.
+- Improved `AppLifecycleState` and other enum extensions.
+- Fixed `ThrottleLast` task execution.
+- Updated minimum SDK to 3.10.1.
+
 ## 2.3.0
 
 - Added `index` parameter to `separator` in `Iterable.separated` extension method.
