@@ -5,7 +5,7 @@ part of '../../fluiver.dart';
 Future<bool> hasDeviceConnection() {
   return InternetAddress.lookup('example.com')
       .then((value) => value.isNotEmpty && value[0].rawAddress.isNotEmpty)
-      .catchError((error) => false);
+      .onError<SocketException>((_, _) => false);
 }
 
 /// FNV-1a 64-bit hash algorithm optimized for Dart Strings (VM Only).
@@ -24,4 +24,43 @@ int fastHash(String string) {
     hash *= fnvPrime;
   }
   return hash;
+}
+
+/// Executes the appropriate callback based on the current platform.
+///
+/// Use [android] for Android devices.
+/// Use [fuchsia] for Fuchsia devices.
+/// Use [ios] for iOS devices.
+/// Use [linux] for Linux devices.
+/// Use [macOS] for MacOS devices.
+/// Use [windows] for Windows devices.
+/// Use [web] for Web devices.
+T platformSpecific<T>({
+  T Function()? android,
+  T Function()? fuchsia,
+  T Function()? ios,
+  T Function()? linux,
+  T Function()? macOS,
+  T Function()? windows,
+  T Function()? web,
+}) {
+  final T Function()? callback;
+  if (kIsWeb) {
+    callback = web;
+  } else {
+    callback = switch (defaultTargetPlatform) {
+      TargetPlatform.android => android,
+      TargetPlatform.fuchsia => fuchsia,
+      TargetPlatform.iOS => ios,
+      TargetPlatform.linux => linux,
+      TargetPlatform.macOS => macOS,
+      TargetPlatform.windows => windows,
+    };
+  }
+
+  if (callback != null) {
+    return callback();
+  }
+
+  throw UnsupportedError(kIsWeb ? 'Web' : defaultTargetPlatform.name);
 }

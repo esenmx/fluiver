@@ -6,7 +6,7 @@ part of '../../fluiver.dart';
 ///    final observer = LocaleObserver((locales) => ref.state = locales);
 ///    WidgetsBinding.instance.addObserver(observer);
 ///    ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
-///    return WidgetsBinding.instance.window.locales.first;
+///    return PlatformDispatcher.instance.locales;
 ///  });
 /// ```
 class LocaleObserver extends WidgetsBindingObserver {
@@ -27,7 +27,7 @@ class LocaleObserver extends WidgetsBindingObserver {
 ///   final observer = BrightnessObserver((brightness) => ref.state = brightness);
 ///   WidgetsBinding.instance.addObserver(observer);
 ///   ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
-///   return WidgetsBinding.instance.window.platformBrightness;
+///   return PlatformDispatcher.instance.platformBrightness;
 /// });
 /// ```
 class BrightnessObserver extends WidgetsBindingObserver {

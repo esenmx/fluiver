@@ -69,7 +69,7 @@ class ThrottleLast with _TimerMixin {
   void call(VoidCallback task) {
     _last = task;
     if (_timer?.isActive != true) {
-      _timer = Timer(duration, _last);
+      _timer = Timer(duration, () => _last());
     }
   }
 }
