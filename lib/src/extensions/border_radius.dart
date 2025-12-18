@@ -4,39 +4,39 @@ part of '../../fluiver.dart';
 /// Adding radius values to [BorderRadius].
 extension BorderRadiusAdd on BorderRadius {
   BorderRadius addAll(double radius) {
-    return this + BorderRadius.circular(radius);
+    return this + .circular(radius);
   }
 
   BorderRadius addLeft(double radius) {
-    return this + BorderRadius.horizontal(left: Radius.circular(radius));
+    return this + .horizontal(left: .circular(radius));
   }
 
   BorderRadius addTop(double radius) {
-    return this + BorderRadius.vertical(top: Radius.circular(radius));
+    return this + .vertical(top: .circular(radius));
   }
 
   BorderRadius addRight(double radius) {
-    return this + BorderRadius.horizontal(right: Radius.circular(radius));
+    return this + .horizontal(right: .circular(radius));
   }
 
   BorderRadius addBottom(double radius) {
-    return this + BorderRadius.vertical(bottom: Radius.circular(radius));
+    return this + .vertical(bottom: .circular(radius));
   }
 
   BorderRadius addTopLeft(double radius) {
-    return this + BorderRadius.only(topLeft: Radius.circular(radius));
+    return this + .only(topLeft: .circular(radius));
   }
 
   BorderRadius addTopRight(double radius) {
-    return this + BorderRadius.only(topRight: Radius.circular(radius));
+    return this + .only(topRight: .circular(radius));
   }
 
   BorderRadius addBottomRight(double radius) {
-    return this + BorderRadius.only(bottomRight: Radius.circular(radius));
+    return this + .only(bottomRight: .circular(radius));
   }
 
   BorderRadius addBottomLeft(double radius) {
-    return this + BorderRadius.only(bottomLeft: Radius.circular(radius));
+    return this + .only(bottomLeft: .circular(radius));
   }
 }
 
@@ -60,19 +60,19 @@ extension BorderRadiusSet on BorderRadius {
   }
 
   BorderRadius setTopLeft(double radius) {
-    return copyWith(topLeft: Radius.circular(radius));
+    return copyWith(topLeft: .circular(radius));
   }
 
   BorderRadius setTopRight(double radius) {
-    return copyWith(topRight: Radius.circular(radius));
+    return copyWith(topRight: .circular(radius));
   }
 
   BorderRadius setBottomRight(double radius) {
-    return copyWith(bottomRight: Radius.circular(radius));
+    return copyWith(bottomRight: .circular(radius));
   }
 
   BorderRadius setBottomLeft(double radius) {
-    return copyWith(bottomLeft: Radius.circular(radius));
+    return copyWith(bottomLeft: .circular(radius));
   }
 }
 
@@ -80,34 +80,34 @@ extension BorderRadiusSet on BorderRadius {
 /// Extracting specific corners from [BorderRadius].
 extension BorderRadiusOnly on BorderRadius {
   BorderRadius get onlyTopLeft {
-    return BorderRadius.only(topLeft: topLeft);
+    return .only(topLeft: topLeft);
   }
 
   BorderRadius get onlyTopRight {
-    return BorderRadius.only(topRight: topRight);
+    return .only(topRight: topRight);
   }
 
   BorderRadius get onlyBottomRight {
-    return BorderRadius.only(bottomRight: bottomRight);
+    return .only(bottomRight: bottomRight);
   }
 
   BorderRadius get onlyBottomLeft {
-    return BorderRadius.only(bottomLeft: bottomLeft);
+    return .only(bottomLeft: bottomLeft);
   }
 
   BorderRadius get onlyLeft {
-    return BorderRadius.only(topLeft: topLeft, bottomLeft: bottomLeft);
+    return .only(topLeft: topLeft, bottomLeft: bottomLeft);
   }
 
   BorderRadius get onlyTop {
-    return BorderRadius.only(topLeft: topLeft, topRight: topRight);
+    return .only(topLeft: topLeft, topRight: topRight);
   }
 
   BorderRadius get onlyRight {
-    return BorderRadius.only(topRight: topRight, bottomRight: bottomRight);
+    return .only(topRight: topRight, bottomRight: bottomRight);
   }
 
   BorderRadius get onlyBottom {
-    return BorderRadius.only(bottomRight: bottomRight, bottomLeft: bottomLeft);
+    return .only(bottomRight: bottomRight, bottomLeft: bottomLeft);
   }
 }
