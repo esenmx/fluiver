@@ -35,38 +35,43 @@ class MockLocaleObserver extends _i1.Mock implements _i2.LocaleObserver {
   }
 
   @override
-  void Function(List<_i3.Locale>?) get onLocalesChanged => (super.noSuchMethod(
-        Invocation.getter(#onLocalesChanged),
-        returnValue: (List<_i3.Locale>? locales) {},
-      ) as void Function(List<_i3.Locale>?));
+  void Function(List<_i3.Locale>?) get onLocalesChanged =>
+      (super.noSuchMethod(
+            Invocation.getter(#onLocalesChanged),
+            returnValue: (List<_i3.Locale>? locales) {},
+          )
+          as void Function(List<_i3.Locale>?));
 
   @override
   void didChangeLocales(List<_i3.Locale>? locales) => super.noSuchMethod(
-        Invocation.method(
-          #didChangeLocales,
-          [locales],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #didChangeLocales,
+      [locales],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i4.Future<bool> didPopRoute() => (super.noSuchMethod(
-        Invocation.method(
-          #didPopRoute,
-          [],
-        ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+  _i4.Future<bool> didPopRoute() =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #didPopRoute,
+              [],
+            ),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
 
   @override
   bool handleStartBackGesture(_i5.PredictiveBackEvent? backEvent) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #handleStartBackGesture,
-          [backEvent],
-        ),
-        returnValue: false,
-      ) as bool);
+            Invocation.method(
+              #handleStartBackGesture,
+              [backEvent],
+            ),
+            returnValue: false,
+          )
+          as bool);
 
   @override
   void handleUpdateBackGestureProgress(_i5.PredictiveBackEvent? backEvent) =>
@@ -80,68 +85,72 @@ class MockLocaleObserver extends _i1.Mock implements _i2.LocaleObserver {
 
   @override
   void handleCommitBackGesture() => super.noSuchMethod(
-        Invocation.method(
-          #handleCommitBackGesture,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #handleCommitBackGesture,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void handleCancelBackGesture() => super.noSuchMethod(
-        Invocation.method(
-          #handleCancelBackGesture,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #handleCancelBackGesture,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i4.Future<bool> didPushRoute(String? route) => (super.noSuchMethod(
-        Invocation.method(
-          #didPushRoute,
-          [route],
-        ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+  _i4.Future<bool> didPushRoute(String? route) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #didPushRoute,
+              [route],
+            ),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
 
   @override
   _i4.Future<bool> didPushRouteInformation(
-          _i6.RouteInformation? routeInformation) =>
+    _i6.RouteInformation? routeInformation,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #didPushRouteInformation,
-          [routeInformation],
-        ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+            Invocation.method(
+              #didPushRouteInformation,
+              [routeInformation],
+            ),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
 
   @override
   void didChangeMetrics() => super.noSuchMethod(
-        Invocation.method(
-          #didChangeMetrics,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #didChangeMetrics,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void didChangeTextScaleFactor() => super.noSuchMethod(
-        Invocation.method(
-          #didChangeTextScaleFactor,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #didChangeTextScaleFactor,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void didChangePlatformBrightness() => super.noSuchMethod(
-        Invocation.method(
-          #didChangePlatformBrightness,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #didChangePlatformBrightness,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void didChangeAppLifecycleState(_i3.AppLifecycleState? state) =>
@@ -155,38 +164,41 @@ class MockLocaleObserver extends _i1.Mock implements _i2.LocaleObserver {
 
   @override
   void didChangeViewFocus(_i3.ViewFocusEvent? event) => super.noSuchMethod(
-        Invocation.method(
-          #didChangeViewFocus,
-          [event],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #didChangeViewFocus,
+      [event],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i4.Future<_i3.AppExitResponse> didRequestAppExit() => (super.noSuchMethod(
-        Invocation.method(
-          #didRequestAppExit,
-          [],
-        ),
-        returnValue:
-            _i4.Future<_i3.AppExitResponse>.value(_i3.AppExitResponse.exit),
-      ) as _i4.Future<_i3.AppExitResponse>);
+  _i4.Future<_i3.AppExitResponse> didRequestAppExit() =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #didRequestAppExit,
+              [],
+            ),
+            returnValue: _i4.Future<_i3.AppExitResponse>.value(
+              _i3.AppExitResponse.exit,
+            ),
+          )
+          as _i4.Future<_i3.AppExitResponse>);
 
   @override
   void didHaveMemoryPressure() => super.noSuchMethod(
-        Invocation.method(
-          #didHaveMemoryPressure,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #didHaveMemoryPressure,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void didChangeAccessibilityFeatures() => super.noSuchMethod(
-        Invocation.method(
-          #didChangeAccessibilityFeatures,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #didChangeAccessibilityFeatures,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 }

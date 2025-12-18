@@ -20,8 +20,9 @@ void main() {
       check('foo,,bar'.capitalizeAll(separator: ',')).equals('Foo,Bar');
     });
     test('custom joiner', () {
-      check('foo,,bar'.capitalizeAll(separator: ',', joiner: ' '))
-          .equals('Foo Bar');
+      check(
+        'foo,,bar'.capitalizeAll(separator: ',', joiner: ' '),
+      ).equals('Foo Bar');
     });
   });
 

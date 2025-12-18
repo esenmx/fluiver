@@ -73,8 +73,9 @@ void main() {
     });
 
     test('one year ago minus margin', () {
-      final birth =
-          now.copyWith(year: year - 1).subtract(const Duration(seconds: 1));
+      final birth = now
+          .copyWith(year: year - 1)
+          .subtract(const Duration(seconds: 1));
       check(birth.age()).equals(1);
     });
   });
