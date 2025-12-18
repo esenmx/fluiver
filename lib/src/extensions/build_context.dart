@@ -63,6 +63,7 @@ extension BuildContextTextStyle on BuildContext {
 /// Provides convenient access to [ColorScheme] colors.
 extension BuildContextsColorScheme on BuildContext {
   ColorScheme get _cs => _t.colorScheme;
+
   Color get primaryColor => _cs.primary;
   Color get onPrimaryColor => _cs.onPrimary;
   Color get primaryContainerColor => _cs.primaryContainer;
@@ -95,9 +96,6 @@ extension BuildContextsColorScheme on BuildContext {
   Color get errorContainerColor => _cs.errorContainer;
   Color get onErrorContainerColor => _cs.onErrorContainer;
 
-  Color get backgroundColor => _cs.surface;
-  Color get onBackgroundColor => _cs.onSurface;
-
   Color get surfaceColor => _cs.surface;
   Color get onSurfaceColor => _cs.onSurface;
   Color get surfaceVariantColor => _cs.surfaceContainerHighest;
@@ -118,6 +116,4 @@ extension BuildContextsColorScheme on BuildContext {
   Color? get surfaceContainerColor => _cs.surfaceContainer;
   Color? get surfaceContainerHighColor => _cs.surfaceContainerHigh;
   Color? get surfaceContainerHighestColor => _cs.surfaceContainerHighest;
-
-  Brightness get colorSchemeBrightness => _cs.brightness;
 }

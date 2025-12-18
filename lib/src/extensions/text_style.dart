@@ -51,24 +51,23 @@ extension TextStyleColor on TextStyle {
 /// {@macro extensionFor}
 /// Applying font weights to [TextStyle].
 extension TextStyleFontWeight on TextStyle {
-  TextStyle get withWeight100 => copyWith(fontWeight: FontWeight.w100);
-  TextStyle get withWeight200 => copyWith(fontWeight: FontWeight.w200);
-  TextStyle get withWeight300 => copyWith(fontWeight: FontWeight.w300);
-  TextStyle get withWeight400 => copyWith(fontWeight: FontWeight.w400);
-  TextStyle get withWeight500 => copyWith(fontWeight: FontWeight.w500);
-  TextStyle get withWeight600 => copyWith(fontWeight: FontWeight.w600);
-  TextStyle get withWeight700 => copyWith(fontWeight: FontWeight.w700);
-  TextStyle get withWeight800 => copyWith(fontWeight: FontWeight.w800);
-  TextStyle get withWeight900 => copyWith(fontWeight: FontWeight.w900);
+  TextStyle get withWeight100 => copyWith(fontWeight: .w100);
+  TextStyle get withWeight200 => copyWith(fontWeight: .w200);
+  TextStyle get withWeight300 => copyWith(fontWeight: .w300);
+  TextStyle get withWeight400 => copyWith(fontWeight: .w400);
+  TextStyle get withWeight500 => copyWith(fontWeight: .w500);
+  TextStyle get withWeight600 => copyWith(fontWeight: .w600);
+  TextStyle get withWeight700 => copyWith(fontWeight: .w700);
+  TextStyle get withWeight800 => copyWith(fontWeight: .w800);
+  TextStyle get withWeight900 => copyWith(fontWeight: .w900);
 }
 
 /// {@macro extensionFor}
 /// Applying text decorations to [TextStyle].
 extension TextStyleDecoration on TextStyle {
-  TextStyle get withUnderline => copyWith(decoration: TextDecoration.underline);
-  TextStyle get withOverline => copyWith(decoration: TextDecoration.overline);
-  TextStyle get withLineThrough =>
-      copyWith(decoration: TextDecoration.lineThrough);
+  TextStyle get withUnderline => copyWith(decoration: .underline);
+  TextStyle get withOverline => copyWith(decoration: .overline);
+  TextStyle get withLineThrough => copyWith(decoration: .lineThrough);
 }
 
 /// {@macro extensionFor}

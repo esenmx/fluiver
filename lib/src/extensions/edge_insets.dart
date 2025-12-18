@@ -3,24 +3,24 @@ part of '../../fluiver.dart';
 /// {@macro extensionFor}
 /// Adding padding values to [EdgeInsets].
 extension EdgeInsetsAdd on EdgeInsets {
-  EdgeInsets addAll(double value) => this + EdgeInsets.all(value);
+  EdgeInsets addAll(double value) => this + .all(value);
 
-  EdgeInsets addLeft(double value) => this + EdgeInsets.only(left: value);
-  EdgeInsets addTop(double value) => this + EdgeInsets.only(top: value);
-  EdgeInsets addRight(double value) => this + EdgeInsets.only(right: value);
-  EdgeInsets addBottom(double value) => this + EdgeInsets.only(bottom: value);
+  EdgeInsets addLeft(double value) => this + .only(left: value);
+  EdgeInsets addTop(double value) => this + .only(top: value);
+  EdgeInsets addRight(double value) => this + .only(right: value);
+  EdgeInsets addBottom(double value) => this + .only(bottom: value);
 }
 
 /// {@macro extensionFor}
 /// Extracting specific sides from [EdgeInsets].
 extension EdgeInsetsOnly on EdgeInsets {
-  EdgeInsets get onlyLeft => EdgeInsets.only(left: left);
-  EdgeInsets get onlyTop => EdgeInsets.only(top: top);
-  EdgeInsets get onlyRight => EdgeInsets.only(right: right);
-  EdgeInsets get onlyBottom => EdgeInsets.only(bottom: bottom);
+  EdgeInsets get onlyLeft => .only(left: left);
+  EdgeInsets get onlyTop => .only(top: top);
+  EdgeInsets get onlyRight => .only(right: right);
+  EdgeInsets get onlyBottom => .only(bottom: bottom);
 
-  EdgeInsets get onlyVertical => EdgeInsets.only(top: top, bottom: bottom);
-  EdgeInsets get onlyHorizontal => EdgeInsets.only(left: left, right: right);
+  EdgeInsets get onlyVertical => .only(top: top, bottom: bottom);
+  EdgeInsets get onlyHorizontal => .only(left: left, right: right);
 }
 
 /// {@macro extensionFor}
@@ -39,14 +39,14 @@ extension EdgeInsetsSet on EdgeInsets {
 /// Applying [MediaQuery] insets to [EdgeInsets].
 extension EdgeInsetsMediaQuery on EdgeInsets {
   EdgeInsets withStatusBarMargin(BuildContext context) {
-    return this + EdgeInsets.only(top: context.topViewPadding);
+    return this + .only(top: context.topViewPadding);
   }
 
   EdgeInsets withBottomBarMargin(BuildContext context) {
-    return this + EdgeInsets.only(bottom: context.bottomViewPadding);
+    return this + .only(bottom: context.bottomViewPadding);
   }
 
   EdgeInsets withKeyboardInset(BuildContext context) {
-    return this + EdgeInsets.only(bottom: context.bottomViewInset);
+    return this + .only(bottom: context.bottomViewInset);
   }
 }

@@ -21,17 +21,17 @@ class FlexGrid extends MultiChildRenderObjectWidget {
     required this.crossAxisCount,
     super.children,
     this.childAspectRatio = 1.0,
-    this.mainAxisSpacing = 0.0,
-    this.crossAxisSpacing = 0.0,
-    this.mainAxisExtent = 0.0,
-    this.direction = Axis.vertical,
-    this.padding = EdgeInsets.zero,
+    this.mainAxisSpacing = .0,
+    this.crossAxisSpacing = .0,
+    this.mainAxisExtent = .0,
+    this.direction = .vertical,
+    this.padding = .zero,
     super.key,
-  })  : assert(crossAxisCount > 0, 'crossAxisCount must be greater than 0'),
-        assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0'),
-        assert(mainAxisSpacing >= 0, 'mainAxisSpacing must be 0 or positive'),
-        assert(crossAxisSpacing >= 0, 'crossAxisSpacing must be 0 or positive'),
-        assert(mainAxisExtent >= 0, 'mainAxisExtent must be 0 or positive');
+  }) : assert(crossAxisCount > 0, 'crossAxisCount must be greater than 0'),
+       assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0'),
+       assert(mainAxisSpacing >= 0, 'mainAxisSpacing must be 0 or positive'),
+       assert(crossAxisSpacing >= 0, 'crossAxisSpacing must be 0 or positive'),
+       assert(mainAxisExtent >= 0, 'mainAxisExtent must be 0 or positive');
 
   /// The number of columns in the grid.
   final int crossAxisCount;
@@ -97,14 +97,14 @@ class RenderFlexGrid extends RenderBox
     required Axis direction,
     required EdgeInsetsGeometry padding,
     TextDirection? textDirection,
-  })  : _crossAxisCount = crossAxisCount,
-        _childAspectRatio = childAspectRatio,
-        _mainAxisSpacing = mainAxisSpacing,
-        _crossAxisSpacing = crossAxisSpacing,
-        _mainAxisExtent = mainAxisExtent,
-        _direction = direction,
-        _padding = padding,
-        _textDirection = textDirection;
+  }) : _crossAxisCount = crossAxisCount,
+       _childAspectRatio = childAspectRatio,
+       _mainAxisSpacing = mainAxisSpacing,
+       _crossAxisSpacing = crossAxisSpacing,
+       _mainAxisExtent = mainAxisExtent,
+       _direction = direction,
+       _padding = padding,
+       _textDirection = textDirection;
 
   /// [crossAxisCount]
   int _crossAxisCount;
@@ -194,10 +194,9 @@ class RenderFlexGrid extends RenderBox
     markNeedsLayout();
   }
 
-  EdgeInsets get _resolvedPadding =>
-      _padding.resolve(_textDirection ?? TextDirection.ltr);
+  EdgeInsets get _resolvedPadding => _padding.resolve(_textDirection ?? .ltr);
 
-  bool get _isVertical => _direction == Axis.vertical;
+  bool get _isVertical => _direction == .vertical;
 
   @override
   void setupParentData(RenderBox child) {
@@ -242,7 +241,8 @@ class RenderFlexGrid extends RenderBox
       final mainAxisOffset = row * (childMainAxisExtent + _mainAxisSpacing);
 
       final parentData = child.parentData! as _FlexGridParentData
-        ..offset = paddingOffset +
+        ..offset =
+            paddingOffset +
             (_isVertical
                 ? Offset(crossAxisOffset, mainAxisOffset)
                 : Offset(mainAxisOffset, crossAxisOffset));
