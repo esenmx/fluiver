@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.1
+
+- Broadened SDK constraint to `>=3.10.0 <4.0.0`.
+
 ## 2.4.0
 
 - Added `platformSpecific` utility function.
