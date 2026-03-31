@@ -10,17 +10,17 @@ extension TextStyleColor on TextStyle {
   TextStyle withColor(Color color) => copyWith(color: color);
 
   /// [Colors.white]
-  TextStyle get withColorWhite38 => copyWith(color: Colors.white38);
-  TextStyle get withColorWhite54 => copyWith(color: Colors.white54);
-  TextStyle get withColorWhite70 => copyWith(color: Colors.white70);
-  TextStyle get withColorWhite => copyWith(color: Colors.white);
+  TextStyle get withColorWhite38 => withColor(Colors.white38);
+  TextStyle get withColorWhite54 => withColor(Colors.white54);
+  TextStyle get withColorWhite70 => withColor(Colors.white70);
+  TextStyle get withColorWhite => withColor(Colors.white);
 
   /// [Colors.black]
-  TextStyle get withColorBlack38 => copyWith(color: Colors.black38);
-  TextStyle get withColorBlack54 => copyWith(color: Colors.black54);
-  TextStyle get withColorBlack70 => copyWith(color: const Color(0xB3000000));
-  TextStyle get withColorBlack87 => copyWith(color: Colors.black87);
-  TextStyle get withColorBlack => copyWith(color: Colors.black);
+  TextStyle get withColorBlack38 => withColor(Colors.black38);
+  TextStyle get withColorBlack54 => withColor(Colors.black54);
+  TextStyle get withColorBlack70 => withColor(const Color(0xB3000000));
+  TextStyle get withColorBlack87 => withColor(Colors.black87);
+  TextStyle get withColorBlack => withColor(Colors.black);
 
   /// [ColorScheme]
   TextStyle withPrimaryColor(BuildContext context) {

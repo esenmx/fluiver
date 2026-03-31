@@ -9,7 +9,7 @@ Fluiver keeps everyday Flutter reads to a single dot (`context.` / `list.`) with
 
 ```yaml
 dependencies:
-  fluiver: ^2.2.0
+  fluiver: ^2.4.1
 ```
 
 ---
