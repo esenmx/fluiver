@@ -6,11 +6,15 @@ extension BuildContextMediaQuery on BuildContext {
   double get screenWidth => MediaQuery.sizeOf(this).width;
   double get screenHeight => MediaQuery.sizeOf(this).height;
 
-  bool get isPlatformDark => MediaQuery.platformBrightnessOf(this).isDark;
-  bool get isPlatformLight => MediaQuery.platformBrightnessOf(this).isLight;
+  bool get isPlatformDark =>
+      MediaQuery.platformBrightnessOf(this) == Brightness.dark;
+  bool get isPlatformLight =>
+      MediaQuery.platformBrightnessOf(this) == Brightness.light;
 
-  bool get isOrientationPortrait => MediaQuery.orientationOf(this).isPortrait;
-  bool get isOrientationLandscape => MediaQuery.orientationOf(this).isLandscape;
+  bool get isOrientationPortrait =>
+      MediaQuery.orientationOf(this) == Orientation.portrait;
+  bool get isOrientationLandscape =>
+      MediaQuery.orientationOf(this) == Orientation.landscape;
 
   double get topViewPadding => MediaQuery.viewPaddingOf(this).top;
   double get bottomViewPadding => MediaQuery.viewPaddingOf(this).bottom;
@@ -24,15 +28,15 @@ extension _BuildContext on BuildContext {
 /// {@macro extensionFor}
 /// Checking theme brightness.
 extension BuildContextThemeBrightness on BuildContext {
-  bool get isThemeDark => _t.brightness.isDark;
-  bool get isThemeLight => _t.brightness.isLight;
+  bool get isThemeDark => _t.brightness == Brightness.dark;
+  bool get isThemeLight => _t.brightness == Brightness.light;
 }
 
 /// {@macro extensionFor}
 /// Checking text direction.
 extension BuildContextDirectionality on BuildContext {
-  bool get isDirectionalityLtr => Directionality.of(this).isLtr;
-  bool get isDirectionalityRtl => Directionality.of(this).isRtl;
+  bool get isDirectionalityLtr => Directionality.of(this) == TextDirection.ltr;
+  bool get isDirectionalityRtl => Directionality.of(this) == TextDirection.rtl;
 }
 
 /// {@macro extensionFor}

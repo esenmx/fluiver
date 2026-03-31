@@ -2,28 +2,28 @@ part of '../../fluiver.dart';
 
 /// A function that disables the input counter widget.
 /// Used for [TextField.buildCounter] to disable the input counter widget.
-final InputCounterWidgetBuilder inputCounterDisabler =
-    (
-      BuildContext context, {
-      required int currentLength,
-      required int? maxLength,
-      required bool isFocused,
-    }) {
-      return null;
-    };
+Widget? disabledInputCounterBuilder(
+  BuildContext context, {
+  required int currentLength,
+  required int? maxLength,
+  required bool isFocused,
+}) => null;
 
 /// Checks whether the device has a connection to the internet or not.
 ///
-/// Uses a direct socket connection to Cloudflare's DNS (1.1.1.1:53) for faster,
+/// Uses a direct socket connection to Cloudflare's DNS (1.0.0.1:53) for faster,
 /// more reliable connectivity detection without DNS resolution overhead.
 Future<bool> hasDeviceConnection() {
   return Socket.connect(
-        InternetAddress('1.1.1.1'),
+        InternetAddress('1.0.0.1'),
         53,
         timeout: const Duration(seconds: 2),
       )
-      .then((socket) => socket.close().then((_) => true))
-      .onError((_, __) => false);
+      .then((socket) {
+        unawaited(socket.close());
+        return true;
+      })
+      .onError((_, _) => false);
 }
 
 /// FNV-1a 64-bit hash algorithm optimized for Dart Strings (VM Only).
@@ -80,5 +80,5 @@ T platformSpecific<T>({
     return callback();
   }
 
-  throw UnsupportedError(kIsWeb ? 'Web' : defaultTargetPlatform.name);
+  throw UnsupportedError(kIsWeb ? 'web' : defaultTargetPlatform.name);
 }
