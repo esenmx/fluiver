@@ -1,11 +1,29 @@
 part of '../../fluiver.dart';
 
-/// Checks whether the device has a connection to the internet or not
-/// Reference: [https://stackoverflow.com/a/49648870/10380182]
+/// A function that disables the input counter widget.
+/// Used for [TextField.buildCounter] to disable the input counter widget.
+final InputCounterWidgetBuilder inputCounterDisabler =
+    (
+      BuildContext context, {
+      required int currentLength,
+      required int? maxLength,
+      required bool isFocused,
+    }) {
+      return null;
+    };
+
+/// Checks whether the device has a connection to the internet or not.
+///
+/// Uses a direct socket connection to Cloudflare's DNS (1.1.1.1:53) for faster,
+/// more reliable connectivity detection without DNS resolution overhead.
 Future<bool> hasDeviceConnection() {
-  return InternetAddress.lookup('example.com')
-      .then((value) => value.isNotEmpty && value[0].rawAddress.isNotEmpty)
-      .onError<SocketException>((_, _) => false);
+  return Socket.connect(
+        InternetAddress('1.1.1.1'),
+        53,
+        timeout: const Duration(seconds: 2),
+      )
+      .then((socket) => socket.close().then((_) => true))
+      .onError((_, __) => false);
 }
 
 /// FNV-1a 64-bit hash algorithm optimized for Dart Strings (VM Only).

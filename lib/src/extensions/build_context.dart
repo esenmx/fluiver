@@ -68,28 +68,28 @@ extension BuildContextsColorScheme on BuildContext {
   Color get onPrimaryColor => _cs.onPrimary;
   Color get primaryContainerColor => _cs.primaryContainer;
   Color get onPrimaryContainerColor => _cs.onPrimaryContainer;
-  Color? get primaryFixedColor => _cs.primaryFixed;
-  Color? get primaryFixedDimColor => _cs.primaryFixedDim;
-  Color? get onPrimaryFixedColor => _cs.onPrimaryFixed;
-  Color? get onPrimaryFixedVariantColor => _cs.onPrimaryFixedVariant;
+  Color get primaryFixedColor => _cs.primaryFixed;
+  Color get primaryFixedDimColor => _cs.primaryFixedDim;
+  Color get onPrimaryFixedColor => _cs.onPrimaryFixed;
+  Color get onPrimaryFixedVariantColor => _cs.onPrimaryFixedVariant;
 
   Color get secondaryColor => _cs.secondary;
   Color get onSecondaryColor => _cs.onSecondary;
   Color get secondaryContainerColor => _cs.secondaryContainer;
   Color get onSecondaryContainerColor => _cs.onSecondaryContainer;
-  Color? get secondaryFixedColor => _cs.secondaryFixed;
-  Color? get secondaryFixedDimColor => _cs.secondaryFixedDim;
-  Color? get onSecondaryFixedColor => _cs.onSecondaryFixed;
-  Color? get onSecondaryFixedVariantColor => _cs.onSecondaryFixedVariant;
+  Color get secondaryFixedColor => _cs.secondaryFixed;
+  Color get secondaryFixedDimColor => _cs.secondaryFixedDim;
+  Color get onSecondaryFixedColor => _cs.onSecondaryFixed;
+  Color get onSecondaryFixedVariantColor => _cs.onSecondaryFixedVariant;
 
   Color get tertiaryColor => _cs.tertiary;
   Color get onTertiaryColor => _cs.onTertiary;
   Color get tertiaryContainerColor => _cs.tertiaryContainer;
   Color get onTertiaryContainerColor => _cs.onTertiaryContainer;
-  Color? get tertiaryFixedColor => _cs.tertiaryFixed;
-  Color? get tertiaryFixedDimColor => _cs.tertiaryFixedDim;
-  Color? get onTertiaryFixedColor => _cs.onTertiaryFixed;
-  Color? get onTertiaryFixedVariantColor => _cs.onTertiaryFixedVariant;
+  Color get tertiaryFixedColor => _cs.tertiaryFixed;
+  Color get tertiaryFixedDimColor => _cs.tertiaryFixedDim;
+  Color get onTertiaryFixedColor => _cs.onTertiaryFixed;
+  Color get onTertiaryFixedVariantColor => _cs.onTertiaryFixedVariant;
 
   Color get errorColor => _cs.error;
   Color get onErrorColor => _cs.onError;
@@ -103,17 +103,17 @@ extension BuildContextsColorScheme on BuildContext {
   Color get inverseSurfaceColor => _cs.inverseSurface;
   Color get onInverseSurfaceColor => _cs.onInverseSurface;
   Color get inversePrimaryColor => _cs.inversePrimary;
-  Color? get outlineColor => _cs.outline;
-  Color? get outlineVariantColor => _cs.outlineVariant;
-  Color? get shadowColor => _cs.shadow;
-  Color? get scrimColor => _cs.scrim;
-  Color? get surfaceTintColor => _cs.surfaceTint;
+  Color get outlineColor => _cs.outline;
+  Color get outlineVariantColor => _cs.outlineVariant;
+  Color get shadowColor => _cs.shadow;
+  Color get scrimColor => _cs.scrim;
+  Color get surfaceTintColor => _cs.surfaceTint;
 
-  Color? get surfaceBrightColor => _cs.surfaceBright;
-  Color? get surfaceDimColor => _cs.surfaceDim;
-  Color? get surfaceContainerLowestColor => _cs.surfaceContainerLowest;
-  Color? get surfaceContainerLowColor => _cs.surfaceContainerLow;
-  Color? get surfaceContainerColor => _cs.surfaceContainer;
-  Color? get surfaceContainerHighColor => _cs.surfaceContainerHigh;
-  Color? get surfaceContainerHighestColor => _cs.surfaceContainerHighest;
+  Color get surfaceBrightColor => _cs.surfaceBright;
+  Color get surfaceDimColor => _cs.surfaceDim;
+  Color get surfaceContainerLowestColor => _cs.surfaceContainerLowest;
+  Color get surfaceContainerLowColor => _cs.surfaceContainerLow;
+  Color get surfaceContainerColor => _cs.surfaceContainer;
+  Color get surfaceContainerHighColor => _cs.surfaceContainerHigh;
+  Color get surfaceContainerHighestColor => _cs.surfaceContainerHighest;
 }
