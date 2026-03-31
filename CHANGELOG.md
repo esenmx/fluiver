@@ -3,9 +3,9 @@
 ## 2.4.2
 
 - Removed `is*` enum extension getters; prefer shorthand comparisons (e.g. `x == .ltr`).
-- Standardized `BuildContext` enum comparisons to shorthand values.
-- Hardened `hasDeviceConnection` (timeout + best-effort close) and added `disabledInputCounterBuilder`.
-- Synced README dependency snippet with the current package version.
+- Updated `BuildContext` enum comparisons to shorthand values.
+- Improved `hasDeviceConnection` (timeout + best-effort close) and added `disabledInputCounterBuilder`.
+- Docs: update README.
 
 ## 2.4.1
 
