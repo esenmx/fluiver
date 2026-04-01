@@ -20,13 +20,7 @@ extension DateTimeMerge on DateTime {
   }
 
   DateTime withTimeOfDay(TimeOfDay time) {
-    return truncateTime().copyWith(
-      hour: time.hour,
-      minute: time.minute,
-      second: 0,
-      millisecond: 0,
-      microsecond: 0,
-    );
+    return truncateTime().copyWith(hour: time.hour, minute: time.minute);
   }
 }
 
@@ -70,20 +64,18 @@ extension DateTimeCheck on DateTime {
   bool get inThisYear => toLocal().year == DateTime.now().year;
 
   bool isWithinFromNow(Duration duration) {
-    return difference(DateTime.now()).inMicroseconds <= duration.inMicroseconds;
+    return difference(DateTime.now()).inMicroseconds.abs() <=
+        duration.inMicroseconds;
   }
 }
 
 /// {@macro extensionFor}
 /// Calculating age from [DateTime].
 extension DateTimeCalculator on DateTime {
-  /// Calculates human age based on birth date.
   int age() {
     final now = DateTime.now();
-    final birth = toLocal();
-    var age = now.year - birth.year;
-    if (now.month < birth.month ||
-        (now.month == birth.month && now.day < birth.day)) {
+    var age = now.year - year;
+    if (now.month < month || (now.month == month && now.day < day)) {
       age--;
     }
     return age;

@@ -36,7 +36,6 @@ part 'src/extensions/iterable.dart';
 part 'src/extensions/key.dart';
 part 'src/extensions/map.dart';
 part 'src/extensions/object.dart';
-part 'src/extensions/stream.dart';
 part 'src/extensions/string.dart';
 part 'src/extensions/text_style.dart';
 part 'src/extensions/time_of_day.dart';

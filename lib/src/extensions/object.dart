@@ -1,5 +1,7 @@
 part of '../../fluiver.dart';
 
+/// {@macro extensionFor}
+/// Kotlin-style `let` on any object.
 extension Let<T> on T {
   /// Returns `this` after applying `fn` to it.
   ///

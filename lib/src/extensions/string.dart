@@ -18,7 +18,7 @@ extension StringCapitalize on String {
         .join(joiner ?? separator);
   }
 
-  /// Useful when generating avatars based on name(similar to Google avatars)
+  /// Useful when generating avatars based on name (similar to Google avatars).
   /// John Doe => JD
   /// John doe => Jd
   String initials({String separator = ' ', String joiner = ''}) {
