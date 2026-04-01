@@ -23,7 +23,3 @@ extension EnumBrightness on Brightness {
 extension EnumOrientation on Orientation {
   Orientation get reverse => this == .portrait ? .landscape : .portrait;
 }
-
-/// {@macro extensionFor}
-/// [AppLifecycleState] enum utilities.
-extension EnumAppLifecycleState on AppLifecycleState {}

@@ -17,7 +17,7 @@ class TickerBuilder extends StatefulWidget {
 
 class _TickerBuilderState extends State<TickerBuilder>
     with SingleTickerProviderStateMixin {
-  late final Ticker tickerProvider = createTicker((elapsed) {
+  late final Ticker _ticker = createTicker((elapsed) {
     setState(() {
       this.elapsed = elapsed;
       widget.onTick?.call(elapsed);
@@ -27,13 +27,13 @@ class _TickerBuilderState extends State<TickerBuilder>
 
   @override
   void initState() {
-    unawaited(tickerProvider.start());
+    unawaited(_ticker.start());
     super.initState();
   }
 
   @override
   void dispose() {
-    tickerProvider.stop();
+    _ticker.stop();
     super.dispose();
   }
 

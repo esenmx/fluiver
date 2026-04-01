@@ -2,10 +2,12 @@
 
 ## 2.4.2
 
-- Removed `is*` enum extension getters; prefer shorthand comparisons (e.g. `x == .ltr`).
-- Updated `BuildContext` enum comparisons to shorthand values.
-- Improved `hasDeviceConnection` (timeout + best-effort close) and added `disabledInputCounterBuilder`.
-- Docs: update README.
+- Removed `is*` enum getters; use shorthand comparisons (`x == .ltr`).
+- Improved `hasDeviceConnection` (socket + timeout).
+- Added `disabledInputCounterBuilder`.
+- Removed `StreamWhereType` (duplicates `dart:async`).
+- Renamed `inToday` → `todayAt`, fixed `BuildContextsColorScheme` typo.
+- Doc and README fixes.
 
 ## 2.4.1
 
@@ -13,88 +15,49 @@
 
 ## 2.4.0
 
-- Added `platformSpecific` utility function.
-- Modernized `LocaleObserver` and `BrightnessObserver` using `PlatformDispatcher`.
-- Adopted shorthand enum values throughout the library.
-- Improved `AppLifecycleState` and other enum extensions.
+- Added `platformSpecific` utility.
+- Modernized observers to use `PlatformDispatcher`.
+- Adopted shorthand enum values throughout.
 - Fixed `ThrottleLast` task execution.
-- Updated minimum SDK to 3.10.1.
 
 ## 2.3.0
 
-- Added `index` parameter to `separator` in `Iterable.separated` extension method.
-- Added `let<R>(R Function(T it) fn)` extension to `Object` for scope functions.
-- Renamed `deviceHasConnection` to `hasDeviceConnection` for clarity.
-- Added `fastHash` function.
+- Added `index` parameter to `Iterable.separated`.
+- Added `let` scope extension on `Object`.
+- Renamed `deviceHasConnection` → `hasDeviceConnection`.
+- Added `fastHash`.
 
 ## 2.2.0
 
-Refactored `Iterable` extensions to complement the `package:collection` methods instead of duplicating them.
-Here removed extension methods and their equivalents in `package:collection` as follows:
-
-- `Iterable<Widget>.slicedWidgetsBuilder` => `Iterable.groupListsBy`
-- `Iterable.firstWhereOrNull`, `Iterable.lastWhereOrNull`, `Iterable.whereNot` =>  `Iterable.firstWhereOrNull`, `Iterable.lastWhereOrNull`, `Iterable.whereNo`.
-- `Iterable.groupAsMap` => `Iterable.groupFoldBy`, `Iterable.groupListsBy`, `Iterable.groupSetsBy`
-- `Iterable.to2D` => `Iterable.slices`
-- `Iterable.earliest`, `Iterable.latest` => `Iterable.minBy`, `Iterable.maxBy`
-- `Iterable<num>.sum`, `Iterable<num>.average`, `Iterable<num>.lowest`, `Iterable<num>.highest` => `Iterable<num>.sum`, `Iterable<num>.average`, `Iterable<num>.min`, `Iterable<num>.max`
-- `Iterable<Iterable>.flatten` => `Iterable<Iterable>.flattened`, `Iterable<Iterable>.flattenedToList`, `Iterable<Iterable>.flattenedToSet`
-- `Iterable.sliced` => `Iterable.skip()` + `Iterable.take()` combination
-- `List.safeSubList` => `Iterable.skip()` + `Iterable.take()` combination
-- `Set.subSet` => `Iterable.skip()` + `Iterable.take()` + `Iterable.toSet()` combination
-
-Renamed these extension methods:
-
-- `Iterable.separate` => `Iterable.separated`
+- Removed `Iterable` extensions that duplicate `package:collection`.
+- Renamed `Iterable.separate` → `Iterable.separated`.
 
 ## 2.1.0
 
-- Added `PaddedFlex`, `PaddedRow` and `PaddedColumn` wrappers
+- Added `PaddedFlex`, `PaddedRow`, `PaddedColumn`.
 
 ## 2.0.0
 
-### Breaking
-
-- `FlexGrid` rewritten as `MultiChildRenderObjectWidget` for better performance
-- `FlexGrid` now accepts `children` directly (removed generic type parameter)
-- Minimum SDK raised to Dart 3.0.0
-
-### Added
-
-- `FlexGrid.padding` parameter
-- All Material 3 `ColorScheme` colors via `BuildContext` extensions
-- Comprehensive dartdoc documentation
-
-### Changed
-
-- Optimized `humanAge()` calculation
-- Switched to `very_good_analysis` linter
-
-### Removed
-
-- `BezierSquircleBorder`
+- **Breaking:** `FlexGrid` rewritten as `MultiChildRenderObjectWidget`.
+- Added `FlexGrid.padding`, all M3 `ColorScheme` context getters.
+- Removed `BezierSquircleBorder`. Min SDK Dart 3.0.0.
 
 ## 1.2.0
 
-- Added `ColorScheme` colors to `BuildContext`
-- Added `BezierSquircleBorder`
-- Added `StreamWhereType` extension
-- Renamed `InputCounterBuilders` → `InputCounterWidgetBuilders`
-- Removed `TextStyleFamily`
+- Added `ColorScheme` context getters, `BezierSquircleBorder`, `StreamWhereType`.
 
 ## 1.1.1
 
-- Added `TickerBuilder.onTick` parameter
+- Added `TickerBuilder.onTick`.
 
 ## 1.1.0
 
-- Added `TickerBuilder` widget
+- Added `TickerBuilder`.
 
 ## 1.0.1
 
-- Updated to new `MediaQuery` lookups
-- Removed `elementAtOrNull`, `singleOrNull` (now in core)
+- Updated `MediaQuery` lookups; removed `elementAtOrNull`, `singleOrNull` (now in core).
 
 ## 1.0.0
 
-- Initial release
+- Initial release.

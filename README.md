@@ -9,7 +9,7 @@ Fluiver keeps everyday Flutter reads to a single dot (`context.` / `list.`) with
 
 ```yaml
 dependencies:
-  fluiver: ^2.4.1
+  fluiver: ^2.4.2
 ```
 
 ---
@@ -48,7 +48,7 @@ final title = Theme.of(context).textTheme.titleLarge!;
 final primary = context.primaryColor;
 final width = context.screenWidth;
 final title = context.titleLargeTextStyle;
-final widgets = items.separated(() => const Divider()).toList();
+final widgets = items.separated((_) => const Divider()).toList();
 ```
 
 ### Debounced search — the right way
@@ -123,7 +123,7 @@ int? value = 'not42'.let(int.tryParse);
 ### Iterable
 
 ```dart
-list.separated(() => Divider());
+list.separated((_) => Divider());
 ```
 
 ### Map & Stream

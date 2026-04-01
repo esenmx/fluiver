@@ -1,5 +1,7 @@
 part of '../../fluiver.dart';
 
+/// Observes locale changes via [WidgetsBindingObserver].
+///
 /// Example:
 /// ```dart
 ///  final localesProvider = Provider<List<Locale>?>((ref) {
@@ -21,6 +23,8 @@ class LocaleObserver extends WidgetsBindingObserver {
   }
 }
 
+/// Observes platform brightness changes via [WidgetsBindingObserver].
+///
 /// Example:
 /// ```dart
 /// final brightnessProvider = Provider<Brightness>((ref) {
@@ -44,6 +48,8 @@ class BrightnessObserver extends WidgetsBindingObserver {
   }
 }
 
+/// Observes app lifecycle state changes via [WidgetsBindingObserver].
+///
 /// Example:
 /// ```dart
 /// final appLifecycleStateProvider = Provider<AppLifecycleState?>((ref) {

@@ -62,7 +62,7 @@ extension BuildContextTextStyle on BuildContext {
 
 /// {@macro extensionFor}
 /// Provides convenient access to [ColorScheme] colors.
-extension BuildContextsColorScheme on BuildContext {
+extension BuildContextColorScheme on BuildContext {
   ColorScheme get _cs => _t.colorScheme;
 
   Color get primaryColor => _cs.primary;
