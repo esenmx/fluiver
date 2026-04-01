@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.2
+## 2.4.3
 
 - Removed `is*` enum getters; use shorthand comparisons (`x == .ltr`).
 - Improved `hasDeviceConnection` (socket + timeout).
@@ -8,6 +8,10 @@
 - Removed `StreamWhereType` (duplicates `dart:async`).
 - Renamed `inToday` → `todayAt`, fixed `BuildContextsColorScheme` typo.
 - Doc and README fixes.
+
+## 2.4.2
+
+- Release 2.4.2.
 
 ## 2.4.1
 
