@@ -1,6 +1,6 @@
 name: fluiver
 description: Flutter utility library — debounce/throttle, observers, FlexGrid, DateTime predicates, and SDK gap-fillers.
-version: 3.0.0
+version: 3.1.0
 homepage: https://mehmetesen.com
 repository: https://github.com/esenmx/fluiver
 issue_tracker: https://github.com/esenmx/fluiver/issues

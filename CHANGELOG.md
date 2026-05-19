@@ -1,5 +1,28 @@
 # Changelog
 
+## 3.1.0
+
+### Added
+
+| Category | API | Notes |
+| --- | --- | --- |
+| Color | `Color.darken([amount])`, `Color.lighten([amount])`, `Color.contrastText` | HSL-based; `contrastText` picks black/white via luminance |
+| ScrollController | `.atTop`, `.atBottom`, `.animateToTop({duration, curve})`, `.animateToBottom({duration, curve})` | `hasClients`-safe |
+| Future | `Future<T>.timeoutOrNull(Duration)` → `Future<T?>` | Null on timeout, errors still propagate |
+| Iterable | `Iterable<E>.windowed(int size, {int step = 1})` | Stepped sliding window; drops partial trailing window |
+| TextEditingController | `.setTextAndCaret(String, {int? caret})` | Avoids the `controller.text = ...` caret-reset papercut |
+
+### Removed
+
+| Removed | Replacement |
+| --- | --- |
+| `PaddedFlex` / `PaddedRow` / `PaddedColumn` widgets | `Padding(padding: ..., child: Column(children: [...]))` / `Row` — LLMs reach for this natively |
+| `IterableEnum.byNameOrElse(name, orElse: ...)` | `Enum.values.byNameOrNull(name) ?? .fallback` — Dart shorthand handles the fallback |
+
+### Changed
+
+- LLM artifact moved from `rules/fluiver.md` to `rules/flutter-fluiver.md`. Renamed with the `flutter-` prefix to namespace it against other rule collections.
+
 ## 3.0.0
 
 **Breaking — utility-library pivot.**
