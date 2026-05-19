@@ -21,23 +21,20 @@ class _TickerBuilderPageState extends State<TickerBuilderPage> {
 
   String _formatDuration(Duration duration) {
     return switch (_selectedFormat) {
-      TimeFormat.microseconds => duration.inMicroseconds.toString(),
-      TimeFormat.milliseconds => duration.inMilliseconds.toString(),
-      TimeFormat.seconds => duration.inSeconds.toString(),
-      TimeFormat.minutes => duration.inMinutes.toString(),
-      TimeFormat.hours => duration.inHours.toString(),
-      TimeFormat.days => duration.inDays.toString(),
-      TimeFormat.full =>
-        DateFormat('HH:mm:ss.SSS').format(DateTime(0).add(duration)),
+      .microseconds => duration.inMicroseconds.toString(),
+      .milliseconds => duration.inMilliseconds.toString(),
+      .seconds => duration.inSeconds.toString(),
+      .minutes => duration.inMinutes.toString(),
+      .hours => duration.inHours.toString(),
+      .days => duration.inDays.toString(),
+      .full => DateFormat('HH:mm:ss.SSS').format(DateTime(0).add(duration)),
     };
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ticker Builder Page'),
-      ),
+      appBar: AppBar(title: const Text('Ticker Builder Page')),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -46,8 +43,9 @@ class _TickerBuilderPageState extends State<TickerBuilderPage> {
               final formattedValue = _formatDuration(elapsed);
               _controller.value = TextEditingValue(
                 text: formattedValue,
-                selection:
-                    TextSelection.collapsed(offset: formattedValue.length),
+                selection: TextSelection.collapsed(
+                  offset: formattedValue.length,
+                ),
               );
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +56,7 @@ class _TickerBuilderPageState extends State<TickerBuilderPage> {
                       controller: _controller,
                       textAlign: TextAlign.center,
                       readOnly: true,
-                      style: context.headlineLargeTextStyle,
+                      style: Theme.of(context).textTheme.headlineLarge,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),

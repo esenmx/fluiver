@@ -1,11 +1,10 @@
 include: package:very_good_analysis/analysis_options.yaml
 
 analyzer:
-  errors:
-    comment_references: ignore
-    lines_longer_than_80_chars: ignore
+  exclude:
+    - "**/*.mocks.dart"
 
 linter:
   rules:
+    # FNV-1a constants are intentionally 64-bit; VM-only documented loudly.
     avoid_js_rounded_ints: false
-    public_member_api_docs: false
