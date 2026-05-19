@@ -12,45 +12,16 @@ void main() {
     });
   });
 
+  group('withTimeOfDay', () {
+    test('replaces time components', () {
+      final merged = dt.withTimeOfDay(const TimeOfDay(hour: 14, minute: 5));
+      check(merged).equals(DateTime(1990, 6, 26, 14, 5));
+    });
+  });
+
   group('toTimeOfDay', () {
     test('extracts time', () {
       check(dt.toTimeOfDay()).equals(const TimeOfDay(hour: 8, minute: 30));
-    });
-  });
-
-  group('addYears', () {
-    test('positive', () => check(dt.addYears(31).year).equals(2021));
-    test('negative', () => check(dt.addYears(-5000).year).equals(-3010));
-  });
-
-  group('addMonths', () {
-    test('same year', () => check(dt.addMonths(4).month).equals(10));
-    test('next year', () {
-      final result = dt.addMonths(12);
-      check(result.year).equals(1991);
-      check(result.month).equals(6);
-    });
-    test('negative', () {
-      final result = dt.addMonths(-23);
-      check(result.year).equals(1988);
-      check(result.month).equals(7);
-    });
-  });
-
-  group('addDays', () {
-    test('positive', () => check(dt.addDays(3).day).equals(29));
-  });
-
-  group('addHours', () {
-    test('positive', () => check(dt.addHours(12).hour).equals(20));
-  });
-
-  group('addMinutes', () {
-    test('same hour', () => check(dt.addMinutes(15).minute).equals(45));
-    test('next hour', () {
-      final result = dt.addMinutes(30);
-      check(result.hour).equals(9);
-      check(result.minute).equals(0);
     });
   });
 
@@ -77,6 +48,65 @@ void main() {
           .copyWith(year: year - 1)
           .subtract(const Duration(seconds: 1));
       check(birth.age()).equals(1);
+    });
+  });
+
+  group('isToday / isTomorrow / isYesterday', () {
+    test('isToday is true for now', () {
+      check(DateTime.now().isToday).isTrue();
+    });
+
+    test('isToday is false for tomorrow', () {
+      final now = DateTime.now();
+      final tomorrow = DateTime(now.year, now.month, now.day + 1, 12);
+      check(tomorrow.isToday).isFalse();
+    });
+
+    test('isTomorrow uses calendar shift not 24h', () {
+      final now = DateTime.now();
+      final tomorrow = DateTime(now.year, now.month, now.day + 1, 12);
+      check(tomorrow.isTomorrow).isTrue();
+    });
+
+    test('isYesterday uses calendar shift not 24h', () {
+      final now = DateTime.now();
+      final yesterday = DateTime(now.year, now.month, now.day - 1, 12);
+      check(yesterday.isYesterday).isTrue();
+    });
+
+    test('predicates are mutually exclusive', () {
+      final now = DateTime.now();
+      check(now.isTomorrow).isFalse();
+      check(now.isYesterday).isFalse();
+    });
+  });
+
+  group('inThisYear', () {
+    test('current year is true', () {
+      check(DateTime.now().inThisYear).isTrue();
+    });
+
+    test('last year is false', () {
+      final lastYear = DateTime(DateTime.now().year - 1, 6);
+      check(lastYear.inThisYear).isFalse();
+    });
+  });
+
+  group('isWithinFromNow', () {
+    test('now is within any duration', () {
+      check(
+        DateTime.now().isWithinFromNow(const Duration(seconds: 1)),
+      ).isTrue();
+    });
+
+    test('one hour ahead is outside one minute', () {
+      final future = DateTime.now().add(const Duration(hours: 1));
+      check(future.isWithinFromNow(const Duration(minutes: 1))).isFalse();
+    });
+
+    test('symmetric — past and future', () {
+      final past = DateTime.now().subtract(const Duration(seconds: 30));
+      check(past.isWithinFromNow(const Duration(minutes: 1))).isTrue();
     });
   });
 }

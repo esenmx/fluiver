@@ -19,27 +19,23 @@ class _FlexGridPageState extends State<FlexGridPage> {
   double _paddingBottom = 16;
 
   EdgeInsets get _padding => EdgeInsets.only(
-        left: _paddingLeft,
-        top: _paddingTop,
-        right: _paddingRight,
-        bottom: _paddingBottom,
-      );
+    left: _paddingLeft,
+    top: _paddingTop,
+    right: _paddingRight,
+    bottom: _paddingBottom,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('FlexGrid'),
-      ),
+      appBar: AppBar(title: Text('FlexGrid')),
       body: Row(
         children: [
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                border: Border(
-                  right: BorderSide(color: Colors.grey.shade300),
-                ),
+                border: Border(right: BorderSide(color: Colors.grey.shade300)),
               ),
               child: SingleChildScrollView(
                 child: Column(
@@ -47,7 +43,7 @@ class _FlexGridPageState extends State<FlexGridPage> {
                   children: [
                     Text(
                       'FlexGrid Controls',
-                      style: context.titleLargeTextStyle,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 24),
                     IncrementalControl(
@@ -88,7 +84,7 @@ class _FlexGridPageState extends State<FlexGridPage> {
                     const SizedBox(height: 24),
                     Text(
                       'Padding',
-                      style: context.titleMediumTextStyle,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 16),
                     IncrementalControl(
@@ -148,9 +144,9 @@ class _FlexGridPageState extends State<FlexGridPage> {
                       alignment: Alignment.center,
                       child: Text(
                         i.toString(),
-                        style: context.displayMediumTextStyle,
+                        style: Theme.of(context).textTheme.displayMedium,
                       ),
-                    )
+                    ),
                 ],
               ),
             ),
@@ -183,10 +179,7 @@ class IncrementalControl extends StatelessWidget {
       children: [
         FittedBox(
           fit: BoxFit.fitWidth,
-          child: Text(
-            label,
-            style: context.bodyMediumTextStyle,
-          ),
+          child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
         ),
         const SizedBox(height: 8),
         Row(
@@ -205,7 +198,7 @@ class IncrementalControl extends StatelessWidget {
               child: Text(
                 value.toStringAsFixed(value % 1 == 0 ? 0 : 1),
                 textAlign: TextAlign.center,
-                style: context.bodyLargeTextStyle,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
             IconButton(
@@ -213,7 +206,7 @@ class IncrementalControl extends StatelessWidget {
               onPressed: () => onChanged(value + step),
             ),
           ],
-        )
+        ),
       ],
     );
   }

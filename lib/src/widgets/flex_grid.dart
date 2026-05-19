@@ -12,11 +12,12 @@ part of '../../fluiver.dart';
 ///   mainAxisSpacing: 8,
 ///   crossAxisSpacing: 8,
 ///   childAspectRatio: .8,
-///   padding: EdgeInsets.all(16),
+///   padding: .all(16),
 ///   children: List.generate(10, (i) => ColoredBox(color: Colors.blue)),
 /// )
 /// ```
 class FlexGrid extends MultiChildRenderObjectWidget {
+  /// Creates a non-scrolling grid.
   const FlexGrid({
     required this.crossAxisCount,
     super.children,
@@ -84,10 +85,15 @@ class FlexGrid extends MultiChildRenderObjectWidget {
 
 class _FlexGridParentData extends ContainerBoxParentData<RenderBox> {}
 
+/// Render object backing [FlexGrid].
+///
+/// Lays children out in a fixed [crossAxisCount] grid, sized to fit. Single
+/// layout pass — O(n) in children.
 class RenderFlexGrid extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _FlexGridParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _FlexGridParentData> {
+  /// Creates the [FlexGrid] render object.
   RenderFlexGrid({
     required int crossAxisCount,
     required double childAspectRatio,
@@ -106,9 +112,9 @@ class RenderFlexGrid extends RenderBox
        _padding = padding,
        _textDirection = textDirection;
 
-  /// [crossAxisCount]
   int _crossAxisCount;
 
+  /// Number of children along the cross axis.
   int get crossAxisCount => _crossAxisCount;
 
   set crossAxisCount(int value) {
@@ -117,9 +123,9 @@ class RenderFlexGrid extends RenderBox
     markNeedsLayout();
   }
 
-  /// [childAspectRatio]
   double _childAspectRatio;
 
+  /// Ratio of each child's cross-axis to main-axis extent.
   double get childAspectRatio => _childAspectRatio;
 
   set childAspectRatio(double value) {
@@ -128,9 +134,9 @@ class RenderFlexGrid extends RenderBox
     markNeedsLayout();
   }
 
-  /// [mainAxisSpacing]
   double _mainAxisSpacing;
 
+  /// Gap between children along the main axis.
   double get mainAxisSpacing => _mainAxisSpacing;
 
   set mainAxisSpacing(double value) {
@@ -139,9 +145,9 @@ class RenderFlexGrid extends RenderBox
     markNeedsLayout();
   }
 
-  /// [crossAxisSpacing]
   double _crossAxisSpacing;
 
+  /// Gap between children along the cross axis.
   double get crossAxisSpacing => _crossAxisSpacing;
 
   set crossAxisSpacing(double value) {
@@ -150,9 +156,10 @@ class RenderFlexGrid extends RenderBox
     markNeedsLayout();
   }
 
-  /// [mainAxisExtent]
   double _mainAxisExtent;
 
+  /// Extra main-axis extent added to each child on top of the size derived
+  /// from [childAspectRatio].
   double get mainAxisExtent => _mainAxisExtent;
 
   set mainAxisExtent(double value) {
@@ -161,9 +168,9 @@ class RenderFlexGrid extends RenderBox
     markNeedsLayout();
   }
 
-  /// [direction]
   Axis _direction;
 
+  /// Grid main-axis direction.
   Axis get direction => _direction;
 
   set direction(Axis value) {
@@ -172,9 +179,9 @@ class RenderFlexGrid extends RenderBox
     markNeedsLayout();
   }
 
-  /// [padding]
   EdgeInsetsGeometry _padding;
 
+  /// Padding around the grid.
   EdgeInsetsGeometry get padding => _padding;
 
   set padding(EdgeInsetsGeometry value) {
@@ -183,9 +190,9 @@ class RenderFlexGrid extends RenderBox
     markNeedsLayout();
   }
 
-  /// [textDirection]
   TextDirection? _textDirection;
 
+  /// Ambient text direction used to resolve [padding].
   TextDirection? get textDirection => _textDirection;
 
   set textDirection(TextDirection? value) {
