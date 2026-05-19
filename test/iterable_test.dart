@@ -35,4 +35,68 @@ void main() {
       }
     });
   });
+
+  group('windowed', () {
+    test('default step yields every overlapping window', () {
+      check([1, 2, 3, 4, 5].windowed(3).toList()).deepEquals([
+        [1, 2, 3],
+        [2, 3, 4],
+        [3, 4, 5],
+      ]);
+    });
+
+    test('custom step skips elements between windows', () {
+      check([1, 2, 3, 4, 5].windowed(2, step: 2).toList()).deepEquals([
+        [1, 2],
+        [3, 4],
+      ]);
+    });
+
+    test('step larger than size skips inputs between windows', () {
+      check([1, 2, 3, 4, 5, 6, 7].windowed(2, step: 3).toList()).deepEquals([
+        [1, 2],
+        [4, 5],
+      ]);
+    });
+
+    test('drops partial trailing window', () {
+      check([1, 2, 3, 4].windowed(3, step: 2).toList()).deepEquals([
+        [1, 2, 3],
+      ]);
+    });
+
+    test('empty when size exceeds length', () {
+      check([1, 2].windowed(3).toList()).isEmpty();
+    });
+
+    test('size 1 with default step is one window per element', () {
+      check([1, 2, 3].windowed(1).toList()).deepEquals([
+        [1],
+        [2],
+        [3],
+      ]);
+    });
+
+    test('size 0 throws', () {
+      check(() => [1, 2, 3].windowed(0).toList()).throws<RangeError>();
+    });
+
+    test('step 0 throws', () {
+      check(() => [1, 2, 3].windowed(2, step: 0).toList()).throws<RangeError>();
+    });
+
+    test('lazy — does not iterate beyond what consumer takes', () {
+      var pulls = 0;
+      Iterable<int> source() sync* {
+        for (var i = 0; i < 1000; i++) {
+          pulls++;
+          yield i;
+        }
+      }
+
+      source().windowed(3).take(1).toList();
+
+      check(pulls).equals(3);
+    });
+  });
 }

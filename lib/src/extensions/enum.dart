@@ -31,7 +31,8 @@ mixin EnumIndexComparable on Enum implements Comparable<Enum> {
 extension IterableEnum<T extends Enum> on Iterable<T> {
   /// Returns the enum value whose `name` matches [name], or `null` if none.
   ///
-  /// Non-throwing counterpart to `Enum.byName`.
+  /// Non-throwing counterpart to `Enum.byName`. For a fallback use
+  /// `Enum.values.byNameOrNull(s) ?? .fallback` — Dart shorthand handles it.
   T? byNameOrNull(String name) {
     for (final e in this) {
       if (e.name == name) {
@@ -39,18 +40,5 @@ extension IterableEnum<T extends Enum> on Iterable<T> {
       }
     }
     return null;
-  }
-
-  /// Returns the enum value whose `name` matches [name], or `orElse()` if
-  /// none.
-  ///
-  /// Non-throwing counterpart to `Enum.byName` with a fallback.
-  T byNameOrElse(String name, {required T Function() orElse}) {
-    for (final e in this) {
-      if (e.name == name) {
-        return e;
-      }
-    }
-    return orElse();
   }
 }

@@ -33,4 +33,19 @@ void main() {
       check(unordered..sort()).deepEquals(_TestEnum.values);
     });
   });
+
+  group('byNameOrNull', () {
+    test('matching name returns value', () {
+      check(_TestEnum.values.byNameOrNull('bar')).equals(_TestEnum.bar);
+    });
+
+    test('unknown name returns null', () {
+      check(_TestEnum.values.byNameOrNull('nope')).isNull();
+    });
+
+    test('?? fallback covers the missing case', () {
+      final v = _TestEnum.values.byNameOrNull('nope') ?? _TestEnum.foo;
+      check(v).equals(_TestEnum.foo);
+    });
+  });
 }

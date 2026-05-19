@@ -3,11 +3,15 @@ part of '../../fluiver.dart';
 /// Dispatches to the callback matching the current platform.
 ///
 /// ```dart
-/// final padding = platformDispatch<EdgeInsets>(
-///   android: () => const .all(8),
-///   ios: () => const .all(16),
-///   web: () => .zero,
+/// final storeUrl = platformDispatch<Uri>(
+///   android: () {
+///     return Uri.parse('https://play.google.com/store/apps/details?id=com.example.app');
+///   },
+///   ios: () {
+///     return Uri.parse('https://apps.apple.com/app/id123456789');
+///   },
 /// );
+/// await launchUrl(storeUrl);
 /// ```
 ///
 /// Throws [UnsupportedError] if the current platform has no callback —

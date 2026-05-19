@@ -2,26 +2,19 @@ part of '../../fluiver.dart';
 
 /// Observes locale changes via [WidgetsBindingObserver].
 ///
-/// Construct, register via `WidgetsBinding.instance.addObserver(...)`,
-/// and remove on dispose. Works from any state container — a plain
-/// [StatefulWidget], a [ValueNotifier], or a Riverpod / BLoC notifier.
+/// Designed for providers — `flutter_hooks` does not ship a locale
+/// hook. For widget-local consumption inside a hook widget, do it
+/// inline with the `WidgetsBindingObserver` mixin instead.
 ///
 /// ```dart
-/// class _MyAppState extends State<MyApp> {
-///   late final LocaleObserver _observer = LocaleObserver((locales) {
-///     // react to locale change
-///   });
-///
+/// @riverpod
+/// class LocalesNotifier extends _$LocalesNotifier {
 ///   @override
-///   void initState() {
-///     super.initState();
-///     WidgetsBinding.instance.addObserver(_observer);
-///   }
-///
-///   @override
-///   void dispose() {
-///     WidgetsBinding.instance.removeObserver(_observer);
-///     super.dispose();
+///   List<Locale>? build() {
+///     final observer = LocaleObserver((locales) => state = locales);
+///     WidgetsBinding.instance.addObserver(observer);
+///     ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
+///     return PlatformDispatcher.instance.locales;
 ///   }
 /// }
 /// ```
@@ -42,13 +35,20 @@ class LocaleObserver extends WidgetsBindingObserver {
 
 /// Observes platform brightness changes via [WidgetsBindingObserver].
 ///
+/// For widget context prefer `flutter_hooks.useOnPlatformBrightnessChange`;
+/// this observer is for provider code where hooks don't apply.
+///
 /// ```dart
-/// final observer = BrightnessObserver((brightness) {
-///   // react to brightness change
-/// });
-/// WidgetsBinding.instance.addObserver(observer);
-/// // ...
-/// WidgetsBinding.instance.removeObserver(observer);
+/// @riverpod
+/// class BrightnessNotifier extends _$BrightnessNotifier {
+///   @override
+///   Brightness build() {
+///     final observer = BrightnessObserver((b) => state = b);
+///     WidgetsBinding.instance.addObserver(observer);
+///     ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
+///     return PlatformDispatcher.instance.platformBrightness;
+///   }
+/// }
 /// ```
 class BrightnessObserver extends WidgetsBindingObserver {
   /// Creates an observer that invokes [onPlatformBrightnessChanged] when
@@ -69,13 +69,20 @@ class BrightnessObserver extends WidgetsBindingObserver {
 
 /// Observes app lifecycle state changes via [WidgetsBindingObserver].
 ///
+/// For widget context prefer `flutter_hooks.useOnAppLifecycleStateChange`;
+/// this observer is for provider code where hooks don't apply.
+///
 /// ```dart
-/// final observer = AppLifecycleObserver((state) {
-///   // react to lifecycle change
-/// });
-/// WidgetsBinding.instance.addObserver(observer);
-/// // ...
-/// WidgetsBinding.instance.removeObserver(observer);
+/// @riverpod
+/// class AppLifecycleNotifier extends _$AppLifecycleNotifier {
+///   @override
+///   AppLifecycleState? build() {
+///     final observer = AppLifecycleObserver((s) => state = s);
+///     WidgetsBinding.instance.addObserver(observer);
+///     ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
+///     return WidgetsBinding.instance.lifecycleState;
+///   }
+/// }
 /// ```
 class AppLifecycleObserver extends WidgetsBindingObserver {
   /// Creates an observer that invokes [onAppLifecycleStateChange] when the
