@@ -13,20 +13,24 @@ class IndexPage extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.grid_view),
             title: const Text('FlexGrid'),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) {
-                return const FlexGridPage();
-              },
-            )),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const FlexGridPage();
+                },
+              ),
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.timer),
             title: const Text('TickerBuilder'),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) {
-                return const TickerBuilderPage();
-              },
-            )),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const TickerBuilderPage();
+                },
+              ),
+            ),
           ),
         ],
       ),

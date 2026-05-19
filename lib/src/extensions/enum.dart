@@ -10,12 +10,16 @@ part of '../../fluiver.dart';
 /// }
 /// ```
 mixin EnumIndexComparable on Enum implements Comparable<Enum> {
+  /// Whether this value's index is less than [other]'s.
   bool operator <(Enum other) => index < other.index;
 
+  /// Whether this value's index is less than or equal to [other]'s.
   bool operator <=(Enum other) => index <= other.index;
 
+  /// Whether this value's index is greater than [other]'s.
   bool operator >(Enum other) => index > other.index;
 
+  /// Whether this value's index is greater than or equal to [other]'s.
   bool operator >=(Enum other) => index >= other.index;
 
   @override
@@ -25,6 +29,9 @@ mixin EnumIndexComparable on Enum implements Comparable<Enum> {
 /// {@macro extensionFor}
 /// Working with [Enum] collections.
 extension IterableEnum<T extends Enum> on Iterable<T> {
+  /// Returns the enum value whose `name` matches [name], or `null` if none.
+  ///
+  /// Non-throwing counterpart to `Enum.byName`.
   T? byNameOrNull(String name) {
     for (final e in this) {
       if (e.name == name) {
@@ -34,6 +41,10 @@ extension IterableEnum<T extends Enum> on Iterable<T> {
     return null;
   }
 
+  /// Returns the enum value whose `name` matches [name], or `orElse()` if
+  /// none.
+  ///
+  /// Non-throwing counterpart to `Enum.byName` with a fallback.
   T byNameOrElse(String name, {required T Function() orElse}) {
     for (final e in this) {
       if (e.name == name) {

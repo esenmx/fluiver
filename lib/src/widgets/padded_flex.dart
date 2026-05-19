@@ -1,31 +1,61 @@
 part of '../../fluiver.dart';
 
+/// `Padding` + `Flex` composition. Two render objects, not one — but the
+/// alternative (a custom `MultiChildRenderObjectWidget` re-implementing all
+/// of `Flex`'s main/cross/baseline logic) costs hundreds of lines and a
+/// real bug surface for negligible perf gain. Composition is the right
+/// tool for glue widgets.
+///
+/// For raw-RenderObject grid layout, see [FlexGrid].
 class PaddedFlex extends StatelessWidget {
+  /// Creates a padded flex layout.
   const PaddedFlex({
     required this.direction,
     required this.padding,
     required this.children,
-    this.mainAxisAlignment = MainAxisAlignment.start,
-    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.mainAxisAlignment = .start,
+    this.crossAxisAlignment = .center,
     this.spacing = 0.0,
-    this.mainAxisSize = MainAxisSize.max,
-    this.verticalDirection = VerticalDirection.down,
-    this.textBaseline = TextBaseline.alphabetic,
-    this.textDirection = TextDirection.ltr,
-    this.clipBehavior = Clip.none,
+    this.mainAxisSize = .max,
+    this.verticalDirection = .down,
+    this.textBaseline,
+    this.textDirection,
+    this.clipBehavior = .none,
     super.key,
   });
 
+  /// Forwarded to [Flex.direction].
   final Axis direction;
+
+  /// Forwarded to [Padding.padding].
   final EdgeInsetsGeometry padding;
+
+  /// Forwarded to [Flex.children].
   final List<Widget> children;
+
+  /// Forwarded to [Flex.spacing].
   final double spacing;
+
+  /// Forwarded to [Flex.mainAxisAlignment].
   final MainAxisAlignment mainAxisAlignment;
+
+  /// Forwarded to [Flex.crossAxisAlignment].
   final CrossAxisAlignment crossAxisAlignment;
+
+  /// Forwarded to [Flex.mainAxisSize].
   final MainAxisSize mainAxisSize;
-  final TextBaseline textBaseline;
-  final TextDirection textDirection;
+
+  /// Forwarded to [Flex.textBaseline]; `null` falls back to default.
+  final TextBaseline? textBaseline;
+
+  /// Forwarded to [Flex.textDirection]; `null` resolves from ambient
+  /// [Directionality].
+  final TextDirection? textDirection;
+
+  /// Forwarded to [Flex.verticalDirection].
   final VerticalDirection verticalDirection;
+
+  /// Forwarded to [Flex.clipBehavior].
   final Clip clipBehavior;
 
   @override
@@ -48,7 +78,9 @@ class PaddedFlex extends StatelessWidget {
   }
 }
 
+/// [PaddedFlex] with [Axis.horizontal].
 class PaddedRow extends PaddedFlex {
+  /// Creates a padded row.
   const PaddedRow({
     required super.padding,
     required super.children,
@@ -61,10 +93,12 @@ class PaddedRow extends PaddedFlex {
     super.verticalDirection,
     super.clipBehavior,
     super.key,
-  }) : super(direction: Axis.horizontal);
+  }) : super(direction: .horizontal);
 }
 
+/// [PaddedFlex] with [Axis.vertical].
 class PaddedColumn extends PaddedFlex {
+  /// Creates a padded column.
   const PaddedColumn({
     required super.padding,
     required super.children,
@@ -77,5 +111,5 @@ class PaddedColumn extends PaddedFlex {
     super.verticalDirection,
     super.clipBehavior,
     super.key,
-  }) : super(direction: Axis.vertical);
+  }) : super(direction: .vertical);
 }

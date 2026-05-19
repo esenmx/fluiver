@@ -1,14 +1,23 @@
 part of '../../fluiver.dart';
 
-/// A widget that rebuilds on each tick, providing elapsed [Duration].
+/// A widget that rebuilds on every frame, providing the elapsed [Duration]
+/// since the first frame.
+///
+/// Owns a [Ticker] internally; starts it in `initState` and stops it in
+/// `dispose`. Drop in when you need per-frame rebuilds (e.g. a countdown
+/// or a debug clock) without managing the ticker yourself.
 class TickerBuilder extends StatefulWidget {
+  /// Creates a widget that rebuilds every frame.
   const TickerBuilder({
     required this.builder,
     this.onTick,
     super.key,
   });
 
+  /// Called every frame with the elapsed time since the first frame.
   final Widget Function(BuildContext context, Duration elapsed) builder;
+
+  /// Optional side-effect callback invoked every frame alongside [builder].
   final void Function(Duration elapsed)? onTick;
 
   @override
@@ -23,12 +32,14 @@ class _TickerBuilderState extends State<TickerBuilder>
       widget.onTick?.call(elapsed);
     });
   });
-  Duration elapsed = Duration.zero;
+
+  /// Elapsed time since the first frame; updated every tick.
+  Duration elapsed = .zero;
 
   @override
   void initState() {
-    unawaited(_ticker.start());
     super.initState();
+    unawaited(_ticker.start());
   }
 
   @override

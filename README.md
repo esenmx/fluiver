@@ -3,65 +3,63 @@
 [![pub](https://img.shields.io/pub/v/fluiver.svg)](https://pub.dev/packages/fluiver)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**Write less. Build more.**
+**SDK gap-fillers for Flutter.** Every API passes the gap test — the Dart or Flutter SDK should have shipped it and didn't. No shortcut sugar, no `package:collection` overlap.
 
-Fluiver keeps everyday Flutter reads to a single dot (`context.` / `list.`) without sacrificing clarity. Extensions feel native, stay autocomplete-friendly, and avoid boilerplate.
+- Debounce/throttle helpers with proper disposal
+- `FlexGrid` — non-scrolling grid safe inside `ListView` / `SingleChildScrollView`
+- `PaddedFlex` / `PaddedRow` / `PaddedColumn` — padding + flex glue widgets
+- `TickerBuilder` — per-frame rebuild with elapsed `Duration`
+- System observers (`Locale`, `Brightness`, `AppLifecycle`) without `WidgetsBindingObserver` boilerplate
+- `DateTime` predicates (`isToday`, `isTomorrow`, `age()`, …)
+- `Map` predicates the SDK only has on `Iterable`
+- `Enum.byNameOrNull` / `byNameOrElse` (the SDK only ships throwing `byName`)
+- `Object.let` (Kotlin scope function)
+- `LRUCache<K, V>`, `DisposableBag` — common patterns the SDK doesn't ship
+- `FastHash.fnv1a`, `NetworkProbe.hasConnection`, `platformDispatch`, `TextFieldBuilders.disabledCounter`
 
 ```yaml
 dependencies:
-  fluiver: ^2.4.3
+  fluiver: ^3.0.0
 ```
+
+> **3.0 is a hard break.** All `BuildContext`, `TextStyle`, `EdgeInsets`,
+> `BorderRadius`, `bool.toInt`, `DateTime.addX`, `String.capitalize`, and
+> related "shortcut" extensions were removed. The single-dot shortcut
+> framing collided with LLM-assisted development. Top-level helpers
+> (`fastHash`, `hasDeviceConnection`, `platformSpecific`,
+> `disabledInputCounterBuilder`) moved into domain-grouped static classes.
+> See [CHANGELOG.md](CHANGELOG.md) for the full migration table.
 
 ---
 
 ## Install
 
-Add `fluiver` to your `pubspec.yaml`, then import `package:fluiver/fluiver.dart`.
+```bash
+dart pub add fluiver
+```
+
+```dart
+import 'package:fluiver/fluiver.dart';
+```
 
 ---
 
-## Quickstart
+## Highlights
+
+### Debounce / Throttle
 
 ```dart
-// Single-dot reads
-final color = context.primaryColor;
-final width = context.screenWidth;
-final title = context.titleLargeTextStyle;
+final debounce = Debounce(const Duration(milliseconds: 300));
 
-// Padded row with spacing
-PaddedRow(
-  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  spacing: 8,
-  children: const [Icon(Icons.home), Text('Home')],
+TextField(
+  onChanged: (q) => debounce(() => search(q)),
 );
 ```
 
-### Fluiver vs. vanilla Flutter (single-dot wins)
+`ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` cover the rate-limit
+variants. All four expose `dispose()`.
 
-```dart
-// ❌ Vanilla Flutter
-final primary = Theme.of(context).colorScheme.primary;
-final width = MediaQuery.of(context).size.width;
-final title = Theme.of(context).textTheme.titleLarge!;
-
-// ✅ With fluiver (one dot, cleaner, readable)
-final primary = context.primaryColor;
-final width = context.screenWidth;
-final title = context.titleLargeTextStyle;
-final widgets = items.separated((_) => const Divider()).toList();
-```
-
-### Debounced search — the right way
-
-```dart
-final _debounce = Debounce(const Duration(milliseconds: 400));
-
-TextField(
-  onChanged: (query) => _debounce(() => searchApi(query)),
-)
-```
-
-### Nested grids without performance issues
+### FlexGrid — non-scrolling grid inside scrollables
 
 ```dart
 ListView(
@@ -71,166 +69,134 @@ ListView(
       crossAxisCount: 3,
       crossAxisSpacing: 8,
       mainAxisSpacing: 8,
-      children: products.map((p) => ProductCard(p)).toList(),
-    ),
-    const Text('Recent'),
-    FlexGrid(
-      crossAxisCount: 2,
-      children: recentItems.map((r) => ItemTile(r)).toList(),
+      children: products.map(ProductCard.new).toList(),
     ),
   ],
 );
 ```
 
----
-
-## Extensions at a glance
-
-### BuildContext
-
-```dart
-context.screenWidth; context.screenHeight;
-context.isPlatformDark; context.isThemeDark;
-context.primaryColor; context.surfaceColor; context.errorColor;
-context.bodyLargeTextStyle; context.titleMediumTextStyle;
-```
-
-### DateTime
-
-```dart
-dateTime.addDays(7);
-dateTime.addMonths(1);
-dateTime.truncateTime();
-dateTime.isToday;
-birthDate.age();
-```
-
-### String
-
-```dart
-'hello'.capitalize;          // Hello
-'john doe'.capitalizeAll;    // John Doe
-'John Doe'.initials();       // JD
-```
-
-### Object
-
-```dart
-// Scope function
-int? value = 'not42'.let(int.tryParse);
-```
-
-### Iterable
-
-```dart
-list.separated((_) => Divider());
-```
-
-### Map & Stream
-
-```dart
-stream.whereType<int>();
-```
-
----
-
-## Widgets
-
-### PaddedFlex / PaddedRow / PaddedColumn
-
-Apply padding before layout while keeping the full `Flex` API (spacing, alignment, direction, clip behavior).
-
-```dart
-PaddedColumn(
-  padding: const EdgeInsets.all(12),
-  spacing: 6,
-  children: const [Text('Title'), Text('Subtitle')],
-);
-```
-
-### FlexGrid
-
-Non-scrolling grid built with custom `RenderObject`. Drop-in replacement for `GridView` with `shrinkWrap: true` — without the performance penalty.
-
-```dart
-FlexGrid(
-  crossAxisCount: 3,
-  mainAxisSpacing: 8,
-  crossAxisSpacing: 8,
-  padding: EdgeInsets.all(16),
-  children: [...],
-)
-```
-
-### TickerBuilder
-
-Frame-by-frame rebuilds with elapsed duration. Perfect for timers and animations.
-
-```dart
-TickerBuilder(
-  builder: (context, elapsed) => Text('${elapsed.inSeconds}s'),
-)
-```
-
----
-
-## Helpers
-
-### Debounce & Throttle
-
-```dart
-final debounce = Debounce(Duration(milliseconds: 300));
-onChanged: (text) => debounce(() => search(text));
-
-final throttle = ThrottleFirst(Duration(seconds: 1));
-onTap: () => throttle(() => submit());
-```
+Drop-in replacement for `GridView(shrinkWrap: true)` without the
+performance penalty. Custom `RenderObject` — does not scroll itself.
 
 ### Observers
 
-React to system changes without boilerplate.
-
 ```dart
-LocaleObserver((locales) => ...);
-BrightnessObserver((brightness) => ...);
-AppLifecycleObserver((state) => ...);
+final obs = LocaleObserver((locales) => ...);
+WidgetsBinding.instance.addObserver(obs);
+// also: BrightnessObserver((Brightness b) => ...)
+//       AppLifecycleObserver((AppLifecycleState s) => ...)
 ```
 
-### Connectivity
+### DateTime predicates
 
 ```dart
-if (await hasDeviceConnection()) {
-  // Online
-}
+dt.isToday;
+dt.isTomorrow;
+dt.inThisYear;
+dt.isWithinFromNow(const Duration(minutes: 5));
+birthDate.age();
+dt.withTimeOfDay(const TimeOfDay(hour: 9, minute: 0));
+```
+
+For arithmetic use stdlib: `dt.add(const Duration(days: 7))`.
+
+### TimeOfDay
+
+```dart
+const TimeOfDay(hour: 9).onDate(DateTime.now());   // today 09:00
+const TimeOfDay(hour: 9).onDate(meeting.day);      // any date 09:00
+```
+
+### SDK gap-fillers
+
+```dart
+// Enum — non-throwing lookups
+MyEnum.values.byNameOrNull('foo');
+MyEnum.values.byNameOrElse('foo', orElse: () => MyEnum.bar);
+
+// Map — what Iterable already has
+map.firstWhereOrNull((k, v) => v.isActive);
+map.whereKeyType<String>();
+map.whereValueType<int>();
+
+// Iterable
+list.separated((i) => const Divider());
+```
+
+### `Object.let` — Kotlin scope function
+
+Bounded to `T extends Object` so it doesn't pollute autocomplete on
+nullables. Use `?.let(...)` for null-aware chaining.
+
+```dart
+// 1. Null-aware transform — returns a value, not a side-effect
+final port = env['PORT']?.let(int.parse);
+final user = jsonResponse?.let(User.fromJson);
+
+// 2. Inline widget construction via tear-off
+Column(children: [
+  Text(title),
+  ?subtitle?.let(Text.new),
+  ?avatarUrl?.let(NetworkImage.new),
+]);
+
+// 3. Chain pure transformations without temp vars
+final hash = userId.toString().let(FastHash.fnv1a);
+final slug = title.trim().toLowerCase().let(_sluggify);
+
+// 4. Conditional spread of children
+Column(children: [
+  Text(title),
+  ...?subtitle?.let((s) => [const SizedBox(height: 4), Text(s)]),
+]);
+
+// 5. Static method as transform — no lambda
+final id = rawId?.let(int.tryParse);
+```
+
+Don't reach for `.let` for side-effect-only calls (returns a value —
+wasted), multi-line bodies (use a temp), or chains beyond three.
+
+### LRUCache / DisposableBag
+
+```dart
+final cache = LRUCache<String, User>(maxEntries: 100);
+cache['alice'] = user;
+final hit = cache['alice'];          // promotes to most-recently-used
+
+final bag = DisposableBag()
+  ..add(debounce.dispose)
+  ..add(subscription.cancel)
+  ..add(controller.dispose);
+await bag.dispose();
+```
+
+### Static helpers
+
+```dart
+if (await NetworkProbe.hasConnection()) { /* online */ }
+
+final h = FastHash.fnv1a('input');  // FNV-1a int64 (VM only, not Web)
+
+final padding = platformDispatch<EdgeInsets>(
+  android: () => const .all(8),
+  ios: () => const .all(16),
+);
+
+TextField(buildCounter: TextFieldBuilders.disabledCounter);
 ```
 
 ---
 
-## Philosophy
+## LLM rule file
 
-- **Single-dot first** — one autocomplete hit (`context.` / `list.`) for common needs without sacrificing clarity.
-- **Expressive** — names read like English and stay concise.
-- **Minimal** — only the helpers you actually reach for.
-- **Performant** — custom render objects where it matters.
+A compact rule file ships at `rules/fluiver.md`. Drop it into your agent's
+rules directory (`~/.claude/rules/`, `.cursor/rules/`, `.cursorrules`, or
+the AntiGravity equivalent) so the agent reaches for fluiver APIs instead
+of reinventing them — and stops trying to use the removed sugar.
 
 ---
 
-## Agent Rules
+## License
 
-Add these rules to your Cursor/Claude Code/AntiGravity "Rules for AI" to generate optimal `fluiver` code:
-
-@fluiver_rules
-
-**Context Access**: ALWAYS use `context.extension` formula.
-
-- ❌ `Theme.of(context).colorScheme.primary`
-- ✅ `context.primaryColor`
-- ❌ `Theme.of(context).textTheme.titleLarge`
-- ✅ `context.titleLargeTextStyle`
-- ❌ `MediaQuery.of(context).size.width`
-- ✅ `context.screenWidth`
-
-**Layout Efficiency**: Prefer declarative widgets over imperative nesting.
-
-- ❌ `Padding(padding: EdgeInsets.all(16), child: Column(...))`
-- ✅ `PaddedColumn(padding: EdgeInsets.all(16), ...)`
+MIT.
