@@ -2,28 +2,14 @@ import 'dart:async';
 
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void main() {
-  Future<void> pumpList(WidgetTester tester, ScrollController controller) {
-    return tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: ListView.builder(
-            controller: controller,
-            itemCount: 100,
-            itemBuilder: (_, i) => SizedBox(height: 50, child: Text('$i')),
-          ),
-        ),
-      ),
-    );
-  }
+import '_helpers.dart';
 
+void main() {
   group('atTop / atBottom — no client', () {
     test('both false when controller has no clients', () {
-      final c = ScrollController();
-      addTearDown(c.dispose);
+      final c = newScrollController();
 
       check(c.atTop).isFalse();
       check(c.atBottom).isFalse();
@@ -32,20 +18,18 @@ void main() {
 
   group('atTop / atBottom — attached', () {
     testWidgets('atTop true after mount, atBottom false', (tester) async {
-      final c = ScrollController();
-      addTearDown(c.dispose);
+      final c = newScrollController();
 
-      await pumpList(tester, c);
+      await pumpScrollableList(tester, c);
 
       check(c.atTop).isTrue();
       check(c.atBottom).isFalse();
     });
 
     testWidgets('atBottom true after jumpTo maxScrollExtent', (tester) async {
-      final c = ScrollController();
-      addTearDown(c.dispose);
+      final c = newScrollController();
 
-      await pumpList(tester, c);
+      await pumpScrollableList(tester, c);
       c.jumpTo(c.position.maxScrollExtent);
       await tester.pump();
 
@@ -56,10 +40,9 @@ void main() {
 
   group('animateToTop / animateToBottom', () {
     testWidgets('animateToBottom reaches maxScrollExtent', (tester) async {
-      final c = ScrollController();
-      addTearDown(c.dispose);
+      final c = newScrollController();
 
-      await pumpList(tester, c);
+      await pumpScrollableList(tester, c);
       unawaited(
         c.animateToBottom(duration: const Duration(milliseconds: 100)),
       );
@@ -69,10 +52,9 @@ void main() {
     });
 
     testWidgets('animateToTop reaches minScrollExtent', (tester) async {
-      final c = ScrollController();
-      addTearDown(c.dispose);
+      final c = newScrollController();
 
-      await pumpList(tester, c);
+      await pumpScrollableList(tester, c);
       c.jumpTo(c.position.maxScrollExtent);
       await tester.pump();
 
@@ -83,8 +65,7 @@ void main() {
     });
 
     test('animateToBottom no-op when no client', () async {
-      final c = ScrollController();
-      addTearDown(c.dispose);
+      final c = newScrollController();
 
       await c.animateToBottom();
     });
