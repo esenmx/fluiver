@@ -10,6 +10,10 @@ class MockBrightnessObserverCallback extends Mock {
   void call(Brightness brightness);
 }
 
+class MockAppLifecycleObserverCallback extends Mock {
+  void call(AppLifecycleState state);
+}
+
 @GenerateMocks([LocaleObserver])
 void main() {
   setUp(TestWidgetsFlutterBinding.ensureInitialized);
@@ -32,13 +36,27 @@ void main() {
     final callback = MockBrightnessObserverCallback();
     WidgetsBinding.instance.addObserver(BrightnessObserver(callback.call));
     final window = tester.binding.platformDispatcher
-      ..platformBrightnessTestValue = Brightness.dark;
-    verify(callback(Brightness.dark)).called(1);
+      ..platformBrightnessTestValue = .dark;
+    verify(callback(.dark)).called(1);
 
-    window.platformBrightnessTestValue = Brightness.light;
-    verify(callback(Brightness.light)).called(1);
+    window.platformBrightnessTestValue = .light;
+    verify(callback(.light)).called(1);
 
-    window.platformBrightnessTestValue = Brightness.light;
-    verify(callback(Brightness.light)).called(1);
+    window.platformBrightnessTestValue = .light;
+    verify(callback(.light)).called(1);
+  });
+
+  testWidgets('AppLifecycleObserver', (tester) async {
+    final callback = MockAppLifecycleObserverCallback();
+    WidgetsBinding.instance.addObserver(AppLifecycleObserver(callback.call));
+
+    tester.binding.handleAppLifecycleStateChanged(.paused);
+    verify(callback(.paused)).called(1);
+
+    tester.binding.handleAppLifecycleStateChanged(.resumed);
+    verify(callback(.resumed)).called(1);
+
+    tester.binding.handleAppLifecycleStateChanged(.detached);
+    verify(callback(.detached)).called(1);
   });
 }

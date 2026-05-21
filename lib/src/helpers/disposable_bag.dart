@@ -38,6 +38,21 @@ class DisposableBag {
     _disposers.add(disposer);
   }
 
+  /// Registers each closure in [disposers]. Convenience for bulk-add — same
+  /// semantics as calling [add] in order.
+  ///
+  /// ```dart
+  /// final bag = DisposableBag()
+  ///   ..addAll([
+  ///     debounce.dispose,
+  ///     subscription.cancel,
+  ///     controller.dispose,
+  ///   ]);
+  /// ```
+  void addAll(Iterable<FutureOr<void> Function()> disposers) {
+    disposers.forEach(add);
+  }
+
   /// Runs every registered disposer in order, then clears the bag.
   /// Safe to call multiple times.
   Future<void> dispose() async {

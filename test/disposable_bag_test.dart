@@ -55,5 +55,19 @@ void main() {
       await bag.dispose();
       check(done).isTrue();
     });
+
+    test('addAll registers each closure in order', () async {
+      final calls = <String>[];
+      final bag = DisposableBag()
+        ..addAll([
+          () => calls.add('a'),
+          () => calls.add('b'),
+          () => calls.add('c'),
+        ]);
+
+      check(bag.length).equals(3);
+      await bag.dispose();
+      check(calls).deepEquals(['a', 'b', 'c']);
+    });
   });
 }

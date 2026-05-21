@@ -8,7 +8,7 @@ void main() {
     tearDown(() => debugDefaultTargetPlatformOverride = null);
 
     test('dispatches to matching platform callback', () {
-      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      debugDefaultTargetPlatformOverride = .android;
       final value = platformDispatch<String>(
         android: () => 'android',
         ios: () => 'ios',
@@ -17,29 +17,22 @@ void main() {
     });
 
     test('throws UnsupportedError when no callback for platform', () {
-      debugDefaultTargetPlatformOverride = TargetPlatform.linux;
+      debugDefaultTargetPlatformOverride = .linux;
       check(
         () => platformDispatch<String>(android: () => 'android'),
       ).throws<UnsupportedError>();
     });
 
     test('all platforms route to their slot', () {
-      for (final platform in [
-        TargetPlatform.android,
-        TargetPlatform.fuchsia,
-        TargetPlatform.iOS,
-        TargetPlatform.linux,
-        TargetPlatform.macOS,
-        TargetPlatform.windows,
-      ]) {
+      for (final platform in TargetPlatform.values) {
         debugDefaultTargetPlatformOverride = platform;
         final value = platformDispatch<TargetPlatform>(
-          android: () => TargetPlatform.android,
-          fuchsia: () => TargetPlatform.fuchsia,
-          ios: () => TargetPlatform.iOS,
-          linux: () => TargetPlatform.linux,
-          macOS: () => TargetPlatform.macOS,
-          windows: () => TargetPlatform.windows,
+          android: () => .android,
+          fuchsia: () => .fuchsia,
+          ios: () => .iOS,
+          linux: () => .linux,
+          macOS: () => .macOS,
+          windows: () => .windows,
         );
         check(value).equals(platform);
       }

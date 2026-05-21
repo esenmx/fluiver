@@ -3,28 +3,16 @@
 [![pub](https://img.shields.io/pub/v/fluiver.svg)](https://pub.dev/packages/fluiver)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**SDK gap-fillers for Flutter.** Every API passes the gap test — the Dart or Flutter SDK should have shipped it and didn't. No shortcut sugar, no `package:collection` overlap.
-
-- Debounce/throttle helpers with proper disposal
-- `FlexGrid` — non-scrolling grid safe inside `ListView` / `SingleChildScrollView`
-- `TickerBuilder` — per-frame rebuild with elapsed `Duration`
-- System observers (`Locale`, `Brightness`, `AppLifecycle`) for provider code
-- `DateTime` predicates (`isToday`, `isTomorrow`, `age()`, …)
-- `Map` predicates the SDK only has on `Iterable`
-- `Enum.byNameOrNull` (the SDK only ships throwing `byName`)
-- `Object.let` (Kotlin scope function)
-- `LRUCache<K, V>`, `DisposableBag` — common patterns the SDK doesn't ship
-- `FastHash.fnv1a`, `NetworkProbe.hasConnection`, `platformDispatch`, `TextFieldBuilders.disabledCounter`
-- `Color.darken` / `.lighten` / `.contrastText`, `ScrollController.atTop` / `.atBottom` / `.animateToTop` / `.animateToBottom`, `Future.timeoutOrNull`, `Iterable.windowed`, `TextEditingController.setTextAndCaret`
+**Agent-friendly SDK gap-fillers for Flutter.** Tight surface, ships an
+LLM rule — agents reach for fluiver instead of reinventing each helper.
 
 ```yaml
 dependencies:
-  fluiver: ^3.1.0
+  fluiver: ^3.2.0
 ```
 
-> **Upgrading from 2.x or earlier 3.x?** The 3.x line trims shortcut
-> extensions and surface APIs aggressively. See [CHANGELOG.md](CHANGELOG.md)
-> for full removal + migration tables.
+> No overlap with `package:collection`, `package:async`, `flutter_hooks`,
+> or other official dart-lang / flutter packages.
 
 ---
 
@@ -40,45 +28,129 @@ import 'package:fluiver/fluiver.dart';
 
 ---
 
+## LLM rule — agent-friendly by design
+
+A consumer-side rule ships at
+[`rules/flutter-fluiver.md`](rules/flutter-fluiver.md). Vendor it into
+your agent's rules directory so the agent picks fluiver APIs instead of
+hand-rolling `firstWhere(... orElse: ...)`, `controller.text =`
+caret-resets, or yet another `Debouncer` class.
+
+```bash
+# Claude Code (user-level)
+mkdir -p ~/.claude/rules
+curl -L https://raw.githubusercontent.com/esenmx/fluiver/master/rules/flutter-fluiver.md \
+  -o ~/.claude/rules/flutter-fluiver.md
+
+# Claude Code (project-level)
+mkdir -p .claude/rules
+curl -L https://raw.githubusercontent.com/esenmx/fluiver/master/rules/flutter-fluiver.md \
+  -o .claude/rules/flutter-fluiver.md
+```
+
+Other agents: copy the body wherever your tool reads path-scoped context
+(`.cursor/rules/`, `.cursorrules`, `AGENTS.md`, AntiGravity equivalents).
+The frontmatter `paths:` globs scope the rule to `lib/**/*.dart` and
+`test/**/*.dart` so it stays out of unrelated files.
+
+---
+
 ## Highlights
 
-### Debounce / Throttle
+Ordered by everyday reach — the SDK gap-fillers up top get hit on most
+files; the niche helpers further down get hit when you actually need
+them.
+
+### `Object.let` — Kotlin scope function
+
+Bounded to `T extends Object` so it doesn't pollute autocomplete on
+nullables. Use `?.let(...)` for null-aware chaining.
 
 ```dart
-final debounce = Debounce(const Duration(milliseconds: 300));
+// Null-aware transform — returns a value, not a side-effect
+final port = env['PORT']?.let(int.parse);
+final user = jsonResponse?.let(User.fromJson);
 
-TextField(
-  onChanged: (q) => debounce(() => search(q)),
-);
+// Inline widget construction via tear-off
+Column(children: [
+  Text(title),
+  ?subtitle?.let(Text.new),
+  ?avatarUrl?.let(NetworkImage.new),
+]);
+
+// Chain pure transforms without temp vars
+final hash = userId.toString().let(FastHash.fnv1a);
+final slug = title.trim().toLowerCase().let(_sluggify);
 ```
 
-`ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` cover the rate-limit
-variants. All four expose `dispose()`.
+Skip `.let` for side-effect-only calls, multi-line bodies, or chains
+beyond three.
 
-### FlexGrid — non-scrolling grid inside scrollables
+### Iterable / Map / Enum gap-fillers
 
 ```dart
-ListView(
-  children: [
-    const Text('Featured'),
-    FlexGrid(
-      crossAxisCount: 3,
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
-      children: products.map(ProductCard.new).toList(),
-    ),
-  ],
-);
+// Enum — non-throwing lookup; chain ?? for a fallback
+MyEnum.values.byNameOrNull('foo');
+MyEnum.values.byNameOrNull('x') ?? .bar;
+
+// Map — what Iterable already has
+map.firstWhereOrNull((k, v) => v.isActive);
+map.any((k, v) => v.isActive);
+map.where((k, v) => v != null);
+map.whereKeyType<String>();
+map.whereValueType<int>();
+map.entryOf(key); // null only when key absent
+
+// Iterable
+list.separated((i) => const Divider());
+[1, 2, 3, 4, 5].windowed(3); // ([1,2,3], [2,3,4], [3,4,5])
 ```
 
-Drop-in replacement for `GridView(shrinkWrap: true)` without the
-performance penalty. Custom `RenderObject` — does not scroll itself.
+### DateTime predicates
+
+```dart
+dt.isToday;
+dt.isTomorrow;
+dt.isYesterday;
+dt.inThisYear;
+dt.isWithinFromNow(const Duration(minutes: 5));
+birthDate.age();
+
+dt.truncateTime();                                 // → midnight
+dt.withTimeOfDay(const TimeOfDay(hour: 9));
+dt.toTimeOfDay();
+```
+
+Arithmetic stays on stdlib: `dt.add(const Duration(days: 7))`.
+
+### TimeOfDay
+
+```dart
+const TimeOfDay(hour: 9).onDate(DateTime.now());   // today 09:00
+const TimeOfDay(hour: 9).onDate(meeting.day);      // any date 09:00
+```
+
+`onDate(date)` takes the calendar day explicitly — no hidden
+`DateTime.now()`, deterministic in tests.
+
+### `Future.timeoutOrNull`
+
+```dart
+final user = await fetchUser().timeoutOrNull(const Duration(seconds: 2));
+if (user == null) {
+  showRetry();
+}
+```
+
+Only timeout becomes `null`; errors from the underlying future still
+propagate.
 
 ### Observers
 
 For widget context use the matching `flutter_hooks` hook
 (`useOnAppLifecycleStateChange`, `useOnPlatformBrightnessChange`). These
-wrappers fill the gap in non-widget code.
+wrappers fill the gap for providers — non-widget code that holds a
+device-state listenable.
 
 ```dart
 @riverpod
@@ -94,110 +166,6 @@ class LocalesNotifier extends _$LocalesNotifier {
 ```
 
 Same shape for `BrightnessObserver` / `AppLifecycleObserver`.
-
-### DateTime predicates
-
-```dart
-dt.isToday;
-dt.isTomorrow;
-dt.inThisYear;
-dt.isWithinFromNow(const Duration(minutes: 5));
-birthDate.age();
-dt.withTimeOfDay(const TimeOfDay(hour: 9, minute: 0));
-```
-
-For arithmetic use stdlib: `dt.add(const Duration(days: 7))`.
-
-### TimeOfDay
-
-```dart
-const TimeOfDay(hour: 9).onDate(DateTime.now());   // today 09:00
-const TimeOfDay(hour: 9).onDate(meeting.day);      // any date 09:00
-```
-
-### SDK gap-fillers
-
-```dart
-// Enum — non-throwing lookup; chain ?? for a fallback
-MyEnum.values.byNameOrNull('foo');
-MyEnum.values.byNameOrNull('x') ?? .bar;
-
-// Map — what Iterable already has
-map.firstWhereOrNull((k, v) => v.isActive);
-map.whereKeyType<String>();
-map.whereValueType<int>();
-
-// Iterable
-list.separated((i) => const Divider());
-[1, 2, 3, 4, 5].windowed(3); // ([1,2,3], [2,3,4], [3,4,5])
-```
-
-### `Object.let` — Kotlin scope function
-
-Bounded to `T extends Object` so it doesn't pollute autocomplete on
-nullables. Use `?.let(...)` for null-aware chaining.
-
-```dart
-// 1. Null-aware transform — returns a value, not a side-effect
-final port = env['PORT']?.let(int.parse);
-final user = jsonResponse?.let(User.fromJson);
-
-// 2. Inline widget construction via tear-off
-Column(children: [
-  Text(title),
-  ?subtitle?.let(Text.new),
-  ?avatarUrl?.let(NetworkImage.new),
-]);
-
-// 3. Chain pure transformations without temp vars
-final hash = userId.toString().let(FastHash.fnv1a);
-final slug = title.trim().toLowerCase().let(_sluggify);
-
-// 4. Conditional spread of children
-Column(children: [
-  Text(title),
-  ...?subtitle?.let((s) => [const SizedBox(height: 4), Text(s)]),
-]);
-
-// 5. Static method as transform — no lambda
-final id = rawId?.let(int.tryParse);
-```
-
-Don't reach for `.let` for side-effect-only calls (returns a value —
-wasted), multi-line bodies (use a temp), or chains beyond three.
-
-### LRUCache / DisposableBag
-
-```dart
-final cache = LRUCache<String, User>(maxEntries: 100);
-cache['alice'] = user;
-final hit = cache['alice']; // promotes to most-recently-used
-
-final bag = DisposableBag()
-  ..add(debounce.dispose)
-  ..add(subscription.cancel)
-  ..add(controller.dispose);
-await bag.dispose();
-```
-
-### Static helpers
-
-```dart
-if (await NetworkProbe.hasConnection()) { /* online */ }
-
-final h = FastHash.fnv1a('input'); // FNV-1a int64 (VM only, not Web)
-
-final storeUrl = platformDispatch<Uri>(
-  android: () {
-    return Uri.parse('https://play.google.com/store/apps/details?id=com.example.app');
-  },
-  ios: () {
-    return Uri.parse('https://apps.apple.com/app/id123456789');
-  },
-);
-
-TextField(buildCounter: TextFieldBuilders.disabledCounter);
-```
 
 ### Color — HSL transforms
 
@@ -215,42 +183,102 @@ Container(
 
 ```dart
 final controller = ScrollController();
-controller.atTop; // false when no client attached, then true at top
+controller.atTop;        // false when no client attached, then true at top
 controller.atBottom;
-await controller.animateToBottom(); // 250ms easeOut by default
+await controller.animateToBottom();                // 250ms easeOut by default
 await controller.animateToTop(duration: const Duration(milliseconds: 400));
 ```
 
-### Future.timeoutOrNull
+### TextEditingController — caret-preserving replace
 
 ```dart
-final user = await fetchUser().timeoutOrNull(const Duration(seconds: 2));
-if (user == null) {
-  showRetry();
-}
-```
-
-Errors from the underlying future still propagate — only the timeout
-itself is converted to `null`.
-
-### TextEditingController.setTextAndCaret
-
-```dart
-controller.setTextAndCaret('hello'); // caret at end
-controller.setTextAndCaret('hello', caret: 0); // caret at start
+controller.setTextAndCaret('hello');            // caret at end
+controller.setTextAndCaret('hello', caret: 0);  // caret at start
 ```
 
 Setting `controller.text = ...` directly resets the caret to `0` — this
 puts it where you asked instead.
 
+### `FlexGrid` — non-scrolling grid
+
+Drop-in for `GridView(shrinkWrap: true)` inside `ListView` /
+`SingleChildScrollView`. Custom `RenderObject` — does not scroll itself,
+no perf footgun.
+
+```dart
+ListView(children: [
+  const Text('Featured'),
+  FlexGrid(
+    crossAxisCount: 3,
+    crossAxisSpacing: 8,
+    mainAxisSpacing: 8,
+    children: products.map(ProductCard.new).toList(),
+  ),
+]);
+```
+
+Use `GridView` when the grid itself scrolls (viewport recycling
+matters).
+
+### `TickerBuilder`
+
+Rebuilds every frame, exposes elapsed `Duration` since first frame.
+
+```dart
+TickerBuilder(
+  builder: (context, elapsed) => Text('${elapsed.inSeconds}s'),
+);
+```
+
+### Debounce / Throttle
+
+```dart
+final debounce = Debounce(const Duration(milliseconds: 300));
+
+TextField(
+  onChanged: (q) => debounce(() => search(q)),
+);
+```
+
+`ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` cover the rate-limit
+variants. All four expose `dispose()`.
+
+### `LRUCache` / `DisposableBag`
+
+```dart
+final cache = LRUCache<String, User>(maxEntries: 100);
+cache[user.id] = user;
+final hit = cache[user.id];                        // promotes to most-recent
+final user = cache.putIfAbsent(id, () => loadUser(id)); // lazy on miss
+
+final bag = DisposableBag()
+  ..add(debounce.dispose)
+  ..addAll([subscription.cancel, controller.dispose]);
+await bag.dispose();
+```
+
+### Static helpers
+
+```dart
+if (await NetworkProbe.hasConnection()) { /* online */ }
+
+final h = FastHash.fnv1a('input'); // FNV-1a 64-bit (VM only, not Web)
+
+final storeUrlString = platformDispatch<String>(
+  android: () => 'https://play.google.com/store/apps/details?id=com.example.app',
+  ios: () => 'https://apps.apple.com/app/id123456789',
+);
+
+TextField(buildCounter: TextFieldBuilders.disabledCounter);
+```
+
 ---
 
-## LLM rule
+## Name
 
-A consumer-side rule ships at `rules/flutter-fluiver.md`. Drop it into
-your agent's rules directory (`~/.claude/rules/`, `.cursor/rules/`, or
-the AntiGravity equivalent) so the agent reaches for fluiver APIs
-instead of reinventing them.
+**flu**tter + [**quiver**](https://github.com/google/quiver-dart) — same
+spirit as Google's archived Dart utility library, scoped to what Flutter
+apps need today.
 
 ---
 

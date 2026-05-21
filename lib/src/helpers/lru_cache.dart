@@ -7,9 +7,9 @@ part of '../../fluiver.dart';
 ///
 /// ```dart
 /// final cache = LRUCache<String, User>(maxEntries: 100);
-/// cache['alice'] = user;
-/// final hit = cache['alice'];                  // marks as recent
-/// cache.remove('alice');
+/// cache[user.id] = user;
+/// final hit = cache[user.id]; // marks as recent
+/// cache.remove(user.id);
 /// cache.clear();
 /// ```
 ///
@@ -54,6 +54,25 @@ class LRUCache<K, V> {
     if (_entries.length > maxEntries) {
       _entries.remove(_entries.keys.first);
     }
+  }
+
+  /// Returns the cached value for [key], promoting it to most-recently-used.
+  /// On miss, computes [ifAbsent], stores it, and returns the new value.
+  ///
+  /// ```dart
+  /// final user = userCache.putIfAbsent(id, () => loadUser(id));
+  /// ```
+  ///
+  /// [ifAbsent] runs synchronously; for async loads keep the cache typed on
+  /// the future (`LRUCache<K, Future<V>>`) so concurrent misses dedupe.
+  V putIfAbsent(K key, V Function() ifAbsent) {
+    final hit = this[key];
+    if (hit != null || _entries.containsKey(key)) {
+      return hit as V;
+    }
+    final value = ifAbsent();
+    this[key] = value;
+    return value;
   }
 
   /// Returns `true` if [key] is present (without promoting it).
