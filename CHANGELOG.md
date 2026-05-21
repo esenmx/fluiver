@@ -1,90 +1,50 @@
 # Changelog
 
+## 3.2.0
+
+- **Added** — `LRUCache.putIfAbsent(K key, V Function() ifAbsent)`. Lazy compute on miss; hit promotes the entry to most-recently-used.
+- **Added** — `DisposableBag.addAll(Iterable<FutureOr<void> Function()>)`. Bulk-register disposers; same semantics as repeated `add`.
+- **Changed** — Rule file no-overlap callout narrowed to `package:collection` and `package:async`.
+
 ## 3.1.0
 
-### Added
-
-| Category | API | Notes |
-| --- | --- | --- |
-| Color | `Color.darken([amount])`, `Color.lighten([amount])`, `Color.contrastText` | HSL-based; `contrastText` picks black/white via luminance |
-| ScrollController | `.atTop`, `.atBottom`, `.animateToTop({duration, curve})`, `.animateToBottom({duration, curve})` | `hasClients`-safe |
-| Future | `Future<T>.timeoutOrNull(Duration)` → `Future<T?>` | Null on timeout, errors still propagate |
-| Iterable | `Iterable<E>.windowed(int size, {int step = 1})` | Stepped sliding window; drops partial trailing window |
-| TextEditingController | `.setTextAndCaret(String, {int? caret})` | Avoids the `controller.text = ...` caret-reset papercut |
-
-### Removed
-
-| Removed | Replacement |
-| --- | --- |
-| `PaddedFlex` / `PaddedRow` / `PaddedColumn` widgets | `Padding(padding: ..., child: Column(children: [...]))` / `Row` — LLMs reach for this natively |
-| `IterableEnum.byNameOrElse(name, orElse: ...)` | `Enum.values.byNameOrNull(name) ?? .fallback` — Dart shorthand handles the fallback |
-
-### Changed
-
-- LLM artifact moved from `rules/fluiver.md` to `rules/flutter-fluiver.md`. Renamed with the `flutter-` prefix to namespace it against other rule collections.
+- **Added** — `Color.darken([amount])`, `Color.lighten([amount])`, `Color.contrastText`. HSL-based; `contrastText` picks black or white via luminance.
+- **Added** — `ScrollController.atTop`, `.atBottom`, `.animateToTop({duration, curve})`, `.animateToBottom({duration, curve})`. `hasClients`-safe.
+- **Added** — `Future<T>.timeoutOrNull(Duration)` → `Future<T?>`. Null on timeout, errors still propagate.
+- **Added** — `Iterable<E>.windowed(int size, {int step = 1})`. Stepped sliding window; drops partial trailing window.
+- **Added** — `TextEditingController.setTextAndCaret(String, {int? caret})`. Avoids the `controller.text = ...` caret-reset papercut.
+- **Changed** — LLM artifact moved from `rules/fluiver.md` to `rules/flutter-fluiver.md`. Namespaced with the `flutter-` prefix.
+- **Removed** — `PaddedFlex` / `PaddedRow` / `PaddedColumn` widgets. Use `Padding(padding: ..., child: Column(children: [...]))` / `Row` — LLMs reach for this natively.
+- **Removed** — `IterableEnum.byNameOrElse(name, orElse: ...)`. Use `Enum.values.byNameOrNull(name) ?? .fallback` — Dart shorthand handles the fallback.
 
 ## 3.0.0
 
-**Breaking — utility-library pivot.**
+**Breaking — utility-library pivot.** The "single-dot shortcut" framing collided with LLM-assisted development: agents do not know the extensions exist, default to stdlib forms, and teaching the API costs input tokens on every turn. The sugar layer had to go. What remains is substance — things the SDK is genuinely missing. Ships a compact rule file at `rules/fluiver.md` for consumer projects to load into their LLM agent.
 
-The "single-dot shortcut" framing collided with LLM-assisted development:
-agents do not know the extensions exist, default to stdlib forms, and
-teaching the API costs input tokens on every turn. The sugar layer had to
-go. What remains is substance — things the SDK is genuinely missing.
-
-Ships a compact rule file at `rules/fluiver.md` for consumer projects to
-load into their LLM agent.
-
-### Removed
-
-| Removed | Replacement |
-| --- | --- |
-| `extensions/build_context.dart` (all `context.primaryColor`, `context.titleLargeTextStyle`, `context.screenWidth`, `context.isThemeDark`, etc.) | `Theme.of(context).colorScheme.primary`, `Theme.of(context).textTheme.titleLarge`, `MediaQuery.sizeOf(context).width`, `Theme.of(context).brightness == Brightness.dark` |
-| `extensions/text_style.dart` (`withColor`, `withWeight400`, `withSize`, `withUnderline`, ...) | `style.copyWith(color: ..., fontWeight: FontWeight.w400, fontSize: ...)` |
-| `extensions/edge_insets.dart` (`addLeft`, `onlyTop`, `setRight`, `withStatusBarMargin`, ...) | `EdgeInsets.only(...)`, `.copyWith(...)`, `MediaQuery.viewPaddingOf(context).top` |
-| `extensions/border_radius.dart` (`addAll`, `onlyTopLeft`, `setBottomRight`, ...) | `BorderRadius.only(...)`, `.copyWith(...)` |
-| `extensions/bool.dart` (`toInt`) | `b ? 1 : 0` |
-| `extensions/date_time.dart` arithmetic (`addYears`, `addMonths`, `addWeeks`, `addDays`, `addHours`, `addMinutes`, `addSeconds`) | `dt.add(Duration(days: N))` / `DateTime(y + n, m, d)` |
-| `extensions/key.dart` (`validateAndSave` on `GlobalKey<FormFieldState<T>>`) | `if (k.currentState!.validate()) k.currentState!.save();` |
-| `extensions/flutter_enums.dart` (`Axis.reverse`, `TextDirection.reverse`, `Brightness.reverse`, `Orientation.reverse`) | inline ternary |
-| `extensions/string.dart` (`capitalize`, `capitalizeAll`, `initials`, `safeSubstring`) | inline |
-
-### Renamed / Refactored
-
-| Before | After | Why |
-| --- | --- | --- |
-| top-level `fastHash(s)` | `FastHash.fnv1a(s)` | namespace, algorithm-named, future-proof for other hashes |
-| top-level `hasDeviceConnection()` | `NetworkProbe.hasConnection({timeout})` | namespaced, `timeout` is now configurable |
-| top-level `platformSpecific<T>(...)` | top-level `platformDispatch<T>(...)` | clearer name; matches `compute`/`dispatch` mental model |
-| top-level `disabledInputCounterBuilder` | `TextFieldBuilders.disabledCounter` | namespaced; room for more `TextField` helpers |
-| `TimeOfDay.todayAt()` | `TimeOfDay.onDate(DateTime date)` | takes the calendar day explicitly — testable, no hidden `DateTime.now()` |
-
-### Fixed
-
-- `Map.entryOf(k)` distinguishes "key absent" from "key present with null value"; previously returned `null` for both. `{'a': null}.entryOf('a')` now returns `MapEntry('a', null)`.
-- `DateTime.isTomorrow` / `isYesterday` used `Duration(days: 1)` (24h), which crosses DST fall-back days incorrectly. Now uses calendar-day arithmetic (`DateTime(y, m, d ± 1)`).
-- `NetworkProbe.hasConnection` now short-circuits to `true` on web (previous `dart:io.Socket` call would have thrown at runtime), narrows its catch to `SocketException`/`TimeoutException` (no more swallowing programming bugs), and exposes the timeout as a parameter.
-- `PaddedFlex.textDirection` / `textBaseline` default to `null` — `Flex` resolves from ambient `Directionality`. Previously hardcoded `TextDirection.ltr` broke RTL layouts.
-- `TickerBuilder.initState` calls `super.initState()` before starting the ticker.
-- `ThrottleLast._last` initialized to a no-op closure instead of `late VoidCallback`.
-- `Let<T>` extension is now bounded to `T extends Object`, so `.let` no longer pollutes autocomplete on nullable receivers. Use `?.let(...)` for null-aware chaining.
-
-### Added
-
-- `LRUCache<K, V>(maxEntries: N)` — bounded least-recently-used cache; O(1) reads/writes/eviction; reads/writes promote.
-- `DisposableBag` — collect `dispose` / `cancel` / `close` closures and flush in registration order with a single `dispose()`. Idempotent; adding after dispose runs the closure immediately.
-- `rules/fluiver.md` — compact rule file for LLM agents; documents the surviving API surface and steers away from removed identifiers.
-
-### Kept
-
-- Widgets: `FlexGrid`, `TickerBuilder`, `PaddedFlex`/`PaddedRow`/`PaddedColumn`
-- Reactive: `Debounce`, `ThrottleLatest`, `ThrottleFirst`, `ThrottleLast`
-- Observers: `LocaleObserver`, `BrightnessObserver`, `AppLifecycleObserver`
-- DateTime predicates + merge: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow`, `age()`, `truncateTime`, `withTimeOfDay`, `toTimeOfDay`
-- Enum: `EnumIndexComparable` mixin, `byNameOrNull`, `byNameOrElse`
-- Iterable: `separated`
-- Map: `any`, `every`, `firstWhereOrNull`, `where`, `whereKeyType`, `whereValueType`, `entryOf`
-- Object: `let`
+- **Removed** — `extensions/build_context.dart` (`context.primaryColor`, `context.titleLargeTextStyle`, `context.screenWidth`, `context.isThemeDark`, …). Use `Theme.of(context).colorScheme.primary`, `Theme.of(context).textTheme.titleLarge`, `MediaQuery.sizeOf(context).width`, `Theme.of(context).brightness == Brightness.dark`.
+- **Removed** — `extensions/text_style.dart` (`withColor`, `withWeight400`, `withSize`, `withUnderline`, …). Use `style.copyWith(color: ..., fontWeight: FontWeight.w400, fontSize: ...)`.
+- **Removed** — `extensions/edge_insets.dart` (`addLeft`, `onlyTop`, `setRight`, `withStatusBarMargin`, …). Use `EdgeInsets.only(...)`, `.copyWith(...)`, `MediaQuery.viewPaddingOf(context).top`.
+- **Removed** — `extensions/border_radius.dart` (`addAll`, `onlyTopLeft`, `setBottomRight`, …). Use `BorderRadius.only(...)`, `.copyWith(...)`.
+- **Removed** — `extensions/bool.dart` (`toInt`). Use `b ? 1 : 0`.
+- **Removed** — `extensions/date_time.dart` arithmetic (`addYears`, `addMonths`, `addWeeks`, `addDays`, `addHours`, `addMinutes`, `addSeconds`). Use `dt.add(Duration(days: N))` / `DateTime(y + n, m, d)`.
+- **Removed** — `extensions/key.dart` (`validateAndSave` on `GlobalKey<FormFieldState<T>>`). Use `if (k.currentState!.validate()) k.currentState!.save();`.
+- **Removed** — `extensions/flutter_enums.dart` (`Axis.reverse`, `TextDirection.reverse`, `Brightness.reverse`, `Orientation.reverse`). Use inline ternary.
+- **Removed** — `extensions/string.dart` (`capitalize`, `capitalizeAll`, `initials`, `safeSubstring`). Inline.
+- **Renamed** — `fastHash(s)` → `FastHash.fnv1a(s)`. Namespace, algorithm-named, future-proof for other hashes.
+- **Renamed** — `hasDeviceConnection()` → `NetworkProbe.hasConnection({timeout})`. Namespaced; `timeout` is now configurable.
+- **Renamed** — `platformSpecific<T>(...)` → `platformDispatch<T>(...)`. Clearer name; matches `compute` / `dispatch` mental model.
+- **Renamed** — `disabledInputCounterBuilder` → `TextFieldBuilders.disabledCounter`. Namespaced; room for more `TextField` helpers.
+- **Renamed** — `TimeOfDay.todayAt()` → `TimeOfDay.onDate(DateTime date)`. Takes the calendar day explicitly — testable, no hidden `DateTime.now()`.
+- **Fixed** — `Map.entryOf(k)` distinguishes "key absent" from "key present with null value"; previously returned `null` for both. `{'a': null}.entryOf('a')` now returns `MapEntry('a', null)`.
+- **Fixed** — `DateTime.isTomorrow` / `isYesterday` used `Duration(days: 1)` (24h), which crosses DST fall-back days incorrectly. Now uses calendar-day arithmetic (`DateTime(y, m, d ± 1)`).
+- **Fixed** — `NetworkProbe.hasConnection` short-circuits to `true` on web (previous `dart:io.Socket` call would have thrown at runtime), narrows its catch to `SocketException` / `TimeoutException` (no more swallowing programming bugs), and exposes the timeout as a parameter.
+- **Fixed** — `PaddedFlex.textDirection` / `textBaseline` default to `null` — `Flex` resolves from ambient `Directionality`. Previously hardcoded `TextDirection.ltr` broke RTL layouts.
+- **Fixed** — `TickerBuilder.initState` calls `super.initState()` before starting the ticker.
+- **Fixed** — `ThrottleLast._last` initialized to a no-op closure instead of `late VoidCallback`.
+- **Fixed** — `Let<T>` extension is now bounded to `T extends Object`, so `.let` no longer pollutes autocomplete on nullable receivers. Use `?.let(...)` for null-aware chaining.
+- **Added** — `LRUCache<K, V>(maxEntries: N)`. Bounded least-recently-used cache; O(1) reads / writes / eviction; reads / writes promote.
+- **Added** — `DisposableBag`. Collect `dispose` / `cancel` / `close` closures and flush in registration order with a single `dispose()`. Idempotent; adding after dispose runs the closure immediately.
+- **Added** — `rules/fluiver.md`. Compact rule file for LLM agents; documents the surviving API surface and steers away from removed identifiers.
 
 ## 2.4.3
 
