@@ -1,6 +1,5 @@
 ---
 name: flutter-fluiver
-description: fluiver utility package APIs.
 paths:
   - "**/lib/**/*.dart"
   - "**/test/**/*.dart"
@@ -10,7 +9,7 @@ paths:
 
 **SDK gap-fillers for Flutter.** Every API is something `dart:core` / Flutter SDK should ship and doesn't. `import 'package:fluiver/fluiver.dart';` and reach for these instead of reinventing.
 
-> **Don't reinvent these (covered elsewhere).** `List.swap` lives in `package:collection`; `Random.intInRange` / `Random.pick` in `package:rand`; `useAutomaticKeepAlive` / `useOnAppLifecycleStateChange` / `useOnPlatformBrightnessChange` in `flutter_hooks`. fluiver does not duplicate them.
+> **No overlap with `package:collection` / `package:async`.** Reach for those first for list/set/iterable/stream helpers — fluiver does not duplicate them.
 
 ## Widgets
 
@@ -247,11 +246,11 @@ TextField(buildCounter: TextFieldBuilders.disabledCounter)
 ### `platformDispatch<T>(...)` — top-level
 
 ```dart
-final storeUrl = platformDispatch<Uri>(
+final storeUrlString = platformDispatch<String>(
   android: () => 'https://play.google.com/store/apps/details?id=com.example.app',
   ios: () => 'https://apps.apple.com/app/id123456789',
 );
-await launchUrl(storeUrl);
+await launchUrlString(storeUrlString);
 ```
 
 Throws `UnsupportedError` if current platform has no callback — opt in to what you support.
@@ -261,11 +260,16 @@ Throws `UnsupportedError` if current platform has no callback — opt in to what
 Bounded LRU. Reads/writes promote to most-recent; O(1). Not thread-safe; per-isolate.
 
 ```dart
-final cache = LRUCache<String, User>(maxEntries: 100)..['alice'] = user;
-final hit = cache['alice']; // promotes
-cache.remove('alice');
+final cache = LRUCache<String, User>(maxEntries: 100)..[user.id] = user;
+final hit = cache[user.id]; // promotes
+cache.remove(user.id);
 cache.clear();
+
+// Lazy compute on miss; hit still promotes.
+final user = cache.putIfAbsent(id, () => loadUser(id));
 ```
+
+For async loads, type the cache on the future (`LRUCache<K, Future<V>>`) so concurrent misses dedupe.
 
 ### `DisposableBag`
 
@@ -274,7 +278,6 @@ Collects `dispose` / `cancel` / `close` closures; one call flushes all in regist
 ```dart
 final bag = DisposableBag()
   ..add(debounce.dispose)
-  ..add(subscription.cancel)
-  ..add(controller.dispose);
+  ..addAll([subscription.cancel, controller.dispose]);
 await bag.dispose();
 ```

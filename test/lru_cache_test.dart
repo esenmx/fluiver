@@ -71,5 +71,46 @@ void main() {
       final _ = cache['a'];
       check(cache.keys.toList()).deepEquals(['b', 'c', 'a']);
     });
+
+    group('putIfAbsent', () {
+      test('computes and stores on miss', () {
+        final cache = LRUCache<String, int>(maxEntries: 2);
+        var calls = 0;
+
+        final v = cache.putIfAbsent('a', () {
+          calls++;
+          return 42;
+        });
+
+        check(v).equals(42);
+        check(calls).equals(1);
+        check(cache['a']).equals(42);
+      });
+
+      test('returns existing value without running factory', () {
+        final cache = LRUCache<String, int>(maxEntries: 2)..['a'] = 1;
+        var calls = 0;
+
+        final v = cache.putIfAbsent('a', () {
+          calls++;
+          return 99;
+        });
+
+        check(v).equals(1);
+        check(calls).equals(0);
+      });
+
+      test('hit promotes the entry to most-recently-used', () {
+        final cache = LRUCache<String, int>(maxEntries: 2)
+          ..['a'] = 1
+          ..['b'] = 2
+          ..putIfAbsent('a', () => 99) // hit; should promote 'a'.
+          ..['c'] = 3; // evicts 'b', not 'a'.
+
+        check(cache.containsKey('a')).isTrue();
+        check(cache.containsKey('b')).isFalse();
+        check(cache.containsKey('c')).isTrue();
+      });
+    });
   });
 }
