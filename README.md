@@ -4,11 +4,11 @@
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **Agent-friendly SDK gap-fillers for Flutter.** Tight surface, ships an
-LLM rule — agents reach for fluiver instead of reinventing each helper.
+LLM skill — agents reach for fluiver instead of reinventing each helper.
 
 ```yaml
 dependencies:
-  fluiver: ^3.2.0
+  fluiver: ^3.2.1
 ```
 
 > No overlap with `package:collection`, `package:async`, `flutter_hooks`,
@@ -28,30 +28,14 @@ import 'package:fluiver/fluiver.dart';
 
 ---
 
-## LLM rule — agent-friendly by design
+## LLM skill
 
-A consumer-side rule ships at
-[`rules/flutter-fluiver.md`](rules/flutter-fluiver.md). Vendor it into
-your agent's rules directory so the agent picks fluiver APIs instead of
-hand-rolling `firstWhere(... orElse: ...)`, `controller.text =`
-caret-resets, or yet another `Debouncer` class.
-
-```bash
-# Claude Code (user-level)
-mkdir -p ~/.claude/rules
-curl -L https://raw.githubusercontent.com/esenmx/fluiver/master/rules/flutter-fluiver.md \
-  -o ~/.claude/rules/flutter-fluiver.md
-
-# Claude Code (project-level)
-mkdir -p .claude/rules
-curl -L https://raw.githubusercontent.com/esenmx/fluiver/master/rules/flutter-fluiver.md \
-  -o .claude/rules/flutter-fluiver.md
-```
-
-Other agents: copy the body wherever your tool reads path-scoped context
-(`.cursor/rules/`, `.cursorrules`, `AGENTS.md`, AntiGravity equivalents).
-The frontmatter `paths:` globs scope the rule to `lib/**/*.dart` and
-`test/**/*.dart` so it stays out of unrelated files.
+Ships a description-triggered skill at
+[`tool/claude/flutter-fluiver/SKILL.md`](tool/claude/flutter-fluiver/SKILL.md)
+so agents reach for fluiver APIs instead of hand-rolling
+`firstWhere(... orElse: ...)`, `controller.text =` caret-resets, or yet another
+`Debouncer`. Vendor it into your agent's skills directory — installing it is the
+consumer's call.
 
 ---
 
