@@ -12,7 +12,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:meta/meta.dart';
 
 part 'src/extensions/color.dart';
 part 'src/extensions/date_time.dart';

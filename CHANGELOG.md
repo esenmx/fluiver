@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.2.1
+
+- **Changed** — Dropped `@useResult` from `Object.let`; the result can now be safely ignored (e.g. side-effecting transforms) without an analyzer warning.
+- **Changed** — LLM artifact moved from a path-scoped rule to a description-triggered skill (`tool/claude/flutter-fluiver/SKILL.md`); loaded by relevance instead of on every `lib/` / `test/` file.
+
 ## 3.2.0
 
 - **Added** — `LRUCache.putIfAbsent(K key, V Function() ifAbsent)`. Lazy compute on miss; hit promotes the entry to most-recently-used.
