@@ -38,6 +38,5 @@ extension Let<T extends Object> on T {
   /// Anti-patterns: side-effect-only calls (`.let` returns a value — wasted
   /// if you ignore it); long bodies that hide intent (use a temp variable);
   /// chains longer than three (use named steps).
-  @useResult
   R let<R>(R Function(T it) fn) => fn(this);
 }
