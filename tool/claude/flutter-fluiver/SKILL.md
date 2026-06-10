@@ -1,6 +1,6 @@
 ---
 name: flutter-fluiver
-description: SDK gap-fillers via package:fluiver — reach for these instead of reinventing. FlexGrid (non-scroll grid), TickerBuilder, Debounce/ThrottleFirst/Last/Latest, Locale/Brightness/AppLifecycle observers, DateTime/TimeOfDay predicates, Enum byNameOrNull/EnumIndexComparable, Iterable separated/windowed, Map entryOf, Object.let, Color darken/lighten/contrastText, ScrollController atTop/animateTo*, Future.timeoutOrNull, TextEditingController.setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
+description: SDK gap-fillers via package:fluiver — use instead of reinventing. FlexGrid (non-scroll grid), TickerBuilder, Debounce/Throttle*, Locale/Brightness/AppLifecycle observers, DateTime/TimeOfDay predicates, Enum.byNameOrNull, Iterable separated/windowed, Map.entryOf, Object.let, Color darken/lighten/contrastText, ScrollController atTop/animateTo*, Future.timeoutOrNull, TextEditingController.setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
 ---
 
 # flutter-fluiver
