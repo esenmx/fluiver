@@ -1,6 +1,5 @@
 part of '../../fluiver.dart';
 
-/// {@macro extensionFor}
 /// Predicate operations on [Map].
 extension MapPredicate<K, V> on Map<K, V> {
   /// Whether at least one entry satisfies [test].
@@ -28,7 +27,6 @@ extension MapPredicate<K, V> on Map<K, V> {
   }
 }
 
-/// {@macro extensionFor}
 /// Filtering [Map] entries by key or value type.
 extension MapFilter<K, V> on Map<K, V> {
   /// Returns a new map containing only the entries that satisfy [test].
@@ -56,7 +54,6 @@ extension MapFilter<K, V> on Map<K, V> {
   }
 }
 
-/// {@macro extensionFor}
 /// Getting [MapEntry] from [Map].
 extension MapMapEntry<K, V> on Map<K, V> {
   /// Returns the [MapEntry] for [k], or `null` if the key is absent.

@@ -1,9 +1,5 @@
 library;
 
-/// {@template extensionFor}
-/// Extension providing convenient access to operations on the target type.
-/// {@endtemplate}
-
 import 'dart:async';
 import 'dart:collection';
 import 'dart:io' show InternetAddress, Socket, SocketException;
