@@ -1,6 +1,5 @@
 part of '../../fluiver.dart';
 
-/// {@macro extensionFor}
 /// Separating [Iterable] elements.
 extension IterableSeparator<E> on Iterable<E> {
   /// Yields each element of this iterable separated by the result of
@@ -28,7 +27,6 @@ extension IterableSeparator<E> on Iterable<E> {
   }
 }
 
-/// {@macro extensionFor}
 /// Stepped sliding-window iteration over an [Iterable].
 ///
 /// Fills a gap left by `package:collection` — its `slices` only yields

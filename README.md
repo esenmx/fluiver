@@ -8,7 +8,7 @@ LLM skill — agents reach for fluiver instead of reinventing each helper.
 
 ```yaml
 dependencies:
-  fluiver: ^3.2.1
+  fluiver: ^3.2.2
 ```
 
 > No overlap with `package:collection`, `package:async`, `flutter_hooks`,

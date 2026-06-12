@@ -8,11 +8,7 @@ part of '../../fluiver.dart';
 /// or a debug clock) without managing the ticker yourself.
 class TickerBuilder extends StatefulWidget {
   /// Creates a widget that rebuilds every frame.
-  const TickerBuilder({
-    required this.builder,
-    this.onTick,
-    super.key,
-  });
+  const TickerBuilder({required this.builder, this.onTick, super.key});
 
   /// Called every frame with the elapsed time since the first frame.
   final Widget Function(BuildContext context, Duration elapsed) builder;

@@ -1,6 +1,5 @@
 part of '../../fluiver.dart';
 
-/// {@macro extensionFor}
 /// Anchoring a [TimeOfDay] onto a [DateTime] calendar day.
 extension TimeOfDayOnDate on TimeOfDay {
   /// Returns a [DateTime] on [date] at this time-of-day, with seconds and

@@ -26,7 +26,6 @@ mixin EnumIndexComparable on Enum implements Comparable<Enum> {
   int compareTo(Enum other) => index - other.index;
 }
 
-/// {@macro extensionFor}
 /// Working with [Enum] collections.
 extension IterableEnum<T extends Enum> on Iterable<T> {
   /// Returns the enum value whose `name` matches [name], or `null` if none.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.2
+
+- **Fixed** — `FastHash.fnv1a`'s 64-bit offset-basis literal broke compilation on web targets (including `flutter widget-preview`). Now split into web-representable halves (bit-exact on the VM); throws `UnsupportedError` on web instead of corrupting hashes.
+
 ## 3.2.1
 
 - **Changed** — Dropped `@useResult` from `Object.let`; the result can now be safely ignored (e.g. side-effecting transforms) without an analyzer warning.

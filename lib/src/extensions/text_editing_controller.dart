@@ -1,6 +1,5 @@
 part of '../../fluiver.dart';
 
-/// {@macro extensionFor}
 /// Caret-preserving text replacement on [TextEditingController].
 extension TextEditingControllerCaret on TextEditingController {
   /// Replaces the controller text and places the caret at [caret],

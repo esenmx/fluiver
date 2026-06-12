@@ -1,6 +1,5 @@
 part of '../../fluiver.dart';
 
-/// {@macro extensionFor}
 /// Kotlin-style `let` scope function on any non-null object.
 ///
 /// Bounded to `T extends Object` so `.let` only appears on non-null

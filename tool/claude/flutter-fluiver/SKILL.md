@@ -40,7 +40,7 @@ ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
 - **Enum**: `with EnumIndexComparable` adds `<`/`>`/`compareTo` by index. `Values.byNameOrNull(name)` → nullable — use on untrusted URL/env/JSON input (stdlib `byName` throws); chain `?? .fallback`.
 - **Iterable**: `separated((i) => sep)` (interleave by index slot); `windowed(size, {step})` — stepped sliding window that **drops the partial trailing window** (vs non-overlapping `package:collection.slices`).
 - **Map**: `any` / `every` / `firstWhereOrNull` / `where` over `(k, v)`; `whereKeyType<T>()`, `whereValueType<T>()`; `entryOf(key)` → `MapEntry?` that is null **only when the key is absent** (distinguishes present-with-null from missing).
-- **Object.let** (`T extends Object`, `@useResult`): transform-and-return; `?.let(...)` for null-aware (`env['PORT']?.let(int.parse)`, `?url?.let(NetworkImage.new)`). Skip it for side-effect-only calls, multi-line bodies, or chains beyond three.
+- **Object.let** (`T extends Object`): transform-and-return; `?.let(...)` for null-aware (`env['PORT']?.let(int.parse)`, `?url?.let(NetworkImage.new)`). Skip it for side-effect-only calls, multi-line bodies, or chains beyond three.
 - **Color** (HSL): `darken([amount])`, `lighten([amount])` (default ±0.1), `contrastText` (black or white by luminance). `amount` and result lightness clamp to `[0,1]`.
 - **ScrollController**: `atTop`, `atBottom`, `animateToTop({duration, curve})`, `animateToBottom(...)` — all `hasClients`-safe (no-op when unattached); defaults 250 ms `easeOut`.
 - **Future**: `timeoutOrNull(Duration)` → `Future<T?>` — null on timeout **only**; the underlying future's errors still throw.
@@ -49,7 +49,7 @@ ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
 ## Helpers
 
 |API|Note|
-|---|---|
+|--|--|
 |`FastHash.fnv1a(String)` → `int`|FNV-1a 64-bit. **VM only** — JS 53-bit ints corrupt it. NOT cryptographic.|
 |`NetworkProbe.hasConnection({timeout})`|`false` on `SocketException` / `TimeoutException`; web short-circuits to `true`.|
 |`platformDispatch<T>({android, ios, macos, …})`|Per-platform value; **throws `UnsupportedError`** when the current platform has no callback — opt in explicitly.|
