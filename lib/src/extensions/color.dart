@@ -1,6 +1,5 @@
 part of '../../fluiver.dart';
 
-/// {@macro extensionFor}
 /// HSL-based [Color] transforms and contrast-text picker.
 extension ColorTransform on Color {
   /// Returns a darker variant by subtracting [amount] from HSL lightness.

@@ -1,6 +1,5 @@
 part of '../../fluiver.dart';
 
-/// {@macro extensionFor}
 /// Null-on-timeout variant of [Future.timeout].
 extension FutureTimeout<T> on Future<T> {
   /// Returns `null` instead of throwing on [TimeoutException].

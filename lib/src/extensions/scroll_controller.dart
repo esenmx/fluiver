@@ -1,6 +1,5 @@
 part of '../../fluiver.dart';
 
-/// {@macro extensionFor}
 /// Position predicates and edge-animation shortcuts for [ScrollController].
 ///
 /// `atTop` / `atBottom` are safe to read before a scrollable attaches —
@@ -34,11 +33,7 @@ extension ScrollControllerPosition on ScrollController {
     if (!hasClients) {
       return;
     }
-    await animateTo(
-      position.minScrollExtent,
-      duration: duration,
-      curve: curve,
-    );
+    await animateTo(position.minScrollExtent, duration: duration, curve: curve);
   }
 
   /// Animates to the maximum scroll extent.
@@ -51,10 +46,6 @@ extension ScrollControllerPosition on ScrollController {
     if (!hasClients) {
       return;
     }
-    await animateTo(
-      position.maxScrollExtent,
-      duration: duration,
-      curve: curve,
-    );
+    await animateTo(position.maxScrollExtent, duration: duration, curve: curve);
   }
 }

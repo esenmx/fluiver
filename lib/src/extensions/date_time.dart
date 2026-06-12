@@ -1,13 +1,11 @@
 part of '../../fluiver.dart';
 
-/// {@macro extensionFor}
 /// Converting [DateTime] to [TimeOfDay].
 extension DateTimeTimeOfDay on DateTime {
   /// Returns this date's hour and minute as a [TimeOfDay].
   TimeOfDay toTimeOfDay() => TimeOfDay(hour: hour, minute: minute);
 }
 
-/// {@macro extensionFor}
 /// Merging time components with [DateTime].
 extension DateTimeMerge on DateTime {
   /// Returns this date with hour/minute/second/millisecond/microsecond
@@ -29,7 +27,6 @@ extension DateTimeMerge on DateTime {
   }
 }
 
-/// {@macro extensionFor}
 /// Checking date conditions on [DateTime].
 extension DateTimeCheck on DateTime {
   bool _offsetChecker(int dayOffset) {
@@ -61,7 +58,6 @@ extension DateTimeCheck on DateTime {
   }
 }
 
-/// {@macro extensionFor}
 /// Calculating age from [DateTime].
 extension DateTimeCalculator on DateTime {
   /// Returns the number of full years between this date and `DateTime.now()`.
