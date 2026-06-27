@@ -285,4 +285,89 @@ class RenderFlexGrid extends RenderBox
   bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
     return defaultHitTestChildren(result, position: position);
   }
+
+  @override
+  double computeMinIntrinsicWidth(double height) =>
+      _computeIntrinsicWidth(height);
+
+  @override
+  double computeMaxIntrinsicWidth(double height) =>
+      _computeIntrinsicWidth(height);
+
+  @override
+  double computeMinIntrinsicHeight(double width) =>
+      _computeIntrinsicHeight(width);
+
+  @override
+  double computeMaxIntrinsicHeight(double width) =>
+      _computeIntrinsicHeight(width);
+
+  double _computeIntrinsicWidth(double height) {
+    final resolvedPadding = _resolvedPadding;
+    final paddingHorizontal = resolvedPadding.left + resolvedPadding.right;
+    if (_isVertical) {
+      // Vertical grid width is derived from constraints.
+      // Report sum of maximum child widths.
+      var maxChildWidth = 0.0;
+      var child = firstChild;
+      while (child != null) {
+        final childMaxIntrinsic = child.getMaxIntrinsicWidth(double.infinity);
+        if (childMaxIntrinsic > maxChildWidth) {
+          maxChildWidth = childMaxIntrinsic;
+        }
+        child = (child.parentData! as _FlexGridParentData).nextSibling;
+      }
+      return maxChildWidth * _crossAxisCount +
+          (_crossAxisCount - 1) * _crossAxisSpacing +
+          paddingHorizontal;
+    } else {
+      // Horizontal grid width depends on content rows.
+      final childCount = this.childCount;
+      if (childCount == 0) return paddingHorizontal;
+      final rowCount = (childCount / _crossAxisCount).ceil();
+      // Estimate based on aspect ratio from available cross axis (height)
+      final paddingVertical = resolvedPadding.top + resolvedPadding.bottom;
+      final availHeight = height.isFinite ? height - paddingVertical : 300.0;
+      final childHeight =
+          (availHeight - (_crossAxisCount - 1) * _crossAxisSpacing) /
+              _crossAxisCount;
+      final childWidth = childHeight * _childAspectRatio + _mainAxisExtent;
+      return rowCount * childWidth +
+          (rowCount - 1) * _mainAxisSpacing +
+          paddingHorizontal;
+    }
+  }
+
+  double _computeIntrinsicHeight(double width) {
+    final resolvedPadding = _resolvedPadding;
+    final paddingVertical = resolvedPadding.top + resolvedPadding.bottom;
+    if (_isVertical) {
+      final childCount = this.childCount;
+      if (childCount == 0) return paddingVertical;
+      final rowCount = (childCount / _crossAxisCount).ceil();
+      final paddingHorizontal = resolvedPadding.left + resolvedPadding.right;
+      final availWidth = width.isFinite ? width - paddingHorizontal : 300.0;
+      final childWidth =
+          (availWidth - (_crossAxisCount - 1) * _crossAxisSpacing) /
+              _crossAxisCount;
+      final childHeight = childWidth / _childAspectRatio + _mainAxisExtent;
+      return rowCount * childHeight +
+          (rowCount - 1) * _mainAxisSpacing +
+          paddingVertical;
+    } else {
+      // Horizontal grid height derived from columns.
+      var maxChildHeight = 0.0;
+      var child = firstChild;
+      while (child != null) {
+        final childMaxIntrinsic = child.getMaxIntrinsicHeight(double.infinity);
+        if (childMaxIntrinsic > maxChildHeight) {
+          maxChildHeight = childMaxIntrinsic;
+        }
+        child = (child.parentData! as _FlexGridParentData).nextSibling;
+      }
+      return maxChildHeight * _crossAxisCount +
+          (_crossAxisCount - 1) * _crossAxisSpacing +
+          paddingVertical;
+    }
+  }
 }

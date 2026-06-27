@@ -35,9 +35,9 @@ ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
 
 ## Extensions
 
-- **DateTime predicates**: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow(Duration)`, `age()` (years, month/day-correct), `truncateTime()` (→ midnight), `withTimeOfDay(TimeOfDay)`, `toTimeOfDay()`. No arithmetic helpers — use stdlib `Duration` (there is no `addDays/Months/Years`).
-- **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day. Day passed explicitly (no hidden `DateTime.now()` → deterministic in tests).
-- **Enum**: `with EnumIndexComparable` adds `<`/`>`/`compareTo` by index. `Values.byNameOrNull(name)` → nullable — use on untrusted URL/env/JSON input (stdlib `byName` throws); chain `?? .fallback`.
+- **DateTime predicates**: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow(Duration)`, `age()` (timezone-safe years, month/day-correct), `truncateTime()` (→ midnight), `withTimeOfDay(TimeOfDay)`, `toTimeOfDay()`. No arithmetic helpers — use stdlib `Duration` (there is no `addDays/Months/Years`).
+- **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day (preserves UTC/local alignment). Day passed explicitly (no hidden `DateTime.now()` → deterministic in tests).
+- **Enum**: `with EnumIndexComparable<MyEnum>` adds `<`/`>`/`compareTo` by index type-safely. `Values.byNameOrNull(name)` → nullable — use on untrusted URL/env/JSON input (stdlib `byName` throws); chain `?? .fallback`.
 - **Iterable**: `separated((i) => sep)` (interleave by index slot); `windowed(size, {step})` — stepped sliding window that **drops the partial trailing window** (vs non-overlapping `package:collection.slices`).
 - **Map**: `any` / `every` / `firstWhereOrNull` / `where` over `(k, v)`; `whereKeyType<T>()`, `whereValueType<T>()`; `entryOf(key)` → `MapEntry?` that is null **only when the key is absent** (distinguishes present-with-null from missing).
 - **Object.let** (`T extends Object`): transform-and-return; `?.let(...)` for null-aware (`env['PORT']?.let(int.parse)`, `?url?.let(NetworkImage.new)`). Skip it for side-effect-only calls, multi-line bodies, or chains beyond three.
@@ -55,4 +55,4 @@ ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
 |`platformDispatch<T>({android, ios, macos, …})`|Per-platform value; **throws `UnsupportedError`** when the current platform has no callback — opt in explicitly.|
 |`TextFieldBuilders.disabledCounter`|`TextField(buildCounter: TextFieldBuilders.disabledCounter)` hides the counter.|
 |`LRUCache<K, V>(maxEntries:)`|O(1) get/put, promotes to MRU; per-isolate. `putIfAbsent(k, ifAbsent)` lazy on miss. For async, type `LRUCache<K, Future<V>>` so concurrent misses dedupe.|
-|`DisposableBag()`|`..add(fn)` / `..addAll([...])`; idempotent `dispose()`. Pair with `ref.onDispose(() => unawaited(bag.dispose()))` — Riverpod doesn't await async dispose.|
+|`DisposableBag()`|`..add(fn)` / `..addAll([...])`; idempotent `dispose()` (runs all, throws `DisposableBagException` on error). Pair with `ref.onDispose(() => unawaited(bag.dispose()))` — Riverpod doesn't await async dispose.|

@@ -19,7 +19,7 @@ abstract final class NetworkProbe {
     }
     try {
       final socket = await Socket.connect(
-        InternetAddress('1.0.0.1', type: .IPv4),
+        InternetAddress('1.0.0.1', type: InternetAddressType.IPv4),
         53,
         timeout: timeout,
       );

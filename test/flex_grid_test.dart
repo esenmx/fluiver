@@ -114,5 +114,34 @@ void main() {
       check(r0.left).isCloseTo(16, 0.01);
       check(r0.top).isCloseTo(16, 0.01);
     });
+
+    testWidgets(
+      'intrinsic dimensions match layout calculations',
+      (tester) async {
+        const grid = FlexGrid(
+          crossAxisCount: 2,
+          childAspectRatio: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          mainAxisExtent: 5,
+          children: [
+            SizedBox(width: 50, height: 50),
+            SizedBox(width: 50, height: 50),
+            SizedBox(width: 50, height: 50),
+          ],
+        );
+        await _pump(tester, grid);
+        final renderBox =
+            tester.renderObject<RenderFlexGrid>(find.byType(FlexGrid));
+
+        // Available width: 300.
+        // Child cross-axis extent: (300 - 10) / 2 = 145.
+        // Child main-axis extent: 145 / 2 + 5 = 77.5.
+        // Row count: 2 (3 children).
+        // Total height: 2 * 77.5 + 10 = 165.0.
+        check(renderBox.getMinIntrinsicHeight(300)).isCloseTo(165.0, 0.01);
+        check(renderBox.getMaxIntrinsicHeight(300)).isCloseTo(165.0, 0.01);
+      },
+    );
   });
 }

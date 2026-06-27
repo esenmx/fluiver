@@ -60,9 +60,34 @@ class DisposableBag {
       return;
     }
     _disposed = true;
+    final errors = <Object>[];
     for (final disposer in _disposers) {
-      await disposer();
+      try {
+        await disposer();
+      } on Object catch (e) {
+        errors.add(e);
+      }
     }
     _disposers.clear();
+    if (errors.isNotEmpty) {
+      throw DisposableBagException(errors);
+    }
+  }
+}
+
+/// Exception thrown when one or more disposers throw during
+/// [DisposableBag.dispose].
+class DisposableBagException implements Exception {
+  /// Creates a [DisposableBagException] with the list of errors.
+  DisposableBagException(this.errors);
+
+  /// The errors thrown by individual disposers.
+  final List<Object> errors;
+
+  @override
+  String toString() {
+    final count = errors.length;
+    final list = errors.map((e) => ' - $e').join('\n');
+    return 'DisposableBagException: $count disposer(s) threw errors:\n$list';
   }
 }
