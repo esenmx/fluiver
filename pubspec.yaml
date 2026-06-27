@@ -1,6 +1,6 @@
 name: fluiver
 description: Flutter SDK gap-fillers — scope function, DateTime predicates, observers, FlexGrid, debounce/throttle. Ships an LLM skill for agent-friendly coding.
-version: 3.2.2
+version: 3.2.3
 homepage: https://mehmetesen.com
 repository: https://github.com/esenmx/fluiver
 issue_tracker: https://github.com/esenmx/fluiver/issues
