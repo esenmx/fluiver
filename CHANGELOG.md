@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.2.3
+
+- **Fixed** — SDK compatibility fix in `NetworkProbe` by replacing type-directed enum shorthand `.IPv4` with fully qualified enum reference.
+- **Fixed** — Rescheduling timing bug in `ThrottleLatest`.
+- **Fixed** — Memory leak in `ThrottleLast` by clearing callback references post-execution.
+- **Fixed** — Native resource leak in `TickerBuilder` by disposing of ticker binding resources properly.
+- **Fixed** — Exception safety in `DisposableBag` to prevent a single failing disposer from blocking subsequent disposers, raising `DisposableBagException` containing all errors at the end.
+- **Fixed** — Timezone-safety alignment in `DateTimeCheck.age()` and `TimeOfDayOnDate.onDate()`.
+- **Added** — Intrinsic height and width measurement calculations on `FlexGrid`'s custom `RenderBox` (`RenderFlexGrid`).
+- **Changed** — Optimized lookup efficiency in `Map.entryOf` and generic compile-safety in `EnumIndexComparable`.
+
 ## 3.2.2
 
 - **Fixed** — `FastHash.fnv1a`'s 64-bit offset-basis literal broke compilation on web targets (including `flutter widget-preview`). Now split into web-representable halves (bit-exact on the VM); throws `UnsupportedError` on web instead of corrupting hashes.
