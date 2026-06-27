@@ -2,7 +2,7 @@ import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-enum _TestEnum with EnumIndexComparable { first, second, third }
+enum _TestEnum with EnumIndexComparable<_TestEnum> { first, second, third }
 
 void main() {
   group('EnumIndexComparable', () {

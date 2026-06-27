@@ -40,7 +40,7 @@ class _TickerBuilderState extends State<TickerBuilder>
 
   @override
   void dispose() {
-    _ticker.stop();
+    _ticker.dispose();
     super.dispose();
   }
 

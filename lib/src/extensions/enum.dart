@@ -3,27 +3,27 @@ part of '../../fluiver.dart';
 /// Mixin for comparing [Enum] values by their index.
 ///
 /// ```dart
-/// enum Enums with EnumIndexComparable {
+/// enum Enums with EnumIndexComparable<Enums> {
 ///   one,
 ///   two,
 ///   three;
 /// }
 /// ```
-mixin EnumIndexComparable on Enum implements Comparable<Enum> {
+mixin EnumIndexComparable<T extends Enum> on Enum implements Comparable<T> {
   /// Whether this value's index is less than [other]'s.
-  bool operator <(Enum other) => index < other.index;
+  bool operator <(T other) => index < other.index;
 
   /// Whether this value's index is less than or equal to [other]'s.
-  bool operator <=(Enum other) => index <= other.index;
+  bool operator <=(T other) => index <= other.index;
 
   /// Whether this value's index is greater than [other]'s.
-  bool operator >(Enum other) => index > other.index;
+  bool operator >(T other) => index > other.index;
 
   /// Whether this value's index is greater than or equal to [other]'s.
-  bool operator >=(Enum other) => index >= other.index;
+  bool operator >=(T other) => index >= other.index;
 
   @override
-  int compareTo(Enum other) => index - other.index;
+  int compareTo(T other) => index - other.index;
 }
 
 /// Working with [Enum] collections.

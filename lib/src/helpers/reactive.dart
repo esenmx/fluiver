@@ -37,17 +37,21 @@ class ThrottleLatest with _TimerMixin {
   final Duration duration;
   VoidCallback? _pending;
 
+  void _onTimerComplete() {
+    if (_pending != null) {
+      final task = _pending!;
+      _pending = null;
+      task.call();
+      _timer = Timer(duration, _onTimerComplete);
+    }
+  }
+
   /// Runs [task] immediately if no window is active, otherwise queues it
   /// as the latest pending task.
   void call(VoidCallback task) {
     if (_timer?.isActive != true) {
       task.call();
-      _timer = Timer(duration, () {
-        if (_pending != null) {
-          _pending!.call();
-          _pending = null;
-        }
-      });
+      _timer = Timer(duration, _onTimerComplete);
     } else {
       _pending = task;
     }
@@ -80,14 +84,17 @@ class ThrottleLast with _TimerMixin {
 
   /// The trailing window before the latest task fires.
   final Duration duration;
-  late VoidCallback _last;
+  VoidCallback? _last;
 
   /// Stores [task] as the latest, scheduling it to run after [duration]
   /// if no run is already pending.
   void call(VoidCallback task) {
     _last = task;
     if (_timer?.isActive != true) {
-      _timer = Timer(duration, () => _last());
+      _timer = Timer(duration, () {
+        _last?.call();
+        _last = null;
+      });
     }
   }
 }
