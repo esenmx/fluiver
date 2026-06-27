@@ -13,6 +13,9 @@ extension TimeOfDayOnDate on TimeOfDay {
   /// Takes the date explicitly rather than reading [DateTime.now()] inside,
   /// so callers control the clock and tests stay deterministic.
   DateTime onDate(DateTime date) {
+    if (date.isUtc) {
+      return DateTime.utc(date.year, date.month, date.day, hour, minute);
+    }
     return DateTime(date.year, date.month, date.day, hour, minute);
   }
 }

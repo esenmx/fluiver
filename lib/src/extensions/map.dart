@@ -61,9 +61,10 @@ extension MapMapEntry<K, V> on Map<K, V> {
   /// Distinguishes "key present with `null` value" from "key absent" —
   /// `{'a': null}.entryOf('a')` is `MapEntry('a', null)`, not `null`.
   MapEntry<K, V>? entryOf(K k) {
-    if (!containsKey(k)) {
-      return null;
+    final value = this[k];
+    if (value != null || containsKey(k)) {
+      return MapEntry<K, V>(k, value as V);
     }
-    return MapEntry<K, V>(k, this[k] as V);
+    return null;
   }
 }
