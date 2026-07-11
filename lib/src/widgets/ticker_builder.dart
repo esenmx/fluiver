@@ -35,7 +35,7 @@ class _TickerBuilderState extends State<TickerBuilder>
   @override
   void initState() {
     super.initState();
-    unawaited(_ticker.start());
+    final _ = _ticker.start();
   }
 
   @override
