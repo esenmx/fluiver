@@ -37,7 +37,7 @@ class ScrollTrackingExpandable extends StatefulWidget {
 class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  late Animation<double> _animation;
+  late CurvedAnimation _animation;
 
   @override
   void initState() {
@@ -62,6 +62,7 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
       _controller.duration = widget.duration;
     }
     if (widget.curve != oldWidget.curve) {
+      _animation.dispose();
       _updateAnimation();
     }
     if (widget.isExpanded != oldWidget.isExpanded) {
@@ -72,23 +73,37 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
   }
 
   void _trackScroll() {
-    if (mounted && _controller.status == AnimationStatus.forward) {
-      final ro = context.findRenderObject();
-      if (ro case final RenderBox rb) {
-        rb.showOnScreen(
-          rect: Rect.fromLTWH(
-            0,
-            0,
-            rb.size.width,
-            rb.size.height + widget.scrollOffset,
-          ),
-        );
-      }
+    // RenderBox.size lags the tick by one frame (ticks run before layout),
+    // and the last tick fires with status already completed — defer to
+    // post-frame and include completed so the fully expanded extent is
+    // revealed.
+    if (mounted && _isExpanding) {
+      WidgetsBinding.instance.addPostFrameCallback(_showOnScreen);
+    }
+  }
+
+  bool get _isExpanding => switch (_controller.status) {
+    .forward || .completed => true,
+    .reverse || .dismissed => false,
+  };
+
+  void _showOnScreen(Duration _) {
+    if (!mounted || !_isExpanding) return;
+    if (context.findRenderObject() case final RenderBox rb) {
+      rb.showOnScreen(
+        rect: Rect.fromLTWH(
+          0,
+          0,
+          rb.size.width,
+          rb.size.height + widget.scrollOffset,
+        ),
+      );
     }
   }
 
   @override
   void dispose() {
+    _animation.dispose();
     _controller
       ..removeListener(_trackScroll)
       ..dispose();
