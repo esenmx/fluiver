@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.3.0
+
+- **Added** — `ScrollTrackingExpandable` widget: animated expand/collapse that keeps the growing bottom edge visible in the nearest `Scrollable` while expanding, with `scrollOffset` for extra breathing room below.
+
 ## 3.2.3
 
 - **Fixed** — SDK compatibility fix in `NetworkProbe` by replacing type-directed enum shorthand `.IPv4` with fully qualified enum reference.
