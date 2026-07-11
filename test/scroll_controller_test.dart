@@ -43,9 +43,7 @@ void main() {
       final c = newScrollController();
 
       await pumpScrollableList(tester, c);
-      unawaited(
-        c.animateToBottom(duration: const Duration(milliseconds: 100)),
-      );
+      unawaited(c.animateToBottom(duration: const Duration(milliseconds: 100)));
       await tester.pumpAndSettle();
 
       check(c.position.pixels).equals(c.position.maxScrollExtent);
