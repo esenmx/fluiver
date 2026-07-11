@@ -2,8 +2,7 @@ library;
 
 import 'dart:async';
 import 'dart:collection';
-import 'dart:io'
-    show InternetAddress, InternetAddressType, Socket, SocketException;
+import 'dart:io' show InternetAddress, Socket, SocketException;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,4 +28,5 @@ part 'src/helpers/platform_dispatch.dart';
 part 'src/helpers/reactive.dart';
 part 'src/helpers/text_field_builders.dart';
 part 'src/widgets/flex_grid.dart';
+part 'src/widgets/scroll_tracking_expandable.dart';
 part 'src/widgets/ticker_builder.dart';
