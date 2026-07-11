@@ -39,10 +39,8 @@ Future<void> pumpScrollableList(
         body: ListView.builder(
           controller: controller,
           itemCount: itemCount,
-          itemBuilder: (_, i) => SizedBox(
-            height: itemExtent,
-            child: Text('$i'),
-          ),
+          itemBuilder: (_, i) =>
+              SizedBox(height: itemExtent, child: Text('$i')),
         ),
       ),
     ),
