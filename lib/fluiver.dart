@@ -2,7 +2,8 @@ library;
 
 import 'dart:async';
 import 'dart:collection';
-import 'dart:io' show InternetAddress, Socket, SocketException;
+import 'dart:io'
+    show InternetAddress, InternetAddressType, Socket, SocketException;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
