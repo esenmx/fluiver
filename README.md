@@ -214,6 +214,22 @@ TickerBuilder(
 );
 ```
 
+### `ScrollTrackingExpandable`
+
+Expand/collapse with a size animation that keeps the growing bottom
+edge visible in the nearest `Scrollable` — an expanding tile near the
+bottom of a list no longer overflows below the fold.
+
+```dart
+ScrollTrackingExpandable(
+  isExpanded: showDetails,
+  scrollOffset: 16, // extra breathing room below the bottom edge
+  child: const DetailsCard(),
+);
+```
+
+Collapse never scrolls; only expansion tracks.
+
 ### Debounce / Throttle
 
 ```dart

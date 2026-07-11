@@ -1,6 +1,6 @@
 ---
 name: flutter-fluiver
-description: SDK gap-fillers via package:fluiver — use instead of reinventing. FlexGrid (non-scroll grid), TickerBuilder, Debounce/Throttle*, Locale/Brightness/AppLifecycle observers, DateTime/TimeOfDay predicates, Enum.byNameOrNull, Iterable separated/windowed, Map.entryOf, Object.let, Color darken/lighten/contrastText, ScrollController atTop/animateTo*, Future.timeoutOrNull, TextEditingController.setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
+description: SDK gap-fillers via package:fluiver — use instead of reinventing. FlexGrid (non-scroll grid), TickerBuilder, ScrollTrackingExpandable (expand/collapse pinned into view), Debounce/Throttle*, Locale/Brightness/AppLifecycle observers, DateTime/TimeOfDay predicates, Enum.byNameOrNull, Iterable separated/windowed, Map.entryOf, Object.let, Color darken/lighten/contrastText, ScrollController atTop/animateTo*, Future.timeoutOrNull, TextEditingController.setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
 ---
 
 # flutter-fluiver
@@ -11,6 +11,7 @@ description: SDK gap-fillers via package:fluiver — use instead of reinventing.
 
 - `FlexGrid(crossAxisCount:, mainAxisSpacing:, crossAxisSpacing:, children:)` — non-scrolling grid (custom `RenderObject`). The drop-in for `GridView(shrinkWrap: true)` inside a `ListView` / `SingleChildScrollView`; use a real `GridView` only when the grid itself scrolls (viewport recycling).
 - `TickerBuilder(builder: (context, Duration elapsed) => …)` — rebuilds per frame, `elapsed` since first frame. Don't wrap in `AnimatedBuilder`.
+- `ScrollTrackingExpandable(isExpanded:, child:, duration:, curve:, scrollOffset:)` — animated expand/collapse that keeps the growing bottom edge visible in the nearest `Scrollable` (`scrollOffset` adds breathing room below). Collapse never scrolls. Use over `AnimatedSize`/`ExpansionTile` when the tile sits low in a scrollable and would expand below the fold.
 
 ## Debounce / Throttle
 
