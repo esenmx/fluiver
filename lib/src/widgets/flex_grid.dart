@@ -330,7 +330,7 @@ class RenderFlexGrid extends RenderBox
       final availHeight = height.isFinite ? height - paddingVertical : 300.0;
       final childHeight =
           (availHeight - (_crossAxisCount - 1) * _crossAxisSpacing) /
-              _crossAxisCount;
+          _crossAxisCount;
       final childWidth = childHeight * _childAspectRatio + _mainAxisExtent;
       return rowCount * childWidth +
           (rowCount - 1) * _mainAxisSpacing +
@@ -349,7 +349,7 @@ class RenderFlexGrid extends RenderBox
       final availWidth = width.isFinite ? width - paddingHorizontal : 300.0;
       final childWidth =
           (availWidth - (_crossAxisCount - 1) * _crossAxisSpacing) /
-              _crossAxisCount;
+          _crossAxisCount;
       final childHeight = childWidth / _childAspectRatio + _mainAxisExtent;
       return rowCount * childHeight +
           (rowCount - 1) * _mainAxisSpacing +
