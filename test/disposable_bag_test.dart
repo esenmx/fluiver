@@ -70,10 +70,8 @@ void main() {
       check(calls).deepEquals(['a', 'b', 'c']);
     });
 
-    test(
-      'runs subsequent disposers even if one throws, '
-      'throwing DisposableBagException at the end',
-      () async {
+    test('runs subsequent disposers even if one throws, '
+        'throwing DisposableBagException at the end', () async {
       final calls = <String>[];
       final bag = DisposableBag()
         ..add(() => calls.add('a'))
