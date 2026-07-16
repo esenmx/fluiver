@@ -24,7 +24,8 @@ abstract final class FastHash {
     // Offset basis 0xcbf29ce484222325, split because a >2^53 literal is a
     // compile error on web targets even when the function is never called.
     var hash = (0xcbf29ce4 << 32) | 0x84222325;
-    for (final codeUnit in s.codeUnits) {
+    for (var i = 0; i < s.length; i++) {
+      final codeUnit = s.codeUnitAt(i);
       hash ^= codeUnit >> 8;
       hash *= fnvPrime;
       hash ^= codeUnit & 0xFF;
