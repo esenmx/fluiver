@@ -43,18 +43,23 @@ void main() {
       await bag.dispose();
 
       Object? caughtError;
-      runZonedGuarded(() {
-        bag.add(() => throw Exception('late error'));
-      }, (error, _) {
-        caughtError = error;
-      });
+      runZonedGuarded(
+        () {
+          bag.add(() => throw Exception('late error'));
+        },
+        (error, _) {
+          caughtError = error;
+        },
+      );
 
       // Allow the queued microtask to flush.
       await Future<void>.delayed(Duration.zero);
 
       check(caughtError)
         ..isNotNull()
-        ..isA<Exception>().has((e) => e.toString(), 'toString').contains('late error');
+        ..isA<Exception>()
+            .has((e) => e.toString(), 'toString')
+            .contains('late error');
     });
 
     test('length tracks pending disposers', () async {
