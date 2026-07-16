@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -34,6 +36,25 @@ void main() {
       await Future<void>.delayed(Duration.zero);
       check(calls).deepEquals(['late']);
       check(bag.length).equals(0);
+    });
+
+    test('add after dispose propagates error if disposer throws', () async {
+      final bag = DisposableBag();
+      await bag.dispose();
+
+      Object? caughtError;
+      runZonedGuarded(() {
+        bag.add(() => throw Exception('late error'));
+      }, (error, _) {
+        caughtError = error;
+      });
+
+      // Allow the queued microtask to flush.
+      await Future<void>.delayed(Duration.zero);
+
+      check(caughtError)
+        ..isNotNull()
+        ..isA<Exception>().has((e) => e.toString(), 'toString').contains('late error');
     });
 
     test('length tracks pending disposers', () async {
