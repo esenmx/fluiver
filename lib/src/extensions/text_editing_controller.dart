@@ -7,7 +7,8 @@ extension TextEditingControllerCaret on TextEditingController {
   ///
   /// Setting [TextEditingController.text] directly resets the caret to
   /// offset `0` — a well-known SDK papercut. This sets [value] in one
-  /// shot so the caret lands where you asked.
+  /// shot so the caret lands where you asked. Out-of-range [caret] is
+  /// clamped to `0..text.length`.
   ///
   /// ```dart
   /// controller.setTextAndCaret('hello');         // caret at 5 (end)
