@@ -19,8 +19,11 @@ class LRUCache<K, V> {
   /// Creates a cache that holds at most [maxEntries] entries.
   ///
   /// [maxEntries] must be strictly positive.
-  LRUCache({required this.maxEntries})
-    : assert(maxEntries > 0, 'maxEntries must be greater than 0');
+  LRUCache({required this.maxEntries}) {
+    if (maxEntries <= 0) {
+      throw ArgumentError('maxEntries must be greater than 0');
+    }
+  }
 
   /// Maximum number of entries the cache holds before evicting.
   final int maxEntries;
