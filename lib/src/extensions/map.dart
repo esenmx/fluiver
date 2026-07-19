@@ -4,30 +4,23 @@ part of '../../fluiver.dart';
 extension MapPredicate<K, V> on Map<K, V> {
   /// Whether at least one entry satisfies [test].
   bool any(bool Function(K key, V value) test) {
-    for (final key in keys) {
-      if (test(key, this[key] as V)) {
-        return true;
-      }
-    }
-    return false;
+    return entries.any((entry) {
+      return test(entry.key, entry.value);
+    });
   }
 
   /// Whether every entry satisfies [test].
   bool every(bool Function(K key, V value) test) {
-    for (final key in keys) {
-      if (!test(key, this[key] as V)) {
-        return false;
-      }
-    }
-    return true;
+    return entries.every((entry) {
+      return test(entry.key, entry.value);
+    });
   }
 
   /// Returns the first entry that satisfies [test], or `null` if none does.
   MapEntry<K, V>? firstWhereOrNull(bool Function(K key, V value) test) {
-    for (final key in keys) {
-      final value = this[key] as V;
-      if (test(key, value)) {
-        return MapEntry(key, value);
+    for (final e in entries) {
+      if (test(e.key, e.value)) {
+        return e;
       }
     }
     return null;
@@ -38,35 +31,26 @@ extension MapPredicate<K, V> on Map<K, V> {
 extension MapFilter<K, V> on Map<K, V> {
   /// Returns a new map containing only the entries that satisfy [test].
   Map<K, V> where(bool Function(K key, V value) test) {
-    final result = <K, V>{};
-    forEach((key, value) {
-      if (test(key, value)) {
-        result[key] = value;
-      }
-    });
-    return result;
+    return <K, V>{
+      for (final e in entries)
+        if (test(e.key, e.value)) e.key: e.value,
+    };
   }
 
   /// Returns a new map containing only entries whose key is a [T].
   Map<T, V> whereKeyType<T>() {
-    final result = <T, V>{};
-    forEach((key, value) {
-      if (key is T) {
-        result[key as T] = value;
-      }
-    });
-    return result;
+    return <T, V>{
+      for (final entry in entries)
+        if (entry.key is T) entry.key as T: entry.value,
+    };
   }
 
   /// Returns a new map containing only entries whose value is a [T].
   Map<K, T> whereValueType<T>() {
-    final result = <K, T>{};
-    forEach((key, value) {
-      if (value is T) {
-        result[key] = value as T;
-      }
-    });
-    return result;
+    return <K, T>{
+      for (final entry in entries)
+        if (entry.value is T) entry.key: entry.value as T,
+    };
   }
 }
 
