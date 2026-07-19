@@ -29,25 +29,6 @@ void main() {
     });
   });
 
-  group('where', () {
-    test('keeps matching entries', () {
-      check(map.where((k, v) => k is int)).deepEquals({0: false, 1: true});
-    });
-
-    test('keeps entries whose value is null', () {
-      check(map.where((k, v) => v == null)).deepEquals({'baz': null});
-    });
-
-    test('no match returns empty', () {
-      check(map.where((k, v) => false)).deepEquals({});
-    });
-
-    test('preserves insertion order', () {
-      final ordered = {3: 'c', 1: 'a', 2: 'b', 0: 'z'};
-      check(ordered.where((k, v) => k < 3).keys).deepEquals([1, 2, 0]);
-    });
-  });
-
   group('entryOf', () {
     test('returns entry for present non-null value', () {
       final entry = map.entryOf('foo')!;

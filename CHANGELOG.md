@@ -1,11 +1,5 @@
 # Changelog
 
-## 3.3.1
-
-- **Fixed** — `TextEditingController.setTextAndCaret` now clamps `caret` to `0..text.length` instead of producing an out-of-range selection.
-- **Changed** — `LRUCache` throws `ArgumentError` for `maxEntries <= 0` in all build modes (was a debug-only assert).
-- **Changed** — `FastHash.fnv1a` iterates code units by index, avoiding an iterator allocation per call.
-
 ## 3.3.0
 
 - **Added** — `ScrollTrackingExpandable` widget: animated expand/collapse that keeps the growing bottom edge visible in the nearest `Scrollable` while expanding, with `scrollOffset` for extra breathing room below.

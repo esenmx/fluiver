@@ -4,16 +4,22 @@ part of '../../fluiver.dart';
 extension MapPredicate<K, V> on Map<K, V> {
   /// Whether at least one entry satisfies [test].
   bool any(bool Function(K key, V value) test) {
-    return entries.any((entry) {
-      return test(entry.key, entry.value);
-    });
+    for (final e in entries) {
+      if (test(e.key, e.value)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /// Whether every entry satisfies [test].
   bool every(bool Function(K key, V value) test) {
-    return entries.every((entry) {
-      return test(entry.key, entry.value);
-    });
+    for (final e in entries) {
+      if (!test(e.key, e.value)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /// Returns the first entry that satisfies [test], or `null` if none does.
@@ -28,19 +34,14 @@ extension MapPredicate<K, V> on Map<K, V> {
 }
 
 /// Filtering [Map] entries by key or value type.
-///
-/// These traverse the whole map, so they go through [forEach], which hands the
-/// key and value straight to the callback — no `MapEntry` per entry, and no
-/// lookup either. Measured ~20% faster than a collection-`for` over [entries]
-/// in AOT. The predicates in [MapPredicate] deliberately keep [entries]: they
-/// can exit early, and reaching a value by key would put the cost of
-/// `operator []` — O(log n) on an ordered map — in a hot loop.
 extension MapFilter<K, V> on Map<K, V> {
   /// Returns a new map containing only the entries that satisfy [test].
   Map<K, V> where(bool Function(K key, V value) test) {
     final result = <K, V>{};
     forEach((key, value) {
-      if (test(key, value)) result[key] = value;
+      if (test(key, value)) {
+        result[key] = value;
+      }
     });
     return result;
   }
@@ -49,7 +50,9 @@ extension MapFilter<K, V> on Map<K, V> {
   Map<T, V> whereKeyType<T>() {
     final result = <T, V>{};
     forEach((key, value) {
-      if (key is T) result[key as T] = value;
+      if (key is T) {
+        result[key as T] = value;
+      }
     });
     return result;
   }
@@ -58,7 +61,9 @@ extension MapFilter<K, V> on Map<K, V> {
   Map<K, T> whereValueType<T>() {
     final result = <K, T>{};
     forEach((key, value) {
-      if (value is T) result[key] = value as T;
+      if (value is T) {
+        result[key] = value as T;
+      }
     });
     return result;
   }
