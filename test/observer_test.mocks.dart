@@ -35,12 +35,13 @@ class MockLocaleObserver extends _i1.Mock implements _i2.LocaleObserver {
   }
 
   @override
-  void Function(List<_i3.Locale>?) get onLocalesChanged =>
-      (super.noSuchMethod(
-            Invocation.getter(#onLocalesChanged),
-            returnValue: (List<_i3.Locale>? locales) {},
-          )
-          as void Function(List<_i3.Locale>?));
+  void Function(List<_i3.Locale>?) get onLocalesChanged {
+    final result = super.noSuchMethod(
+      Invocation.getter(#onLocalesChanged),
+      returnValue: (List<_i3.Locale>? locales) {},
+    );
+    return result as void Function(List<_i3.Locale>?);
+  }
 
   @override
   void didChangeLocales(List<_i3.Locale>? locales) => super.noSuchMethod(
@@ -49,20 +50,22 @@ class MockLocaleObserver extends _i1.Mock implements _i2.LocaleObserver {
   );
 
   @override
-  _i4.Future<bool> didPopRoute() =>
-      (super.noSuchMethod(
-            Invocation.method(#didPopRoute, []),
-            returnValue: _i4.Future<bool>.value(false),
-          )
-          as _i4.Future<bool>);
+  _i4.Future<bool> didPopRoute() {
+    final result = super.noSuchMethod(
+      Invocation.method(#didPopRoute, []),
+      returnValue: _i4.Future<bool>.value(false),
+    );
+    return result as _i4.Future<bool>;
+  }
 
   @override
-  bool handleStartBackGesture(_i5.PredictiveBackEvent? backEvent) =>
-      (super.noSuchMethod(
-            Invocation.method(#handleStartBackGesture, [backEvent]),
-            returnValue: false,
-          )
-          as bool);
+  bool handleStartBackGesture(_i5.PredictiveBackEvent? backEvent) {
+    final result = super.noSuchMethod(
+      Invocation.method(#handleStartBackGesture, [backEvent]),
+      returnValue: false,
+    );
+    return result as bool;
+  }
 
   @override
   void handleUpdateBackGestureProgress(_i5.PredictiveBackEvent? backEvent) =>
@@ -84,22 +87,24 @@ class MockLocaleObserver extends _i1.Mock implements _i2.LocaleObserver {
   );
 
   @override
-  _i4.Future<bool> didPushRoute(String? route) =>
-      (super.noSuchMethod(
-            Invocation.method(#didPushRoute, [route]),
-            returnValue: _i4.Future<bool>.value(false),
-          )
-          as _i4.Future<bool>);
+  _i4.Future<bool> didPushRoute(String? route) {
+    final result = super.noSuchMethod(
+      Invocation.method(#didPushRoute, [route]),
+      returnValue: _i4.Future<bool>.value(false),
+    );
+    return result as _i4.Future<bool>;
+  }
 
   @override
   _i4.Future<bool> didPushRouteInformation(
     _i6.RouteInformation? routeInformation,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#didPushRouteInformation, [routeInformation]),
-            returnValue: _i4.Future<bool>.value(false),
-          )
-          as _i4.Future<bool>);
+  ) {
+    final result = super.noSuchMethod(
+      Invocation.method(#didPushRouteInformation, [routeInformation]),
+      returnValue: _i4.Future<bool>.value(false),
+    );
+    return result as _i4.Future<bool>;
+  }
 
   @override
   void didChangeMetrics() => super.noSuchMethod(
@@ -133,14 +138,15 @@ class MockLocaleObserver extends _i1.Mock implements _i2.LocaleObserver {
   );
 
   @override
-  _i4.Future<_i3.AppExitResponse> didRequestAppExit() =>
-      (super.noSuchMethod(
-            Invocation.method(#didRequestAppExit, []),
-            returnValue: _i4.Future<_i3.AppExitResponse>.value(
-              _i3.AppExitResponse.exit,
-            ),
-          )
-          as _i4.Future<_i3.AppExitResponse>);
+  _i4.Future<_i3.AppExitResponse> didRequestAppExit() {
+    final result = super.noSuchMethod(
+      Invocation.method(#didRequestAppExit, []),
+      returnValue: _i4.Future<_i3.AppExitResponse>.value(
+        _i3.AppExitResponse.exit,
+      ),
+    );
+    return result as _i4.Future<_i3.AppExitResponse>;
+  }
 
   @override
   void didHaveMemoryPressure() => super.noSuchMethod(

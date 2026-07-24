@@ -38,9 +38,9 @@ void main() {
     });
 
     test('propagates errors from the underlying future', () async {
-      final f = Future<int>.error(
-        const FormatException('bad'),
-      ).timeoutOrNull(const Duration(seconds: 1));
+      const error = FormatException('bad');
+      const timeout = Duration(seconds: 1);
+      final f = Future<int>.error(error).timeoutOrNull(timeout);
 
       await check(f).throws<FormatException>();
     });

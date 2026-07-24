@@ -10,9 +10,8 @@ void main() {
     test('default amount lowers HSL lightness by 0.1', () {
       const blue = Color(0xFF2196F3);
 
-      check(
-        lightnessOf(blue.darken()),
-      ).isCloseTo(lightnessOf(blue) - 0.1, 1e-6);
+      final darkened = lightnessOf(blue.darken());
+      check(darkened).isCloseTo(lightnessOf(blue) - 0.1, 1e-6);
     });
 
     test('custom amount darkens further', () {
@@ -37,9 +36,8 @@ void main() {
     test('default amount raises HSL lightness by 0.1', () {
       const blue = Color(0xFF2196F3);
 
-      check(
-        lightnessOf(blue.lighten()),
-      ).isCloseTo(lightnessOf(blue) + 0.1, 1e-6);
+      final lightened = lightnessOf(blue.lighten());
+      check(lightened).isCloseTo(lightnessOf(blue) + 0.1, 1e-6);
     });
 
     test('clamps result lightness to [0, 1]', () {

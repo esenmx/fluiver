@@ -18,9 +18,8 @@ void main() {
 
     test('throws UnsupportedError when no callback for platform', () {
       debugDefaultTargetPlatformOverride = .linux;
-      check(
-        () => platformDispatch<String>(android: () => 'android'),
-      ).throws<UnsupportedError>();
+      String dispatch() => platformDispatch<String>(android: () => 'android');
+      check(dispatch).throws<UnsupportedError>();
     });
 
     test('all platforms route to their slot', () {
