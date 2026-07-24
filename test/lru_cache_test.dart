@@ -6,9 +6,8 @@ void main() {
   group('LRUCache', () {
     test('throws ArgumentError if maxEntries <= 0', () {
       check(() => LRUCache<String, int>(maxEntries: 0)).throws<ArgumentError>();
-      check(
-        () => LRUCache<String, int>(maxEntries: -1),
-      ).throws<ArgumentError>();
+      LRUCache<String, int> negative() => LRUCache(maxEntries: -1);
+      check(negative).throws<ArgumentError>();
     });
 
     test('stores and reads values', () {

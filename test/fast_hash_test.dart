@@ -10,9 +10,8 @@ void main() {
 
     test('different inputs produce different hashes', () {
       check(FastHash.fnv1a('a')).not((it) => it.equals(FastHash.fnv1a('b')));
-      check(
-        FastHash.fnv1a('Hello'),
-      ).not((it) => it.equals(FastHash.fnv1a('hello')));
+      final upper = FastHash.fnv1a('Hello');
+      check(upper).not((it) => it.equals(FastHash.fnv1a('hello')));
     });
 
     test('empty string returns FNV-1a 64 offset basis', () {

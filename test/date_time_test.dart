@@ -94,9 +94,8 @@ void main() {
 
   group('isWithinFromNow', () {
     test('now is within any duration', () {
-      check(
-        DateTime.now().isWithinFromNow(const Duration(seconds: 1)),
-      ).isTrue();
+      const oneSecond = Duration(seconds: 1);
+      check(DateTime.now().isWithinFromNow(oneSecond)).isTrue();
     });
 
     test('one hour ahead is outside one minute', () {
