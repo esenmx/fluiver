@@ -1,10 +1,31 @@
 # Changelog
 
-## 3.3.1
+## 4.0.0
+
+Strips every API whose job the framework or core libraries already do — fluiver keeps only genuine gaps.
+
+- **Removed** — `AppLifecycleObserver`. The framework's `AppLifecycleListener` is the same wrapper with more granular callbacks: `AppLifecycleListener(onStateChange: (s) => ...)`.
+- **Removed** — `DateTime.toTimeOfDay()`. Identical to the framework's `TimeOfDay.fromDateTime(dt)`.
+- **Removed** — `Map.any` / `Map.every` / `Map.firstWhereOrNull`. Sugar over `map.entries`: `entries.any((e) => ...)`, `entries.every((e) => ...)`, and `entries.firstWhereOrNull(...)` via `package:collection`.
+- **Renamed** — `LocaleObserver` → `LocaleListener`, `BrightnessObserver` → `BrightnessListener`, matching the framework's `AppLifecycleListener` naming.
+- **Breaking** — `FlexGrid` is now `Grid` (`RenderFlexGrid` → `RenderGrid`), configured by the same `SliverGridDelegate` family as `GridView` for DX and agent predictability: `Grid(gridDelegate: ...)` takes any delegate (custom ones included), `Grid.count(...)` / `Grid.extent(...)` mirror `GridView.count` / `GridView.extent`. Migrate `FlexGrid(crossAxisCount: 3, ...)` → `Grid.count(crossAxisCount: 3, ...)`; the delegate's `mainAxisExtent` **overrides** `childAspectRatio` (the `GridView` contract, replacing the old additive behavior).
+- **Added** — `Grid` covers what `GridView(shrinkWrap: true)` cannot: real intrinsics (no hard-coded estimates; unbounded extents shrink-wrap to child intrinsics), exact `computeDryLayout` and `computeDryBaseline`, first-child baseline, `debugFillProperties`, RTL cross-axis reversal matching `GridView`, a descriptive `FlutterError` under an unbounded cross axis, and degenerate constraints clamping cells to zero instead of negative.
+- **Breaking** — `platformDispatch`'s `macOS` parameter is now `macos`, matching its all-lowercase siblings (`android`, `ios`, `linux`, …) — the name agents and autocomplete-blind humans guess first.
+- **Breaking** — `NetworkProbe.hasConnection` → `checkConnection` (verb — it's an async probe, not a cheap property). Gains `host`/`port` (default unchanged: `1.0.0.1:53`) for self-hosted probe endpoints, its first tests, and the default `timeout` rises 2s → 3s so a lossy mobile network surviving two SYN retransmits still reports `true`.
+- **Changed** — `RenderGrid` and `TickerBuilder` internals follow framework conventions: getter/field/setter property clusters, delegate relayout via `SliverGridDelegate.shouldRelayout`, named tick handler created in `initState` (side effects moved out of the `setState` closure).
+- **Changed** — `unawaited_futures`/`discarded_futures` lints disabled package-wide: fire-and-forget futures in sync lifecycle methods are dropped bare, framework-style; `NetworkProbe` now awaits `socket.close()` before reporting reachability.
 
 - **Fixed** — `TextEditingController.setTextAndCaret` now clamps `caret` to `0..text.length` instead of producing an out-of-range selection.
 - **Changed** — `LRUCache` throws `ArgumentError` for `maxEntries <= 0` in all build modes (was a debug-only assert).
 - **Changed** — `FastHash.fnv1a` iterates code units by index, avoiding an iterator allocation per call.
+- **Changed** — `FastHash.fnv1a` now runs on Wasm builds (native 64-bit ints there); only JS web throws `UnsupportedError`.
+- **Changed** — `Debounce`/`Throttle*` `dispose()` drops pending task references (no closure retention), and calling a disposed instance throws `FlutterError` in debug mode.
+- **Changed** — a `Grid` given `EdgeInsetsDirectional` padding with no ambient `Directionality` now asserts in debug mode (framework behavior) instead of silently resolving as LTR.
+- **Fixed** — an empty `Grid`'s cross-axis intrinsics no longer include phantom `crossAxisSpacing`; they report padding only.
+- **Fixed** — `windowed(0)` (and `step: 0`) now throws `RangeError: size: must be > 0` instead of a misleading `-1` message.
+- **Changed** — dropped the unused `meta` dependency.
+
+Kept deliberately, verified against Flutter 3.41 / Dart 3.11: `truncateTime()` (unlike `DateUtils.dateOnly` it preserves UTC-ness), `windowed` (`package:collection` only has non-overlapping `slices`), `timeoutOrNull` (`package:async` has no equivalent), `Map.where`/`whereKeyType`/`whereValueType` (return a `Map`, narrow the static type), `separated` (Flex `spacing` only covers blank gaps, not separator widgets), `byNameOrNull` (core's `asNameMap()[name]` allocates a map per lookup and spells a simple scan sideways).
 
 ## 3.3.0
 

@@ -21,7 +21,7 @@ T platformDispatch<T>({
   T Function()? fuchsia,
   T Function()? ios,
   T Function()? linux,
-  T Function()? macOS,
+  T Function()? macos,
   T Function()? windows,
   T Function()? web,
 }) {
@@ -30,12 +30,12 @@ T platformDispatch<T>({
     callback = web;
   } else {
     callback = switch (defaultTargetPlatform) {
-      TargetPlatform.android => android,
-      TargetPlatform.fuchsia => fuchsia,
-      TargetPlatform.iOS => ios,
-      TargetPlatform.linux => linux,
-      TargetPlatform.macOS => macOS,
-      TargetPlatform.windows => windows,
+      .android => android,
+      .fuchsia => fuchsia,
+      .iOS => ios,
+      .linux => linux,
+      .macOS => macos,
+      .windows => windows,
     };
   }
 

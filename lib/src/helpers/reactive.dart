@@ -3,8 +3,18 @@ part of '../../fluiver.dart';
 /// Mixin for managing timer lifecycle.
 mixin _TimerMixin {
   Timer? _timer;
+  bool _disposed = false;
 
+  bool get _debugNotDisposed {
+    if (_disposed) {
+      throw FlutterError('A $runtimeType was used after being disposed.');
+    }
+    return true;
+  }
+
+  /// Cancels any pending task. The object must not be used afterwards.
   void dispose() {
+    _disposed = true;
     _timer?.cancel();
   }
 }
@@ -20,6 +30,7 @@ class Debounce with _TimerMixin {
 
   /// Schedules [task] to run after [duration]; replaces any pending task.
   void call(VoidCallback task) {
+    assert(_debugNotDisposed, 'used after dispose');
     if (_timer?.isActive ?? false) {
       _timer!.cancel();
     }
@@ -49,12 +60,19 @@ class ThrottleLatest with _TimerMixin {
   /// Runs [task] immediately if no window is active, otherwise queues it
   /// as the latest pending task.
   void call(VoidCallback task) {
+    assert(_debugNotDisposed, 'used after dispose');
     if (_timer?.isActive != true) {
       task.call();
       _timer = Timer(duration, _onTimerComplete);
     } else {
       _pending = task;
     }
+  }
+
+  @override
+  void dispose() {
+    _pending = null;
+    super.dispose();
   }
 }
 
@@ -69,6 +87,7 @@ class ThrottleFirst with _TimerMixin {
 
   /// Runs [task] immediately if no window is active, otherwise drops it.
   void call(VoidCallback task) {
+    assert(_debugNotDisposed, 'used after dispose');
     if (_timer?.isActive != true) {
       task.call();
       _timer = Timer(duration, () {});
@@ -89,6 +108,7 @@ class ThrottleLast with _TimerMixin {
   /// Stores [task] as the latest, scheduling it to run after [duration]
   /// if no run is already pending.
   void call(VoidCallback task) {
+    assert(_debugNotDisposed, 'used after dispose');
     _last = task;
     if (_timer?.isActive != true) {
       _timer = Timer(duration, () {
@@ -96,5 +116,11 @@ class ThrottleLast with _TimerMixin {
         _last = null;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _last = null;
+    super.dispose();
   }
 }

@@ -76,12 +76,16 @@ void main() {
       ]);
     });
 
-    test('size 0 throws', () {
-      check(() => [1, 2, 3].windowed(0).toList()).throws<RangeError>();
+    test('size 0 throws naming size', () {
+      check(() => [1, 2, 3].windowed(0).toList()).throws<RangeError>()
+        ..has((e) => e.name, 'name').equals('size')
+        ..has((e) => e.message, 'message').equals('must be > 0');
     });
 
-    test('step 0 throws', () {
-      check(() => [1, 2, 3].windowed(2, step: 0).toList()).throws<RangeError>();
+    test('step 0 throws naming step', () {
+      check(() => [1, 2, 3].windowed(2, step: 0).toList()).throws<RangeError>()
+        ..has((e) => e.name, 'name').equals('step')
+        ..has((e) => e.message, 'message').equals('must be > 0');
     });
 
     test('lazy — does not iterate beyond what consumer takes', () {

@@ -10,18 +10,18 @@ void main() {
     test('removes time components', () {
       check(dt.truncateTime()).equals(DateTime(1990, 6, 26));
     });
+
+    test('preserves UTC flag', () {
+      final result = DateTime.utc(1990, 6, 26, 8, 30).truncateTime();
+      check(result).equals(DateTime.utc(1990, 6, 26));
+      check(result.isUtc).isTrue();
+    });
   });
 
   group('withTimeOfDay', () {
     test('replaces time components', () {
       final merged = dt.withTimeOfDay(const TimeOfDay(hour: 14, minute: 5));
       check(merged).equals(DateTime(1990, 6, 26, 14, 5));
-    });
-  });
-
-  group('toTimeOfDay', () {
-    test('extracts time', () {
-      check(dt.toTimeOfDay()).equals(const TimeOfDay(hour: 8, minute: 30));
     });
   });
 

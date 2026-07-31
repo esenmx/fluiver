@@ -66,26 +66,4 @@ void main() {
       check(map.entryOf('absent')).isNull();
     });
   });
-
-  group('any / every / firstWhereOrNull', () {
-    test('any matches', () {
-      check({1: 'a', 2: 'b'}.any((k, v) => v == 'b')).isTrue();
-      check({1: 'a', 2: 'b'}.any((k, v) => v == 'c')).isFalse();
-    });
-
-    test('every matches', () {
-      check({1: 'a', 2: 'b'}.every((k, v) => k > 0)).isTrue();
-      check({1: 'a', 2: 'b'}.every((k, v) => k > 1)).isFalse();
-    });
-
-    test('firstWhereOrNull returns null on no match', () {
-      check({1: 'a'}.firstWhereOrNull((k, v) => k == 2)).isNull();
-    });
-
-    test('firstWhereOrNull returns matched entry', () {
-      final entry = {1: 'a', 2: 'b'}.firstWhereOrNull((k, v) => v == 'b')!;
-      check(entry.key).equals(2);
-      check(entry.value).equals('b');
-    });
-  });
 }

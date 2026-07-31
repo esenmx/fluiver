@@ -30,7 +30,7 @@ void main() {
           fuchsia: () => .fuchsia,
           ios: () => .iOS,
           linux: () => .linux,
-          macOS: () => .macOS,
+          macos: () => .macOS,
           windows: () => .windows,
         );
         check(value).equals(platform);

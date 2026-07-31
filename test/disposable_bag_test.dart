@@ -33,7 +33,7 @@ void main() {
       await bag.dispose();
       bag.add(() => calls.add('late'));
       // Allow the queued microtask to flush.
-      await Future<void>.delayed(Duration.zero);
+      await Future<void>.delayed(.zero);
       check(calls).deepEquals(['late']);
       check(bag.length).equals(0);
     });
@@ -53,7 +53,7 @@ void main() {
       );
 
       // Allow the queued microtask to flush.
-      await Future<void>.delayed(Duration.zero);
+      await Future<void>.delayed(.zero);
 
       check(caughtError)
         ..isNotNull()

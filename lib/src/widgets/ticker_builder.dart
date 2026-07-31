@@ -18,29 +18,40 @@ class TickerBuilder extends StatefulWidget {
 
   @override
   State<TickerBuilder> createState() => _TickerBuilderState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(
+      ObjectFlagProperty<void Function(Duration elapsed)>.has('onTick', onTick),
+    );
+  }
 }
 
 class _TickerBuilderState extends State<TickerBuilder>
     with SingleTickerProviderStateMixin {
-  late final Ticker _ticker = createTicker((elapsed) {
-    setState(() {
-      this.elapsed = elapsed;
-      widget.onTick?.call(elapsed);
-    });
-  });
+  late final Ticker ticker;
 
-  /// Elapsed time since the first frame; updated every tick.
   Duration elapsed = .zero;
+
+  void handleTick(Duration tick) {
+    setState(() {
+      elapsed = tick;
+    });
+    widget.onTick?.call(tick);
+  }
 
   @override
   void initState() {
     super.initState();
-    final _ = _ticker.start();
+    ticker = createTicker(handleTick);
+    ticker.start();
   }
 
   @override
   void dispose() {
-    _ticker.dispose();
+    // Before super: the ticker-provider mixin asserts no live ticker remains.
+    ticker.dispose();
     super.dispose();
   }
 

@@ -8,7 +8,7 @@ LLM skill — agents reach for fluiver instead of reinventing each helper.
 
 ```yaml
 dependencies:
-  fluiver: ^3.2.2
+  fluiver: ^4.0.0
 ```
 
 > No overlap with `package:collection`, `package:async`, `flutter_hooks`,
@@ -31,7 +31,7 @@ import 'package:fluiver/fluiver.dart';
 ## LLM skill
 
 Ships a description-triggered skill at
-[`tool/claude/flutter-fluiver/SKILL.md`](tool/claude/flutter-fluiver/SKILL.md)
+[`tool/skills/flutter-fluiver/SKILL.md`](tool/skills/flutter-fluiver/SKILL.md)
 so agents reach for fluiver APIs instead of hand-rolling
 `firstWhere(... orElse: ...)`, `controller.text =` caret-resets, or yet another
 `Debouncer`. Vendor it into your agent's skills directory — installing it is the
@@ -73,13 +73,10 @@ beyond three.
 ### Iterable / Map / Enum gap-fillers
 
 ```dart
-// Enum — non-throwing lookup; chain ?? for a fallback
-MyEnum.values.byNameOrNull('foo');
+// Enum — non-throwing lookup, no asNameMap() allocation
 MyEnum.values.byNameOrNull('x') ?? .bar;
 
-// Map — what Iterable already has
-map.firstWhereOrNull((k, v) => v.isActive);
-map.any((k, v) => v.isActive);
+// Map — filters that return a Map, not an entry iterable
 map.where((k, v) => v != null);
 map.whereKeyType<String>();
 map.whereValueType<int>();
@@ -102,7 +99,6 @@ birthDate.age();
 
 dt.truncateTime();                                 // → midnight
 dt.withTimeOfDay(const TimeOfDay(hour: 9));
-dt.toTimeOfDay();
 ```
 
 Arithmetic stays on stdlib: `dt.add(const Duration(days: 7))`.
@@ -129,27 +125,28 @@ if (user == null) {
 Only timeout becomes `null`; errors from the underlying future still
 propagate.
 
-### Observers
+### Listeners
 
 For widget context use the matching `flutter_hooks` hook
-(`useOnAppLifecycleStateChange`, `useOnPlatformBrightnessChange`). These
-wrappers fill the gap for providers — non-widget code that holds a
-device-state listenable.
+(`useOnPlatformBrightnessChange`). These wrappers fill the gap for
+providers — non-widget code that holds a device-state listenable. Named
+`*Listener` to match the framework's `AppLifecycleListener`.
 
 ```dart
 @riverpod
 class LocalesNotifier extends _$LocalesNotifier {
   @override
   List<Locale>? build() {
-    final observer = LocaleObserver((locales) => state = locales);
-    WidgetsBinding.instance.addObserver(observer);
-    ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
+    final listener = LocaleListener((locales) => state = locales);
+    WidgetsBinding.instance.addObserver(listener);
+    ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
     return PlatformDispatcher.instance.locales;
   }
 }
 ```
 
-Same shape for `BrightnessObserver` / `AppLifecycleObserver`.
+Same shape for `BrightnessListener`. App lifecycle needs no wrapper —
+the framework's `AppLifecycleListener` already is one.
 
 ### Color — HSL transforms
 
@@ -183,16 +180,20 @@ controller.setTextAndCaret('hello', caret: 0);  // caret at start
 Setting `controller.text = ...` directly resets the caret to `0` — this
 puts it where you asked instead.
 
-### `FlexGrid` — non-scrolling grid
+### `Grid` — non-scrolling grid
 
-Drop-in for `GridView(shrinkWrap: true)` inside `ListView` /
-`SingleChildScrollView`. Custom `RenderObject` — does not scroll itself,
-no perf footgun.
+`GridView`'s layout without its viewport — configured by the same
+`SliverGridDelegate` family, with `Grid.count` / `Grid.extent` mirroring
+`GridView.count` / `GridView.extent` 1:1. The drop-in for
+`GridView(shrinkWrap: true)` inside `ListView` /
+`SingleChildScrollView`: no repaint boundaries, no scroll semantics, and
+intrinsics/dry layout actually work (a shrink-wrapped `GridView` throws
+inside `IntrinsicHeight`).
 
 ```dart
 ListView(children: [
   const Text('Featured'),
-  FlexGrid(
+  Grid.count(
     crossAxisCount: 3,
     crossAxisSpacing: 8,
     mainAxisSpacing: 8,
@@ -260,9 +261,9 @@ await bag.dispose();
 ### Static helpers
 
 ```dart
-if (await NetworkProbe.hasConnection()) { /* online */ }
+if (await NetworkProbe.checkConnection()) { /* online */ }
 
-final h = FastHash.fnv1a('input'); // FNV-1a 64-bit (VM only, not Web)
+final h = FastHash.fnv1a('input'); // FNV-1a 64-bit (throws on JS web; VM/Wasm fine)
 
 final storeUrlString = platformDispatch<String>(
   android: () => 'https://play.google.com/store/apps/details?id=com.example.app',
