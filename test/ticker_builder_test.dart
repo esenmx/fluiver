@@ -17,7 +17,7 @@ void main() {
           ),
         ),
       );
-      check(captured).equals(Duration.zero);
+      check(captured).equals(.zero);
     });
 
     testWidgets('rebuilds on subsequent frames with growing elapsed', (

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -43,7 +41,7 @@ void main() {
       final c = newScrollController();
 
       await pumpScrollableList(tester, c);
-      unawaited(c.animateToBottom(duration: const Duration(milliseconds: 100)));
+      c.animateToBottom(duration: const Duration(milliseconds: 100));
       await tester.pumpAndSettle();
 
       check(c.position.pixels).equals(c.position.maxScrollExtent);
@@ -56,7 +54,7 @@ void main() {
       c.jumpTo(c.position.maxScrollExtent);
       await tester.pump();
 
-      unawaited(c.animateToTop(duration: const Duration(milliseconds: 100)));
+      c.animateToTop(duration: const Duration(milliseconds: 100));
       await tester.pumpAndSettle();
 
       check(c.position.pixels).equals(c.position.minScrollExtent);

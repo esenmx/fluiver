@@ -36,5 +36,14 @@ void main() {
       ).onDate(DateTime(2024, 6, 15));
       check(result).equals(DateTime(2024, 6, 15));
     });
+
+    test('UTC date yields a UTC result', () {
+      final result = const TimeOfDay(
+        hour: 9,
+        minute: 30,
+      ).onDate(DateTime.utc(2024, 6, 15, 23, 59));
+      check(result).equals(DateTime.utc(2024, 6, 15, 9, 30));
+      check(result.isUtc).isTrue();
+    });
   });
 }

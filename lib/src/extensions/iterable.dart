@@ -46,8 +46,8 @@ extension IterableWindowed<E> on Iterable<E> {
   /// [1, 2].windowed(3);                     // () — size > length
   /// ```
   Iterable<List<E>> windowed(int size, {int step = 1}) sync* {
-    RangeError.checkNotNegative(size - 1, 'size');
-    RangeError.checkNotNegative(step - 1, 'step');
+    if (size < 1) throw RangeError.value(size, 'size', 'must be > 0');
+    if (step < 1) throw RangeError.value(step, 'step', 'must be > 0');
 
     final buffer = <E>[];
     var skip = 0;

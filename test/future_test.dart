@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:checks/checks.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:fluiver/fluiver.dart';
@@ -10,11 +8,9 @@ void main() {
     test('returns value when future completes within timeout', () {
       fakeAsync((async) {
         int? captured;
-        unawaited(
-          Future.delayed(const Duration(milliseconds: 50), () => 42)
-              .timeoutOrNull(const Duration(milliseconds: 100))
-              .then((v) => captured = v),
-        );
+        Future.delayed(const Duration(milliseconds: 50), () => 42)
+            .timeoutOrNull(const Duration(milliseconds: 100))
+            .then((v) => captured = v);
 
         async.elapse(const Duration(milliseconds: 60));
 
@@ -25,11 +21,9 @@ void main() {
     test('returns null when timeout elapses first', () {
       fakeAsync((async) {
         int? captured = -1;
-        unawaited(
-          Future.delayed(const Duration(seconds: 5), () => 42)
-              .timeoutOrNull(const Duration(milliseconds: 100))
-              .then((v) => captured = v),
-        );
+        Future.delayed(const Duration(seconds: 5), () => 42)
+            .timeoutOrNull(const Duration(milliseconds: 100))
+            .then((v) => captured = v);
 
         async.elapse(const Duration(milliseconds: 150));
 

@@ -30,8 +30,9 @@ mixin EnumIndexComparable<T extends Enum> on Enum implements Comparable<T> {
 extension IterableEnum<T extends Enum> on Iterable<T> {
   /// Returns the enum value whose `name` matches [name], or `null` if none.
   ///
-  /// Non-throwing counterpart to `Enum.byName`. For a fallback use
-  /// `Enum.values.byNameOrNull(s) ?? .fallback` — Dart shorthand handles it.
+  /// Non-throwing counterpart to `Enum.byName`; chain `?? .fallback`.
+  /// Unlike core's `values.asNameMap()[name]`, this is a plain scan — no
+  /// map allocation per lookup.
   T? byNameOrNull(String name) {
     for (final e in this) {
       if (e.name == name) {

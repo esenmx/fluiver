@@ -12,9 +12,14 @@ extension TimeOfDayOnDate on TimeOfDay {
   ///
   /// Takes the date explicitly rather than reading [DateTime.now()] inside,
   /// so callers control the clock and tests stay deterministic.
+  ///
+  /// The calendar day is read in [date]'s own zone flavor and the result
+  /// stays in that flavor — fields and constructor never mix
+  /// representations. Which *day* you mean near a day boundary is the
+  /// caller's choice: `.toLocal()` / `.toUtc()` the date first.
   DateTime onDate(DateTime date) {
     if (date.isUtc) {
-      return DateTime.utc(date.year, date.month, date.day, hour, minute);
+      return .utc(date.year, date.month, date.day, hour, minute);
     }
     return DateTime(date.year, date.month, date.day, hour, minute);
   }
