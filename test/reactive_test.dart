@@ -1,6 +1,7 @@
 import 'package:checks/checks.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:fluiver/fluiver.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void reactiveTest(
@@ -106,6 +107,44 @@ void main() {
       check(log).deepEquals(['task2']);
 
       throttle.dispose();
+    });
+
+    reactiveTest('dispose drops the pending Debounce task', (async, log) {
+      final debounce = Debounce(const Duration(milliseconds: 100));
+
+      debounce(() => log.add('task'));
+      debounce.dispose();
+
+      async.elapse(const Duration(milliseconds: 200));
+      check(log).isEmpty();
+    });
+
+    reactiveTest('dispose drops the pending ThrottleLast task', (async, log) {
+      final throttle = ThrottleLast(const Duration(milliseconds: 100));
+
+      throttle(() => log.add('task'));
+      throttle.dispose();
+
+      async.elapse(const Duration(milliseconds: 200));
+      check(log).isEmpty();
+    });
+
+    reactiveTest('dispose drops the queued ThrottleLatest task', (async, log) {
+      final throttle = ThrottleLatest(const Duration(milliseconds: 100));
+
+      throttle(() => log.add('first'));
+      throttle(() => log.add('queued'));
+      throttle.dispose();
+
+      async.elapse(const Duration(milliseconds: 200));
+      check(log).deepEquals(['first']);
+    });
+
+    reactiveTest('calling a disposed instance throws in debug', (async, log) {
+      final debounce = Debounce(const Duration(milliseconds: 100))..dispose();
+
+      check(() => debounce(() => log.add('task'))).throws<FlutterError>();
+      check(log).isEmpty();
     });
   });
 }

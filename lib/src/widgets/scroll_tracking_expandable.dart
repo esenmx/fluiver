@@ -8,10 +8,10 @@ class ScrollTrackingExpandable extends StatefulWidget {
   const ScrollTrackingExpandable({
     required this.isExpanded,
     required this.child,
-    super.key,
     this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.easeInOutCubic,
     this.scrollOffset = 0.0,
+    super.key,
   });
 
   /// Whether the widget should be expanded.
@@ -32,6 +32,23 @@ class ScrollTrackingExpandable extends StatefulWidget {
   @override
   State<ScrollTrackingExpandable> createState() =>
       _ScrollTrackingExpandableState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(
+        FlagProperty(
+          'isExpanded',
+          value: isExpanded,
+          ifTrue: 'expanded',
+          ifFalse: 'collapsed',
+        ),
+      )
+      ..add(DiagnosticsProperty<Duration>('duration', duration))
+      ..add(DiagnosticsProperty<Curve>('curve', curve))
+      ..add(DoubleProperty('scrollOffset', scrollOffset, defaultValue: 0.0));
+  }
 }
 
 class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
@@ -66,9 +83,11 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
       _updateAnimation();
     }
     if (widget.isExpanded != oldWidget.isExpanded) {
-      final _ = widget.isExpanded
-          ? _controller.forward()
-          : _controller.reverse();
+      if (widget.isExpanded) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
     }
   }
 
@@ -91,7 +110,7 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
     if (!mounted || !_isExpanding) return;
     if (context.findRenderObject() case final RenderBox rb) {
       rb.showOnScreen(
-        rect: Rect.fromLTWH(
+        rect: .fromLTWH(
           0,
           0,
           rb.size.width,

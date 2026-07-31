@@ -17,7 +17,7 @@ extension TextEditingControllerCaret on TextEditingController {
   void setTextAndCaret(String text, {int? caret}) {
     value = TextEditingValue(
       text: text,
-      selection: TextSelection.collapsed(
+      selection: .collapsed(
         offset: (caret ?? text.length).clamp(0, text.length),
       ),
     );

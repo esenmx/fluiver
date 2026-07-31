@@ -4,22 +4,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'observer_test.mocks.dart';
+import 'listener_test.mocks.dart';
 
-class MockBrightnessObserverCallback extends Mock {
+class MockBrightnessListenerCallback extends Mock {
   void call(Brightness brightness);
 }
 
-class MockAppLifecycleObserverCallback extends Mock {
-  void call(AppLifecycleState state);
-}
-
-@GenerateMocks([LocaleObserver])
+@GenerateMocks([LocaleListener])
 void main() {
   setUp(TestWidgetsFlutterBinding.ensureInitialized);
 
-  testWidgets('LocaleObserver', (tester) async {
-    final observer = MockLocaleObserver();
+  testWidgets('LocaleListener', (tester) async {
+    final observer = MockLocaleListener();
     WidgetsBinding.instance.addObserver(observer);
     final window = tester.binding.platformDispatcher;
 
@@ -32,9 +28,9 @@ void main() {
     verify(observer.didChangeLocales(value2)).called(1);
   });
 
-  testWidgets('BrightnessObserver', (tester) async {
-    final callback = MockBrightnessObserverCallback();
-    WidgetsBinding.instance.addObserver(BrightnessObserver(callback.call));
+  testWidgets('BrightnessListener', (tester) async {
+    final callback = MockBrightnessListenerCallback();
+    WidgetsBinding.instance.addObserver(BrightnessListener(callback.call));
     final window = tester.binding.platformDispatcher
       ..platformBrightnessTestValue = .dark;
     verify(callback(.dark)).called(1);
@@ -44,19 +40,5 @@ void main() {
 
     window.platformBrightnessTestValue = .light;
     verify(callback(.light)).called(1);
-  });
-
-  testWidgets('AppLifecycleObserver', (tester) async {
-    final callback = MockAppLifecycleObserverCallback();
-    WidgetsBinding.instance.addObserver(AppLifecycleObserver(callback.call));
-
-    tester.binding.handleAppLifecycleStateChanged(.paused);
-    verify(callback(.paused)).called(1);
-
-    tester.binding.handleAppLifecycleStateChanged(.resumed);
-    verify(callback(.resumed)).called(1);
-
-    tester.binding.handleAppLifecycleStateChanged(.detached);
-    verify(callback(.detached)).called(1);
   });
 }

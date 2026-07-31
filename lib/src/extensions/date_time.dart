@@ -1,11 +1,5 @@
 part of '../../fluiver.dart';
 
-/// Converting [DateTime] to [TimeOfDay].
-extension DateTimeTimeOfDay on DateTime {
-  /// Returns this date's hour and minute as a [TimeOfDay].
-  TimeOfDay toTimeOfDay() => TimeOfDay(hour: hour, minute: minute);
-}
-
 /// Merging time components with [DateTime].
 extension DateTimeMerge on DateTime {
   /// Returns this date with hour/minute/second/millisecond/microsecond
@@ -53,8 +47,7 @@ extension DateTimeCheck on DateTime {
   /// Whether this date is within [duration] of `DateTime.now()`, in either
   /// direction.
   bool isWithinFromNow(Duration duration) {
-    return difference(DateTime.now()).inMicroseconds.abs() <=
-        duration.inMicroseconds;
+    return difference(.now()).inMicroseconds.abs() <= duration.inMicroseconds;
   }
 }
 

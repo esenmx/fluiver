@@ -32,7 +32,7 @@ class DisposableBag {
   /// disposed, runs [disposer] immediately.
   void add(FutureOr<void> Function() disposer) {
     if (_disposed) {
-      final _ = Future.sync(disposer);
+      Future.sync(disposer);
       return;
     }
     _disposers.add(disposer);

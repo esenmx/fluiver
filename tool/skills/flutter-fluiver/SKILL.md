@@ -1,6 +1,6 @@
 ---
 name: flutter-fluiver
-description: SDK gap-fillers via package:fluiver — use instead of reinventing. FlexGrid (non-scroll grid), TickerBuilder, ScrollTrackingExpandable (expand/collapse pinned into view), Debounce/Throttle*, Locale/Brightness/AppLifecycle observers, DateTime/TimeOfDay predicates, Enum.byNameOrNull, Iterable separated/windowed, Map.entryOf, Object.let, Color darken/lighten/contrastText, ScrollController atTop/animateTo*, Future.timeoutOrNull, TextEditingController.setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
+description: SDK gap-fillers via package:fluiver — use instead of reinventing. Grid (non-scroll grid, GridView API), TickerBuilder, ScrollTrackingExpandable (expand/collapse pinned into view), Debounce/Throttle*, Locale/Brightness listeners, DateTime/TimeOfDay predicates, Enum.byNameOrNull, Iterable separated/windowed, Map.entryOf, Object.let, Color darken/lighten/contrastText, ScrollController atTop/animateTo*, Future.timeoutOrNull, TextEditingController.setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
 ---
 
 # flutter-fluiver
@@ -9,13 +9,13 @@ description: SDK gap-fillers via package:fluiver — use instead of reinventing.
 
 ## Widgets
 
-- `FlexGrid(crossAxisCount:, mainAxisSpacing:, crossAxisSpacing:, children:)` — non-scrolling grid (custom `RenderObject`). The drop-in for `GridView(shrinkWrap: true)` inside a `ListView` / `SingleChildScrollView`; use a real `GridView` only when the grid itself scrolls (viewport recycling).
-- `TickerBuilder(builder: (context, Duration elapsed) => …)` — rebuilds per frame, `elapsed` since first frame. Don't wrap in `AnimatedBuilder`.
-- `ScrollTrackingExpandable(isExpanded:, child:, duration:, curve:, scrollOffset:)` — animated expand/collapse that keeps the growing bottom edge visible in the nearest `Scrollable` (`scrollOffset` adds breathing room below). Collapse never scrolls. Use over `AnimatedSize`/`ExpansionTile` when the tile sits low in a scrollable and would expand below the fold.
+- `Grid(gridDelegate:, children:)` / `Grid.count(crossAxisCount:, ...)` / `Grid.extent(maxCrossAxisExtent:, ...)` — GridView's API minus the viewport; any `SliverGridDelegate`. All ctors also take `direction:` (main axis) and `padding:`. Drop-in for `GridView(shrinkWrap: true)` inside a `ListView` / `Column`; unlike that, intrinsics/dry layout work. Real `GridView` only when the grid itself scrolls.
+- `TickerBuilder(builder: (context, Duration elapsed) => …, onTick:)` — rebuilds per frame, `elapsed` since first frame; `onTick` for per-frame side effects. Don't wrap in `AnimatedBuilder`.
+- `ScrollTrackingExpandable(isExpanded:, child:, duration:, curve:, scrollOffset:)` — expand/collapse that keeps the growing bottom edge visible in the nearest `Scrollable`. Collapse never scrolls. Use over `AnimatedSize`/`ExpansionTile` for tiles low in a scrollable.
 
 ## Debounce / Throttle
 
-`Debounce(Duration)`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` — all callable (`d(() => …)`) and all expose `dispose()` (call from `State.dispose` / `ref.onDispose`, or cluster in a `DisposableBag`). Run them in the widget, never inside a notifier.
+`Debounce(Duration)`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` — callable (`d(() => …)`), all expose `dispose()`. Run in the widget, never inside a notifier.
 
 |Variant|Fires|
 |--|--|
@@ -24,36 +24,36 @@ description: SDK gap-fillers via package:fluiver — use instead of reinventing.
 |`ThrottleLast`|drops intermediates, keeps the last (scroll save, slider end)|
 |`ThrottleLatest`|rate-limited but every call eventually fires (live preview)|
 
-## Observers (device state outside a widget)
+## Listeners (device state outside a widget)
 
-`LocaleObserver`, `BrightnessObserver`, `AppLifecycleObserver` — for providers/services that need device state where there's no `BuildContext` (in widgets, use the matching `flutter_hooks` hook instead). Seed from `PlatformDispatcher.instance` / `WidgetsBinding.instance`, register with `addObserver`, remove in `onDispose`:
+`LocaleListener`, `BrightnessListener` — for providers/services with no `BuildContext` (in widgets, use the matching `flutter_hooks` hook). Seed from `PlatformDispatcher.instance`:
 
 ```dart
-final observer = LocaleObserver((locales) => state = locales);
-WidgetsBinding.instance.addObserver(observer);
-ref.onDispose(() => WidgetsBinding.instance.removeObserver(observer));
+final listener = LocaleListener((locales) => state = locales);
+WidgetsBinding.instance.addObserver(listener);
+ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
 ```
 
 ## Extensions
 
-- **DateTime predicates**: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow(Duration)`, `age()` (timezone-safe years, month/day-correct), `truncateTime()` (→ midnight), `withTimeOfDay(TimeOfDay)`, `toTimeOfDay()`. No arithmetic helpers — use stdlib `Duration` (there is no `addDays/Months/Years`).
-- **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day (preserves UTC/local alignment). Day passed explicitly (no hidden `DateTime.now()` → deterministic in tests).
-- **Enum**: `with EnumIndexComparable<MyEnum>` adds `<`/`>`/`compareTo` by index type-safely. `Values.byNameOrNull(name)` → nullable — use on untrusted URL/env/JSON input (stdlib `byName` throws); chain `?? .fallback`.
-- **Iterable**: `separated((i) => sep)` (interleave by index slot); `windowed(size, {step})` — stepped sliding window that **drops the partial trailing window** (vs non-overlapping `package:collection.slices`).
-- **Map**: `any` / `every` / `firstWhereOrNull` / `where` over `(k, v)`; `whereKeyType<T>()`, `whereValueType<T>()`; `entryOf(key)` → `MapEntry?` that is null **only when the key is absent** (distinguishes present-with-null from missing).
-- **Object.let** (`T extends Object`): transform-and-return; `?.let(...)` for null-aware (`env['PORT']?.let(int.parse)`, `?url?.let(NetworkImage.new)`). Skip it for side-effect-only calls, multi-line bodies, or chains beyond three.
-- **Color** (HSL): `darken([amount])`, `lighten([amount])` (default ±0.1), `contrastText` (black or white by luminance). `amount` and result lightness clamp to `[0,1]`.
-- **ScrollController**: `atTop`, `atBottom`, `animateToTop({duration, curve})`, `animateToBottom(...)` — all `hasClients`-safe (no-op when unattached); defaults 250 ms `easeOut`.
-- **Future**: `timeoutOrNull(Duration)` → `Future<T?>` — null on timeout **only**; the underlying future's errors still throw.
-- **TextEditingController**: `setTextAndCaret(text, {caret})` — text + caret in one shot. Plain `controller.text = …` resets the caret to 0 (papercut).
+- **DateTime predicates**: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow(Duration)`, `age()` (timezone-safe years, month/day-correct), `truncateTime()` (→ midnight, keeps UTC flag), `withTimeOfDay(TimeOfDay)`. No arithmetic helpers — stdlib `Duration`.
+- **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day. Day passed explicitly — deterministic in tests.
+- **Enum**: `with EnumIndexComparable<MyEnum>` adds `<`/`>`/`compareTo` by index type-safely. `values.byNameOrNull(name)` → nullable, for untrusted input (stdlib `byName` throws); chain `?? .fallback`.
+- **Iterable**: `separated((i) => sep)` (interleave by index slot); `windowed(size, {step})` — sliding window, **drops the partial trailing window** (vs non-overlapping `collection.slices`).
+- **Map**: `where` over `(k, v)`; `whereKeyType<T>()`, `whereValueType<T>()` (narrowed static type); `entryOf(key)` → `MapEntry?`, null **only when the key is absent** (present-with-null ≠ missing).
+- **Object.let** (`T extends Object`): transform-and-return; `?.let(...)` for null-aware (`env['PORT']?.let(int.parse)`). Skip for side-effect-only calls, multi-line bodies, chains beyond three.
+- **Color** (HSL): `darken([amount])`, `lighten([amount])` (default ±0.1), `contrastText` (black/white by luminance).
+- **ScrollController**: `atTop`, `atBottom`, `animateToTop({duration, curve})`, `animateToBottom(...)` — `hasClients`-safe no-ops when unattached.
+- **Future**: `timeoutOrNull(Duration)` → `Future<T?>` — null on timeout **only**; underlying errors still throw.
+- **TextEditingController**: `setTextAndCaret(text, {caret})` — text + caret in one shot (`.text =` resets caret to 0).
 
 ## Helpers
 
 |API|Note|
 |--|--|
-|`FastHash.fnv1a(String)` → `int`|FNV-1a 64-bit. **VM only** — JS 53-bit ints corrupt it. NOT cryptographic.|
-|`NetworkProbe.hasConnection({timeout})`|`false` on `SocketException` / `TimeoutException`; web short-circuits to `true`.|
-|`platformDispatch<T>({android, ios, macos, …})`|Per-platform value; **throws `UnsupportedError`** when the current platform has no callback — opt in explicitly.|
+|`FastHash.fnv1a(String)` → `int`|FNV-1a 64-bit. **Throws on JS web**; VM/Wasm fine. NOT cryptographic.|
+|`NetworkProbe.checkConnection({host, port, timeout})`|`false` on `SocketException`/`TimeoutException`; web → `true`. Defaults `1.0.0.1:53`, 3s; `host` = literal IP.|
+|`platformDispatch<T>({android, ios, macos, web, …})`|Per-platform value (all params lowercase); throws `UnsupportedError` on platforms without a callback.|
 |`TextFieldBuilders.disabledCounter`|`TextField(buildCounter: TextFieldBuilders.disabledCounter)` hides the counter.|
-|`LRUCache<K, V>(maxEntries:)`|O(1) get/put, promotes to MRU; per-isolate. `putIfAbsent(k, ifAbsent)` lazy on miss. For async, type `LRUCache<K, Future<V>>` so concurrent misses dedupe.|
-|`DisposableBag()`|`..add(fn)` / `..addAll([...])`; idempotent `dispose()` (runs all, throws `DisposableBagException` on error). Pair with `ref.onDispose(() => unawaited(bag.dispose()))` — Riverpod doesn't await async dispose.|
+|`LRUCache<K, V>(maxEntries:)`|O(1) get/put, promotes to MRU; per-isolate. For async, type `LRUCache<K, Future<V>>` so concurrent misses dedupe.|
+|`DisposableBag()`|`..add(fn)` / `..addAll([...])`; idempotent `dispose()` runs all, then throws `DisposableBagException` if any failed. Pair with `ref.onDispose(bag.dispose)`.|

@@ -1,14 +1,14 @@
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 
-class FlexGridPage extends StatefulWidget {
-  const FlexGridPage({super.key});
+class GridPage extends StatefulWidget {
+  const GridPage({super.key});
 
   @override
-  State<FlexGridPage> createState() => _FlexGridPageState();
+  State<GridPage> createState() => _GridPageState();
 }
 
-class _FlexGridPageState extends State<FlexGridPage> {
+class _GridPageState extends State<GridPage> {
   int _crossAxisCount = 2;
   double _mainAxisSpacing = 16;
   double _crossAxisSpacing = 16;
@@ -18,7 +18,7 @@ class _FlexGridPageState extends State<FlexGridPage> {
   double _paddingRight = 16;
   double _paddingBottom = 16;
 
-  EdgeInsets get _padding => EdgeInsets.only(
+  EdgeInsets get _padding => .only(
     left: _paddingLeft,
     top: _paddingTop,
     right: _paddingRight,
@@ -28,7 +28,7 @@ class _FlexGridPageState extends State<FlexGridPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('FlexGrid')),
+      appBar: AppBar(title: Text('Grid')),
       body: Row(
         children: [
           Expanded(
@@ -39,10 +39,10 @@ class _FlexGridPageState extends State<FlexGridPage> {
               ),
               child: SingleChildScrollView(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: .stretch,
                   children: [
                     Text(
-                      'FlexGrid Controls',
+                      'Grid Controls',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 24),
@@ -129,19 +129,19 @@ class _FlexGridPageState extends State<FlexGridPage> {
           Expanded(
             flex: 3,
             child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: FlexGrid(
+              scrollDirection: .vertical,
+              child: Grid.count(
                 crossAxisCount: _crossAxisCount,
                 mainAxisSpacing: _mainAxisSpacing,
                 crossAxisSpacing: _crossAxisSpacing,
                 childAspectRatio: _aspectRatio,
                 padding: _padding,
-                direction: Axis.vertical,
+                direction: .vertical,
                 children: [
                   for (var i = 0; i < 100; i++)
                     Container(
                       color: Colors.primaries[i % Colors.primaries.length],
-                      alignment: Alignment.center,
+                      alignment: .center,
                       child: Text(
                         i.toString(),
                         style: Theme.of(context).textTheme.displayMedium,
@@ -178,7 +178,7 @@ class IncrementalControl extends StatelessWidget {
     return Column(
       children: [
         FittedBox(
-          fit: BoxFit.fitWidth,
+          fit: .fitWidth,
           child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
         ),
         const SizedBox(height: 8),
@@ -187,7 +187,7 @@ class IncrementalControl extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.remove),
               onPressed: value > min
-                  ? () => onChanged((value - step).clamp(min, double.infinity))
+                  ? () => onChanged((value - step).clamp(min, .infinity))
                   : null,
               style: IconButton.styleFrom(
                 backgroundColor: value > min ? null : Colors.grey.shade200,
@@ -197,7 +197,7 @@ class IncrementalControl extends StatelessWidget {
               width: 60,
               child: Text(
                 value.toStringAsFixed(value % 1 == 0 ? 0 : 1),
-                textAlign: TextAlign.center,
+                textAlign: .center,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),

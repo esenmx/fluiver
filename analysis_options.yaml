@@ -8,3 +8,10 @@ linter:
   rules:
     # FNV-1a constants are intentionally 64-bit; VM-only documented loudly.
     avoid_js_rounded_ints: false
+    # Fire-and-forget futures are dropped bare, framework-style: sync
+    # lifecycle methods (initState, didUpdateWidget) cannot await, and
+    # unawaited()/.ignore()/wildcard wrappers are ceremony. Futures whose
+    # completion matters are awaited instead. discarded_futures is the
+    # same policy viewed from the call site.
+    unawaited_futures: false
+    discarded_futures: false

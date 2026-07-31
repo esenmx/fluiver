@@ -11,7 +11,7 @@ class TickerBuilderPage extends StatefulWidget {
 
 class _TickerBuilderPageState extends State<TickerBuilderPage> {
   final TextEditingController _controller = TextEditingController();
-  TimeFormat _selectedFormat = TimeFormat.full;
+  TimeFormat _selectedFormat = .full;
 
   @override
   void dispose() {
@@ -36,31 +36,27 @@ class _TickerBuilderPageState extends State<TickerBuilderPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Ticker Builder Page')),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: .center,
         children: [
           TickerBuilder(
             builder: (context, elapsed) {
               final formattedValue = _formatDuration(elapsed);
               _controller.value = TextEditingValue(
                 text: formattedValue,
-                selection: TextSelection.collapsed(
-                  offset: formattedValue.length,
-                ),
+                selection: .collapsed(offset: formattedValue.length),
               );
               return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: .center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 32),
                     child: TextField(
                       controller: _controller,
-                      textAlign: TextAlign.center,
+                      textAlign: .center,
                       readOnly: true,
                       style: Theme.of(context).textTheme.headlineLarge,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                        border: OutlineInputBorder(borderRadius: .circular(8)),
                         labelText: 'Ticker Value',
                         hintText: '00:00:00.000',
                       ),
@@ -70,37 +66,37 @@ class _TickerBuilderPageState extends State<TickerBuilderPage> {
                   SegmentedButton<TimeFormat>(
                     segments: const [
                       ButtonSegment(
-                        value: TimeFormat.full,
+                        value: .full,
                         label: Text('Full'),
                         tooltip: 'HH:mm:ss.SSS',
                       ),
                       ButtonSegment(
-                        value: TimeFormat.microseconds,
+                        value: .microseconds,
                         label: Text('μs'),
                         tooltip: 'Microseconds',
                       ),
                       ButtonSegment(
-                        value: TimeFormat.milliseconds,
+                        value: .milliseconds,
                         label: Text('ms'),
                         tooltip: 'Milliseconds',
                       ),
                       ButtonSegment(
-                        value: TimeFormat.seconds,
+                        value: .seconds,
                         label: Text('s'),
                         tooltip: 'Seconds',
                       ),
                       ButtonSegment(
-                        value: TimeFormat.minutes,
+                        value: .minutes,
                         label: Text('m'),
                         tooltip: 'Minutes',
                       ),
                       ButtonSegment(
-                        value: TimeFormat.hours,
+                        value: .hours,
                         label: Text('h'),
                         tooltip: 'Hours',
                       ),
                       ButtonSegment(
-                        value: TimeFormat.days,
+                        value: .days,
                         label: Text('d'),
                         tooltip: 'Days',
                       ),
