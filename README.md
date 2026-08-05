@@ -31,7 +31,7 @@ import 'package:fluiver/fluiver.dart';
 ## LLM skill
 
 Ships a description-triggered skill at
-[`tool/skills/flutter-fluiver/SKILL.md`](tool/skills/flutter-fluiver/SKILL.md)
+[`skills/flutter-fluiver/SKILL.md`](skills/flutter-fluiver/SKILL.md)
 so agents reach for fluiver APIs instead of hand-rolling
 `firstWhere(... orElse: ...)`, `controller.text =` caret-resets, or yet another
 `Debouncer`. Vendor it into your agent's skills directory — installing it is the
