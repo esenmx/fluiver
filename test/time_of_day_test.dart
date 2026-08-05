@@ -41,8 +41,8 @@ void main() {
       final result = const TimeOfDay(
         hour: 9,
         minute: 30,
-      ).onDate(DateTime.utc(2024, 6, 15, 23, 59));
-      check(result).equals(DateTime.utc(2024, 6, 15, 9, 30));
+      ).onDate(.utc(2024, 6, 15, 23, 59));
+      check(result).equals(.utc(2024, 6, 15, 9, 30));
       check(result.isUtc).isTrue();
     });
   });
