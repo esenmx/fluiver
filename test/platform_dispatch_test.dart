@@ -45,9 +45,13 @@ void main() {
       check(value).equals('web');
     }, skip: !kIsWeb);
 
-    test('throws UnsupportedError when no web callback on web platform', () {
-      String dispatch() => platformDispatch<String>(android: () => 'android');
-      check(dispatch).throws<UnsupportedError>();
-    }, skip: !kIsWeb);
+    test(
+      'throws UnsupportedError when no web callback on web platform',
+      () {
+        String dispatch() => platformDispatch<String>(android: () => 'android');
+        check(dispatch).throws<UnsupportedError>();
+      },
+      skip: !kIsWeb,
+    );
   });
 }
