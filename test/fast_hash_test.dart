@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('FastHash.fnv1a', () {
-    final isJS = kIsWeb && !kIsWasm;
+    const isJS = kIsWeb && !kIsWasm;
 
     test('throws UnsupportedError on JS web', () {
       check(() => FastHash.fnv1a('hello'))
