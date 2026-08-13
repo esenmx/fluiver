@@ -41,12 +41,21 @@ class LRUCache<K, V> {
   /// Returns the value for [key], promoting it to most-recently-used, or
   /// `null` if absent.
   V? operator [](K key) {
-    if (!_entries.containsKey(key)) {
-      return null;
+    if (null is V) {
+      if (!_entries.containsKey(key)) {
+        return null;
+      }
+      final value = _entries.remove(key) as V;
+      _entries[key] = value;
+      return value;
     }
-    final value = _entries.remove(key) as V;
-    _entries[key] = value;
-    return value;
+
+    final value = _entries.remove(key);
+    if (value != null) {
+      _entries[key] = value;
+      return value;
+    }
+    return null;
   }
 
   /// Inserts or replaces [value] for [key] and marks it most-recently-used.
@@ -70,7 +79,7 @@ class LRUCache<K, V> {
   /// the future (`LRUCache<K, Future<V>>`) so concurrent misses dedupe.
   V putIfAbsent(K key, V Function() ifAbsent) {
     final hit = this[key];
-    if (hit != null || _entries.containsKey(key)) {
+    if (hit != null || (null is V && _entries.containsKey(key))) {
       return hit as V;
     }
     final value = ifAbsent();
