@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:checks/checks.dart';
@@ -5,9 +6,6 @@ import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  // The TimeoutException path is not covered: a deterministic connect
-  // timeout needs an endpoint that black-holes SYNs, and no loopback setup
-  // does that — closed ports refuse (SocketException) instead.
   group('checkConnection', () {
     test('returns true when the endpoint accepts', () async {
       final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
@@ -30,6 +28,22 @@ void main() {
         port: port,
       );
       check(result).isFalse();
+    });
+
+    test('returns false on connection timeout', () async {
+      await IOOverrides.runZoned(
+        () async {
+          final result = await NetworkProbe.checkConnection(
+            host: InternetAddress.loopbackIPv4.address,
+            port: 80,
+          );
+          check(result).isFalse();
+        },
+        socketConnect:
+            (host, port, {sourceAddress, sourcePort = 0, timeout}) async {
+              throw TimeoutException('Simulated timeout');
+            },
+      );
     });
 
     test('propagates non-socket errors', () async {
