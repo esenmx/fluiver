@@ -142,6 +142,25 @@ void main() {
       check(_rectOf(tester, 1).left).isCloseTo(0, 0.01);
     });
 
+    testWidgets('Grid rtl direction', (tester) async {
+      await _pump(
+        tester,
+        Grid.count(
+          crossAxisCount: 3,
+          children: List.generate(3, _cell),
+        ),
+        textDirection: TextDirection.rtl,
+      );
+
+      // 300 wide, 3 columns -> each is 100 wide.
+      // Under RTL, child 0 should be on the right (left = 200)
+      // child 1 should be in the middle (left = 100)
+      // child 2 should be on the left (left = 0)
+      check(_rectOf(tester, 0).left).isCloseTo(200, 0.01);
+      check(_rectOf(tester, 1).left).isCloseTo(100, 0.01);
+      check(_rectOf(tester, 2).left).isCloseTo(0, 0.01);
+    });
+
     testWidgets('intrinsic dimensions match layout calculations', (
       tester,
     ) async {
