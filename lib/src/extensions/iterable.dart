@@ -49,21 +49,23 @@ extension IterableWindowed<E> on Iterable<E> {
     if (size < 1) throw RangeError.value(size, 'size', 'must be > 0');
     if (step < 1) throw RangeError.value(step, 'step', 'must be > 0');
 
-    final buffer = <E>[];
+    final buffer = ListQueue<E>(size);
     var skip = 0;
     for (final element in this) {
       if (skip > 0) {
         skip--;
         continue;
       }
-      buffer.add(element);
+      buffer.addLast(element);
       if (buffer.length == size) {
         yield List<E>.unmodifiable(buffer);
         if (step >= size) {
           buffer.clear();
           skip = step - size;
         } else {
-          buffer.removeRange(0, step);
+          for (var i = 0; i < step; i++) {
+            buffer.removeFirst();
+          }
         }
       }
     }
