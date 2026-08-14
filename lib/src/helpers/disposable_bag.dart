@@ -63,7 +63,10 @@ class DisposableBag {
     final errors = <Object>[];
     for (final disposer in _disposers) {
       try {
-        await disposer();
+        final result = disposer();
+        if (result is Future) {
+          await result;
+        }
       } on Object catch (e) {
         errors.add(e);
       }
