@@ -107,6 +107,48 @@ void main() {
       await check(bag.dispose()).throws<DisposableBagException>();
       check(calls).deepEquals(['a', 'c']);
     });
+
+    test('executes async disposers concurrently', () async {
+      final order = <String>[];
+      final bag = DisposableBag()
+        ..add(() async {
+          order.add('start-a');
+          await Future<void>.delayed(const Duration(milliseconds: 20));
+          order.add('end-a');
+        })
+        ..add(() async {
+          order.add('start-b');
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+          order.add('end-b');
+        });
+
+      await bag.dispose();
+      // Both disposers start synchronously before either completes.
+      // b takes 10ms, a takes 20ms, so b finishes before a.
+      check(order).deepEquals(['start-a', 'start-b', 'end-b', 'end-a']);
+    });
+
+    test('collects errors from async disposers', () async {
+      final bag = DisposableBag()
+        ..add(() async {
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+          throw Exception('async error 1');
+        })
+        ..add(() async {
+          await Future<void>.delayed(const Duration(milliseconds: 5));
+          throw Exception('async error 2');
+        });
+
+      DisposableBagException? exception;
+      try {
+        await bag.dispose();
+      } on DisposableBagException catch (e) {
+        exception = e;
+      }
+
+      check(exception).isNotNull();
+      check(exception!.errors.length).equals(2);
+    });
   });
 
   group('DisposableBagException', () {
