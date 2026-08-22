@@ -361,13 +361,10 @@ class RenderGrid extends RenderBox
       if (extent > maxChild) maxChild = extent;
       child = (child.parentData! as _GridParentData).nextSibling;
     }
-    final delegate = _gridDelegate;
-    if (delegate is SliverGridDelegateWithFixedCrossAxisCount) {
-      return maxChild * delegate.crossAxisCount +
-          (delegate.crossAxisCount - 1) * delegate.crossAxisSpacing +
-          _crossPaddingSum;
-    }
-    return maxChild + _crossPaddingSum;
+    final delegate = _gridDelegate as SliverGridDelegateWithFixedCrossAxisCount;
+    return maxChild * delegate.crossAxisCount +
+        (delegate.crossAxisCount - 1) * delegate.crossAxisSpacing +
+        _crossPaddingSum;
   }
 
   /// Main-axis extent (padding included) for a total cross extent
