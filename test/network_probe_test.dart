@@ -8,24 +8,18 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('checkConnection', () {
     test('returns true when the endpoint accepts', () async {
-      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
-      addTearDown(server.close);
-
+      // Connect to Google DNS over TLS as an integration test.
+      // This avoids mocking a local secure server without valid certificates.
       final result = await NetworkProbe.checkConnection(
-        host: server.address.address,
-        port: server.port,
+        host: '8.8.8.8',
       );
       check(result).isTrue();
     });
 
     test('returns false on connection refused', () async {
-      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
-      final port = server.port;
-      await server.close();
-
       final result = await NetworkProbe.checkConnection(
         host: InternetAddress.loopbackIPv4.address,
-        port: port,
+        port: 55555,
       );
       check(result).isFalse();
     });

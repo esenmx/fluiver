@@ -2,8 +2,8 @@ part of '../../fluiver.dart';
 
 /// Lightweight reachability probes.
 abstract final class NetworkProbe {
-  /// Returns `true` if a TCP socket to `host:port` — Cloudflare DNS
-  /// (`1.0.0.1:53`) by default — opens within [timeout].
+  /// Returns `true` if a secure connection to `host:port` — Cloudflare DNS
+  /// over TLS (`1.0.0.1:853`) by default — opens within [timeout].
   ///
   /// Skips DNS resolution by connecting to a literal IP — faster and more
   /// reliable than HTTP probes. [host] must be a literal IPv4/IPv6 address;
@@ -20,14 +20,14 @@ abstract final class NetworkProbe {
   /// in the browser, and a running web app is by definition online.
   static Future<bool> checkConnection({
     String host = '1.0.0.1',
-    int port = 53,
+    int port = 853,
     Duration timeout = const Duration(seconds: 3),
   }) async {
     if (kIsWeb) {
       return true;
     }
     try {
-      final socket = await Socket.connect(
+      final socket = await SecureSocket.connect(
         InternetAddress(host),
         port,
         timeout: timeout,
