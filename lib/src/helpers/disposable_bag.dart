@@ -61,17 +61,32 @@ class DisposableBag {
     }
     _disposed = true;
     final errors = <Object>[];
+    List<Future<void>>? futures;
+
     for (final disposer in _disposers) {
       try {
         final result = disposer();
         if (result is Future) {
-          await result;
+          futures ??= [];
+          futures.add(
+            result.then(
+              (_) => null,
+              onError: (Object e) {
+                errors.add(e);
+              },
+            ),
+          );
         }
       } on Object catch (e) {
         errors.add(e);
       }
     }
     _disposers.clear();
+
+    if (futures != null) {
+      await Future.wait(futures);
+    }
+
     if (errors.isNotEmpty) {
       throw DisposableBagException(errors);
     }
