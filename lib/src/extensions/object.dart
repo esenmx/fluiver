@@ -22,7 +22,7 @@ extension Let<T extends Object> on T {
   /// ]);
   ///
   /// // 3. Chain pure transformations
-  /// final hash = userId.toString().let(FastHash.fnv1a);
+  /// final hash = userId.toString().let(SecureHash.sha256);
   ///
   /// // 4. Conditional spread of children
   /// Column(children: [

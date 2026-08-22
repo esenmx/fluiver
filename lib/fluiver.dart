@@ -5,8 +5,10 @@ library;
 
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io' show InternetAddress, Socket, SocketException;
 
+import 'package:crypto/crypto.dart' as crypto;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -23,7 +25,7 @@ part 'src/extensions/scroll_controller.dart';
 part 'src/extensions/text_editing_controller.dart';
 part 'src/extensions/time_of_day.dart';
 part 'src/helpers/disposable_bag.dart';
-part 'src/helpers/fast_hash.dart';
+part 'src/helpers/secure_hash.dart';
 part 'src/helpers/listener.dart';
 part 'src/helpers/lru_cache.dart';
 part 'src/helpers/network_probe.dart';
