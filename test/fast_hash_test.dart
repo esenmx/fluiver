@@ -34,6 +34,16 @@ void main() {
           check(FastHash.fnv1a('')).equals((0xcbf29ce4 << 32) | 0x84222325);
         });
 
+        test('known vectors are stable', () {
+          // Hashes UTF-16 code units as hi/lo byte pairs, so standard FNV
+          // byte vectors do not apply; pinned from the released algorithm.
+          // Split literals: a >2^53 literal is a dart2js compile error.
+          check(FastHash.fnv1a('a')).equals((0x08326707 << 32) | 0xb4eb37da);
+          check(
+            FastHash.fnv1a('hello'),
+          ).equals((0x4ce155d4 << 32) | 0x4072f8ef);
+        });
+
         test('handles unicode code units', () {
           check(
             FastHash.fnv1a('🚀'),
