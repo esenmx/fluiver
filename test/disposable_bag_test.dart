@@ -108,4 +108,30 @@ void main() {
       check(calls).deepEquals(['a', 'c']);
     });
   });
+
+  group('DisposableBagException', () {
+    test('toString formats single error correctly', () {
+      final exception = DisposableBagException([
+        Exception('error 1'),
+      ]);
+
+      check(exception.toString()).equals(
+        'DisposableBagException: 1 disposer(s) threw errors:\n'
+        ' - Exception: error 1',
+      );
+    });
+
+    test('toString formats multiple errors correctly', () {
+      final exception = DisposableBagException([
+        Exception('first error'),
+        'second error',
+      ]);
+
+      check(exception.toString()).equals(
+        'DisposableBagException: 2 disposer(s) threw errors:\n'
+        ' - Exception: first error\n'
+        ' - second error',
+      );
+    });
+  });
 }
