@@ -15,9 +15,15 @@ part of '../../fluiver.dart';
 /// bag.dispose();
 /// ```
 ///
-/// Closures run in registration order. [dispose] is idempotent — calling it
-/// twice runs the closures once. Adding after dispose runs the closure
-/// immediately and does not retain it.
+/// Closures are invoked in registration order. A synchronous disposer
+/// completes before the next one starts; disposers that return a [Future]
+/// are started in order but awaited together, so [dispose] settles when the
+/// slowest one does and a stalled disposer never starves the ones after it.
+/// A step that must wait for a previous async step (flush, then close)
+/// belongs in one closure: `() async { await flush(); await close(); }`.
+///
+/// [dispose] is idempotent — calling it twice runs the closures once. Adding
+/// after dispose runs the closure immediately and does not retain it.
 class DisposableBag {
   final List<FutureOr<void> Function()> _disposers = [];
   bool _disposed = false;
@@ -53,40 +59,31 @@ class DisposableBag {
     disposers.forEach(add);
   }
 
-  /// Runs every registered disposer in order, then clears the bag.
-  /// Safe to call multiple times.
+  /// Invokes every registered disposer in order, awaits the ones that return
+  /// a [Future] together, then clears the bag. Throws [DisposableBagException]
+  /// listing every error in registration order. Safe to call multiple times.
   Future<void> dispose() async {
     if (_disposed) {
       return;
     }
     _disposed = true;
-    final errors = <Object>[];
-    List<Future<void>>? futures;
-
-    for (final disposer in _disposers) {
+    final slots = List<Object?>.filled(_disposers.length, null);
+    final futures = <Future<void>>[];
+    for (var i = 0; i < _disposers.length; i++) {
       try {
-        final result = disposer();
+        final result = _disposers[i]();
         if (result is Future) {
-          futures ??= [];
-          futures.add(
-            result.then(
-              (_) => null,
-              onError: (Object e) {
-                errors.add(e);
-              },
-            ),
-          );
+          futures.add(result.then((_) {}, onError: (Object e) => slots[i] = e));
         }
       } on Object catch (e) {
-        errors.add(e);
+        slots[i] = e;
       }
     }
     _disposers.clear();
-
-    if (futures != null) {
+    if (futures.isNotEmpty) {
       await Future.wait(futures);
     }
-
+    final errors = slots.nonNulls.toList();
     if (errors.isNotEmpty) {
       throw DisposableBagException(errors);
     }
