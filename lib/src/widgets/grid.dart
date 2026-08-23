@@ -351,7 +351,10 @@ class RenderGrid extends RenderBox
   /// Cross-axis extent (padding included) shrink-wrapping the children's
   /// cross intrinsics. Exact for the fixed-count delegate; other
   /// delegates adapt their cell count to any extent, so the widest
-  /// single cell is the honest minimum.
+  /// single cell is the honest minimum. [_gridDelegate] is deliberately a
+  /// [SliverGridDelegate] — any delegate, custom subclasses included — so
+  /// the fallback branch must stay; narrowing it to a cast throws for
+  /// [Grid.extent].
   double _crossIntrinsicFromChildren(double Function(RenderBox child) measure) {
     if (firstChild == null) return _crossPaddingSum;
     var maxChild = 0.0;
