@@ -1,6 +1,7 @@
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Widget _cell(int i) => SizedBox.expand(key: ValueKey(i));
@@ -25,6 +26,27 @@ Future<void> _pump(
 
 Rect _rectOf(WidgetTester tester, int i) {
   return tester.getRect(find.byKey(ValueKey(i)));
+}
+
+/// Bare [SliverGridDelegate] — neither built-in subclass — so the
+/// intrinsic path has no `crossAxisCount` to read and must fall back.
+class _RegularTileDelegate extends SliverGridDelegate {
+  const _RegularTileDelegate();
+
+  @override
+  SliverGridLayout getLayout(SliverConstraints constraints) {
+    return const SliverGridRegularTileLayout(
+      crossAxisCount: 2,
+      mainAxisStride: 50,
+      crossAxisStride: 50,
+      childMainAxisExtent: 50,
+      childCrossAxisExtent: 50,
+      reverseCrossAxis: false,
+    );
+  }
+
+  @override
+  bool shouldRelayout(_RegularTileDelegate oldDelegate) => false;
 }
 
 void main() {
@@ -433,6 +455,90 @@ void main() {
       check(r0.width).isCloseTo(142, 0.01);
       check(r0.left).isCloseTo(142, 0.01);
       check(r0.right).isCloseTo(284, 0.01);
+    });
+  });
+
+  // Regression for the #26 "dead code" removal: every delegate other than
+  // SliverGridDelegateWithFixedCrossAxisCount reaches the
+  // widest-single-cell branch of RenderGrid._crossIntrinsicFromChildren.
+  // Casting there throws for Grid.extent and any custom delegate.
+  group('delegate fallback intrinsics', () {
+    List<Widget> cells() => .generate(
+      4,
+      (i) => const SizedBox(width: 40, height: 10),
+    );
+
+    testWidgets('Grid.extent cross intrinsics are the widest child', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        .extent(maxCrossAxisExtent: 100, children: cells()),
+      );
+      final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
+
+      check(renderBox.getMinIntrinsicWidth(.infinity)).equals(40);
+      check(renderBox.getMaxIntrinsicWidth(.infinity)).equals(40);
+    });
+
+    testWidgets('Grid.extent main intrinsic for unbounded cross resolves', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        .extent(maxCrossAxisExtent: 100, children: cells()),
+      );
+      final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
+
+      // Routes through _unboundedCrossFallback: cross = 40 → one
+      // 40-wide column, four rows. Throwing here is the failure mode.
+      check(renderBox.getMinIntrinsicHeight(.infinity)).isGreaterThan(0);
+    });
+
+    testWidgets('horizontal Grid.extent cross intrinsic is the tallest child', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        .extent(
+          maxCrossAxisExtent: 100,
+          direction: .horizontal,
+          children: cells(),
+        ),
+      );
+      final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
+
+      check(renderBox.getMinIntrinsicHeight(.infinity)).equals(10);
+    });
+
+    testWidgets('custom SliverGridDelegate falls back to the widest child', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        Grid(gridDelegate: const _RegularTileDelegate(), children: cells()),
+      );
+      final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
+
+      check(renderBox.getMinIntrinsicWidth(.infinity)).equals(40);
+    });
+
+    testWidgets('IntrinsicWidth over Grid.extent lays out without error', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: .ltr,
+          child: Align(
+            alignment: .topLeft,
+            child: IntrinsicWidth(
+              child: Grid.extent(maxCrossAxisExtent: 100, children: cells()),
+            ),
+          ),
+        ),
+      );
+
+      check(tester.takeException()).isNull();
     });
   });
 }
