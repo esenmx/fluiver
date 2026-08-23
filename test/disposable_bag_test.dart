@@ -107,6 +107,65 @@ void main() {
       await check(bag.dispose()).throws<DisposableBagException>();
       check(calls).deepEquals(['a', 'c']);
     });
+
+    test('starts async disposers in order without awaiting each', () async {
+      final order = <String>[];
+      final a = Completer<void>();
+      final b = Completer<void>();
+      final bag = DisposableBag()
+        ..add(() async {
+          order.add('start-a');
+          await a.future;
+          order.add('end-a');
+        })
+        ..add(() async {
+          order.add('start-b');
+          await b.future;
+          order.add('end-b');
+        });
+      final done = bag.dispose();
+      check(order).deepEquals(['start-a', 'start-b']);
+      b.complete();
+      a.complete();
+      await done;
+      check(order).deepEquals(['start-a', 'start-b', 'end-b', 'end-a']);
+    });
+
+    test('collects every async disposer error', () async {
+      final bag = DisposableBag()
+        ..add(() async => throw Exception('async error 1'))
+        ..add(() async => throw Exception('async error 2'));
+      await check(bag.dispose()).throws<DisposableBagException>(
+        (e) => e.has((e) => e.errors, 'errors').length.equals(2),
+      );
+    });
+
+    test('collects sync and async errors in registration order', () async {
+      final a = Completer<void>();
+      final b = Completer<void>();
+      final bag = DisposableBag()
+        ..add(() async {
+          await a.future;
+          throw Exception('first');
+        })
+        ..add(() async {
+          await b.future;
+          throw Exception('second');
+        })
+        ..add(() => throw Exception('third'));
+      final done = bag.dispose();
+      b.complete();
+      a.complete();
+      await check(done).throws<DisposableBagException>(
+        (e) => e
+            .has((e) => e.errors.map((o) => o.toString()).toList(), 'errors')
+            .deepEquals([
+              'Exception: first',
+              'Exception: second',
+              'Exception: third',
+            ]),
+      );
+    });
   });
 
   group('DisposableBagException', () {
