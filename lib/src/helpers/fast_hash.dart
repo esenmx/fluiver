@@ -25,7 +25,14 @@ abstract final class FastHash {
     // Offset basis 0xcbf29ce484222325, split because a >2^53 literal is a
     // compile error on JS targets even when the function is never called.
     var hash = (0xcbf29ce4 << 32) | 0x84222325;
-    for (final codeUnit in s.codeUnits) {
+    // Indexed codeUnitAt, not `for (... in s.codeUnits)`: same output, same
+    // speed on JIT, but on AOT the for-in pays a fixed ~2ns/hash ListIterator
+    // setup plus a per-step length check on top of codeUnitAt's own bounds
+    // check: ~20-30% on 5-char keys, nil by 64 chars (measured on isolated
+    // AOT binaries, inlined and never-inline). Do not flip back (see #12,
+    // #21, #28).
+    for (var i = 0; i < s.length; i++) {
+      final codeUnit = s.codeUnitAt(i);
       hash ^= codeUnit >> 8;
       hash *= fnvPrime;
       hash ^= codeUnit & 0xFF;
