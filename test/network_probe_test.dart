@@ -5,20 +5,29 @@ import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  // The TimeoutException path is not covered: a deterministic connect
+  // timeout needs an endpoint that black-holes SYNs, and no loopback setup
+  // does that — closed ports refuse (SocketException) instead.
   group('checkConnection', () {
     test('returns true when the endpoint accepts', () async {
-      // Connect to Google DNS over TLS as an integration test.
-      // This avoids mocking a local secure server without valid certificates.
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      addTearDown(server.close);
+
       final result = await NetworkProbe.checkConnection(
-        host: '8.8.8.8',
+        host: server.address.address,
+        port: server.port,
       );
       check(result).isTrue();
     });
 
     test('returns false on connection refused', () async {
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      final port = server.port;
+      await server.close();
+
       final result = await NetworkProbe.checkConnection(
         host: InternetAddress.loopbackIPv4.address,
-        port: 55555,
+        port: port,
       );
       check(result).isFalse();
     });
@@ -26,6 +35,47 @@ void main() {
     test('propagates non-socket errors', () async {
       await check(
         NetworkProbe.checkConnection(host: 'not-a-literal-ip'),
+      ).throws<ArgumentError>();
+    });
+  });
+
+  group('checkTlsConnection', () {
+    test('returns true when the endpoint accepts a TLS handshake', () async {
+      // Connect to Google DNS over TLS as an integration test to avoid needing
+      // local certificates.
+      final result = await NetworkProbe.checkTlsConnection(
+        host: '8.8.8.8',
+      );
+      check(result).isTrue();
+    });
+
+    test('returns false on connection refused', () async {
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      final port = server.port;
+      await server.close();
+
+      final result = await NetworkProbe.checkTlsConnection(
+        host: InternetAddress.loopbackIPv4.address,
+        port: port,
+      );
+      check(result).isFalse();
+    });
+
+    test('returns false on TLS handshake failure', () async {
+      // Bind a plain TCP server. A TLS client connects but fails handshake.
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      addTearDown(server.close);
+
+      final result = await NetworkProbe.checkTlsConnection(
+        host: server.address.address,
+        port: server.port,
+      );
+      check(result).isFalse();
+    });
+
+    test('propagates non-socket errors', () async {
+      await check(
+        NetworkProbe.checkTlsConnection(host: 'not-a-literal-ip'),
       ).throws<ArgumentError>();
     });
   });

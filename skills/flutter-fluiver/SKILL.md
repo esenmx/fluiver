@@ -52,7 +52,7 @@ ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
 |API|Note|
 |--|--|
 |`FastHash.fnv1a(String)` → `int`|FNV-1a 64-bit. **Throws on JS web**; VM/Wasm fine. NOT cryptographic.|
-|`NetworkProbe.checkConnection({host, port, timeout})`|`false` on `SocketException`/`TimeoutException`; web → `true`. Defaults `1.0.0.1:53`, 3s; `host` = literal IP.|
+|`NetworkProbe.checkConnection({host, port, timeout})`|`false` on `SocketException`/`TimeoutException`; web → `true`. Defaults `1.0.0.1:53`, 3s; `host` = literal IP. Also see `checkTlsConnection` for DNS-over-TLS (port 853).|
 |`platformDispatch<T>({android, ios, macos, web, …})`|Per-platform value (all params lowercase); throws `UnsupportedError` on platforms without a callback.|
 |`TextFieldBuilders.disabledCounter`|`TextField(buildCounter: TextFieldBuilders.disabledCounter)` hides the counter.|
 |`LRUCache<K, V>(maxEntries:)`|O(1) get/put, promotes to MRU; per-isolate. For async, type `LRUCache<K, Future<V>>` so concurrent misses dedupe.|

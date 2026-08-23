@@ -5,7 +5,15 @@ library;
 
 import 'dart:async';
 import 'dart:collection';
-import 'dart:io' show InternetAddress, SecureSocket, SocketException;
+import 'dart:io'
+    show
+        InternetAddress,
+        SecureSocket,
+        SecurityContext,
+        Socket,
+        SocketException,
+        TlsException,
+        X509Certificate;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

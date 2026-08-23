@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0
+
+* Add `NetworkProbe.checkTlsConnection` for a secure DNS reachability probe.
+
 ## 4.0.0
 
 Strips every API whose job the framework or core libraries already do — fluiver keeps only genuine gaps.
