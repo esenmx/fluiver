@@ -108,46 +108,63 @@ void main() {
       check(calls).deepEquals(['a', 'c']);
     });
 
-    test('executes async disposers concurrently', () async {
+    test('starts async disposers in order without awaiting each', () async {
       final order = <String>[];
+      final a = Completer<void>();
+      final b = Completer<void>();
       final bag = DisposableBag()
         ..add(() async {
           order.add('start-a');
-          await Future<void>.delayed(const Duration(milliseconds: 20));
+          await a.future;
           order.add('end-a');
         })
         ..add(() async {
           order.add('start-b');
-          await Future<void>.delayed(const Duration(milliseconds: 10));
+          await b.future;
           order.add('end-b');
         });
-
-      await bag.dispose();
-      // Both disposers start synchronously before either completes.
-      // b takes 10ms, a takes 20ms, so b finishes before a.
+      final done = bag.dispose();
+      check(order).deepEquals(['start-a', 'start-b']);
+      b.complete();
+      a.complete();
+      await done;
       check(order).deepEquals(['start-a', 'start-b', 'end-b', 'end-a']);
     });
 
-    test('collects errors from async disposers', () async {
+    test('collects every async disposer error', () async {
+      final bag = DisposableBag()
+        ..add(() async => throw Exception('async error 1'))
+        ..add(() async => throw Exception('async error 2'));
+      await check(bag.dispose()).throws<DisposableBagException>(
+        (e) => e.has((e) => e.errors, 'errors').length.equals(2),
+      );
+    });
+
+    test('collects sync and async errors in registration order', () async {
+      final a = Completer<void>();
+      final b = Completer<void>();
       final bag = DisposableBag()
         ..add(() async {
-          await Future<void>.delayed(const Duration(milliseconds: 10));
-          throw Exception('async error 1');
+          await a.future;
+          throw Exception('first');
         })
         ..add(() async {
-          await Future<void>.delayed(const Duration(milliseconds: 5));
-          throw Exception('async error 2');
-        });
-
-      DisposableBagException? exception;
-      try {
-        await bag.dispose();
-      } on DisposableBagException catch (e) {
-        exception = e;
-      }
-
-      check(exception).isNotNull();
-      check(exception!.errors.length).equals(2);
+          await b.future;
+          throw Exception('second');
+        })
+        ..add(() => throw Exception('third'));
+      final done = bag.dispose();
+      b.complete();
+      a.complete();
+      await check(done).throws<DisposableBagException>(
+        (e) => e
+            .has((e) => e.errors.map((o) => o.toString()).toList(), 'errors')
+            .deepEquals([
+              'Exception: first',
+              'Exception: second',
+              'Exception: third',
+            ]),
+      );
     });
   });
 
