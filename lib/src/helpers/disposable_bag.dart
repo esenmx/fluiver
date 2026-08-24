@@ -21,9 +21,13 @@ part of '../../fluiver.dart';
 /// slowest one does and a stalled disposer never starves the ones after it.
 /// A step that must wait for a previous async step (flush, then close)
 /// belongs in one closure: `() async { await flush(); await close(); }`.
+/// A disposer that never settles also keeps [dispose] from settling, so
+/// errors already collected from other disposers are never reported.
 ///
 /// [dispose] is idempotent — calling it twice runs the closures once. Adding
-/// after dispose runs the closure immediately and does not retain it.
+/// after dispose runs the closure immediately and does not retain it; if
+/// that late-added closure throws, the error surfaces as an unhandled async
+/// error rather than a [DisposableBagException].
 class DisposableBag {
   final List<FutureOr<void> Function()> _disposers = [];
   bool _disposed = false;
