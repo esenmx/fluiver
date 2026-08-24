@@ -2,7 +2,7 @@
 
 ## 4.1.0
 
-- **Changed** — `DisposableBag.dispose` invokes disposers in registration order but awaits `Future`-returning ones together, so disposal takes as long as the slowest disposer instead of the sum, a stalled async disposer no longer starves the ones after it, and synchronous disposers queued behind an async one now run inside `dispose()` rather than after it settles. Steps that must wait for a previous async step (flush, then close) belong in one closure. `DisposableBagException.errors` stays in registration order.
+- **Changed** — `DisposableBag.dispose` invokes disposers in registration order but awaits `Future`-returning ones together, so disposal takes as long as the slowest disposer instead of the sum, a stalled async disposer no longer starves the ones after it, and synchronous disposers queued behind an async one now run inside `dispose()` rather than after the async one settles. Steps that must wait for a previous async step (flush, then close) belong in one closure. `DisposableBagException.errors` stays in registration order.
 
 ## 4.0.0
 

@@ -258,6 +258,9 @@ final bag = DisposableBag()
 await bag.dispose();
 ```
 
+Async disposers start in registration order but are awaited together;
+dependent steps (flush, then close) go in one closure.
+
 ### Static helpers
 
 ```dart
