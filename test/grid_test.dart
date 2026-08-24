@@ -473,12 +473,17 @@ void main() {
     ) async {
       await _pump(
         tester,
-        .extent(maxCrossAxisExtent: 100, children: cells()),
+        .extent(
+          maxCrossAxisExtent: 100,
+          padding: const EdgeInsets.all(8),
+          children: cells(),
+        ),
       );
       final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
 
-      check(renderBox.getMinIntrinsicWidth(.infinity)).equals(40);
-      check(renderBox.getMaxIntrinsicWidth(.infinity)).equals(40);
+      // 40 widest child + 16 cross padding.
+      check(renderBox.getMinIntrinsicWidth(.infinity)).equals(56);
+      check(renderBox.getMaxIntrinsicWidth(.infinity)).equals(56);
     });
 
     testWidgets('Grid.extent main intrinsic for unbounded cross resolves', (
@@ -491,8 +496,8 @@ void main() {
       final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
 
       // Routes through _unboundedCrossFallback: cross = 40 → one
-      // 40-wide column, four rows. Throwing here is the failure mode.
-      check(renderBox.getMinIntrinsicHeight(.infinity)).isGreaterThan(0);
+      // 40-wide column, four rows of 40 (aspect ratio 1) = 160.
+      check(renderBox.getMinIntrinsicHeight(.infinity)).equals(160);
     });
 
     testWidgets('horizontal Grid.extent cross intrinsic is the tallest child', (
