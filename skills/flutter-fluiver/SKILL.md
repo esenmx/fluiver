@@ -56,4 +56,4 @@ ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
 |`platformDispatch<T>({android, ios, macos, web, …})`|Per-platform value (all params lowercase); throws `UnsupportedError` on platforms without a callback.|
 |`TextFieldBuilders.disabledCounter`|`TextField(buildCounter: TextFieldBuilders.disabledCounter)` hides the counter.|
 |`LRUCache<K, V>(maxEntries:)`|O(1) get/put, promotes to MRU; per-isolate. For async, type `LRUCache<K, Future<V>>` so concurrent misses dedupe.|
-|`DisposableBag()`|`..add(fn)` / `..addAll([...])`; idempotent `dispose()` runs all, then throws `DisposableBagException` if any failed. Pair with `ref.onDispose(bag.dispose)`.|
+|`DisposableBag()`|`..add(fn)` / `..addAll([...])`; idempotent `dispose()` runs all, then throws `DisposableBagException` if any failed; async disposers start in registration order but are awaited together — dependent steps (flush, then close) go in one closure. Pair with `ref.onDispose(bag.dispose)`.|
