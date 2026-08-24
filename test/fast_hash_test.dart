@@ -42,6 +42,14 @@ void main() {
           check(
             FastHash.fnv1a('hello'),
           ).equals((0x4ce155d4 << 32) | 0x4072f8ef);
+          // Non-ASCII vectors pin the hi/lo byte split, which ASCII
+          // cannot: 'é' (0xE9) exercises the >= 0x80 lo byte, and the
+          // surrogate-pair '\u{1F680}' is the only class of code units
+          // with a nonzero hi byte.
+          check(FastHash.fnv1a('é')).equals((0x0831df07 << 32) | 0xb4ea50c2);
+          check(
+            FastHash.fnv1a('\u{1F680}'),
+          ).equals((0xd8ec2a88 << 32) | 0x1c1ca9b0);
         });
 
         test('handles unicode code units', () {
