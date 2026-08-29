@@ -167,11 +167,11 @@ void main() {
     testWidgets('Grid rtl direction', (tester) async {
       await _pump(
         tester,
-        Grid.count(
+        .count(
           crossAxisCount: 3,
-          children: List.generate(3, _cell),
+          children: .generate(3, _cell),
         ),
-        textDirection: TextDirection.rtl,
+        textDirection: .rtl,
       );
 
       // 300 wide, 3 columns -> each is 100 wide.
