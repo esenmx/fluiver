@@ -7,25 +7,25 @@ enum _TestEnum with EnumIndexComparable<_TestEnum> { first, second, third }
 void main() {
   group('EnumIndexComparable', () {
     test('greater than', () {
-      check(_TestEnum.first > _TestEnum.second).isFalse();
-      check(_TestEnum.second > _TestEnum.first).isTrue();
+      check(_TestEnum.first > .second).isFalse();
+      check(_TestEnum.second > .first).isTrue();
     });
 
     test('greater or equal', () {
-      check(_TestEnum.first >= _TestEnum.second).isFalse();
-      check(_TestEnum.second >= _TestEnum.second).isTrue();
-      check(_TestEnum.third >= _TestEnum.second).isTrue();
+      check(_TestEnum.first >= .second).isFalse();
+      check(_TestEnum.second >= .second).isTrue();
+      check(_TestEnum.third >= .second).isTrue();
     });
 
     test('less than', () {
-      check(_TestEnum.second < _TestEnum.first).isFalse();
-      check(_TestEnum.first < _TestEnum.second).isTrue();
+      check(_TestEnum.second < .first).isFalse();
+      check(_TestEnum.first < .second).isTrue();
     });
 
     test('less or equal', () {
-      check(_TestEnum.first <= _TestEnum.second).isTrue();
-      check(_TestEnum.second <= _TestEnum.second).isTrue();
-      check(_TestEnum.third <= _TestEnum.second).isFalse();
+      check(_TestEnum.first <= .second).isTrue();
+      check(_TestEnum.second <= .second).isTrue();
+      check(_TestEnum.third <= .second).isFalse();
     });
 
     test('sortable', () {
