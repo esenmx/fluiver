@@ -47,9 +47,8 @@ void main() {
     });
 
     test('propagates non-socket errors', () async {
-      await check(
-        NetworkProbe.checkConnection(host: 'not-a-literal-ip'),
-      ).throws<ArgumentError>();
+      await check(NetworkProbe.checkConnection(host: 'not-a-literal-ip'))
+          .throws<ArgumentError>();
     });
   });
 }

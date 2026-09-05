@@ -170,9 +170,7 @@ void main() {
 
   group('DisposableBagException', () {
     test('toString formats single error correctly', () {
-      final exception = DisposableBagException([
-        Exception('error 1'),
-      ]);
+      final exception = DisposableBagException([Exception('error 1')]);
 
       check(exception.toString()).equals(
         'DisposableBagException: 1 disposer(s) threw errors:\n'

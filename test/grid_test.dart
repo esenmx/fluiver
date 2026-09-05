@@ -31,7 +31,7 @@ Rect _rectOf(WidgetTester tester, int i) {
 /// Bare [SliverGridDelegate] — neither built-in subclass — so the
 /// intrinsic path has no `crossAxisCount` to read and must fall back.
 class _RegularTileDelegate extends SliverGridDelegate {
-  const _RegularTileDelegate();
+  const new();
 
   @override
   SliverGridLayout getLayout(SliverConstraints constraints) {
@@ -140,10 +140,7 @@ void main() {
     ) async {
       await _pump(
         tester,
-        .extent(
-          maxCrossAxisExtent: 100,
-          children: .generate(4, _cell),
-        ),
+        .extent(maxCrossAxisExtent: 100, children: .generate(4, _cell)),
       );
 
       // 300 / max 100 → 3 columns of exactly 100.
@@ -167,10 +164,7 @@ void main() {
     testWidgets('Grid rtl direction', (tester) async {
       await _pump(
         tester,
-        .count(
-          crossAxisCount: 3,
-          children: .generate(3, _cell),
-        ),
+        .count(crossAxisCount: 3, children: .generate(3, _cell)),
         textDirection: .rtl,
       );
 
@@ -236,10 +230,7 @@ void main() {
         tester,
         .count(
           crossAxisCount: 2,
-          children: .generate(
-            4,
-            (i) => const SizedBox(width: 40, height: 10),
-          ),
+          children: .generate(4, (i) => const SizedBox(width: 40, height: 10)),
         ),
       );
       final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
@@ -267,9 +258,8 @@ void main() {
       await _pump(tester, grid);
       final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
 
-      check(
-        renderBox.getDryLayout(const BoxConstraints(maxWidth: 300)),
-      ).equals(const Size(300, 155));
+      check(renderBox.getDryLayout(const BoxConstraints(maxWidth: 300)))
+          .equals(const Size(300, 155));
     });
 
     testWidgets('mainAxisExtent overrides childAspectRatio', (tester) async {
@@ -296,9 +286,8 @@ void main() {
 
       // Same guard covers performLayout; dry layout throws it without the
       // child-layout error cascade a real layout pass produces.
-      check(
-        () => renderBox.getDryLayout(const BoxConstraints()),
-      ).throws<FlutterError>();
+      check(() => renderBox.getDryLayout(const BoxConstraints()))
+          .throws<FlutterError>();
     });
 
     testWidgets('degenerate constraints clamp cells to zero, not negative', (
@@ -365,10 +354,8 @@ void main() {
       check(_rectOf(tester, 0).left).isCloseTo(450, 0.01);
       check(_rectOf(tester, 2).left).isCloseTo(300, 0.01);
       // Cross axis (vertical) is unaffected by the RTL flip.
-      check(_rectOf(tester, 1).top - _rectOf(tester, 0).top).isCloseTo(
-        150,
-        0.01,
-      );
+      check(_rectOf(tester, 1).top - _rectOf(tester, 0).top)
+          .isCloseTo(150, 0.01);
       check(_rectOf(tester, 1).left).isCloseTo(450, 0.01);
     });
 
@@ -463,10 +450,8 @@ void main() {
   // widest-single-cell branch of RenderGrid._crossIntrinsicFromChildren.
   // Casting there throws for Grid.extent and any custom delegate.
   group('delegate fallback intrinsics', () {
-    List<Widget> cells() => .generate(
-      4,
-      (i) => const SizedBox(width: 40, height: 10),
-    );
+    List<Widget> cells() =>
+        .generate(4, (i) => const SizedBox(width: 40, height: 10));
 
     testWidgets('Grid.extent cross intrinsics are the widest child', (
       tester,
@@ -489,10 +474,7 @@ void main() {
     testWidgets('Grid.extent main intrinsic for unbounded cross resolves', (
       tester,
     ) async {
-      await _pump(
-        tester,
-        .extent(maxCrossAxisExtent: 100, children: cells()),
-      );
+      await _pump(tester, .extent(maxCrossAxisExtent: 100, children: cells()));
       final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
 
       // Routes through _unboundedCrossFallback: cross = 40 → one

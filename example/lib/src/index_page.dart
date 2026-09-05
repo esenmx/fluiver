@@ -2,9 +2,7 @@ import 'package:example/src/grid_page.dart';
 import 'package:example/src/ticker_builder_page.dart';
 import 'package:flutter/material.dart';
 
-class IndexPage extends StatelessWidget {
-  const IndexPage({super.key});
-
+class const IndexPage({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

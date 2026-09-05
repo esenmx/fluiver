@@ -1,9 +1,7 @@
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 
-class GridPage extends StatefulWidget {
-  const GridPage({super.key});
-
+class const GridPage({super.key}) extends StatefulWidget {
   @override
   State<GridPage> createState() => _GridPageState();
 }
@@ -157,22 +155,14 @@ class _GridPageState extends State<GridPage> {
   }
 }
 
-class IncrementalControl extends StatelessWidget {
-  const IncrementalControl({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.step,
-    required this.min,
-    required this.onChanged,
-  });
-
-  final String label;
-  final double value;
-  final double step;
-  final double min;
-  final ValueChanged<double> onChanged;
-
+class const IncrementalControl({
+  super.key,
+  required final String label,
+  required final double value,
+  required final double step,
+  required final double min,
+  required final ValueChanged<double> onChanged,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -96,12 +96,12 @@ class DisposableBag {
 
 /// Exception thrown when one or more disposers throw during
 /// [DisposableBag.dispose].
-class DisposableBagException implements Exception {
-  /// Creates a [DisposableBagException] with the list of errors.
-  DisposableBagException(this.errors);
-
+class DisposableBagException(
   /// The errors thrown by individual disposers.
-  final List<Object> errors;
+  final List<Object> errors,
+) implements Exception {
+  /// Creates a [DisposableBagException] with the list of errors.
+  this;
 
   @override
   String toString() {

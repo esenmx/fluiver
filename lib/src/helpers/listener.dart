@@ -20,13 +20,13 @@ part of '../../fluiver.dart';
 ///   }
 /// }
 /// ```
-class LocaleListener extends WidgetsBindingObserver {
+class LocaleListener(
+  /// Called with the new locale list on every system locale change.
+  final void Function(List<Locale>? locales) onLocalesChanged,
+) extends WidgetsBindingObserver {
   /// Creates a listener that invokes [onLocalesChanged] when system
   /// locales change.
-  LocaleListener(this.onLocalesChanged);
-
-  /// Called with the new locale list on every system locale change.
-  final void Function(List<Locale>? locales) onLocalesChanged;
+  this;
 
   @override
   void didChangeLocales(List<Locale>? locales) {
@@ -52,13 +52,13 @@ class LocaleListener extends WidgetsBindingObserver {
 ///   }
 /// }
 /// ```
-class BrightnessListener extends WidgetsBindingObserver {
+class BrightnessListener(
+  /// Called with the new brightness on every platform brightness change.
+  final void Function(Brightness brightness) onPlatformBrightnessChanged,
+) extends WidgetsBindingObserver {
   /// Creates a listener that invokes [onPlatformBrightnessChanged] when
   /// the platform brightness changes.
-  BrightnessListener(this.onPlatformBrightnessChanged);
-
-  /// Called with the new brightness on every platform brightness change.
-  final void Function(Brightness brightness) onPlatformBrightnessChanged;
+  this;
 
   @override
   void didChangePlatformBrightness() {
