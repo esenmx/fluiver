@@ -2,9 +2,7 @@ import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class TickerBuilderPage extends StatefulWidget {
-  const TickerBuilderPage({super.key});
-
+class const TickerBuilderPage({super.key}) extends StatefulWidget {
   @override
   State<TickerBuilderPage> createState() => _TickerBuilderPageState();
 }

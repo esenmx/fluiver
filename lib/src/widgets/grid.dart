@@ -23,7 +23,7 @@ part of '../../fluiver.dart';
 /// ```
 class Grid extends MultiChildRenderObjectWidget {
   /// Creates a non-scrolling grid with a custom [gridDelegate].
-  const Grid({
+  const new({
     required this.gridDelegate,
     super.children,
     this.direction = .vertical,
@@ -32,7 +32,7 @@ class Grid extends MultiChildRenderObjectWidget {
   });
 
   /// A fixed-column grid — mirrors [GridView.count].
-  Grid.count({
+  new count({
     required int crossAxisCount,
     super.children,
     double mainAxisSpacing = .0,
@@ -51,7 +51,7 @@ class Grid extends MultiChildRenderObjectWidget {
        );
 
   /// A max-cell-extent responsive grid — mirrors [GridView.extent].
-  Grid.extent({
+  new extent({
     required double maxCrossAxisExtent,
     super.children,
     double mainAxisSpacing = .0,
@@ -110,7 +110,7 @@ class Grid extends MultiChildRenderObjectWidget {
   }
 }
 
-class _GridParentData extends ContainerBoxParentData<RenderBox> {}
+class _GridParentData extends ContainerBoxParentData<RenderBox>;
 
 /// Render object backing [Grid].
 ///
@@ -118,24 +118,20 @@ class _GridParentData extends ContainerBoxParentData<RenderBox> {}
 /// (the stock delegates only read `crossAxisExtent` and
 /// `crossAxisDirection`), so RTL cross-axis reversal comes from the
 /// delegate's own layout, matching [GridView].
-class RenderGrid extends RenderBox
+class RenderGrid({
+  required var SliverGridDelegate _gridDelegate,
+  required var Axis _direction,
+  required var EdgeInsetsGeometry _padding,
+  var TextDirection? _textDirection,
+}) extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _GridParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _GridParentData> {
   /// Creates the [Grid] render object.
-  RenderGrid({
-    required SliverGridDelegate gridDelegate,
-    required Axis direction,
-    required EdgeInsetsGeometry padding,
-    TextDirection? textDirection,
-  }) : _gridDelegate = gridDelegate,
-       _direction = direction,
-       _padding = padding,
-       _textDirection = textDirection;
+  this;
 
   /// Sizing policy; relayout follows [SliverGridDelegate.shouldRelayout].
   SliverGridDelegate get gridDelegate => _gridDelegate;
-  SliverGridDelegate _gridDelegate;
   set gridDelegate(SliverGridDelegate value) {
     if (identical(_gridDelegate, value)) return;
     if (value.runtimeType != _gridDelegate.runtimeType ||
@@ -147,7 +143,6 @@ class RenderGrid extends RenderBox
 
   /// Grid main-axis direction.
   Axis get direction => _direction;
-  Axis _direction;
   set direction(Axis value) {
     if (_direction == value) return;
     _direction = value;
@@ -156,7 +151,6 @@ class RenderGrid extends RenderBox
 
   /// Padding around the grid.
   EdgeInsetsGeometry get padding => _padding;
-  EdgeInsetsGeometry _padding;
   set padding(EdgeInsetsGeometry value) {
     if (_padding == value) return;
     _padding = value;
@@ -166,7 +160,6 @@ class RenderGrid extends RenderBox
   /// Ambient text direction; resolves [padding] and reverses the cross
   /// axis of vertical grids, as [GridView] does.
   TextDirection? get textDirection => _textDirection;
-  TextDirection? _textDirection;
   set textDirection(TextDirection? value) {
     if (_textDirection == value) return;
     _textDirection = value;
