@@ -3,31 +3,25 @@ part of '../../fluiver.dart';
 /// A widget that conditionally expands or collapses its [child] and
 /// automatically tracks its bottom edge during expansion to ensure it stays
 /// visible within the nearest [Scrollable].
-class ScrollTrackingExpandable extends StatefulWidget {
-  /// Creates a [ScrollTrackingExpandable].
-  const ScrollTrackingExpandable({
-    required this.isExpanded,
-    required this.child,
-    this.duration = const Duration(milliseconds: 200),
-    this.curve = Curves.easeInOutCubic,
-    this.scrollOffset = 0.0,
-    super.key,
-  });
-
+class const ScrollTrackingExpandable({
   /// Whether the widget should be expanded.
-  final bool isExpanded;
+  required final bool isExpanded,
 
   /// The widget to show or hide.
-  final Widget child;
+  required final Widget child,
 
   /// The duration of the expansion/collapse animation.
-  final Duration duration;
+  final Duration duration = const Duration(milliseconds: 200),
 
   /// The curve of the expansion/collapse animation.
-  final Curve curve;
+  final Curve curve = Curves.easeInOutCubic,
 
   /// Extra scroll offset to track below the widget (e.g. for breathing room).
-  final double scrollOffset;
+  final double scrollOffset = 0.0,
+  super.key,
+}) extends StatefulWidget {
+  /// Creates a [ScrollTrackingExpandable].
+  this;
 
   @override
   State<ScrollTrackingExpandable> createState() =>

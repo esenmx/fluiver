@@ -15,18 +15,18 @@ part of '../../fluiver.dart';
 ///
 /// Backed by [LinkedHashMap] insertion order — O(1) reads, writes, and
 /// eviction. Not thread-safe; isolates each have their own cache.
-class LRUCache<K, V> {
+class LRUCache<K, V>({
+  /// Maximum number of entries the cache holds before evicting.
+  required final int maxEntries,
+}) {
   /// Creates a cache that holds at most [maxEntries] entries.
   ///
   /// [maxEntries] must be strictly positive.
-  LRUCache({required this.maxEntries}) {
+  this {
     if (maxEntries <= 0) {
       throw ArgumentError('maxEntries must be greater than 0');
     }
   }
-
-  /// Maximum number of entries the cache holds before evicting.
-  final int maxEntries;
   final LinkedHashMap<K, V> _entries = LinkedHashMap<K, V>();
 
   /// Number of entries currently held.
