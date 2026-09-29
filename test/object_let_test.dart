@@ -26,7 +26,13 @@ void main() {
       check('42'.let(int.parse)).equals(42);
       check('abc'.let(int.tryParse)).isNull();
     });
+
+    test('applies to extension types implementing Object', () {
+      check(_UserId(7).let((id) => 'user:${id.value}')).equals('user:7');
+    });
   });
 }
 
 String? _maybe(String? value) => value;
+
+extension type _UserId(int value) implements Object;
