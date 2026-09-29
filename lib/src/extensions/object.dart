@@ -4,6 +4,15 @@ part of '../../fluiver.dart';
 ///
 /// Bounded to `T extends Object` so `.let` only appears on non-null
 /// receivers. Use `?.let(...)` for null-aware chaining.
+///
+/// Extension types are only subtypes of `Object?` unless they say otherwise,
+/// so declare `implements Object` (or a non-null supertype) to get `.let`:
+///
+/// ```dart
+/// extension type UserId(int value) implements Object;
+///
+/// final key = UserId(7).let((id) => 'user:${id.value}');
+/// ```
 extension Let<T extends Object> on T {
   /// Applies [fn] to `this` and returns the result.
   ///
