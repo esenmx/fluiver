@@ -125,7 +125,7 @@ void main() {
         ..['b'] = 2;
       check(cache.peek('a')).equals(1);
       check(cache.peek('z')).isNull();
-      cache['c'] = 3; // evicts 'a': peek left it least-recently-used.
+      cache['c'] = 3;
       check(cache.containsKey('a')).isFalse();
       check(cache.containsKey('b')).isTrue();
     });
@@ -135,7 +135,7 @@ void main() {
         ..['a'] = 1
         ..['b'] = 2
         ..['c'] = 3;
-      check(cache['a']).equals(1); // promotes 'a'
+      check(cache['a']).equals(1);
       check(cache.keys.toList()).deepEquals(['b', 'c', 'a']);
       check(cache.values.toList()).deepEquals([2, 3, 1]);
       check([for (final MapEntry(:key, :value) in cache.entries) '$key=$value'])
@@ -171,7 +171,7 @@ void main() {
         ..['a'] = null
         ..['b'] = 2;
       check(cache['a']).isNull();
-      cache['c'] = 3; // evicts 'b' ('a' was promoted)
+      cache['c'] = 3;
       check(cache.containsKey('a')).isTrue();
       check(cache.containsKey('b')).isFalse();
       var calls = 0;

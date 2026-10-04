@@ -23,7 +23,7 @@
 
 - `NetworkProbe.checkConnection` on web returns `navigator.onLine` instead of always `true`.
 - `Color.contrastText` returns the higher-contrast of black/white; the old 0.5 luminance cutoff picked the worse one for mid tones (e.g. `Colors.blue` now gets black text).
-- `darken`/`lighten` keep the colour space and full channel precision.
+- `darken`/`lighten` keep the colour space and sub-8-bit channel precision instead of rounding to 8 bits; channels outside `[0, 1]` (extended sRGB) are still clipped.
 - `age()` no longer counts a UTC date of birth a day early west of UTC.
 - `LRUCache.keys` returns a snapshot: reading each value while iterating it no longer throws `ConcurrentModificationError`.
 - `ThrottleFirst` and `ThrottleLatest` open the window before running the task, so re-entrant or throwing tasks can't bypass it and `ThrottleLatest.dispose` leaves no timer pending.

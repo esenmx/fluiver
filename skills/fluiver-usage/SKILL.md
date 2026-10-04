@@ -10,7 +10,7 @@ description: SDK gap-fillers via package:fluiver — use instead of reinventing.
 ## Widgets
 
 - `Grid(gridDelegate:, children:)` / `Grid.count(crossAxisCount:, ...)` / `Grid.extent(maxCrossAxisExtent:, ...)` — GridView's API minus the viewport; any `SliverGridDelegate`. All ctors also take `direction:` (main axis) and `padding:`. Drop-in for `GridView(shrinkWrap: true)` inside a `ListView` / `Column`; unlike that, intrinsics/dry layout work. Real `GridView` only when the grid itself scrolls.
-- `TickerBuilder(builder: (context, Duration elapsed) => …, onTick:)` — rebuilds per frame, `elapsed` since first frame; `onTick` for per-frame side effects; `enabled: false` pauses (no frames, `elapsed` frozen) — stop a finished countdown. Don't wrap in `AnimatedBuilder`.
+- `TickerBuilder(builder: (context, Duration elapsed) => …, onTick:)` — rebuilds per frame, `elapsed` = running time since first frame (paused time excluded); `onTick` for per-frame side effects; `enabled: false` pauses (no frames, `elapsed` frozen) — stop a finished countdown. Don't wrap in `AnimatedBuilder`.
 - `ScrollTrackingExpandable(isExpanded:, child:, duration:, curve:, scrollOffset:)` — expand/collapse that keeps the growing bottom edge visible in the nearest `Scrollable`. Collapse never scrolls; collapsed child is offstage (unfocusable, out of semantics, tickers muted). Use over `AnimatedSize`/`ExpansionTile` for tiles low in a scrollable.
 
 ## Debounce / Throttle

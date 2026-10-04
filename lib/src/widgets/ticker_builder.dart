@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
-/// A widget that rebuilds on every frame, providing the elapsed [Duration]
-/// since the first frame.
+/// A widget that rebuilds on every frame, providing the elapsed running
+/// [Duration]: time since the first frame, minus any time spent disabled.
 ///
 /// Owns a [Ticker] internally; starts it in `initState` and stops it in
 /// `dispose`. Drop in when you need per-frame rebuilds (e.g. a countdown
@@ -12,7 +12,8 @@ import 'package:flutter/widgets.dart';
 /// Set [enabled] to `false` to pause, e.g. once a countdown ends, so nothing
 /// rebuilds and `pumpAndSettle` settles.
 class const TickerBuilder({
-  /// Called every frame with the elapsed time since the first frame.
+  /// Called every frame with the elapsed running time (time spent disabled
+  /// excluded).
   required final Widget Function(BuildContext context, Duration elapsed)
   builder,
 

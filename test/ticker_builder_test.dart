@@ -67,9 +67,9 @@ void main() {
           ),
         ),
       );
+      check(tester.binding.transientCallbackCount).equals(0);
       await tester.pumpAndSettle();
       check(ticks).equals(0);
-      check(tester.binding.hasScheduledFrame).isFalse();
     });
 
     testWidgets('disabling holds elapsed; re-enabling resumes from it', (
