@@ -6,6 +6,8 @@
 
 - Web and Wasm support: `NetworkProbe` sits behind a conditional import, so `package:fluiver/fluiver.dart` no longer reaches `dart:io`.
 - `DateTime.age({DateTime? at})` takes an optional reference date.
+- `LRUCache.peek`, `values` and `entries`.
+- `DisposableBagException.stackTraces`.
 
 ### Changed
 
@@ -19,6 +21,11 @@
 - `Color.contrastText` returns the higher-contrast of black/white; the old 0.5 luminance cutoff picked the worse one for mid tones (e.g. `Colors.blue` now gets black text).
 - `darken`/`lighten` keep the colour space and full channel precision.
 - `age()` no longer counts a UTC date of birth a day early west of UTC.
+- `LRUCache.keys` returns a snapshot: reading each value while iterating it no longer throws `ConcurrentModificationError`.
+- `ThrottleFirst` and `ThrottleLatest` open the window before running the task, so re-entrant or throwing tasks can't bypass it and `ThrottleLatest.dispose` leaves no timer pending.
+- `ThrottleLast` keeps a call made while its task runs.
+- `ScrollController` edge helpers work with several attached scroll views.
+- `windowed` throws `RangeError` at the call, not on first iteration.
 
 ## 4.1.0
 

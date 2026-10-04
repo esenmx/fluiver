@@ -140,6 +140,17 @@ void main() {
       );
     });
 
+    test('captures a stack trace per error, index-aligned', () async {
+      final bag = DisposableBag()
+        ..add(() => throw Exception('sync'))
+        ..add(() async => throw Exception('async'));
+      await check(bag.dispose()).throws<DisposableBagException>(
+        (e) => e
+          ..has((e) => e.errors.length, 'errors.length').equals(2)
+          ..has((e) => e.stackTraces.length, 'stackTraces.length').equals(2),
+      );
+    });
+
     test('collects sync and async errors in registration order', () async {
       final a = Completer<void>();
       final b = Completer<void>();

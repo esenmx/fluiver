@@ -33,9 +33,7 @@ class Debounce(
   /// Schedules [task] to run after [duration]; replaces any pending task.
   void call(VoidCallback task) {
     assert(_debugNotDisposed, 'used after dispose');
-    if (_timer?.isActive ?? false) {
-      _timer!.cancel();
-    }
+    _timer?.cancel();
     _timer = Timer(duration, task);
   }
 }
@@ -51,11 +49,10 @@ class ThrottleLatest(
   VoidCallback? _pending;
 
   void _onTimerComplete() {
-    if (_pending != null) {
-      final task = _pending!;
+    if (_pending case final task?) {
       _pending = null;
-      task.call();
       _timer = Timer(duration, _onTimerComplete);
+      task();
     }
   }
 
@@ -64,8 +61,8 @@ class ThrottleLatest(
   void call(VoidCallback task) {
     assert(_debugNotDisposed, 'used after dispose');
     if (_timer?.isActive != true) {
-      task.call();
       _timer = Timer(duration, _onTimerComplete);
+      task();
     } else {
       _pending = task;
     }
@@ -91,8 +88,8 @@ class ThrottleFirst(
   void call(VoidCallback task) {
     assert(_debugNotDisposed, 'used after dispose');
     if (_timer?.isActive != true) {
-      task.call();
       _timer = Timer(duration, () {});
+      task();
     }
   }
 }
@@ -114,8 +111,9 @@ class ThrottleLast(
     _last = task;
     if (_timer?.isActive != true) {
       _timer = Timer(duration, () {
-        _last?.call();
+        final task = _last;
         _last = null;
+        task?.call();
       });
     }
   }

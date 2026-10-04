@@ -96,6 +96,15 @@ class LRUCache<K, V>({
   /// Empties the cache.
   void clear() => _entries.clear();
 
-  /// Keys in least- to most-recently-used order.
-  Iterable<K> get keys => _entries.keys;
+  /// Returns the value for [key] without promoting it, or `null` if absent.
+  V? peek(K key) => _entries[key];
+
+  /// Keys in least- to most-recently-used order, as a snapshot.
+  Iterable<K> get keys => List.unmodifiable(_entries.keys);
+
+  /// Values in least- to most-recently-used order, as a snapshot.
+  Iterable<V> get values => List.unmodifiable(_entries.values);
+
+  /// Entries in least- to most-recently-used order, as a snapshot.
+  Iterable<MapEntry<K, V>> get entries => List.unmodifiable(_entries.entries);
 }

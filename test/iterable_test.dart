@@ -88,6 +88,20 @@ void main() {
         ..has((e) => e.message, 'message').equals('must be > 0');
     });
 
+    // A block body: `check(() => it.windowed(0))` passes falsely, because
+    // the subject prints the returned lazy iterable inside its try.
+    test('windowed(0) throws at the call site', () {
+      check(() {
+        [1, 2, 3].windowed(0); // not consumed
+      }).throws<RangeError>();
+    });
+
+    test('windowed(2, step: 0) throws at the call site', () {
+      check(() {
+        [1, 2, 3].windowed(2, step: 0);
+      }).throws<RangeError>();
+    });
+
     test('lazy — does not iterate beyond what consumer takes', () {
       var pulls = 0;
       Iterable<int> source() sync* {
