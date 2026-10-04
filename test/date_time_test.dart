@@ -20,6 +20,8 @@ void main() {
 
   group('withTimeOfDay', () {
     test('replaces time components', () {
+      // Pins the deprecated API until its 5.0.0 removal.
+      // ignore: deprecated_member_use_from_same_package
       final merged = dt.withTimeOfDay(const TimeOfDay(hour: 14, minute: 5));
       check(merged).equals(DateTime(1990, 6, 26, 14, 5));
     });
@@ -41,6 +43,12 @@ void main() {
 
     test('born today', () {
       check(now.age()).equals(0);
+    });
+
+    test('age reads a UTC birth date as its calendar date', () {
+      final birth = DateTime.utc(1996, 10, 4);
+      check(birth.age(at: DateTime(2026, 10, 3, 22))).equals(29);
+      check(birth.age(at: DateTime(2026, 10, 4))).equals(30);
     });
 
     test('one year ago minus margin', () {

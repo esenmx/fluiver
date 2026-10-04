@@ -5,15 +5,20 @@
 ### Added
 
 - Web and Wasm support: `NetworkProbe` sits behind a conditional import, so `package:fluiver/fluiver.dart` no longer reaches `dart:io`.
+- `DateTime.age({DateTime? at})` takes an optional reference date.
 
 ### Changed
 
 - Requires Dart 3.13 / Flutter 3.47 (was Dart 3.10, no Flutter floor).
 - Sources are per-file libraries re-exported by `package:fluiver/fluiver.dart`; that import is unaffected.
+- `DateTime.withTimeOfDay` is deprecated; use `TimeOfDay.onDate(date)`.
 
 ### Fixed
 
 - `NetworkProbe.checkConnection` on web returns `navigator.onLine` instead of always `true`.
+- `Color.contrastText` returns the higher-contrast of black/white; the old 0.5 luminance cutoff picked the worse one for mid tones (e.g. `Colors.blue` now gets black text).
+- `darken`/`lighten` keep the colour space and full channel precision.
+- `age()` no longer counts a UTC date of birth a day early west of UTC.
 
 ## 4.1.0
 
