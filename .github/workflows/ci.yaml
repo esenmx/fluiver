@@ -7,85 +7,97 @@ on:
     branches: [master]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   format:
-    name: Format
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-      - run: flutter pub get
-      - run: dart format --output=none --set-exit-if-changed .
+        with: { channel: stable, cache: true }
+      - run: git ls-files -z -- '*.dart' | xargs -0 dart format --output=none --set-exit-if-changed
 
   analyze:
-    name: Analyze
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
+        with: { channel: stable, cache: true }
       - run: flutter pub get
       - run: flutter analyze --fatal-infos --fatal-warnings
+      - run: flutter pub get
+        working-directory: example
+      - run: flutter analyze --fatal-infos --fatal-warnings
+        working-directory: example
 
   test:
-    name: Test (Flutter ${{ matrix.flutter }})
+    name: test (${{ matrix.name }})
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        flutter: [stable, beta]
+        include:
+          - { name: floor, channel: stable, version: '3.47.0' }
+          - { name: stable, channel: stable, version: '' }
+          - { name: beta, channel: beta, version: '' }
     steps:
       - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.flutter }}
+          channel: ${{ matrix.channel }}
+          flutter-version: ${{ matrix.version }}
           cache: true
       - run: flutter pub get
-      - run: flutter test --coverage
-      - name: Upload coverage
-        if: matrix.flutter == 'stable'
-        uses: codecov/codecov-action@v7
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage/lcov.info
-          fail_ci_if_error: false
+      - run: flutter test
+      - run: flutter test test/date_time_test.dart
+        env: { TZ: America/New_York }
+
+  downgrade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, cache: true }
+      - run: flutter pub downgrade
+      - run: flutter analyze --fatal-warnings
+      - run: flutter test
 
   pana:
-    name: Pana score
     runs-on: ubuntu-latest
-    # Informational only — pana has a known CI cleanup quirk that surfaces
-    # as PathNotFoundException after the score is computed. Don't block PRs
-    # on it; rely on pub.dev's own scoring as the source of truth.
-    continue-on-error: true
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-      - run: flutter pub get
+        with: { channel: stable, cache: true }
       - run: dart pub global activate pana
-      - run: pana --no-warning
+      - run: dart pub global run pana --no-warning --exit-code-threshold 0
 
-  example:
-    name: Example analyze
+  publish-dry-run:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
+        with: { channel: stable, cache: true }
+      - run: flutter pub publish --dry-run
+
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, cache: true }
       - run: flutter pub get
-        working-directory: example
-      - run: flutter analyze
-        working-directory: example
+      - run: flutter test --platform chrome --tags web
+      - run: flutter test --platform chrome --wasm --tags web

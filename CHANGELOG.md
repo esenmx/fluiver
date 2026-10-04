@@ -64,6 +64,10 @@ Strips every API whose job the framework or core libraries already do — fluive
 
 Kept deliberately, verified against Flutter 3.41 / Dart 3.11: `truncateTime()` (unlike `DateUtils.dateOnly` it preserves UTC-ness), `windowed` (`package:collection` only has non-overlapping `slices`), `timeoutOrNull` (`package:async` has no equivalent), `Map.where`/`whereKeyType`/`whereValueType` (return a `Map`, narrow the static type), `separated` (Flex `spacing` only covers blank gaps, not separator widgets), `byNameOrNull` (core's `asNameMap()[name]` allocates a map per lookup and spells a simple scan sideways).
 
+## 3.3.1
+
+- Not documented.
+
 ## 3.3.0
 
 - **Added** — `ScrollTrackingExpandable` widget: animated expand/collapse that keeps the growing bottom edge visible in the nearest `Scrollable` while expanding, with `scrollOffset` for extra breathing room below.
@@ -105,7 +109,7 @@ Kept deliberately, verified against Flutter 3.41 / Dart 3.11: `truncateTime()` (
 - **Removed** — `PaddedFlex` / `PaddedRow` / `PaddedColumn` widgets. Use `Padding(padding: ..., child: Column(children: [...]))` / `Row` — LLMs reach for this natively.
 - **Removed** — `IterableEnum.byNameOrElse(name, orElse: ...)`. Use `Enum.values.byNameOrNull(name) ?? .fallback` — Dart shorthand handles the fallback.
 
-## 3.0.0
+## 3.0.0 (not published)
 
 **Breaking — utility-library pivot.** The "single-dot shortcut" framing collided with LLM-assisted development: agents do not know the extensions exist, default to stdlib forms, and teaching the API costs input tokens on every turn. The sugar layer had to go. What remains is substance — things the SDK is genuinely missing. Ships a compact rule file at `rules/fluiver.md` for consumer projects to load into their LLM agent.
 
@@ -179,7 +183,7 @@ Kept deliberately, verified against Flutter 3.41 / Dart 3.11: `truncateTime()` (
 - Added `FlexGrid.padding`, all M3 `ColorScheme` context getters.
 - Removed `BezierSquircleBorder`. Min SDK Dart 3.0.0.
 
-## 1.2.0
+## 1.2.0 (not published)
 
 - Added `ColorScheme` context getters, `BezierSquircleBorder`, `StreamWhereType`.
 
