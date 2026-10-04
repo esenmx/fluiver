@@ -1,4 +1,6 @@
-part of '../../fluiver.dart';
+import 'dart:collection';
+
+import 'package:flutter/material.dart';
 
 /// Separating [Iterable] elements.
 extension IterableSeparator<E> on Iterable<E> {

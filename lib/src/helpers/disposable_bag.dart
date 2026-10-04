@@ -1,4 +1,6 @@
-part of '../../fluiver.dart';
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
 
 /// Collects disposers and flushes them with a single [dispose] call.
 ///

@@ -1,4 +1,6 @@
-part of '../../fluiver.dart';
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 
 /// Mixin for managing timer lifecycle.
 mixin _TimerMixin {

@@ -1,5 +1,3 @@
-part of '../../fluiver.dart';
-
 /// Filtering [Map] entries by key or value type.
 ///
 /// These traverse the whole map, so they go through [forEach], which hands the

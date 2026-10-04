@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Web and Wasm support: `NetworkProbe` sits behind a conditional import, so `package:fluiver/fluiver.dart` no longer reaches `dart:io`.
+
+### Changed
+
+- Requires Dart 3.13 / Flutter 3.47 (was Dart 3.10, no Flutter floor).
+- Sources are per-file libraries re-exported by `package:fluiver/fluiver.dart`; that import is unaffected.
+
+### Fixed
+
+- `NetworkProbe.checkConnection` on web returns `navigator.onLine` instead of always `true`.
+
 ## 4.1.0
 
 - **Changed** — `DisposableBag.dispose` invokes disposers in registration order but awaits `Future`-returning ones together, so disposal takes as long as the slowest disposer instead of the sum, a stalled async disposer no longer starves the ones after it, and synchronous disposers queued behind an async one now run inside `dispose()` rather than after the async one settles. Steps that must wait for a previous async step (flush, then close) belong in one closure. `DisposableBagException.errors` stays in registration order.

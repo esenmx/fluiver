@@ -1,3 +1,6 @@
+@Tags(['web'])
+library;
+
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/foundation.dart';

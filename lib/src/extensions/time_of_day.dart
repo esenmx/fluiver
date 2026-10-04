@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'package:flutter/material.dart';
 
 /// Anchoring a [TimeOfDay] onto a [DateTime] calendar day.
 extension TimeOfDayOnDate on TimeOfDay {

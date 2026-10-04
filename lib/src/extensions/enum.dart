@@ -1,5 +1,3 @@
-part of '../../fluiver.dart';
-
 /// Mixin for comparing [Enum] values by their index.
 ///
 /// ```dart

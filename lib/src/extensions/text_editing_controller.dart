@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'package:flutter/widgets.dart';
 
 /// Caret-preserving text replacement on [TextEditingController].
 extension TextEditingControllerCaret on TextEditingController {

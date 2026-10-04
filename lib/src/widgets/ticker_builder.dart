@@ -1,4 +1,6 @@
-part of '../../fluiver.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/widgets.dart';
 
 /// A widget that rebuilds on every frame, providing the elapsed [Duration]
 /// since the first frame.

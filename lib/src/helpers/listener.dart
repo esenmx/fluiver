@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'package:flutter/widgets.dart';
 
 /// Observes locale changes via [WidgetsBindingObserver].
 ///
