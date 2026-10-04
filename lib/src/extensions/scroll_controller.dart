@@ -5,47 +5,39 @@ import 'package:flutter/widgets.dart';
 /// `atTop` / `atBottom` are safe to read before a scrollable attaches —
 /// they return `false` when [ScrollController.hasClients] is `false`.
 extension ScrollControllerPosition on ScrollController {
-  /// `true` when the controller has clients and is scrolled to the
-  /// minimum extent.
-  bool get atTop {
-    if (!hasClients) {
-      return false;
-    }
-    return position.pixels <= position.minScrollExtent;
-  }
+  /// `true` when the controller has clients and every attached view is
+  /// scrolled to its minimum extent.
+  bool get atTop =>
+      hasClients && positions.every((p) => p.pixels <= p.minScrollExtent);
 
-  /// `true` when the controller has clients and is scrolled to the
-  /// maximum extent.
-  bool get atBottom {
-    if (!hasClients) {
-      return false;
-    }
-    return position.pixels >= position.maxScrollExtent;
-  }
+  /// `true` when the controller has clients and every attached view is
+  /// scrolled to its maximum extent.
+  bool get atBottom =>
+      hasClients && positions.every((p) => p.pixels >= p.maxScrollExtent);
 
-  /// Animates to the minimum scroll extent.
+  /// Animates every attached view to its minimum scroll extent.
   ///
   /// No-op when no client is attached.
   Future<void> animateToTop({
     Duration duration = const Duration(milliseconds: 250),
     Curve curve = Curves.easeOut,
   }) async {
-    if (!hasClients) {
-      return;
-    }
-    await animateTo(position.minScrollExtent, duration: duration, curve: curve);
+    await Future.wait([
+      for (final p in positions)
+        p.animateTo(p.minScrollExtent, duration: duration, curve: curve),
+    ]);
   }
 
-  /// Animates to the maximum scroll extent.
+  /// Animates every attached view to its maximum scroll extent.
   ///
   /// No-op when no client is attached.
   Future<void> animateToBottom({
     Duration duration = const Duration(milliseconds: 250),
     Curve curve = Curves.easeOut,
   }) async {
-    if (!hasClients) {
-      return;
-    }
-    await animateTo(position.maxScrollExtent, duration: duration, curve: curve);
+    await Future.wait([
+      for (final p in positions)
+        p.animateTo(p.maxScrollExtent, duration: duration, curve: curve),
+    ]);
   }
 }

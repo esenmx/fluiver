@@ -147,4 +147,82 @@ void main() {
       check(log).isEmpty();
     });
   });
+
+  group('Throttle re-entrancy', () {
+    const window = Duration(milliseconds: 100);
+
+    test('ThrottleFirst ignores calls within the window even if task '
+        'threw', () {
+      fakeAsync((async) {
+        final t = ThrottleFirst(window);
+        var runs = 0;
+        check(() {
+          t(() {
+            runs++;
+            throw Exception('submit failed');
+          });
+        }).throws<Exception>();
+        async.elapse(const Duration(milliseconds: 10));
+        t(() => runs++);
+        check(runs, because: 'second call inside the window ran').equals(1);
+        t.dispose();
+      });
+    });
+
+    test('ThrottleFirst reentrant call within the window is dropped', () {
+      fakeAsync((async) {
+        final t = ThrottleFirst(window);
+        var runs = 0;
+        void task() {
+          runs++;
+          if (runs < 5) {
+            t(task);
+          }
+        }
+
+        t(task);
+        check(runs).equals(1);
+        t.dispose();
+      });
+    });
+
+    reactiveTest('ThrottleLast does not lose a call made while its task '
+        'runs', (async, log) {
+      final t = ThrottleLast(window);
+      t(() {
+        log.add('first');
+        t(() => log.add('second'));
+      });
+      async.elapse(const Duration(milliseconds: 350));
+      check(log).deepEquals(['first', 'second']);
+      t.dispose();
+    });
+
+    reactiveTest('ThrottleLatest reentrant call from a queued task is '
+        'rate-limited', (async, log) {
+      final t = ThrottleLatest(window)..call(() => log.add('a'));
+      t(() {
+        log.add('b');
+        t(() => log.add('c')); // fired at t=100 from inside the timer
+      });
+      async.elapse(window);
+      check(
+        log,
+        because: 'c should wait for the next window',
+      ).deepEquals(['a', 'b']);
+      t.dispose();
+      async.elapse(const Duration(milliseconds: 500));
+      check(async.pendingTimers, because: 'dispose leaves a timer').isEmpty();
+    });
+
+    test('ThrottleLatest dispose cancels every timer it armed', () {
+      fakeAsync((async) {
+        final t = ThrottleLatest(window)..call(() {});
+        t(() => t(() {})); // queued task re-enters the throttle
+        async.elapse(window);
+        t.dispose();
+        check(async.pendingTimers).isEmpty();
+      });
+    });
+  });
 }

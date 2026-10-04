@@ -73,25 +73,33 @@ class DisposableBag {
       return;
     }
     _disposed = true;
-    final slots = List<Object?>.filled(_disposers.length, null);
+    final slots = List<(Object, StackTrace)?>.filled(_disposers.length, null);
     final futures = <Future<void>>[];
     for (var i = 0; i < _disposers.length; i++) {
       try {
         final result = _disposers[i]();
         if (result is Future) {
-          futures.add(result.then((_) {}, onError: (Object e) => slots[i] = e));
+          futures.add(
+            result.then(
+              (_) {},
+              onError: (Object e, StackTrace s) => slots[i] = (e, s),
+            ),
+          );
         }
-      } on Object catch (e) {
-        slots[i] = e;
+      } on Object catch (e, s) {
+        slots[i] = (e, s);
       }
     }
     _disposers.clear();
     if (futures.isNotEmpty) {
       await Future.wait(futures);
     }
-    final errors = slots.nonNulls.toList();
-    if (errors.isNotEmpty) {
-      throw DisposableBagException(errors);
+    final failures = slots.nonNulls.toList();
+    if (failures.isNotEmpty) {
+      throw DisposableBagException(
+        [for (final (e, _) in failures) e],
+        stackTraces: [for (final (_, s) in failures) s],
+      );
     }
   }
 }
@@ -100,8 +108,11 @@ class DisposableBag {
 /// [DisposableBag.dispose].
 class DisposableBagException(
   /// The errors thrown by individual disposers.
-  final List<Object> errors,
-) implements Exception {
+  final List<Object> errors, {
+
+  /// Stack traces of [errors], index-aligned; empty when not captured.
+  final List<StackTrace> stackTraces = const [],
+}) implements Exception {
   /// Creates a [DisposableBagException] with the list of errors.
   this;
 

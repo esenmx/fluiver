@@ -47,10 +47,13 @@ extension IterableWindowed<E> on Iterable<E> {
   /// [1, 2, 3, 4, 5].windowed(2, step: 2);   // ([1,2], [3,4])
   /// [1, 2].windowed(3);                     // () — size > length
   /// ```
-  Iterable<List<E>> windowed(int size, {int step = 1}) sync* {
+  Iterable<List<E>> windowed(int size, {int step = 1}) {
     if (size < 1) throw RangeError.value(size, 'size', 'must be > 0');
     if (step < 1) throw RangeError.value(step, 'step', 'must be > 0');
+    return _windowed(size, step);
+  }
 
+  Iterable<List<E>> _windowed(int size, int step) sync* {
     final buffer = ListQueue<E>(size);
     var skip = 0;
     for (final element in this) {

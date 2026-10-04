@@ -1,5 +1,6 @@
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '_helpers.dart';
@@ -64,6 +65,57 @@ void main() {
       final c = newScrollController();
 
       await c.animateToBottom();
+    });
+  });
+
+  group('several attached views', () {
+    Future<void> pumpTwoViews(
+      WidgetTester tester,
+      ScrollController c, {
+      double first = 2000,
+      double second = 2000,
+    }) {
+      return tester.pumpWidget(
+        MaterialApp(
+          home: Row(
+            children: [
+              for (final height in [first, second])
+                Expanded(
+                  child: ListView(
+                    controller: c,
+                    children: [SizedBox(height: height)],
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    testWidgets('atTop is safe with two attached scroll views', (tester) async {
+      final c = newScrollController();
+
+      await pumpTwoViews(tester, c);
+
+      check(() => c.atTop).returnsNormally();
+    });
+
+    testWidgets('edge helpers cover every attached view', (tester) async {
+      final c = newScrollController();
+
+      await pumpTwoViews(tester, c, second: 3000);
+      check(c.atTop).isTrue();
+      check(c.atBottom).isFalse();
+
+      c.animateToBottom(duration: const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
+      check(c.atBottom).isTrue();
+      check(c.atTop).isFalse();
+
+      c.animateToTop(duration: const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
+      check(c.atTop).isTrue();
+      check(c.atBottom).isFalse();
     });
   });
 }
