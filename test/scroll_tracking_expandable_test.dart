@@ -1,3 +1,6 @@
+@Tags(['web'])
+library;
+
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +34,35 @@ Widget _app({
 Size _size(WidgetTester tester) =>
     tester.getSize(find.byType(ScrollTrackingExpandable));
 
+Widget _withField(Widget child, {required bool isExpanded}) => MaterialApp(
+  home: Scaffold(
+    body: Column(
+      children: [
+        const TextField(key: Key('visible')),
+        ScrollTrackingExpandable(isExpanded: isExpanded, child: child),
+      ],
+    ),
+  ),
+);
+
+Widget _collapsed(Widget child) => _withField(child, isExpanded: false);
+
+Future<void> _focusNextAfterVisible(WidgetTester tester) async {
+  await tester.tap(find.byKey(const Key('visible')));
+  await tester.pump();
+  FocusManager.instance.primaryFocus?.nextFocus();
+  await tester.pump();
+}
+
 void main() {
   group('ScrollTrackingExpandable', () {
+    setUp(() {
+      // Headless Chrome reports disableAnimations, which skips the animation.
+      final d = TestWidgetsFlutterBinding.instance.platformDispatcher
+        ..accessibilityFeaturesTestValue = const FakeAccessibilityFeatures();
+      addTearDown(d.clearAccessibilityFeaturesTestValue);
+    });
+
     testWidgets('starts collapsed at zero height', (tester) async {
       await tester.pumpWidget(_app(isExpanded: false));
 
@@ -92,6 +122,54 @@ void main() {
       );
       await tester.pumpAndSettle();
       check(controller.offset).equals(250);
+    });
+
+    testWidgets('collapsed child is skipped by focus traversal', (
+      tester,
+    ) async {
+      final hidden = FocusNode();
+      addTearDown(hidden.dispose);
+      await tester.pumpWidget(_collapsed(TextField(focusNode: hidden)));
+
+      await _focusNextAfterVisible(tester);
+      check(hidden.hasFocus).isFalse();
+    });
+
+    testWidgets('child collapsed after expanding is skipped by focus '
+        'traversal', (tester) async {
+      final hidden = FocusNode();
+      addTearDown(hidden.dispose);
+      await tester.pumpWidget(
+        _withField(TextField(focusNode: hidden), isExpanded: true),
+      );
+      await tester.pumpWidget(_collapsed(TextField(focusNode: hidden)));
+      await tester.pumpAndSettle();
+
+      await _focusNextAfterVisible(tester);
+      check(hidden.hasFocus).isFalse();
+    });
+
+    testWidgets('collapsed child tickers are muted', (tester) async {
+      var ticks = 0;
+      await tester.pumpWidget(
+        _collapsed(
+          TickerBuilder(
+            onTick: (_) => ticks++,
+            builder: (_, _) => const SizedBox(),
+          ),
+        ),
+      );
+      for (var i = 0; i < 5; i++) {
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      check(ticks).equals(0);
+    });
+
+    testWidgets('collapsed child is excluded from semantics', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(_collapsed(const Text('secret details')));
+      expect(find.bySemanticsLabel('secret details'), findsNothing);
+      handle.dispose();
     });
   });
 }

@@ -1,44 +1,44 @@
+import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 
-import 'listener_test.mocks.dart';
-
-class MockBrightnessListenerCallback extends Mock {
-  void call(Brightness brightness);
-}
-
-@GenerateMocks([LocaleListener])
 void main() {
-  setUp(TestWidgetsFlutterBinding.ensureInitialized);
+  testWidgets('LocaleListener reports every locale change', (tester) async {
+    final received = <List<Locale>?>[];
+    final listener = LocaleListener(received.add);
+    WidgetsBinding.instance.addObserver(listener);
+    final dispatcher = tester.platformDispatcher;
+    addTearDown(() {
+      WidgetsBinding.instance.removeObserver(listener);
+      dispatcher.clearLocalesTestValue();
+    });
 
-  testWidgets('LocaleListener', (tester) async {
-    final observer = MockLocaleListener();
-    WidgetsBinding.instance.addObserver(observer);
-    final window = tester.binding.platformDispatcher;
+    const first = [Locale('en', 'AU')];
+    const second = [Locale('en', 'AU'), Locale('tr', 'TR')];
+    dispatcher
+      ..localesTestValue = first
+      ..localesTestValue = second;
 
-    final value1 = [const Locale('en_AU')];
-    window.localesTestValue = value1;
-    verify(observer.didChangeLocales(value1)).called(1);
-
-    final value2 = [const Locale('en_AU'), const Locale('tr_TR')];
-    window.localesTestValue = value2;
-    verify(observer.didChangeLocales(value2)).called(1);
+    check(received).deepEquals([first, second]);
   });
 
-  testWidgets('BrightnessListener', (tester) async {
-    final callback = MockBrightnessListenerCallback();
-    WidgetsBinding.instance.addObserver(BrightnessListener(callback.call));
-    final window = tester.binding.platformDispatcher
-      ..platformBrightnessTestValue = .dark;
-    verify(callback(.dark)).called(1);
+  testWidgets('BrightnessListener reports every brightness change', (
+    tester,
+  ) async {
+    final received = <Brightness>[];
+    final listener = BrightnessListener(received.add);
+    WidgetsBinding.instance.addObserver(listener);
+    final dispatcher = tester.platformDispatcher;
+    addTearDown(() {
+      WidgetsBinding.instance.removeObserver(listener);
+      dispatcher.clearPlatformBrightnessTestValue();
+    });
 
-    window.platformBrightnessTestValue = .light;
-    verify(callback(.light)).called(1);
+    dispatcher
+      ..platformBrightnessTestValue = .dark
+      ..platformBrightnessTestValue = .light;
 
-    window.platformBrightnessTestValue = .light;
-    verify(callback(.light)).called(1);
+    check(received).deepEquals([Brightness.dark, Brightness.light]);
   });
 }
