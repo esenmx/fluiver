@@ -168,8 +168,48 @@ void main() {
     testWidgets('collapsed child is excluded from semantics', (tester) async {
       final handle = tester.ensureSemantics();
       await tester.pumpWidget(_collapsed(const Text('secret details')));
-      expect(find.bySemanticsLabel('secret details'), findsNothing);
+      check(find.bySemanticsLabel('secret details').evaluate()).isEmpty();
       handle.dispose();
+    });
+
+    testWidgets('expanded child is reachable by focus traversal', (
+      tester,
+    ) async {
+      final shown = FocusNode();
+      addTearDown(shown.dispose);
+      await tester.pumpWidget(
+        _withField(TextField(focusNode: shown), isExpanded: true),
+      );
+
+      await _focusNextAfterVisible(tester);
+      check(shown.hasFocus).isTrue();
+    });
+
+    testWidgets('expanded child tickers run', (tester) async {
+      var ticks = 0;
+      await tester.pumpWidget(
+        _withField(
+          TickerBuilder(
+            onTick: (_) => ticks++,
+            builder: (_, _) => const SizedBox(),
+          ),
+          isExpanded: true,
+        ),
+      );
+      for (var i = 0; i < 5; i++) {
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      check(ticks).isGreaterThan(0);
+    });
+
+    testWidgets('collapse animates the height down', (tester) async {
+      await tester.pumpWidget(_app(isExpanded: true));
+
+      await tester.pumpWidget(_app(isExpanded: false));
+      await tester.pump(const Duration(milliseconds: 100));
+      check(_size(tester).height)
+        ..isGreaterThan(0)
+        ..isLessThan(300);
     });
   });
 }

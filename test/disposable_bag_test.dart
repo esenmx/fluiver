@@ -141,13 +141,23 @@ void main() {
     });
 
     test('captures a stack trace per error, index-aligned', () async {
+      void throwingSyncDisposer() => throw Exception('sync');
+      Future<void> throwingAsyncDisposer() async => throw Exception('async');
       final bag = DisposableBag()
-        ..add(() => throw Exception('sync'))
-        ..add(() async => throw Exception('async'));
+        ..add(throwingSyncDisposer)
+        ..add(throwingAsyncDisposer);
       await check(bag.dispose()).throws<DisposableBagException>(
         (e) => e
           ..has((e) => e.errors.length, 'errors.length').equals(2)
-          ..has((e) => e.stackTraces.length, 'stackTraces.length').equals(2),
+          ..has((e) => e.stackTraces.length, 'stackTraces.length').equals(2)
+          ..has(
+            (e) => '${e.stackTraces[0]}',
+            'stackTraces[0]',
+          ).contains('throwingSyncDisposer')
+          ..has(
+            (e) => '${e.stackTraces[1]}',
+            'stackTraces[1]',
+          ).contains('throwingAsyncDisposer'),
       );
     });
 
