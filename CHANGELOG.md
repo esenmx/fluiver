@@ -15,6 +15,8 @@
 - Requires Dart 3.13 / Flutter 3.47 (was Dart 3.10, no Flutter floor).
 - Sources are per-file libraries re-exported by `package:fluiver/fluiver.dart`; that import is unaffected.
 - `DateTime.withTimeOfDay` is deprecated; use `TimeOfDay.onDate(date)`.
+- Agent skill renamed `skills/flutter-fluiver` → `skills/fluiver-usage`, so `dart run skills@ get --package fluiver --all` installs it.
+- pubspec drops the dead `homepage` and the redundant `documentation` link.
 
 ### Fixed
 
@@ -28,6 +30,7 @@
 - `ScrollController` edge helpers work with several attached scroll views.
 - `windowed` throws `RangeError` at the call, not on first iteration.
 - A collapsed `ScrollTrackingExpandable` child is offstage: not focusable, hidden from semantics, tickers muted.
+- README, skill and API-doc snippets compile; `FastHash` documents its UTF-16 input.
 
 ## 4.1.0
 

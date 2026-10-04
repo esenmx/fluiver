@@ -25,7 +25,7 @@ extension Let<T extends Object> on T {
   /// Column(children: [
   ///   Text(title),
   ///   ?subtitle?.let(Text.new),
-  ///   ?avatarUrl?.let(NetworkImage.new)?.let(_circle),
+  ///   ?avatarUrl?.let(NetworkImage.new).let(_circle),
   /// ]);
   ///
   /// // 3. Chain pure transformations

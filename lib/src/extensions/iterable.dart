@@ -9,7 +9,7 @@ extension IterableSeparator<E> on Iterable<E> {
   /// anywhere ([Flex], [Scrollable], `InlineSpan`, …).
   ///
   /// ```dart
-  /// [Child(), Child()].separated((_) => Divider())
+  /// <Widget>[Child(), Child()].separated((_) => const Divider())
   /// // → [Child(), Divider(), Child()]
   /// ```
   ///
