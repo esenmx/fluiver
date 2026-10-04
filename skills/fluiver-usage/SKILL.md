@@ -36,7 +36,7 @@ ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
 
 ## Extensions
 
-- **DateTime predicates**: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow(Duration)`, `age({at})` (full years from each date's own calendar fields (a UTC date of birth is not shifted)), `truncateTime()` (→ midnight, keeps UTC flag). No arithmetic helpers — stdlib `Duration`.
+- **DateTime predicates**: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow(Duration)`, `age({at})` (full years from both dates' calendar fields as stored, no zone conversion; `at` defaults to local now; `.toLocal()` a local date saved via `.toUtc()`), `truncateTime()` (→ midnight, keeps UTC flag). No arithmetic helpers — stdlib `Duration`.
 - **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day. Day passed explicitly — deterministic in tests.
 - **Enum**: `with EnumIndexComparable<MyEnum>` adds `<`/`>`/`compareTo` by index type-safely. `values.byNameOrNull(name)` → nullable, for untrusted input (stdlib `byName` throws); chain `?? .fallback`.
 - **Iterable**: `separated((i) => sep)` (interleave by index slot); `windowed(size, {step})` — sliding window, **drops the partial trailing window** (vs non-overlapping `collection.slices`).

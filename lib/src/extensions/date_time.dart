@@ -54,12 +54,14 @@ extension DateTimeCheck on DateTime {
 
 /// Calculating age from [DateTime].
 extension DateTimeCalculator on DateTime {
-  /// Returns the number of full years between this date and [at] (default
-  /// `DateTime.now()`).
+  /// Returns the number of full years between this date and [at], which
+  /// defaults to the local `DateTime.now()`.
   ///
-  /// Compares each date's own calendar fields without zone conversion, so a
-  /// UTC date of birth `1996-10-04T00:00:00Z` is 4 Oct everywhere; pass both
-  /// dates in the same flavour.
+  /// Compares the year/month/day fields of both dates as stored, with no zone
+  /// conversion, so pass both in the same flavour:
+  /// `DateTime.utc(1996, 10, 4).age(at: DateTime.utc(2026, 10, 4))` is 30 in
+  /// every zone. A local date saved with `.toUtc()` reads as the previous day
+  /// east of UTC; call `.toLocal()` on it first.
   int age({DateTime? at}) {
     final now = at ?? DateTime.now();
     var age = now.year - year;
