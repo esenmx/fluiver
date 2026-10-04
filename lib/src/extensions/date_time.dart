@@ -16,6 +16,7 @@ extension DateTimeMerge on DateTime {
 
   /// Returns this date with its time replaced by [time]; sub-minute
   /// components are zeroed.
+  @Deprecated('Use time.onDate(date). Removed in 5.0.0.')
   DateTime withTimeOfDay(TimeOfDay time) {
     return truncateTime().copyWith(hour: time.hour, minute: time.minute);
   }
@@ -53,16 +54,16 @@ extension DateTimeCheck on DateTime {
 
 /// Calculating age from [DateTime].
 extension DateTimeCalculator on DateTime {
-  /// Returns the number of full years between this date and `DateTime.now()`.
+  /// Returns the number of full years between this date and [at] (default
+  /// `DateTime.now()`).
   ///
-  /// Accounts for the month/day boundary — a birthday that hasn't occurred
-  /// yet this year subtracts one.
-  int age() {
-    final localThis = toLocal();
-    final now = DateTime.now();
-    var age = now.year - localThis.year;
-    if (now.month < localThis.month ||
-        (now.month == localThis.month && now.day < localThis.day)) {
+  /// Compares each date's own calendar fields without zone conversion, so a
+  /// UTC date of birth `1996-10-04T00:00:00Z` is 4 Oct everywhere; pass both
+  /// dates in the same flavour.
+  int age({DateTime? at}) {
+    final now = at ?? DateTime.now();
+    var age = now.year - year;
+    if (now.month < month || (now.month == month && now.day < day)) {
       age--;
     }
     return age;

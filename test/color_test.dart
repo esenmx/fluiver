@@ -1,9 +1,24 @@
+import 'dart:math' as math;
+import 'dart:ui' show ColorSpace;
+
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 double lightnessOf(Color color) => HSLColor.fromColor(color).lightness;
+
+double _contrast(Color a, Color b) {
+  final la = a.computeLuminance();
+  final lb = b.computeLuminance();
+  return (math.max(la, lb) + 0.05) / (math.min(la, lb) + 0.05);
+}
+
+void _checkChannelsClose(Color actual, Color expected, String reason) {
+  check(actual.r, because: reason).isCloseTo(expected.r, 1 / 255);
+  check(actual.g, because: reason).isCloseTo(expected.g, 1 / 255);
+  check(actual.b, because: reason).isCloseTo(expected.b, 1 / 255);
+}
 
 void main() {
   group('darken', () {
@@ -54,6 +69,70 @@ void main() {
     test('returns black over light background', () {
       check(Colors.white.contrastText).equals(Colors.black);
       check(const Color(0xFFEEEEEE).contrastText).equals(Colors.black);
+    });
+
+    test('picks the higher-contrast of black/white', () {
+      for (final bg in const [
+        Color(0xFF808080), // mid gray, luminance ~0.216
+        Color(0xFF2196F3), // Colors.blue[500], luminance ~0.29
+        Color(0xFFE91E63), // Colors.pink[500]
+        Color(0xFF4CAF50), // Colors.green[500]
+      ]) {
+        final best = _contrast(bg, Colors.black) >= _contrast(bg, Colors.white)
+            ? Colors.black
+            : Colors.white;
+        check(
+          bg.contrastText,
+          because:
+              'bg=$bg lum=${bg.computeLuminance().toStringAsFixed(3)} '
+              'black=${_contrast(bg, Colors.black).toStringAsFixed(2)} '
+              'white=${_contrast(bg, Colors.white).toStringAsFixed(2)}',
+        ).equals(best);
+      }
+    });
+  });
+
+  group('lightness shift', () {
+    test('darken(0) keeps a Display-P3 color space', () {
+      const p3 = Color.from(
+        alpha: 1,
+        red: 1,
+        green: 0,
+        blue: 0,
+        colorSpace: ColorSpace.displayP3,
+      );
+      check(p3.darken(0).colorSpace).equals(ColorSpace.displayP3);
+    });
+
+    test('darken(0) preserves sub-8-bit precision', () {
+      const c = Color.from(alpha: 0.5, red: 0.3, green: 0.5, blue: 0.7);
+      final out = c.darken(0);
+      check(out.a).isCloseTo(c.a, 1e-6);
+      check(out.r).isCloseTo(c.r, 1e-6);
+    });
+
+    test('darken/lighten match HSLColor within 1/255 across primaries', () {
+      for (final swatch in Colors.primaries) {
+        for (final shade in const [100, 300, 500, 700, 900]) {
+          final c = swatch[shade] ?? swatch;
+          final hsl = HSLColor.fromColor(c);
+          final l = hsl.lightness;
+          for (final amount in const [.05, .1, .3]) {
+            final darker = hsl.withLightness((l - amount).clamp(0.0, 1.0));
+            final lighter = hsl.withLightness((l + amount).clamp(0.0, 1.0));
+            _checkChannelsClose(
+              c.darken(amount),
+              darker.toColor(),
+              'darken $c by $amount',
+            );
+            _checkChannelsClose(
+              c.lighten(amount),
+              lighter.toColor(),
+              'lighten $c by $amount',
+            );
+          }
+        }
+      }
     });
   });
 }
