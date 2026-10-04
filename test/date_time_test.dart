@@ -51,6 +51,15 @@ void main() {
       check(birth.age(at: DateTime(2026, 10, 4))).equals(30);
     });
 
+    test('a local birth date saved with toUtc needs toLocal first', () {
+      final saved = DateTime(1996, 10, 4).toUtc();
+      final eve = DateTime(2026, 10, 3, 23);
+      check(saved.toLocal().age(at: eve)).equals(29);
+      check(saved.toLocal().age(at: DateTime(2026, 10, 4))).equals(30);
+      final eastOfUtc = saved.toLocal().timeZoneOffset > Duration.zero;
+      check(saved.age(at: eve)).equals(eastOfUtc ? 30 : 29);
+    });
+
     test('one year ago minus margin', () {
       final birth = now
           .copyWith(year: year - 1)

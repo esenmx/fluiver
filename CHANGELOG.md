@@ -17,6 +17,7 @@
 - `DateTime.withTimeOfDay` is deprecated; use `TimeOfDay.onDate(date)`.
 - Agent skill renamed `skills/flutter-fluiver` → `skills/fluiver-usage`, so `dart run skills@ get --package fluiver --all` installs it.
 - pubspec drops the dead `homepage` and the redundant `documentation` link.
+- `age()` reads each date's calendar fields as stored: a local date of birth saved with `.toUtc()` now reads as the previous day east of UTC, so it counts the new year on the eve of the birthday. Call `.toLocal()` on it first.
 
 ### Fixed
 
