@@ -81,7 +81,11 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
       if (widget.isExpanded) {
         _controller.forward();
       } else {
-        _controller.reverse();
+        _controller.reverse().then<void>((_) {
+          if (mounted) {
+            setState(() {});
+          }
+        });
       }
     }
   }
@@ -126,8 +130,18 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
 
   @override
   Widget build(BuildContext context) {
+    final closed = !widget.isExpanded && _controller.isDismissed;
     return ClipRect(
-      child: SizeTransition(sizeFactor: _animation, child: widget.child),
+      child: SizeTransition(
+        sizeFactor: _animation,
+        child: Offstage(
+          offstage: closed,
+          child: TickerMode(
+            enabled: !closed,
+            child: ExcludeFocus(excluding: closed, child: widget.child),
+          ),
+        ),
+      ),
     );
   }
 }

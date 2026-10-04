@@ -8,6 +8,7 @@
 - `DateTime.age({DateTime? at})` takes an optional reference date.
 - `LRUCache.peek`, `values` and `entries`.
 - `DisposableBagException.stackTraces`.
+- `TickerBuilder(enabled:)` pauses and resumes the ticker.
 
 ### Changed
 
@@ -26,6 +27,7 @@
 - `ThrottleLast` keeps a call made while its task runs.
 - `ScrollController` edge helpers work with several attached scroll views.
 - `windowed` throws `RangeError` at the call, not on first iteration.
+- A collapsed `ScrollTrackingExpandable` child is offstage: not focusable, hidden from semantics, tickers muted.
 
 ## 4.1.0
 

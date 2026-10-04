@@ -8,6 +8,9 @@ import 'package:flutter/widgets.dart';
 /// Owns a [Ticker] internally; starts it in `initState` and stops it in
 /// `dispose`. Drop in when you need per-frame rebuilds (e.g. a countdown
 /// or a debug clock) without managing the ticker yourself.
+///
+/// Set [enabled] to `false` to pause, e.g. once a countdown ends, so nothing
+/// rebuilds and `pumpAndSettle` settles.
 class const TickerBuilder({
   /// Called every frame with the elapsed time since the first frame.
   required final Widget Function(BuildContext context, Duration elapsed)
@@ -15,6 +18,10 @@ class const TickerBuilder({
 
   /// Optional side-effect callback invoked every frame alongside [builder].
   final void Function(Duration elapsed)? onTick,
+
+  /// Whether the ticker runs. While `false` no frames are scheduled and the
+  /// elapsed time holds; re-enabling resumes from it.
+  final bool enabled = true,
   super.key,
 }) extends StatefulWidget {
   /// Creates a widget that rebuilds every frame.
@@ -26,9 +33,14 @@ class const TickerBuilder({
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-      ObjectFlagProperty<void Function(Duration elapsed)>.has('onTick', onTick),
-    );
+    properties
+      ..add(
+        ObjectFlagProperty<void Function(Duration elapsed)>.has(
+          'onTick',
+          onTick,
+        ),
+      )
+      ..add(FlagProperty('enabled', value: enabled, ifFalse: 'disabled'));
   }
 }
 
@@ -38,18 +50,36 @@ class _TickerBuilderState extends State<TickerBuilder>
 
   Duration elapsed = .zero;
 
+  Duration resumedFrom = .zero;
+
   void handleTick(Duration tick) {
     setState(() {
-      elapsed = tick;
+      elapsed = resumedFrom + tick;
     });
-    widget.onTick?.call(tick);
+    widget.onTick?.call(elapsed);
   }
 
   @override
   void initState() {
     super.initState();
     ticker = createTicker(handleTick);
-    ticker.start();
+    if (widget.enabled) {
+      ticker.start();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant TickerBuilder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.enabled == oldWidget.enabled) {
+      return;
+    }
+    if (widget.enabled) {
+      resumedFrom = elapsed;
+      ticker.start();
+    } else {
+      ticker.stop();
+    }
   }
 
   @override
