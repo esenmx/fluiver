@@ -19,8 +19,7 @@ body:
       description: A minimal Dart snippet that reproduces the issue.
       render: dart
       placeholder: |
-        final m = <String, int?>{'a': null};
-        print(m.entryOf('a')); // expected MapEntry('a', null), got null
+        // minimal reproduction
     validations:
       required: true
   - type: textarea
@@ -33,7 +32,7 @@ body:
     id: package-version
     attributes:
       label: fluiver version
-      placeholder: 3.0.0
+      placeholder: 4.2.0
     validations:
       required: true
   - type: textarea
