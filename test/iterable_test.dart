@@ -92,7 +92,7 @@ void main() {
     // the subject prints the returned lazy iterable inside its try.
     test('windowed(0) throws at the call site', () {
       check(() {
-        [1, 2, 3].windowed(0); // not consumed
+        [1, 2, 3].windowed(0);
       }).throws<RangeError>();
     });
 

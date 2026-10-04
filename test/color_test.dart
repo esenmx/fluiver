@@ -72,11 +72,12 @@ void main() {
     });
 
     test('picks the higher-contrast of black/white', () {
+      const midGrey = Color(0xFF808080);
       for (final bg in const [
-        Color(0xFF808080), // mid gray, luminance ~0.216
-        Color(0xFF2196F3), // Colors.blue[500], luminance ~0.29
-        Color(0xFFE91E63), // Colors.pink[500]
-        Color(0xFF4CAF50), // Colors.green[500]
+        midGrey,
+        Colors.blue,
+        Colors.pink,
+        Colors.green,
       ]) {
         final best = _contrast(bg, Colors.black) >= _contrast(bg, Colors.white)
             ? Colors.black

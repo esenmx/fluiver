@@ -203,7 +203,7 @@ void main() {
       final t = ThrottleLatest(window)..call(() => log.add('a'));
       t(() {
         log.add('b');
-        t(() => log.add('c')); // fired at t=100 from inside the timer
+        t(() => log.add('c'));
       });
       async.elapse(window);
       check(
@@ -218,7 +218,7 @@ void main() {
     test('ThrottleLatest dispose cancels every timer it armed', () {
       fakeAsync((async) {
         final t = ThrottleLatest(window)..call(() {});
-        t(() => t(() {})); // queued task re-enters the throttle
+        t(() => t(() {}));
         async.elapse(window);
         t.dispose();
         check(async.pendingTimers).isEmpty();

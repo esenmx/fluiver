@@ -187,7 +187,8 @@ matters).
 
 ### `TickerBuilder`
 
-Rebuilds every frame, exposes elapsed `Duration` since first frame.
+Rebuilds every frame, exposes the elapsed running `Duration` (time spent
+disabled excluded).
 
 ```dart
 TickerBuilder(
