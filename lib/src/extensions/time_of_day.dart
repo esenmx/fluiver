@@ -6,8 +6,8 @@ extension TimeOfDayOnDate on TimeOfDay {
   /// subseconds zeroed.
   ///
   /// ```dart
-  /// const TimeOfDay(hour: 9).onDate(DateTime.now());   // today 09:00
-  /// const TimeOfDay(hour: 9).onDate(meeting.day);      // meeting day 09:00
+  /// const TimeOfDay(hour: 9, minute: 0).onDate(DateTime.now()); // today 09:00
+  /// const TimeOfDay(hour: 9, minute: 0).onDate(meeting.day); // any date 09:00
   /// ```
   ///
   /// Takes the date explicitly rather than reading [DateTime.now()] inside,

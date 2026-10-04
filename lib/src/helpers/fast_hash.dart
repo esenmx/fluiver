@@ -8,7 +8,8 @@ import 'package:flutter/foundation.dart';
 abstract final class FastHash {
   static const bool _isJS = kIsWeb && !kIsWasm;
 
-  /// FNV-1a 64-bit hash of [s].
+  /// FNV-1a-64 over the UTF-16 code units of [s], high byte first; does not
+  /// match FNV-1a over UTF-8 bytes.
   ///
   /// Stable across runs and Dart versions; suitable for hash-map keys,
   /// cache shards, and deduplication. NOT a cryptographic hash.

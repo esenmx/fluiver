@@ -1,15 +1,9 @@
 # fluiver
 
-[![pub](https://img.shields.io/pub/v/fluiver.svg)](https://pub.dev/packages/fluiver)
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![pub](https://img.shields.io/pub/v/fluiver.svg)](https://pub.dev/packages/fluiver) [![points](https://img.shields.io/pub/points/fluiver)](https://pub.dev/packages/fluiver/score) [![CI](https://github.com/esenmx/fluiver/actions/workflows/ci.yaml/badge.svg)](https://github.com/esenmx/fluiver/actions/workflows/ci.yaml) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **Agent-friendly SDK gap-fillers for Flutter.** Tight surface, ships an
-LLM skill — agents reach for fluiver instead of reinventing each helper.
-
-```yaml
-dependencies:
-  fluiver: ^4.0.0
-```
+agent skill — agents reach for fluiver instead of reinventing each helper.
 
 > No overlap with `package:collection`, `package:async`, `flutter_hooks`,
 > or other official dart-lang / flutter packages.
@@ -19,23 +13,8 @@ dependencies:
 ## Install
 
 ```bash
-dart pub add fluiver
+flutter pub add fluiver
 ```
-
-```dart
-import 'package:fluiver/fluiver.dart';
-```
-
----
-
-## LLM skill
-
-Ships a description-triggered skill at
-[`skills/flutter-fluiver/SKILL.md`](skills/flutter-fluiver/SKILL.md)
-so agents reach for fluiver APIs instead of hand-rolling
-`firstWhere(... orElse: ...)`, `controller.text =` caret-resets, or yet another
-`Debouncer`. Vendor it into your agent's skills directory — installing it is the
-consumer's call.
 
 ---
 
@@ -59,7 +38,7 @@ final user = jsonResponse?.let(User.fromJson);
 Column(children: [
   Text(title),
   ?subtitle?.let(Text.new),
-  ?avatarUrl?.let(NetworkImage.new),
+  ?avatarUrl?.let(NetworkImage.new).let(_circle),
 ]);
 
 // Chain pure transforms without temp vars
@@ -96,9 +75,10 @@ dt.isYesterday;
 dt.inThisYear;
 dt.isWithinFromNow(const Duration(minutes: 5));
 birthDate.age();
+dt.age(at: DateTime(2030));
 
 dt.truncateTime();                                 // → midnight
-dt.withTimeOfDay(const TimeOfDay(hour: 9));
+const TimeOfDay(hour: 9, minute: 0).onDate(dt);
 ```
 
 Arithmetic stays on stdlib: `dt.add(const Duration(days: 7))`.
@@ -106,8 +86,8 @@ Arithmetic stays on stdlib: `dt.add(const Duration(days: 7))`.
 ### TimeOfDay
 
 ```dart
-const TimeOfDay(hour: 9).onDate(DateTime.now());   // today 09:00
-const TimeOfDay(hour: 9).onDate(meeting.day);      // any date 09:00
+const TimeOfDay(hour: 9, minute: 0).onDate(DateTime.now()); // today 09:00
+const TimeOfDay(hour: 9, minute: 0).onDate(meeting.day);    // any date 09:00
 ```
 
 `onDate(date)` takes the calendar day explicitly — no hidden
@@ -211,9 +191,13 @@ Rebuilds every frame, exposes elapsed `Duration` since first frame.
 
 ```dart
 TickerBuilder(
+  enabled: !done,
   builder: (context, elapsed) => Text('${elapsed.inSeconds}s'),
 );
 ```
+
+`enabled: false` pauses it — no frames, `elapsed` held — e.g. once a
+countdown ends.
 
 ### `ScrollTrackingExpandable`
 
@@ -250,7 +234,9 @@ variants. All four expose `dispose()`.
 final cache = LRUCache<String, User>(maxEntries: 100);
 cache[user.id] = user;
 final hit = cache[user.id];                        // promotes to most-recent
-final user = cache.putIfAbsent(id, () => loadUser(id)); // lazy on miss
+final loaded = cache.putIfAbsent(id, () => loadUser(id)); // lazy on miss
+final peeked = cache.peek(id); // no promotion
+for (final MapEntry(:key, :value) in cache.entries) {} // snapshot
 
 final bag = DisposableBag()
   ..add(debounce.dispose)
@@ -264,9 +250,9 @@ dependent steps (flush, then close) go in one closure.
 ### Static helpers
 
 ```dart
-if (await NetworkProbe.checkConnection()) { /* online */ }
+if (await NetworkProbe.checkConnection()) { /* online */ } // web: navigator.onLine
 
-final h = FastHash.fnv1a('input'); // FNV-1a 64-bit (throws on JS web; VM/Wasm fine)
+final h = FastHash.fnv1a('input'); // FNV-1a-64 over UTF-16BE code units (≠ FNV-1a over UTF-8); throws on JS web, VM/Wasm fine
 
 final storeUrlString = platformDispatch<String>(
   android: () => 'https://play.google.com/store/apps/details?id=com.example.app',
@@ -286,6 +272,18 @@ apps need today.
 
 ---
 
+## Agent skill
+
+This package ships an agent skill in `skills/fluiver-usage/`. Install it into your project's agent config with:
+
+```sh
+dart run skills@ get --package fluiver --all
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
-MIT.
+MIT — see [LICENSE](LICENSE).
