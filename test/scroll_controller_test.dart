@@ -117,5 +117,33 @@ void main() {
       check(c.atTop).isTrue();
       check(c.atBottom).isFalse();
     });
+
+    testWidgets('only the first view at the bottom is at neither edge', (
+      tester,
+    ) async {
+      final c = newScrollController();
+
+      await pumpTwoViews(tester, c, second: 3000);
+      final first = c.positions.first;
+      first.jumpTo(first.maxScrollExtent);
+      await tester.pump();
+
+      check(c.atBottom).isFalse();
+      check(c.atTop).isFalse();
+    });
+
+    testWidgets('only the last view at the bottom is at neither edge', (
+      tester,
+    ) async {
+      final c = newScrollController();
+
+      await pumpTwoViews(tester, c, second: 3000);
+      final last = c.positions.last;
+      last.jumpTo(last.maxScrollExtent);
+      await tester.pump();
+
+      check(c.atBottom).isFalse();
+      check(c.atTop).isFalse();
+    });
   });
 }
