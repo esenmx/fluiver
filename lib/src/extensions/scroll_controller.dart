@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'package:flutter/widgets.dart';
 
 /// Position predicates and edge-animation shortcuts for [ScrollController].
 ///

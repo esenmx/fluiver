@@ -1,4 +1,5 @@
-part of '../../fluiver.dart';
+import 'package:fluiver/src/helpers/network_probe_io.dart'
+    if (dart.library.js_interop) 'package:fluiver/src/helpers/network_probe_web.dart';
 
 /// Lightweight reachability probes.
 abstract final class NetworkProbe {
@@ -9,35 +10,19 @@ abstract final class NetworkProbe {
   /// reliable than HTTP probes. [host] must be a literal IPv4/IPv6 address;
   /// point it at your own endpoint when Cloudflare is unreachable by policy
   /// (corporate networks, some regions). Returns `false` on
-  /// [SocketException] or [TimeoutException]; other errors propagate (let
+  /// `SocketException` or `TimeoutException`; other errors propagate (let
   /// bugs escape).
   ///
   /// The default [timeout] of 3 seconds covers two lost SYNs (TCP
   /// retransmits at ~1s intervals), so a lossy-but-usable mobile network
   /// still reports `true`.
   ///
-  /// On web this short-circuits to `true` — `dart:io.Socket` is unavailable
-  /// in the browser, and a running web app is by definition online.
+  /// On web this returns the browser's `navigator.onLine` (`false` only when
+  /// the browser knows it is offline); [host], [port] and [timeout] are
+  /// ignored there.
   static Future<bool> checkConnection({
     String host = '1.0.0.1',
     int port = 53,
     Duration timeout = const Duration(seconds: 3),
-  }) async {
-    if (kIsWeb) {
-      return true;
-    }
-    try {
-      final socket = await Socket.connect(
-        InternetAddress(host),
-        port,
-        timeout: timeout,
-      );
-      await socket.close();
-      return true;
-    } on SocketException {
-      return false;
-    } on TimeoutException {
-      return false;
-    }
-  }
+  }) => probeConnection(host: host, port: port, timeout: timeout);
 }

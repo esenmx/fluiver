@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'package:flutter/foundation.dart';
 
 /// Dispatches to the callback matching the current platform.
 ///

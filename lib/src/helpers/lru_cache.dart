@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'dart:collection';
 
 /// Fixed-capacity LRU (least-recently-used) cache.
 ///

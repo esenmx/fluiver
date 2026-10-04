@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'dart:async';
 
 /// Null-on-timeout variant of [Future.timeout].
 extension FutureTimeout<T> on Future<T> {

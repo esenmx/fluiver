@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'package:flutter/material.dart';
 
 /// Reusable callbacks for [TextField]'s builder slots.
 abstract final class TextFieldBuilders {

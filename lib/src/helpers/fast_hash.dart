@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'package:flutter/foundation.dart';
 
 /// Non-cryptographic string hashing.
 ///

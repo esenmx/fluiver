@@ -1,5 +1,3 @@
-part of '../../fluiver.dart';
-
 /// Kotlin-style `let` scope function on any non-null object.
 ///
 /// Bounded to `T extends Object` so `.let` only appears on non-null

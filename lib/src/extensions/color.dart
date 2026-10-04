@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'package:flutter/material.dart';
 
 /// HSL-based [Color] transforms and contrast-text picker.
 extension ColorTransform on Color {

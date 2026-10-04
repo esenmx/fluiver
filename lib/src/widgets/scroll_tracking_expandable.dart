@@ -1,4 +1,5 @@
-part of '../../fluiver.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 /// A widget that conditionally expands or collapses its [child] and
 /// automatically tracks its bottom edge during expansion to ensure it stays

@@ -1,4 +1,4 @@
-part of '../../fluiver.dart';
+import 'package:flutter/material.dart';
 
 /// Merging time components with [DateTime].
 extension DateTimeMerge on DateTime {
