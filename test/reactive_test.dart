@@ -1,19 +1,53 @@
 import 'package:checks/checks.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:meta/meta.dart';
 
+@isTest
 void reactiveTest(
   String description,
-  void Function(FakeAsync async, List<String> log) body,
-) {
-  test(description, () {
-    fakeAsync((async) => body(async, <String>[]));
-  });
+  void Function(FakeAsync async, List<String> log) body, {
+  String? testOn,
+  Timeout? timeout,
+  Object? skip,
+  Object? tags,
+  Map<String, dynamic>? onPlatform,
+  int? retry,
+}) {
+  test(
+    description,
+    () => fakeAsync((async) => body(async, <String>[])),
+    testOn: testOn,
+    timeout: timeout,
+    skip: skip,
+    tags: tags,
+    onPlatform: onPlatform,
+    retry: retry,
+  );
 }
 
 void main() {
+  group('negative duration', () {
+    const negative = Duration(milliseconds: -1);
+    for (final (name, create) in <(String, Object Function(Duration))>[
+      ('Debounce', Debounce.new),
+      ('ThrottleLatest', ThrottleLatest.new),
+      ('ThrottleFirst', ThrottleFirst.new),
+      ('ThrottleLast', ThrottleLast.new),
+    ]) {
+      test('$name throws ArgumentError naming duration', () {
+        check(() => create(negative)).throws<ArgumentError>()
+          ..has((e) => e.name, 'name').equals('duration')
+          ..has((e) => e.message, 'message').equals('must not be negative');
+      });
+
+      test('$name accepts Duration.zero', () {
+        check(create(Duration.zero)).isNotNull();
+      });
+    }
+  });
+
   group('Reactive Helpers', () {
     reactiveTest('Debounce executes task after duration', (async, log) {
       final debounce = Debounce(const Duration(milliseconds: 100));
@@ -23,7 +57,6 @@ void main() {
       async.elapse(const Duration(milliseconds: 50));
       check(log).isEmpty();
 
-      // Overwrite previous task
       debounce(() => log.add('task2'));
 
       async.elapse(const Duration(milliseconds: 99));
@@ -41,21 +74,18 @@ void main() {
     ) {
       final throttle = ThrottleLatest(const Duration(milliseconds: 100));
 
-      // First call: immediate execution
       throttle(() => log.add('task1'));
       check(log).deepEquals(['task1']);
 
       async.elapse(const Duration(milliseconds: 10));
 
-      // Calls during cooldown are queued
-      throttle(() => log.add('task2')); // overwritten by task3
+      throttle(() => log.add('task2'));
       throttle(() => log.add('task3'));
 
-      check(log).deepEquals(['task1']); // No new execution yet
+      check(log).deepEquals(['task1']);
 
       async.elapse(const Duration(milliseconds: 90));
 
-      // After cooldown, latest pending task executes
       check(log).deepEquals(['task1', 'task3']);
 
       throttle.dispose();
@@ -72,14 +102,12 @@ void main() {
 
       async.elapse(const Duration(milliseconds: 10));
 
-      // Subsequent calls during cooldown are ignored
       throttle(() => log.add('task2'));
       throttle(() => log.add('task3'));
 
       async.elapse(const Duration(milliseconds: 90));
-      check(log).deepEquals(['task1']); // task2 and task3 were ignored
+      check(log).deepEquals(['task1']);
 
-      // Cooldown passed, next call executes immediately
       throttle(() => log.add('task4'));
       check(log).deepEquals(['task1', 'task4']);
 
@@ -92,18 +120,15 @@ void main() {
     ) {
       final throttle = ThrottleLast(const Duration(milliseconds: 100));
 
-      // First call starts timer but doesn't execute immediately
       throttle(() => log.add('task1'));
       check(log).isEmpty();
 
       async.elapse(const Duration(milliseconds: 10));
 
-      // Update task during window
       throttle(() => log.add('task2'));
 
       async.elapse(const Duration(milliseconds: 90));
 
-      // Timer completes, executes latest
       check(log).deepEquals(['task2']);
 
       throttle.dispose();
@@ -140,10 +165,17 @@ void main() {
       check(log).deepEquals(['first']);
     });
 
-    reactiveTest('calling a disposed instance throws in debug', (async, log) {
-      final debounce = Debounce(const Duration(milliseconds: 100))..dispose();
+    reactiveTest('calling a disposed instance throws StateError', (async, log) {
+      const d = Duration(milliseconds: 100);
+      final debounce = Debounce(d)..dispose();
+      final throttleLatest = ThrottleLatest(d)..dispose();
+      final throttleFirst = ThrottleFirst(d)..dispose();
+      final throttleLast = ThrottleLast(d)..dispose();
 
-      check(() => debounce(() => log.add('task'))).throws<FlutterError>();
+      check(() => debounce(() => log.add('task'))).throws<StateError>();
+      check(() => throttleLatest(() => log.add('task'))).throws<StateError>();
+      check(() => throttleFirst(() => log.add('task'))).throws<StateError>();
+      check(() => throttleLast(() => log.add('task'))).throws<StateError>();
       check(log).isEmpty();
     });
   });
