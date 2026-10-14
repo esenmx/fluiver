@@ -69,7 +69,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true }
       - run: flutter pub downgrade
-      - run: flutter analyze --fatal-warnings
+      - run: flutter analyze --fatal-infos --fatal-warnings
       - run: flutter test
 
   pana:
