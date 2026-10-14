@@ -4,6 +4,10 @@ import 'package:flutter/widgets.dart';
 /// A widget that conditionally expands or collapses its [child] and
 /// automatically tracks its bottom edge during expansion to ensure it stays
 /// visible within the nearest [Scrollable].
+///
+/// While collapsed (after the reverse animation completes), [child] stays
+/// mounted in the element tree but is placed [Offstage], muted via
+/// [TickerMode], and skipped by focus traversal via [ExcludeFocus].
 class const ScrollTrackingExpandable({
   /// Whether the widget should be expanded.
   required final bool isExpanded,
@@ -50,21 +54,30 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late CurvedAnimation _animation;
+  bool _scrollScheduled = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-      value: widget.isExpanded ? 1.0 : 0.0,
-    );
-    _controller.addListener(_trackScroll);
+    _controller =
+        AnimationController(
+            vsync: this,
+            duration: widget.duration,
+            value: widget.isExpanded ? 1.0 : 0.0,
+          )
+          ..addListener(_trackScroll)
+          ..addStatusListener(_onStatusChanged);
     _updateAnimation();
   }
 
   void _updateAnimation() {
     _animation = CurvedAnimation(parent: _controller, curve: widget.curve);
+  }
+
+  void _onStatusChanged(AnimationStatus status) {
+    if (status == .dismissed && !widget.isExpanded && mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -81,11 +94,7 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
       if (widget.isExpanded) {
         _controller.forward();
       } else {
-        _controller.reverse().then<void>((_) {
-          if (mounted) {
-            setState(() {});
-          }
-        });
+        _controller.reverse();
       }
     }
   }
@@ -95,7 +104,8 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
     // and the last tick fires with status already completed — defer to
     // post-frame and include completed so the fully expanded extent is
     // revealed.
-    if (mounted && _isExpanding) {
+    if (mounted && _isExpanding && !_scrollScheduled) {
+      _scrollScheduled = true;
       WidgetsBinding.instance.addPostFrameCallback(_showOnScreen);
     }
   }
@@ -106,6 +116,7 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
   };
 
   void _showOnScreen(Duration _) {
+    _scrollScheduled = false;
     if (!mounted || !_isExpanding) return;
     if (context.findRenderObject() case final RenderBox rb) {
       rb.showOnScreen(
@@ -124,6 +135,7 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
     _animation.dispose();
     _controller
       ..removeListener(_trackScroll)
+      ..removeStatusListener(_onStatusChanged)
       ..dispose();
     super.dispose();
   }
