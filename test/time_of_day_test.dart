@@ -1,10 +1,11 @@
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as legacy_material show TimeOfDay;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
-  group('onDate', () {
+  group('onDate (material_ui.TimeOfDay)', () {
     test('anchors time onto date and zeros seconds', () {
       final result = const TimeOfDay(
         hour: 9,
@@ -39,6 +40,25 @@ void main() {
 
     test('UTC date yields a UTC result', () {
       final result = const TimeOfDay(
+        hour: 9,
+        minute: 30,
+      ).onDate(.utc(2024, 6, 15, 23, 59));
+      check(result).equals(.utc(2024, 6, 15, 9, 30));
+      check(result.isUtc).isTrue();
+    });
+  });
+
+  group('onDate (flutter/material.dart TimeOfDay)', () {
+    test('anchors time onto date and zeros seconds', () {
+      final result = const legacy_material.TimeOfDay(
+        hour: 9,
+        minute: 30,
+      ).onDate(DateTime(2024, 6, 15, 23, 59, 59, 999, 999));
+      check(result).equals(DateTime(2024, 6, 15, 9, 30));
+    });
+
+    test('UTC date yields a UTC result', () {
+      final result = const legacy_material.TimeOfDay(
         hour: 9,
         minute: 30,
       ).onDate(.utc(2024, 6, 15, 23, 59));
