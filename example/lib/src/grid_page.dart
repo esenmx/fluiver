@@ -1,5 +1,5 @@
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class const GridPage({super.key}) extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class _GridPageState extends State<GridPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Grid')),
+      appBar: AppBar(title: const Text('Grid')),
       body: Row(
         children: [
           Expanded(
@@ -127,14 +127,12 @@ class _GridPageState extends State<GridPage> {
           Expanded(
             flex: 3,
             child: SingleChildScrollView(
-              scrollDirection: .vertical,
               child: Grid.count(
                 crossAxisCount: _crossAxisCount,
                 mainAxisSpacing: _mainAxisSpacing,
                 crossAxisSpacing: _crossAxisSpacing,
                 childAspectRatio: _aspectRatio,
                 padding: _padding,
-                direction: .vertical,
                 children: [
                   for (var i = 0; i < 100; i++)
                     Container(
@@ -156,12 +154,12 @@ class _GridPageState extends State<GridPage> {
 }
 
 class const IncrementalControl({
-  super.key,
   required final String label,
   required final double value,
   required final double step,
   required final double min,
   required final ValueChanged<double> onChanged,
+  super.key,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

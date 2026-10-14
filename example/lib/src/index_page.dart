@@ -1,6 +1,6 @@
 import 'package:example/src/grid_page.dart';
 import 'package:example/src/ticker_builder_page.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class const IndexPage({super.key}) extends StatelessWidget {
   @override
@@ -12,7 +12,7 @@ class const IndexPage({super.key}) extends StatelessWidget {
             leading: const Icon(Icons.grid_view),
             title: const Text('Grid'),
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
+              MaterialPageRoute<void>(
                 builder: (context) {
                   return const GridPage();
                 },
@@ -23,7 +23,7 @@ class const IndexPage({super.key}) extends StatelessWidget {
             leading: const Icon(Icons.timer),
             title: const Text('TickerBuilder'),
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
+              MaterialPageRoute<void>(
                 builder: (context) {
                   return const TickerBuilderPage();
                 },
