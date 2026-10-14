@@ -1,5 +1,33 @@
 # Changelog
 
+## Unreleased
+
+## 5.0.0 - 2026-10-15
+
+### Breaking
+
+- `TimeOfDayOnDate` (`onDate`) now extends `package:material_ui/material_ui.dart`'s `TimeOfDay`. Callers still using `package:flutter/material.dart`'s `TimeOfDay` with explicit `show TimeOfDayOnDate` or `TimeOfDayOnDate(tod)` overrides should switch to `LegacyTimeOfDayOnDate` (plain barrel imports with implicit `.onDate` resolve automatically).
+- Added `material_ui: ^1.6.0` as a runtime dependency.
+- Removed deprecated `DateTime.withTimeOfDay` (use `time.onDate(date)`).
+- `Debounce`, `ThrottleFirst`, `ThrottleLast`, and `ThrottleLatest` throw `StateError` in all build modes when called after `dispose()` (previously a debug-only `FlutterError`; release builds silently scheduled the task).
+- `DisposableBagException.errors` and `stackTraces` are unmodifiable.
+
+### Added
+
+- `LegacyTimeOfDayOnDate` (`onDate`) for `package:flutter/material.dart`'s `TimeOfDay`.
+
+### Changed
+
+- Decoupled `Color`, `DateTime`, `Iterable`, `TextFieldBuilders`, and `DisposableBag` from `package:flutter/material.dart` runtime imports.
+
+### Fixed
+
+- `Color.darken` and `Color.lighten` map out-of-range extended-sRGB input channels into `[0, 1]` (shift by the lowest channel, then scale by the highest) before the HSL round-trip so hues are preserved instead of collapsing or inverting, and throw `ArgumentError` when `amount` is `NaN`.
+- `DateTime.isWithinFromNow` throws `ArgumentError` when `duration` is negative.
+- `DisposableBag.dispose` runs and awaits disposers registered re-entrantly during an in-flight `dispose()` call inline.
+- `NetworkProbe.checkConnection` calls `socket.destroy()` instead of `await socket.close()`, preventing hangs when a peer accepts the TCP handshake and never sends `FIN`.
+- `ScrollTrackingExpandable` coalesces post-frame scroll callbacks to at most one per frame and uses an animation status listener so rapid collapse/re-expand toggles and `duration: Duration.zero` collapses reliably update offstage state.
+
 ## 4.2.0 - 2026-10-04
 
 ### Added
