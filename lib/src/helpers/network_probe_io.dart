@@ -13,7 +13,7 @@ Future<bool> probeConnection({
       port,
       timeout: timeout,
     );
-    await socket.close();
+    socket.destroy();
     return true;
   } on SocketException {
     return false;
