@@ -3,8 +3,8 @@ library;
 
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 Widget _app({
   required bool isExpanded,
@@ -167,9 +167,12 @@ void main() {
 
     testWidgets('collapsed child is excluded from semantics', (tester) async {
       final handle = tester.ensureSemantics();
-      await tester.pumpWidget(_collapsed(const Text('secret details')));
-      check(find.bySemanticsLabel('secret details').evaluate()).isEmpty();
-      handle.dispose();
+      try {
+        await tester.pumpWidget(_collapsed(const Text('secret details')));
+        check(find.bySemanticsLabel('secret details').evaluate()).isEmpty();
+      } finally {
+        handle.dispose();
+      }
     });
 
     testWidgets('expanded child is reachable by focus traversal', (
@@ -210,6 +213,55 @@ void main() {
       check(_size(tester).height)
         ..isGreaterThan(0)
         ..isLessThan(300);
+    });
+
+    testWidgets('duration: Duration.zero collapse immediately marks child '
+        'offstage on next frame', (tester) async {
+      final hidden = FocusNode();
+      addTearDown(hidden.dispose);
+      Widget build({required bool isExpanded}) => MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [
+              const TextField(key: Key('visible')),
+              ScrollTrackingExpandable(
+                isExpanded: isExpanded,
+                duration: .zero,
+                child: TextField(focusNode: hidden),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(build(isExpanded: true));
+      await tester.pumpWidget(build(isExpanded: false));
+      final offstage = tester.widget<Offstage>(
+        find.descendant(
+          of: find.byType(ScrollTrackingExpandable),
+          matching: find.byType(Offstage),
+        ),
+      );
+      check(offstage.offstage).isTrue();
+    });
+
+    testWidgets('rapid true -> false -> true toggle expands to full height', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_app(isExpanded: true));
+      await tester.pumpWidget(_app(isExpanded: false));
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.pumpWidget(_app(isExpanded: true));
+      await tester.pumpAndSettle();
+
+      check(_size(tester).height).equals(300);
+      final offstage = tester.widget<Offstage>(
+        find.descendant(
+          of: find.byType(ScrollTrackingExpandable),
+          matching: find.byType(Offstage),
+        ),
+      );
+      check(offstage.offstage).isFalse();
     });
   });
 }
