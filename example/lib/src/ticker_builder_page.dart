@@ -1,6 +1,6 @@
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:material_ui/material_ui.dart';
 
 class const TickerBuilderPage({super.key}) extends StatefulWidget {
   @override
@@ -37,12 +37,11 @@ class _TickerBuilderPageState extends State<TickerBuilderPage> {
         mainAxisAlignment: .center,
         children: [
           TickerBuilder(
-            builder: (context, elapsed) {
+            onTick: (elapsed) {
               final formattedValue = _formatDuration(elapsed);
-              _controller.value = TextEditingValue(
-                text: formattedValue,
-                selection: .collapsed(offset: formattedValue.length),
-              );
+              _controller.setTextAndCaret(formattedValue);
+            },
+            builder: (context, elapsed) {
               return Column(
                 mainAxisAlignment: .center,
                 children: [
@@ -100,7 +99,7 @@ class _TickerBuilderPageState extends State<TickerBuilderPage> {
                       ),
                     ],
                     selected: {_selectedFormat},
-                    onSelectionChanged: (Set<TimeFormat> newSelection) {
+                    onSelectionChanged: (newSelection) {
                       setState(() {
                         _selectedFormat = newSelection.first;
                       });

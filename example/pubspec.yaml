@@ -7,16 +7,16 @@ environment:
   sdk: ^3.13.0
 
 dependencies:
-  flutter:
-    sdk: flutter
   fluiver:
     path: ../.
+  flutter:
+    sdk: flutter
   intl: ^0.20.2
+  material_ui: ^1.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
-
+  very_good_analysis: ^11.0.0
 flutter:
   uses-material-design: true
