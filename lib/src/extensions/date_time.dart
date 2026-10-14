@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as legacy_material show TimeOfDay;
 
 /// Merging time components with [DateTime].
 extension DateTimeMerge on DateTime {
@@ -17,7 +17,7 @@ extension DateTimeMerge on DateTime {
   /// Returns this date with its time replaced by [time]; sub-minute
   /// components are zeroed.
   @Deprecated('Use time.onDate(date). Removed in 5.0.0.')
-  DateTime withTimeOfDay(TimeOfDay time) {
+  DateTime withTimeOfDay(legacy_material.TimeOfDay time) {
     return truncateTime().copyWith(hour: time.hour, minute: time.minute);
   }
 }
@@ -47,7 +47,12 @@ extension DateTimeCheck on DateTime {
 
   /// Whether this date is within [duration] of `DateTime.now()`, in either
   /// direction.
+  ///
+  /// Throws [ArgumentError] if [duration] is negative.
   bool isWithinFromNow(Duration duration) {
+    if (duration.isNegative) {
+      throw ArgumentError.value(duration, 'duration', 'must not be negative');
+    }
     return difference(.now()).inMicroseconds.abs() <= duration.inMicroseconds;
   }
 }
