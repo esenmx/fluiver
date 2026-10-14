@@ -1,13 +1,13 @@
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('separated', () {
     List<Widget> separated(int n) {
       final logos = <Widget>[for (var i = 0; i < n; i++) const FlutterLogo()];
-      return logos.separated((_) => const Divider()).toList();
+      return logos.separated((_) => const SizedBox()).toList();
     }
 
     test('empty', () => check(separated(0)).isEmpty());
@@ -20,7 +20,7 @@ void main() {
       final result = separated(2);
       check(result).length.equals(3);
       check(result[0]).isA<FlutterLogo>();
-      check(result[1]).isA<Divider>();
+      check(result[1]).isA<SizedBox>();
       check(result[2]).isA<FlutterLogo>();
     });
     test('alternates correctly', () {
@@ -29,7 +29,7 @@ void main() {
         if (i.isEven) {
           check(result[i]).isA<FlutterLogo>();
         } else {
-          check(result[i]).isA<Divider>();
+          check(result[i]).isA<SizedBox>();
         }
       }
     });

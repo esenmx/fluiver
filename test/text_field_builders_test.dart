@@ -1,7 +1,9 @@
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
+
+import '_helpers.dart';
 
 void main() {
   group('TextFieldBuilders.disabledCounter', () {
@@ -35,7 +37,7 @@ void main() {
             body: TextField(
               maxLength: 10,
               buildCounter: TextFieldBuilders.disabledCounter,
-              controller: TextEditingController(text: 'abc'),
+              controller: newTextEditingController(text: 'abc'),
             ),
           ),
         ),

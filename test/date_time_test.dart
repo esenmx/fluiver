@@ -1,6 +1,5 @@
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart' as legacy_material show TimeOfDay;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -15,17 +14,6 @@ void main() {
       final result = DateTime.utc(1990, 6, 26, 8, 30).truncateTime();
       check(result).equals(DateTime.utc(1990, 6, 26));
       check(result.isUtc).isTrue();
-    });
-  });
-
-  group('withTimeOfDay', () {
-    test('replaces time components', () {
-      // Pins the deprecated API until its 5.0.0 removal.
-      // ignore: deprecated_member_use_from_same_package
-      final merged = dt.withTimeOfDay(
-        const legacy_material.TimeOfDay(hour: 14, minute: 5),
-      );
-      check(merged).equals(DateTime(1990, 6, 26, 14, 5));
     });
   });
 
