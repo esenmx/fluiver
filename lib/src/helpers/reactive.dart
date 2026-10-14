@@ -7,11 +7,16 @@ mixin _TimerMixin {
   Timer? _timer;
   bool _disposed = false;
 
-  bool get _debugNotDisposed {
-    if (_disposed) {
-      throw FlutterError('A $runtimeType was used after being disposed.');
+  void _checkDuration(Duration duration) {
+    if (duration < Duration.zero) {
+      throw ArgumentError.value(duration, 'duration', 'must not be negative');
     }
-    return true;
+  }
+
+  void _checkNotDisposed() {
+    if (_disposed) {
+      throw StateError('$runtimeType was used after being disposed.');
+    }
   }
 
   /// Cancels any pending task. The object must not be used afterwards.
@@ -28,11 +33,17 @@ class Debounce(
   final Duration duration,
 ) with _TimerMixin {
   /// Creates a debouncer with the given quiet-period [duration].
-  this;
+  ///
+  /// Throws [ArgumentError] if [duration] is negative.
+  this {
+    _checkDuration(duration);
+  }
 
   /// Schedules [task] to run after [duration]; replaces any pending task.
+  ///
+  /// Throws [StateError] if called after [dispose].
   void call(VoidCallback task) {
-    assert(_debugNotDisposed, 'used after dispose');
+    _checkNotDisposed();
     _timer?.cancel();
     _timer = Timer(duration, task);
   }
@@ -45,7 +56,11 @@ class ThrottleLatest(
   final Duration duration,
 ) with _TimerMixin {
   /// Creates a throttler with the given cooldown [duration].
-  this;
+  ///
+  /// Throws [ArgumentError] if [duration] is negative.
+  this {
+    _checkDuration(duration);
+  }
   VoidCallback? _pending;
 
   void _onTimerComplete() {
@@ -58,8 +73,10 @@ class ThrottleLatest(
 
   /// Runs [task] immediately if no window is active, otherwise queues it
   /// as the latest pending task.
+  ///
+  /// Throws [StateError] if called after [dispose].
   void call(VoidCallback task) {
-    assert(_debugNotDisposed, 'used after dispose');
+    _checkNotDisposed();
     if (_timer?.isActive != true) {
       _timer = Timer(duration, _onTimerComplete);
       task();
@@ -82,11 +99,17 @@ class ThrottleFirst(
   final Duration duration,
 ) with _TimerMixin {
   /// Creates a throttler with the given cooldown [duration].
-  this;
+  ///
+  /// Throws [ArgumentError] if [duration] is negative.
+  this {
+    _checkDuration(duration);
+  }
 
   /// Runs [task] immediately if no window is active, otherwise drops it.
+  ///
+  /// Throws [StateError] if called after [dispose].
   void call(VoidCallback task) {
-    assert(_debugNotDisposed, 'used after dispose');
+    _checkNotDisposed();
     if (_timer?.isActive != true) {
       _timer = Timer(duration, () {});
       task();
@@ -101,13 +124,19 @@ class ThrottleLast(
   final Duration duration,
 ) with _TimerMixin {
   /// Creates a throttler with the given trailing-window [duration].
-  this;
+  ///
+  /// Throws [ArgumentError] if [duration] is negative.
+  this {
+    _checkDuration(duration);
+  }
   VoidCallback? _last;
 
   /// Stores [task] as the latest, scheduling it to run after [duration]
   /// if no run is already pending.
+  ///
+  /// Throws [StateError] if called after [dispose].
   void call(VoidCallback task) {
-    assert(_debugNotDisposed, 'used after dispose');
+    _checkNotDisposed();
     _last = task;
     if (_timer?.isActive != true) {
       _timer = Timer(duration, () {
