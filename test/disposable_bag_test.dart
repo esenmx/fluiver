@@ -27,40 +27,107 @@ void main() {
       check(bag.isDisposed).isTrue();
     });
 
-    test('add after dispose runs disposer immediately', () async {
-      final calls = <String>[];
-      final bag = DisposableBag();
-      await bag.dispose();
-      bag.add(() => calls.add('late'));
-      // Allow the queued microtask to flush.
-      await Future<void>.delayed(.zero);
-      check(calls).deepEquals(['late']);
-      check(bag.length).equals(0);
-    });
+    test(
+      'add after dispose throws StateError and never runs the disposer',
+      () async {
+        final calls = <String>[];
+        final bag = DisposableBag();
+        await bag.dispose();
 
-    test('add after dispose propagates error if disposer throws', () async {
-      final bag = DisposableBag();
-      await bag.dispose();
+        check(() => bag.add(() => calls.add('late'))).throws<StateError>();
+        check(() => bag.addAll([() => calls.add('late')])).throws<StateError>();
+        await Future<void>.delayed(.zero);
+        check(calls).isEmpty();
+        check(bag.length).equals(0);
+      },
+    );
 
-      Object? caughtError;
-      runZonedGuarded(
-        () {
-          bag.add(() => throw Exception('late error'));
-        },
-        (error, _) {
-          caughtError = error;
-        },
+    test('dispose called from its own disposer throws StateError', () async {
+      var calls = 0;
+      late final DisposableBag bag;
+      bag = DisposableBag()
+        ..add(() => bag.dispose())
+        ..add(() async {
+          await null;
+          bag.add(() => calls++);
+        });
+
+      await check(bag.dispose()).throws<DisposableBagException>(
+        (it) => it.has((e) => e.errors, 'errors')
+          ..length.equals(1)
+          ..first.isA<StateError>(),
       );
-
-      // Allow the queued microtask to flush.
-      await Future<void>.delayed(.zero);
-
-      check(caughtError)
-        ..isNotNull()
-        ..isA<Exception>()
-            .has((e) => e.toString(), 'toString')
-            .contains('late error');
+      check(calls).equals(1);
     });
+
+    test('a disposer awaiting its own bag fails instead of hanging', () async {
+      late final DisposableBag bag;
+      bag = DisposableBag()..add(() async => await bag.dispose());
+
+      await check(bag.dispose().timeout(const Duration(seconds: 1)))
+          .throws<DisposableBagException>(
+            (it) => it.has((e) => e.errors.single, 'error').isA<StateError>(),
+          );
+    });
+
+    test('a cycle between two bags fails instead of hanging', () async {
+      final a = DisposableBag();
+      final b = DisposableBag();
+      a.add(() async => await b.dispose());
+      b.add(() async => await a.dispose());
+
+      await check(a.dispose().timeout(const Duration(seconds: 1)))
+          .throws<DisposableBagException>(
+            (it) => it
+                .has((e) => e.errors.single, 'error')
+                .isA<DisposableBagException>(),
+          );
+    });
+
+    test(
+      'a second dispose during an in-flight dispose settles with it',
+      () async {
+        final gate = Completer<void>();
+        var released = false;
+        final bag = DisposableBag()
+          ..add(() async {
+            await gate.future;
+            released = true;
+          });
+
+        final first = bag.dispose();
+        var secondSettled = false;
+        final second = bag.dispose().then((_) => secondSettled = true);
+        await Future<void>.delayed(.zero);
+        check(
+          because: 'the slow disposer has not finished',
+          secondSettled,
+        ).isFalse();
+
+        gate.complete();
+        await Future.wait([first, second]);
+        check(released).isTrue();
+        check(secondSettled).isTrue();
+      },
+    );
+
+    test(
+      'a second dispose during an in-flight dispose surfaces its errors',
+      () async {
+        final gate = Completer<void>();
+        final bag = DisposableBag()
+          ..add(() async {
+            await gate.future;
+            throw StateError('boom');
+          });
+
+        final first = bag.dispose();
+        final second = bag.dispose();
+        gate.complete();
+        await check(first).throws<DisposableBagException>();
+        await check(second).throws<DisposableBagException>();
+      },
+    );
 
     test('length tracks pending disposers', () async {
       final bag = DisposableBag()
@@ -187,6 +254,33 @@ void main() {
             ]),
       );
     });
+
+    test('runs inline, awaits, and collects errors from disposers added '
+        're-entrantly during dispose', () async {
+      final calls = <String>[];
+      final bag = DisposableBag();
+      bag
+        ..add(() {
+          calls.add('outer');
+          bag
+            ..add(() => calls.add('late'))
+            ..add(() async {
+              await Future<void>.delayed(const Duration(milliseconds: 5));
+              calls.add('reentrant');
+              throw Exception('reentrant failure');
+            });
+        })
+        ..add(() => calls.add('second'));
+
+      await check(bag.dispose()).throws<DisposableBagException>(
+        (e) => e
+            .has((e) => e.errors.map((o) => o.toString()).toList(), 'errors')
+            .deepEquals(['Exception: reentrant failure']),
+      );
+      check(calls).deepEquals(['outer', 'late', 'second', 'reentrant']);
+      check(bag.isDisposed).isTrue();
+      check(bag.length).equals(0);
+    });
   });
 
   group('DisposableBagException', () {
@@ -210,6 +304,17 @@ void main() {
         ' - Exception: first error\n'
         ' - second error',
       );
+    });
+
+    test('errors and stackTraces lists are unmodifiable', () {
+      final exception = DisposableBagException(
+        [Exception('e')],
+        stackTraces: [StackTrace.current],
+      );
+
+      check(() => exception.errors.add('x')).throws<UnsupportedError>();
+      check(() => exception.stackTraces.add(StackTrace.current))
+          .throws<UnsupportedError>();
     });
   });
 }
