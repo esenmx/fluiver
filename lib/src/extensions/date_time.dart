@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart' as legacy_material show TimeOfDay;
-
 /// Merging time components with [DateTime].
 extension DateTimeMerge on DateTime {
   /// Returns this date with hour/minute/second/millisecond/microsecond
@@ -12,13 +10,6 @@ extension DateTimeMerge on DateTime {
       millisecond: 0,
       microsecond: 0,
     );
-  }
-
-  /// Returns this date with its time replaced by [time]; sub-minute
-  /// components are zeroed.
-  @Deprecated('Use time.onDate(date). Removed in 5.0.0.')
-  DateTime withTimeOfDay(legacy_material.TimeOfDay time) {
-    return truncateTime().copyWith(hour: time.hour, minute: time.minute);
   }
 }
 

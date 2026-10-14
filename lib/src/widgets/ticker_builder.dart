@@ -13,11 +13,14 @@ import 'package:flutter/widgets.dart';
 /// rebuilds and `pumpAndSettle` settles.
 class const TickerBuilder({
   /// Called every frame with the elapsed running time (time spent disabled
-  /// excluded).
+  /// excluded). Keep [builder] pure; put per-frame controller or notifier
+  /// mutations in [onTick].
   required final Widget Function(BuildContext context, Duration elapsed)
   builder,
 
-  /// Optional side-effect callback invoked every frame alongside [builder].
+  /// Optional side-effect callback invoked on every ticker frame with the
+  /// updated elapsed running time (not called on the initial build before the
+  /// first tick).
   final void Function(Duration elapsed)? onTick,
 
   /// Whether the ticker runs. While `false` no frames are scheduled and the

@@ -1,6 +1,6 @@
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -8,13 +8,11 @@ void main() {
     testWidgets('builds with zero elapsed on first frame', (tester) async {
       Duration? captured;
       await tester.pumpWidget(
-        MaterialApp(
-          home: TickerBuilder(
-            builder: (context, elapsed) {
-              captured = elapsed;
-              return const SizedBox.shrink();
-            },
-          ),
+        TickerBuilder(
+          builder: (context, elapsed) {
+            captured = elapsed;
+            return const SizedBox.shrink();
+          },
         ),
       );
       check(captured).equals(.zero);
@@ -25,13 +23,11 @@ void main() {
     ) async {
       final samples = <Duration>[];
       await tester.pumpWidget(
-        MaterialApp(
-          home: TickerBuilder(
-            builder: (context, elapsed) {
-              samples.add(elapsed);
-              return const SizedBox.shrink();
-            },
-          ),
+        TickerBuilder(
+          builder: (context, elapsed) {
+            samples.add(elapsed);
+            return const SizedBox.shrink();
+          },
         ),
       );
       await tester.pump(const Duration(milliseconds: 16));
@@ -43,11 +39,9 @@ void main() {
     testWidgets('calls onTick callback', (tester) async {
       Duration? ticked;
       await tester.pumpWidget(
-        MaterialApp(
-          home: TickerBuilder(
-            onTick: (elapsed) => ticked = elapsed,
-            builder: (context, elapsed) => const SizedBox.shrink(),
-          ),
+        TickerBuilder(
+          onTick: (elapsed) => ticked = elapsed,
+          builder: (context, elapsed) => const SizedBox.shrink(),
         ),
       );
       await tester.pump(const Duration(milliseconds: 16));
@@ -59,12 +53,10 @@ void main() {
     ) async {
       var ticks = 0;
       await tester.pumpWidget(
-        MaterialApp(
-          home: TickerBuilder(
-            enabled: false,
-            onTick: (_) => ticks++,
-            builder: (context, elapsed) => const SizedBox.shrink(),
-          ),
+        TickerBuilder(
+          enabled: false,
+          onTick: (_) => ticks++,
+          builder: (context, elapsed) => const SizedBox.shrink(),
         ),
       );
       check(tester.binding.transientCallbackCount).equals(0);
@@ -76,12 +68,10 @@ void main() {
       tester,
     ) async {
       var last = Duration.zero;
-      Widget app({required bool enabled}) => MaterialApp(
-        home: TickerBuilder(
-          enabled: enabled,
-          onTick: (elapsed) => last = elapsed,
-          builder: (context, elapsed) => const SizedBox.shrink(),
-        ),
+      Widget app({required bool enabled}) => TickerBuilder(
+        enabled: enabled,
+        onTick: (elapsed) => last = elapsed,
+        builder: (context, elapsed) => const SizedBox.shrink(),
       );
 
       await tester.pumpWidget(app(enabled: true));
