@@ -91,7 +91,9 @@ const TimeOfDay(hour: 9, minute: 0).onDate(meeting.day);    // any date 09:00
 ```
 
 `onDate(date)` takes the calendar day explicitly — no hidden
-`DateTime.now()`, deterministic in tests.
+`DateTime.now()`, deterministic in tests. Supports both
+`package:material_ui/material_ui.dart` and `package:flutter/material.dart`
+`TimeOfDay`.
 
 ### `Future.timeoutOrNull`
 
@@ -214,7 +216,8 @@ ScrollTrackingExpandable(
 );
 ```
 
-Collapse never scrolls; only expansion tracks.
+Collapse never scrolls; only expansion tracks. If there is no enclosing
+`Scrollable`, the size animation still runs without scroll tracking.
 
 ### Debounce / Throttle
 
@@ -227,7 +230,8 @@ TextField(
 ```
 
 `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` cover the rate-limit
-variants. All four expose `dispose()`.
+variants. All four expose `dispose()` and throw `StateError` if called
+after disposal.
 
 ### `LRUCache` / `DisposableBag`
 
