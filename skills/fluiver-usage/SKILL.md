@@ -15,7 +15,7 @@ description: SDK gap-fillers via package:fluiver — use instead of reinventing.
 
 ## Debounce / Throttle
 
-`Debounce(Duration)`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` — callable (`d(() => …)`), all expose `dispose()`. Run in the widget, never inside a notifier.
+`Debounce(Duration)`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` — callable (`d(() => …)`), all expose `dispose()` and throw `StateError` if called after disposal. Run in the widget, never inside a notifier.
 
 |Variant|Fires|
 |--|--|
@@ -36,13 +36,13 @@ ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
 
 ## Extensions
 
-- **DateTime predicates**: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow(Duration)`, `age({at})` (full years from both dates' calendar fields as stored, no zone conversion; `at` defaults to local now; `.toLocal()` a local date saved via `.toUtc()`), `truncateTime()` (→ midnight, keeps UTC flag). No arithmetic helpers — stdlib `Duration`.
-- **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day. Day passed explicitly — deterministic in tests.
+- **DateTime predicates**: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow(Duration)` (throws `ArgumentError` if negative), `age({at})` (full years from both dates' calendar fields as stored, no zone conversion; `at` defaults to local now; `.toLocal()` a local date saved via `.toUtc()`), `truncateTime()` (→ midnight, keeps UTC flag). No arithmetic helpers — stdlib `Duration`.
+- **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day (supports both `package:material_ui/material_ui.dart` and `package:flutter/material.dart` `TimeOfDay`). Day passed explicitly — deterministic in tests.
 - **Enum**: `with EnumIndexComparable<MyEnum>` adds `<`/`>`/`compareTo` by index type-safely. `values.byNameOrNull(name)` → nullable, for untrusted input (stdlib `byName` throws); chain `?? .fallback`.
 - **Iterable**: `separated((i) => sep)` (interleave by index slot); `windowed(size, {step})` — sliding window, **drops the partial trailing window** (vs non-overlapping `collection.slices`).
 - **Map**: `where` over `(k, v)`; `whereKeyType<T>()`, `whereValueType<T>()` (narrowed static type); `entryOf(key)` → `MapEntry?`, null **only when the key is absent** (present-with-null ≠ missing).
 - **Object.let** (`T extends Object`): transform-and-return; `?.let(...)` for null-aware (`env['PORT']?.let(int.parse)`). Skip for side-effect-only calls, multi-line bodies, chains beyond three.
-- **Color** (HSL): `darken([amount])`, `lighten([amount])` (default ±0.1), `contrastText` (black/white with the higher contrast ratio).
+- **Color** (HSL): `darken([amount])`, `lighten([amount])` (default ±0.1; throws `ArgumentError` on `NaN`), `contrastText` (black/white with the higher contrast ratio).
 - **ScrollController**: `atTop`, `atBottom`, `animateToTop({duration, curve})`, `animateToBottom(...)` — `hasClients`-safe no-ops when unattached; `atTop`/`atBottom` true only when every attached view is at that edge.
 - **Future**: `timeoutOrNull(Duration)` → `Future<T?>` — null on timeout **only**; underlying errors still throw.
 - **TextEditingController**: `setTextAndCaret(text, {caret})` — text + caret in one shot (`.text =` resets caret to 0).
