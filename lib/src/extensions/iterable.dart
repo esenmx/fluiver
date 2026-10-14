@@ -1,6 +1,8 @@
-import 'dart:collection';
+/// @docImport 'package:flutter/widgets.dart';
+/// @docImport 'package:material_ui/material_ui.dart';
+library;
 
-import 'package:flutter/material.dart';
+import 'dart:collection';
 
 /// Separating [Iterable] elements.
 extension IterableSeparator<E> on Iterable<E> {

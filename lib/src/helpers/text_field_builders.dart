@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart';
+/// @docImport 'package:material_ui/material_ui.dart';
+library;
+
+import 'package:flutter/widgets.dart';
 
 /// Reusable callbacks for [TextField]'s builder slots.
 abstract final class TextFieldBuilders {

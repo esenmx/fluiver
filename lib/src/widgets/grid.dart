@@ -286,12 +286,13 @@ class RenderGrid({
                 geometry.mainAxisExtent
           : geometry.scrollOffset;
 
-      final parentData = child.parentData! as _GridParentData
-        ..offset = _isVertical
+      if (child.parentData case final _GridParentData parentData) {
+        parentData.offset = _isVertical
             ? Offset(p.left + geometry.crossAxisOffset, p.top + mainOffset)
             : Offset(p.left + mainOffset, p.top + geometry.crossAxisOffset);
+      }
 
-      child = parentData.nextSibling;
+      child = childAfter(child);
       index++;
     }
   }
@@ -337,7 +338,7 @@ class RenderGrid({
             : geometry.crossAxisOffset;
         return childBaseline + paddingTop + top;
       }
-      child = (child.parentData! as _GridParentData).nextSibling;
+      child = childAfter(child);
       index++;
     }
     return null;
@@ -357,7 +358,7 @@ class RenderGrid({
     while (child != null) {
       final extent = measure(child);
       if (extent > maxChild) maxChild = extent;
-      child = (child.parentData! as _GridParentData).nextSibling;
+      child = childAfter(child);
     }
     final delegate = _gridDelegate;
     if (delegate is SliverGridDelegateWithFixedCrossAxisCount) {
