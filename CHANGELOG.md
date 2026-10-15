@@ -1,7 +1,5 @@
 # Changelog
 
-## Unreleased
-
 ## 5.0.0 - 2026-10-15
 
 ### Breaking
@@ -20,6 +18,9 @@
 - `Future.timeoutOrNull` is only available on `Future<T>` with a non-nullable `T`, so `null` always means the timeout elapsed.
 - `NetworkProbe.checkConnection` throws `UnsupportedError` on web (previously returned `navigator.onLine`); use `NetworkProbe.isBrowserOnline()`.
 - `Grid` reports an unbounded cross axis in every build mode (previously a debug-only assert).
+- `Iterable.windowed` is now `slidingWindows` (extension `IterableSlidingWindows`), and `Object.let` is now `into` (extension `ObjectInto`): the old names clashed with `package:dartx`'s `windowed` and other packages' `.let`. Migration: rename the call sites.
+- `LocaleListener` and `BrightnessListener` register themselves with `WidgetsBinding` on construction and stop on `dispose()`, like `AppLifecycleListener`; a second `dispose()` throws `StateError`. They are no longer `WidgetsBindingObserver`s, so a leftover `WidgetsBinding.instance.addObserver(listener)` fails to compile instead of double-firing. Migration: delete the `addObserver`/`removeObserver` calls and call `listener.dispose()`.
+- `Debounce`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest`, `LRUCache`, `DisposableBag`, `DisposableBagException`, `LocaleListener`, and `BrightnessListener` are `final` classes: they can't be extended or implemented outside fluiver.
 
 ### Added
 

@@ -33,7 +33,7 @@ import 'dart:async';
 /// [dispose] call; adding after [dispose] has settled throws [StateError].
 /// Calling [dispose] from one of the bag's own disposers, directly or through
 /// another bag's disposer, throws [StateError]: it would wait on itself.
-class DisposableBag {
+final class DisposableBag {
   static final Object _runningKey = Object();
 
   static Set<DisposableBag> _runningBags() =>
@@ -160,7 +160,7 @@ class DisposableBag {
 
 /// Exception thrown when one or more disposers throw during
 /// [DisposableBag.dispose].
-class DisposableBagException implements Exception {
+final class DisposableBagException implements Exception {
   /// Creates a [DisposableBagException] with unmodifiable [errors] and
   /// [stackTraces] lists.
   new(List<Object> errors, {List<StackTrace> stackTraces = const []})

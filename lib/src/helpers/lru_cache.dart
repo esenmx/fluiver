@@ -15,7 +15,7 @@ import 'dart:collection';
 ///
 /// Backed by [LinkedHashMap] insertion order — O(1) reads, writes, and
 /// eviction. Not thread-safe; isolates each have their own cache.
-class LRUCache<K, V>({
+final class LRUCache<K, V>({
   /// Maximum number of entries the cache holds before evicting.
   required final int maxEntries,
 }) {

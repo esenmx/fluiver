@@ -35,9 +35,9 @@ void main() {
     });
   });
 
-  group('windowed', () {
+  group('slidingWindows', () {
     test('default step yields every overlapping window', () {
-      check([1, 2, 3, 4, 5].windowed(3).toList()).deepEquals([
+      check([1, 2, 3, 4, 5].slidingWindows(3).toList()).deepEquals([
         [1, 2, 3],
         [2, 3, 4],
         [3, 4, 5],
@@ -45,31 +45,32 @@ void main() {
     });
 
     test('custom step skips elements between windows', () {
-      check([1, 2, 3, 4, 5].windowed(2, step: 2).toList()).deepEquals([
+      check([1, 2, 3, 4, 5].slidingWindows(2, step: 2).toList()).deepEquals([
         [1, 2],
         [3, 4],
       ]);
     });
 
     test('step larger than size skips inputs between windows', () {
-      check([1, 2, 3, 4, 5, 6, 7].windowed(2, step: 3).toList()).deepEquals([
-        [1, 2],
-        [4, 5],
-      ]);
+      check([1, 2, 3, 4, 5, 6, 7].slidingWindows(2, step: 3).toList())
+          .deepEquals([
+            [1, 2],
+            [4, 5],
+          ]);
     });
 
     test('drops partial trailing window', () {
-      check([1, 2, 3, 4].windowed(3, step: 2).toList()).deepEquals([
+      check([1, 2, 3, 4].slidingWindows(3, step: 2).toList()).deepEquals([
         [1, 2, 3],
       ]);
     });
 
     test('empty when size exceeds length', () {
-      check([1, 2].windowed(3).toList()).isEmpty();
+      check([1, 2].slidingWindows(3).toList()).isEmpty();
     });
 
     test('size 1 with default step is one window per element', () {
-      check([1, 2, 3].windowed(1).toList()).deepEquals([
+      check([1, 2, 3].slidingWindows(1).toList()).deepEquals([
         [1],
         [2],
         [3],
@@ -77,28 +78,29 @@ void main() {
     });
 
     test('size 0 throws naming size', () {
-      check(() => [1, 2, 3].windowed(0).toList()).throws<RangeError>()
+      check(() => [1, 2, 3].slidingWindows(0).toList()).throws<RangeError>()
         ..has((e) => e.name, 'name').equals('size')
         ..has((e) => e.message, 'message').equals('must be > 0');
     });
 
     test('step 0 throws naming step', () {
-      check(() => [1, 2, 3].windowed(2, step: 0).toList()).throws<RangeError>()
+      check(() => [1, 2, 3].slidingWindows(2, step: 0).toList())
+          .throws<RangeError>()
         ..has((e) => e.name, 'name').equals('step')
         ..has((e) => e.message, 'message').equals('must be > 0');
     });
 
-    // A block body: `check(() => it.windowed(0))` passes falsely, because
+    // A block body: `check(() => it.slidingWindows(0))` passes falsely, because
     // the subject prints the returned lazy iterable inside its try.
-    test('windowed(0) throws at the call site', () {
+    test('slidingWindows(0) throws at the call site', () {
       check(() {
-        [1, 2, 3].windowed(0);
+        [1, 2, 3].slidingWindows(0);
       }).throws<RangeError>();
     });
 
-    test('windowed(2, step: 0) throws at the call site', () {
+    test('slidingWindows(2, step: 0) throws at the call site', () {
       check(() {
-        [1, 2, 3].windowed(2, step: 0);
+        [1, 2, 3].slidingWindows(2, step: 0);
       }).throws<RangeError>();
     });
 
@@ -111,7 +113,7 @@ void main() {
         }
       }
 
-      source().windowed(3).take(1).toList();
+      source().slidingWindows(3).take(1).toList();
 
       check(pulls).equals(3);
     });
