@@ -34,9 +34,9 @@ extension IterableSeparator<E> on Iterable<E> {
 /// Stepped sliding-window iteration over an [Iterable].
 ///
 /// Fills a gap left by `package:collection` — its `slices` only yields
-/// non-overlapping chunks, with no step parameter. Named after Kotlin's
-/// `windowed` for cross-language familiarity.
-extension IterableWindowed<E> on Iterable<E> {
+/// non-overlapping chunks, with no step parameter. Kotlin's `windowed`,
+/// named so it doesn't clash with `package:dartx`'s `windowed`.
+extension IterableSlidingWindows<E> on Iterable<E> {
   /// Yields fixed-[size] windows, advancing by [step] each time.
   ///
   /// - [size] must be `> 0`.
@@ -45,17 +45,17 @@ extension IterableWindowed<E> on Iterable<E> {
   ///   dropped — matches Kotlin's default `partialWindows: false`.
   ///
   /// ```dart
-  /// [1, 2, 3, 4, 5].windowed(3);            // ([1,2,3], [2,3,4], [3,4,5])
-  /// [1, 2, 3, 4, 5].windowed(2, step: 2);   // ([1,2], [3,4])
-  /// [1, 2].windowed(3);                     // () — size > length
+  /// [1, 2, 3, 4, 5].slidingWindows(3);            // ([1,2,3], [2,3,4], [3,4,5])
+  /// [1, 2, 3, 4, 5].slidingWindows(2, step: 2);   // ([1,2], [3,4])
+  /// [1, 2].slidingWindows(3);                     // () — size > length
   /// ```
-  Iterable<List<E>> windowed(int size, {int step = 1}) {
+  Iterable<List<E>> slidingWindows(int size, {int step = 1}) {
     if (size < 1) throw RangeError.value(size, 'size', 'must be > 0');
     if (step < 1) throw RangeError.value(step, 'step', 'must be > 0');
-    return _windowed(size, step);
+    return _slidingWindows(size, step);
   }
 
-  Iterable<List<E>> _windowed(int size, int step) sync* {
+  Iterable<List<E>> _slidingWindows(int size, int step) sync* {
     final buffer = ListQueue<E>(size);
     var skip = 0;
     for (final element in this) {
