@@ -17,12 +17,18 @@ abstract final class NetworkProbe {
   /// retransmits at ~1s intervals), so a lossy-but-usable mobile network
   /// still reports `true`.
   ///
-  /// On web this returns the browser's `navigator.onLine` (`false` only when
-  /// the browser knows it is offline); [host], [port] and [timeout] are
-  /// ignored there.
+  /// Throws [UnsupportedError] on web, which has no TCP sockets; use
+  /// [isBrowserOnline] there.
   static Future<bool> checkConnection({
     String host = '1.0.0.1',
     int port = 53,
     Duration timeout = const Duration(seconds: 3),
   }) => probeConnection(host: host, port: port, timeout: timeout);
+
+  /// Returns the browser's `navigator.onLine` — `false` only when the
+  /// browser knows it is offline, so `true` does not prove any server is
+  /// reachable.
+  ///
+  /// Throws [UnsupportedError] off the web; use [checkConnection] there.
+  static bool isBrowserOnline() => browserOnline();
 }

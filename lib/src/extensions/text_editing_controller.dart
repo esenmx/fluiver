@@ -7,19 +7,20 @@ extension TextEditingControllerCaret on TextEditingController {
   ///
   /// Setting [TextEditingController.text] directly resets the caret to
   /// offset `0` — a well-known SDK papercut. This sets [value] in one
-  /// shot so the caret lands where you asked. Out-of-range [caret] is
-  /// clamped to `0..text.length`.
+  /// shot so the caret lands where you asked. Throws [RangeError] if
+  /// [caret] is outside `0..text.length`.
   ///
   /// ```dart
   /// controller.setTextAndCaret('hello');         // caret at 5 (end)
   /// controller.setTextAndCaret('hello', caret: 0); // caret at start
   /// ```
   void setTextAndCaret(String text, {int? caret}) {
+    if (caret != null) {
+      RangeError.checkValueInInterval(caret, 0, text.length, 'caret');
+    }
     value = TextEditingValue(
       text: text,
-      selection: .collapsed(
-        offset: (caret ?? text.length).clamp(0, text.length),
-      ),
+      selection: .collapsed(offset: caret ?? text.length),
     );
   }
 }

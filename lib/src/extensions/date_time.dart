@@ -25,16 +25,16 @@ extension DateTimeCheck on DateTime {
   }
 
   /// Whether this date is the current local calendar day.
-  bool get isToday => _offsetChecker(0);
+  bool isToday() => _offsetChecker(0);
 
   /// Whether this date is the next local calendar day.
-  bool get isTomorrow => _offsetChecker(1);
+  bool isTomorrow() => _offsetChecker(1);
 
   /// Whether this date is the previous local calendar day.
-  bool get isYesterday => _offsetChecker(-1);
+  bool isYesterday() => _offsetChecker(-1);
 
   /// Whether this date is in the current local calendar year.
-  bool get inThisYear => toLocal().year == DateTime.now().year;
+  bool inThisYear() => toLocal().year == DateTime.now().year;
 
   /// Whether this date is within [duration] of `DateTime.now()`, in either
   /// direction.

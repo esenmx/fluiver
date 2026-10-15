@@ -23,12 +23,19 @@ void _stubOnLine({required bool online}) {
 }
 
 void main() {
-  test('reports navigator.onLine = false as offline', () async {
+  test('isBrowserOnline reports navigator.onLine = false', () async {
     _stubOnLine(online: false);
-    check(await NetworkProbe.checkConnection()).isFalse();
+    check(NetworkProbe.isBrowserOnline()).isFalse();
   });
-  test('reports navigator.onLine = true as online', () async {
+
+  test('isBrowserOnline reports navigator.onLine = true', () async {
     _stubOnLine(online: true);
-    check(await NetworkProbe.checkConnection()).isTrue();
+    check(NetworkProbe.isBrowserOnline()).isTrue();
+  });
+
+  test('checkConnection throws UnsupportedError on web', () {
+    check(NetworkProbe.checkConnection).throws<UnsupportedError>();
+    check(() => NetworkProbe.checkConnection(host: '10.0.0.5', port: 443))
+        .throws<UnsupportedError>();
   });
 }

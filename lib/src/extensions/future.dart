@@ -1,7 +1,10 @@
 import 'dart:async';
 
 /// Null-on-timeout variant of [Future.timeout].
-extension FutureTimeout<T> on Future<T> {
+///
+/// Only for futures of non-nullable values, so `null` always means the
+/// timeout elapsed; use [Future.timeout] for a `Future<T?>`.
+extension FutureTimeout<T extends Object> on Future<T> {
   /// Returns `null` instead of throwing on [TimeoutException].
   ///
   /// Errors from the underlying future still propagate — only the
