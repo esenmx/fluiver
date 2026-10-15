@@ -32,7 +32,7 @@ body:
     id: package-version
     attributes:
       label: fluiver version
-      placeholder: 4.2.0
+      placeholder: 5.0.0
     validations:
       required: true
   - type: textarea
