@@ -29,9 +29,39 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+      - name: CHANGELOG and podspec match the pubspec version
+        run: |
+          version=$(sed -n 's/^version:[[:space:]]*//p' pubspec.yaml | head -1)
+          status=0
+          top=$(grep -m1 '^## ' CHANGELOG.md || true)
+          case "$top" in
+            "## Unreleased" | "## $version" | "## $version - "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+            *) echo "::error file=CHANGELOG.md::top heading '$top' is neither '## Unreleased' nor '## $version'"; status=1 ;;
+          esac
+          released=$(grep -m1 -E '^## [0-9]' CHANGELOG.md | sed -E 's/^## ([^ ]+).*/\1/' || true)
+          if [ "$released" != "$version" ]; then
+            echo "::error file=CHANGELOG.md::newest versioned heading is '$released', pubspec.yaml is $version"
+            status=1
+          fi
+          podspecs=0
+          while IFS= read -r podspec; do
+            podspecs=$((podspecs+1))
+            podspec_version=$(sed -nE "s/.*s\.version[[:space:]]*=[[:space:]]*'([^']+)'.*/\1/p" "$podspec" | head -1)
+            if [ "$podspec_version" != "$version" ]; then
+              echo "::error file=$podspec::podspec version '$podspec_version', pubspec.yaml is $version"
+              status=1
+            fi
+          done < <(find . -name '*.podspec' -not -path './example/*' -not -path './build/*' -not -path './.dart_tool/*')
+          if grep -qE '^[[:space:]]+plugin:' pubspec.yaml && grep -qE '^[[:space:]]+(ios|macos):' pubspec.yaml && [ "$podspecs" -eq 0 ]; then
+            echo "::error::pubspec.yaml declares an iOS/macOS plugin but no podspec was found"
+            status=1
+          fi
+          exit $status
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true }
       - run: flutter pub get
+      - name: README and skill snippets compile
+        run: dart run tool/check_snippets.dart --import package:fluiver/fluiver.dart --import package:material_ui/material_ui.dart
       - run: flutter analyze --fatal-infos --fatal-warnings
       - run: flutter pub get
         working-directory: example
