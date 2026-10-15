@@ -24,29 +24,29 @@ Ordered by everyday reach — the SDK gap-fillers up top get hit on most
 files; the niche helpers further down get hit when you actually need
 them.
 
-### `Object.let` — Kotlin scope function
+### `Object.into` — Kotlin's `let`
 
-Bounded to `T extends Object` so it doesn't pollute autocomplete on
-nullables. Use `?.let(...)` for null-aware chaining.
+Named so it doesn't clash with other packages' `.let`. Bounded to
+`T extends Object` so it doesn't pollute autocomplete on nullables. Use `?.into(...)` for null-aware chaining.
 
 ```dart
 // Null-aware transform — returns a value, not a side-effect
-final port = env['PORT']?.let(int.parse);
-final user = jsonResponse?.let(User.fromJson);
+final port = env['PORT']?.into(int.parse);
+final user = jsonResponse?.into(User.fromJson);
 
 // Inline widget construction via tear-off
 Column(children: [
   Text(title),
-  ?subtitle?.let(Text.new),
-  ?avatarUrl?.let(NetworkImage.new).let(_circle),
+  ?subtitle?.into(Text.new),
+  ?avatarUrl?.into(NetworkImage.new).into(_circle),
 ]);
 
 // Chain pure transforms without temp vars
-final hash = userId.toString().let(FastHash.fnv1a);
-final slug = title.trim().toLowerCase().let(_sluggify);
+final hash = userId.toString().into(FastHash.fnv1a);
+final slug = title.trim().toLowerCase().into(_sluggify);
 ```
 
-Skip `.let` for side-effect-only calls, multi-line bodies, or chains
+Skip `.into` for side-effect-only calls, multi-line bodies, or chains
 beyond three.
 
 ### Iterable / Map / Enum gap-fillers
@@ -63,7 +63,7 @@ map.entryOf(key); // null only when key absent
 
 // Iterable
 list.separated((i) => const Divider());
-[1, 2, 3, 4, 5].windowed(3); // ([1,2,3], [2,3,4], [3,4,5])
+[1, 2, 3, 4, 5].slidingWindows(3); // ([1,2,3], [2,3,4], [3,4,5])
 ```
 
 ### DateTime predicates
@@ -112,8 +112,9 @@ can't also be a real result.
 
 For widget context use the matching `flutter_hooks` hook
 (`useOnPlatformBrightnessChange`). These wrappers fill the gap for
-providers — non-widget code that holds a device-state listenable. Named
-`*Listener` to match the framework's `AppLifecycleListener`.
+providers — non-widget code that holds a device-state listenable. Like
+the framework's `AppLifecycleListener`, each one registers itself on
+construction and stops on `dispose()`.
 
 ```dart
 @riverpod
@@ -121,8 +122,7 @@ class LocalesNotifier extends _$LocalesNotifier {
   @override
   List<Locale>? build() {
     final listener = LocaleListener((locales) => state = locales);
-    WidgetsBinding.instance.addObserver(listener);
-    ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
+    ref.onDispose(listener.dispose);
     return PlatformDispatcher.instance.locales;
   }
 }

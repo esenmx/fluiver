@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 
-/// Observes locale changes via [WidgetsBindingObserver].
+/// Reports system locale changes, like the framework's
+/// [AppLifecycleListener]: it registers with [WidgetsBinding] on
+/// construction and stops on [dispose].
 ///
 /// Designed for providers — `flutter_hooks` does not ship a locale
 /// hook. For widget-local consumption inside a hook widget, do it
 /// inline with the `WidgetsBindingObserver` mixin instead.
-///
-/// Named `*Listener` to match the framework's `AppLifecycleListener`.
 ///
 /// ```dart
 /// @riverpod
@@ -14,28 +14,52 @@ import 'package:flutter/widgets.dart';
 ///   @override
 ///   List<Locale>? build() {
 ///     final listener = LocaleListener((locales) => state = locales);
-///     WidgetsBinding.instance.addObserver(listener);
-///     ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
+///     ref.onDispose(listener.dispose);
 ///     return PlatformDispatcher.instance.locales;
 ///   }
 /// }
 /// ```
-class LocaleListener(
+final class LocaleListener(
   /// Called with the new locale list on every system locale change.
   final void Function(List<Locale>? locales) onLocalesChanged,
-) extends WidgetsBindingObserver {
-  /// Creates a listener that invokes [onLocalesChanged] when system
-  /// locales change.
-  this;
+) {
+  /// Creates a listener that invokes [onLocalesChanged] on every system
+  /// locale change until [dispose].
+  this {
+    _binding.addObserver(_observer);
+  }
 
-  @override
-  void didChangeLocales(List<Locale>? locales) {
-    onLocalesChanged(locales);
-    super.didChangeLocales(locales);
+  final WidgetsBinding _binding = WidgetsBinding.instance;
+  final _observer = _LocaleObserver(onLocalesChanged);
+
+  /// Stops reporting locale changes.
+  ///
+  /// Throws [StateError] if called more than once.
+  void dispose() {
+    if (_observer.disposed) {
+      throw StateError('LocaleListener was used after being disposed.');
+    }
+    _observer.disposed = true;
+    _binding.removeObserver(_observer);
   }
 }
 
-/// Observes platform brightness changes via [WidgetsBindingObserver].
+final class _LocaleObserver(
+  final void Function(List<Locale>? locales) onLocalesChanged,
+) with WidgetsBindingObserver {
+  bool disposed = false;
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    if (!disposed) {
+      onLocalesChanged(locales);
+    }
+  }
+}
+
+/// Reports platform brightness changes, like the framework's
+/// [AppLifecycleListener]: it registers with [WidgetsBinding] on
+/// construction and stops on [dispose].
 ///
 /// For widget context prefer `flutter_hooks.useOnPlatformBrightnessChange`;
 /// this listener is for provider code where hooks don't apply.
@@ -46,25 +70,47 @@ class LocaleListener(
 ///   @override
 ///   Brightness build() {
 ///     final listener = BrightnessListener((b) => state = b);
-///     WidgetsBinding.instance.addObserver(listener);
-///     ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
+///     ref.onDispose(listener.dispose);
 ///     return PlatformDispatcher.instance.platformBrightness;
 ///   }
 /// }
 /// ```
-class BrightnessListener(
+final class BrightnessListener(
   /// Called with the new brightness on every platform brightness change.
   final void Function(Brightness brightness) onPlatformBrightnessChanged,
-) extends WidgetsBindingObserver {
-  /// Creates a listener that invokes [onPlatformBrightnessChanged] when
-  /// the platform brightness changes.
-  this;
+) {
+  /// Creates a listener that invokes [onPlatformBrightnessChanged] on every
+  /// platform brightness change until [dispose].
+  this {
+    _binding.addObserver(_observer);
+  }
+
+  final WidgetsBinding _binding = WidgetsBinding.instance;
+  final _observer = _BrightnessObserver(onPlatformBrightnessChanged);
+
+  /// Stops reporting brightness changes.
+  ///
+  /// Throws [StateError] if called more than once.
+  void dispose() {
+    if (_observer.disposed) {
+      throw StateError('BrightnessListener was used after being disposed.');
+    }
+    _observer.disposed = true;
+    _binding.removeObserver(_observer);
+  }
+}
+
+final class _BrightnessObserver(
+  final void Function(Brightness brightness) onPlatformBrightnessChanged,
+) with WidgetsBindingObserver {
+  bool disposed = false;
 
   @override
   void didChangePlatformBrightness() {
-    onPlatformBrightnessChanged(
-      WidgetsBinding.instance.platformDispatcher.platformBrightness,
-    );
-    super.didChangePlatformBrightness();
+    if (!disposed) {
+      onPlatformBrightnessChanged(
+        WidgetsBinding.instance.platformDispatcher.platformBrightness,
+      );
+    }
   }
 }

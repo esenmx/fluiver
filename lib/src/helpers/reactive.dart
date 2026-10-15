@@ -28,7 +28,7 @@ mixin _TimerMixin {
 
 /// Debounces function calls — runs the task only after [duration] of
 /// silence since the last invocation.
-class Debounce(
+final class Debounce(
   /// The quiet period required before the latest task fires.
   final Duration duration,
 ) with _TimerMixin {
@@ -51,7 +51,7 @@ class Debounce(
 
 /// Throttles function calls — runs the first call immediately, then runs
 /// the latest queued call once the window expires.
-class ThrottleLatest(
+final class ThrottleLatest(
   /// The cooldown window between emissions.
   final Duration duration,
 ) with _TimerMixin {
@@ -94,7 +94,7 @@ class ThrottleLatest(
 
 /// Throttles function calls — runs only the first call within each
 /// [duration] window; subsequent calls are ignored.
-class ThrottleFirst(
+final class ThrottleFirst(
   /// The cooldown window during which subsequent calls are dropped.
   final Duration duration,
 ) with _TimerMixin {
@@ -119,7 +119,7 @@ class ThrottleFirst(
 
 /// Throttles function calls — waits [duration], then runs only the most
 /// recent call.
-class ThrottleLast(
+final class ThrottleLast(
   /// The trailing window before the latest task fires.
   final Duration duration,
 ) with _TimerMixin {
