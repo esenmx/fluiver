@@ -29,6 +29,7 @@ them.
 Named so it doesn't clash with other packages' `.let`. Bounded to
 `T extends Object` so it doesn't pollute autocomplete on nullables. Use `?.into(...)` for null-aware chaining.
 
+<!-- no-compile -->
 ```dart
 // Null-aware transform — returns a value, not a side-effect
 final port = env['PORT']?.into(int.parse);
@@ -53,28 +54,32 @@ beyond three.
 
 ```dart
 // Enum — non-throwing lookup, no asNameMap() allocation
-MyEnum.values.byNameOrNull('x') ?? .bar;
+enum Mode { light, dark }
+
+Mode.values.byNameOrNull('x') ?? .light;
 
 // Map — filters that return a Map, not an entry iterable
+final map = <Object, Object?>{'id': 1, 'name': 'Ada', 2: null};
 map.where((k, v) => v != null);
 map.whereKeyType<String>();
 map.whereValueType<int>();
-map.entryOf(key); // null only when key absent
+map.entryOf('id'); // null only when key absent
 
 // Iterable
-list.separated((i) => const Divider());
+<Widget>[const Text('A'), const Text('B')].separated((i) => const Divider());
 [1, 2, 3, 4, 5].slidingWindows(3); // ([1,2,3], [2,3,4], [3,4,5])
 ```
 
 ### DateTime predicates
 
 ```dart
+final dt = DateTime.now();
 dt.isToday();
 dt.isTomorrow();
 dt.isYesterday();
 dt.inThisYear();
 dt.isWithinFromNow(const Duration(minutes: 5));
-birthDate.age();
+DateTime(1990, 5, 17).age();
 dt.age(at: DateTime(2030));
 
 dt.truncateTime();                                 // → midnight
@@ -87,7 +92,7 @@ Arithmetic stays on stdlib: `dt.add(const Duration(days: 7))`.
 
 ```dart
 const TimeOfDay(hour: 9, minute: 0).onDate(DateTime.now()); // today 09:00
-const TimeOfDay(hour: 9, minute: 0).onDate(meeting.day);    // any date 09:00
+const TimeOfDay(hour: 9, minute: 0).onDate(DateTime(2030, 1, 15)); // any date 09:00
 ```
 
 `onDate(date)` takes the calendar day explicitly — no hidden
@@ -97,6 +102,7 @@ const TimeOfDay(hour: 9, minute: 0).onDate(meeting.day);    // any date 09:00
 
 ### `Future.timeoutOrNull`
 
+<!-- no-compile -->
 ```dart
 final user = await fetchUser().timeoutOrNull(const Duration(seconds: 2));
 if (user == null) {
@@ -116,6 +122,7 @@ providers — non-widget code that holds a device-state listenable. Like
 the framework's `AppLifecycleListener`, each one registers itself on
 construction and stops on `dispose()`.
 
+<!-- no-compile -->
 ```dart
 @riverpod
 class LocalesNotifier extends _$LocalesNotifier {
@@ -134,12 +141,13 @@ the framework's `AppLifecycleListener` already is one.
 ### Color — HSL transforms
 
 ```dart
-final pressed = Theme.of(context).colorScheme.primary.darken();
-final hover = Theme.of(context).colorScheme.primary.lighten();
+const brand = Color(0xFF6750A4);
+final pressed = brand.darken();
+final hover = brand.lighten();
 
 Container(
-  color: tagColor,
-  child: Text(label, style: TextStyle(color: tagColor.contrastText())),
+  color: brand,
+  child: Text('New', style: TextStyle(color: brand.contrastText())),
 );
 ```
 
@@ -163,6 +171,7 @@ scroll view is attached; check `controller.hasClients` first if it may not be.
 ### TextEditingController — caret-preserving replace
 
 ```dart
+final controller = TextEditingController();
 controller.setTextAndCaret('hello');            // caret at end
 controller.setTextAndCaret('hello', caret: 0);  // caret at start
 ```
@@ -188,7 +197,7 @@ ListView(children: [
     crossAxisCount: 3,
     crossAxisSpacing: 8,
     mainAxisSpacing: 8,
-    children: products.map(ProductCard.new).toList(),
+    children: [for (var i = 0; i < 6; i++) Text('Product $i')],
   ),
 ]);
 ```
@@ -201,6 +210,7 @@ matters).
 Rebuilds every frame, exposes the elapsed running `Duration` (time spent
 disabled excluded).
 
+<!-- no-compile -->
 ```dart
 TickerBuilder(
   enabled: !done,
@@ -217,6 +227,7 @@ Expand/collapse with a size animation that keeps the growing bottom
 edge visible in the nearest `Scrollable` — an expanding tile near the
 bottom of a list no longer overflows below the fold.
 
+<!-- no-compile -->
 ```dart
 ScrollTrackingExpandable(
   isExpanded: showDetails,
@@ -230,6 +241,7 @@ Collapse never scrolls; only expansion tracks. If there is no enclosing
 
 ### Debounce / Throttle
 
+<!-- no-compile -->
 ```dart
 final debounce = Debounce(const Duration(milliseconds: 300));
 
@@ -244,6 +256,7 @@ variants. All four throw `ArgumentError` for a negative duration, expose
 
 ### `LRUCache` / `DisposableBag`
 
+<!-- no-compile -->
 ```dart
 final cache = LRUCache<String, User>(maxEntries: 100);
 cache[user.id] = user;

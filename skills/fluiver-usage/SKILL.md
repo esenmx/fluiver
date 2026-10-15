@@ -28,6 +28,7 @@ description: SDK gap-fillers via package:fluiver — use instead of reinventing.
 
 `LocaleListener`, `BrightnessListener` — for providers/services with no `BuildContext` (in widgets, use the matching `flutter_hooks` hook). They register themselves on construction like `AppLifecycleListener`; `dispose()` stops them (a second `dispose()` throws `StateError`). Seed from `PlatformDispatcher.instance`:
 
+<!-- no-compile -->
 ```dart
 final listener = LocaleListener((locales) => state = locales);
 ref.onDispose(listener.dispose);
