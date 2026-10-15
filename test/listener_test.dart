@@ -82,7 +82,10 @@ void main() {
         tester,
       ) async {
         VoidCallback? disposeSecond;
-        final disposeFirst = listen(() => disposeSecond?.call());
+        final disposeFirst = listen(() {
+          disposeSecond?.call();
+          disposeSecond = null;
+        });
         addTearDown(disposeFirst);
         var calls = 0;
         disposeSecond = listen(() => calls++);
