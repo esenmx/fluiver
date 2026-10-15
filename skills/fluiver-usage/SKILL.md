@@ -15,7 +15,7 @@ description: SDK gap-fillers via package:fluiver — use instead of reinventing.
 
 ## Debounce / Throttle
 
-`Debounce(Duration)`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` — callable (`d(() => …)`), all expose `dispose()` and throw `StateError` if called after disposal. Run in the widget, never inside a notifier.
+`Debounce(Duration)`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` — callable (`d(() => …)`), throw `ArgumentError` for a negative duration, all expose `dispose()` and throw `StateError` if called after disposal. Run in the widget, never inside a notifier.
 
 |Variant|Fires|
 |--|--|
@@ -36,24 +36,25 @@ ref.onDispose(() => WidgetsBinding.instance.removeObserver(listener));
 
 ## Extensions
 
-- **DateTime predicates**: `isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `isWithinFromNow(Duration)` (throws `ArgumentError` if negative), `age({at})` (full years from both dates' calendar fields as stored, no zone conversion; `at` defaults to local now; `.toLocal()` a local date saved via `.toUtc()`), `truncateTime()` (→ midnight, keeps UTC flag). No arithmetic helpers — stdlib `Duration`.
+- **DateTime predicates**: `isToday()`, `isTomorrow()`, `isYesterday()`, `inThisYear()`, `isWithinFromNow(Duration)` (throws `ArgumentError` if negative), `age({at})` (full years from both dates' calendar fields as stored, no zone conversion; `at` defaults to local now; `.toLocal()` a local date saved via `.toUtc()`), `truncateTime()` (→ midnight, keeps UTC flag). No arithmetic helpers — stdlib `Duration`.
 - **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day (supports both `package:material_ui/material_ui.dart` and `package:flutter/material.dart` `TimeOfDay`). Day passed explicitly — deterministic in tests.
 - **Enum**: `with EnumIndexComparable<MyEnum>` adds `<`/`>`/`compareTo` by index type-safely. `values.byNameOrNull(name)` → nullable, for untrusted input (stdlib `byName` throws); chain `?? .fallback`.
 - **Iterable**: `separated((i) => sep)` (interleave by index slot); `windowed(size, {step})` — sliding window, **drops the partial trailing window** (vs non-overlapping `collection.slices`).
 - **Map**: `where` over `(k, v)`; `whereKeyType<T>()`, `whereValueType<T>()` (narrowed static type); `entryOf(key)` → `MapEntry?`, null **only when the key is absent** (present-with-null ≠ missing).
 - **Object.let** (`T extends Object`): transform-and-return; `?.let(...)` for null-aware (`env['PORT']?.let(int.parse)`). Skip for side-effect-only calls, multi-line bodies, chains beyond three.
-- **Color** (HSL): `darken([amount])`, `lighten([amount])` (default ±0.1; throws `ArgumentError` on `NaN`), `contrastText` (black/white with the higher contrast ratio).
-- **ScrollController**: `atTop`, `atBottom`, `animateToTop({duration, curve})`, `animateToBottom(...)` — `hasClients`-safe no-ops when unattached; `atTop`/`atBottom` true only when every attached view is at that edge.
-- **Future**: `timeoutOrNull(Duration)` → `Future<T?>` — null on timeout **only**; underlying errors still throw.
-- **TextEditingController**: `setTextAndCaret(text, {caret})` — text + caret in one shot (`.text =` resets caret to 0).
+- **Color** (HSL): `darken([amount])`, `lighten([amount])` (default ±0.1; `RangeError` unless `amount` is within `[0, 1]`; `ArgumentError` when a channel is outside `[0, 1]` — map extended sRGB into gamut first), `contrastText()` (black/white with the higher contrast ratio).
+- **ScrollController**: `atTop()`, `atBottom()`, `animateToTop({duration, curve})`, `animateToBottom(...)` — throw `StateError` when unattached (check `hasClients`), like `position`; `atTop()`/`atBottom()` true only when every attached view is at that edge.
+- **Future**: `timeoutOrNull(Duration)` → `Future<T?>` — null on timeout **only**; underlying errors still throw. Non-nullable `Future<T>` only.
+- **TextEditingController**: `setTextAndCaret(text, {caret})` — text + caret in one shot (`.text =` resets caret to 0); `RangeError` if `caret` is outside `0..text.length`.
 
 ## Helpers
 
 |API|Note|
 |--|--|
 |`FastHash.fnv1a(String)` → `int`|FNV-1a-64 over UTF-16BE code units (≠ FNV-1a over UTF-8). **Throws on JS web**; VM/Wasm fine. NOT cryptographic.|
-|`NetworkProbe.checkConnection({host, port, timeout})`|`false` on `SocketException`/`TimeoutException`; web → `navigator.onLine`. Defaults `1.0.0.1:53`, 3s; `host` = literal IP.|
+|`NetworkProbe.checkConnection({host, port, timeout})`|`false` on `SocketException`/`TimeoutException`. Defaults `1.0.0.1:53`, 3s; `host` = literal IP. Web → `UnsupportedError`.|
+|`NetworkProbe.isBrowserOnline()`|web `navigator.onLine` (`false` = known offline); off web → `UnsupportedError`.|
 |`platformDispatch<T>({android, ios, macos, web, …})`|Per-platform value (all params lowercase); throws `UnsupportedError` on platforms without a callback.|
 |`TextFieldBuilders.disabledCounter`|`TextField(buildCounter: TextFieldBuilders.disabledCounter)` hides the counter.|
 |`LRUCache<K, V>(maxEntries:)`|O(1) get/put, promotes to MRU; per-isolate. For async, type `LRUCache<K, Future<V>>` so concurrent misses dedupe. `peek(key)` reads without promoting; `keys`/`values`/`entries` are snapshots.|
-|`DisposableBag()`|`..add(fn)` / `..addAll([...])`; idempotent `dispose()` runs all, then throws `DisposableBagException` if any failed; async disposers start in registration order but are awaited together — dependent steps (flush, then close) go in one closure. Pair with `ref.onDispose(bag.dispose)`.|
+|`DisposableBag()`|`..add(fn)` / `..addAll([...])`; `dispose()` runs all once (every call returns the same future), then throws `DisposableBagException` if any failed; `add` after it settled → `StateError`; `dispose()` from its own disposer → `StateError`; async disposers start in registration order but are awaited together — dependent steps (flush, then close) go in one closure. Pair with `ref.onDispose(bag.dispose)`.|

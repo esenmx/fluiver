@@ -9,12 +9,22 @@
 - `TimeOfDayOnDate` (`onDate`) now extends `package:material_ui/material_ui.dart`'s `TimeOfDay`. Callers still using `package:flutter/material.dart`'s `TimeOfDay` with explicit `show TimeOfDayOnDate` or `TimeOfDayOnDate(tod)` overrides should switch to `LegacyTimeOfDayOnDate` (plain barrel imports with implicit `.onDate` resolve automatically).
 - Added `material_ui: ^1.6.0` as a runtime dependency.
 - Removed deprecated `DateTime.withTimeOfDay` (use `time.onDate(date)`).
+- Extension getters are now methods: `DateTime.isToday`, `isTomorrow`, `isYesterday`, `inThisYear`, `ScrollController.atTop`, `atBottom`, and `Color.contrastText`. Migration: add `()` at each call site (`date.isToday()`, `controller.atTop()`, `color.contrastText()`).
 - `Debounce`, `ThrottleFirst`, `ThrottleLast`, and `ThrottleLatest` throw `StateError` in all build modes when called after `dispose()` (previously a debug-only `FlutterError`; release builds silently scheduled the task).
 - `DisposableBagException.errors` and `stackTraces` are unmodifiable.
+- `DisposableBag.add` after `dispose()` has settled throws `StateError` (previously it ran the disposer immediately and dropped its error into the zone). Every `dispose()` call returns the same future, so a second call during an in-flight dispose waits for the release and sees its `DisposableBagException` (previously it returned at once). Calling `dispose()` from one of the bag's own disposers, directly or through another bag's disposer, throws `StateError` instead of waiting on itself.
+- `Debounce`, `ThrottleFirst`, `ThrottleLast`, and `ThrottleLatest` throw `ArgumentError` for a negative duration (previously treated as zero).
+- `Color.darken` and `Color.lighten` throw `RangeError` when `amount` is outside `[0, 1]` or `NaN` (previously clamped), and `ArgumentError` when a channel is outside `[0, 1]` (previously clipped); map extended-sRGB colors into gamut first.
+- `TextEditingController.setTextAndCaret` throws `RangeError` when `caret` is outside `0..text.length` (previously clamped).
+- `ScrollController.atTop()`, `atBottom()`, `animateToTop`, and `animateToBottom` throw `StateError` when no scroll view is attached, like `ScrollController.position` (previously `false` / a no-op).
+- `Future.timeoutOrNull` is only available on `Future<T>` with a non-nullable `T`, so `null` always means the timeout elapsed.
+- `NetworkProbe.checkConnection` throws `UnsupportedError` on web (previously returned `navigator.onLine`); use `NetworkProbe.isBrowserOnline()`.
+- `Grid` reports an unbounded cross axis in every build mode (previously a debug-only assert).
 
 ### Added
 
 - `LegacyTimeOfDayOnDate` (`onDate`) for `package:flutter/material.dart`'s `TimeOfDay`.
+- `NetworkProbe.isBrowserOnline()` returns the browser's `navigator.onLine` on web and throws `UnsupportedError` elsewhere.
 
 ### Changed
 
@@ -22,7 +32,6 @@
 
 ### Fixed
 
-- `Color.darken` and `Color.lighten` map out-of-range extended-sRGB input channels into `[0, 1]` (shift by the lowest channel, then scale by the highest) before the HSL round-trip so hues are preserved instead of collapsing or inverting, and throw `ArgumentError` when `amount` is `NaN`.
 - `DateTime.isWithinFromNow` throws `ArgumentError` when `duration` is negative.
 - `DisposableBag.dispose` runs and awaits disposers registered re-entrantly during an in-flight `dispose()` call inline.
 - `NetworkProbe.checkConnection` calls `socket.destroy()` instead of `await socket.close()`, preventing hangs when a peer accepts the TCP handshake and never sends `FIN`.

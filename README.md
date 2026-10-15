@@ -69,10 +69,10 @@ list.separated((i) => const Divider());
 ### DateTime predicates
 
 ```dart
-dt.isToday;
-dt.isTomorrow;
-dt.isYesterday;
-dt.inThisYear;
+dt.isToday();
+dt.isTomorrow();
+dt.isYesterday();
+dt.inThisYear();
 dt.isWithinFromNow(const Duration(minutes: 5));
 birthDate.age();
 dt.age(at: DateTime(2030));
@@ -105,7 +105,8 @@ if (user == null) {
 ```
 
 Only timeout becomes `null`; errors from the underlying future still
-propagate.
+propagate. Available only on futures of non-nullable values, so `null`
+can't also be a real result.
 
 ### Listeners
 
@@ -138,19 +139,26 @@ final hover = Theme.of(context).colorScheme.primary.lighten();
 
 Container(
   color: tagColor,
-  child: Text(label, style: TextStyle(color: tagColor.contrastText)),
+  child: Text(label, style: TextStyle(color: tagColor.contrastText())),
 );
 ```
+
+`amount` must be within `[0, 1]` (`RangeError` otherwise). A color with a
+channel outside `[0, 1]` (extended sRGB) throws `ArgumentError`: map it
+into gamut first, the way you want.
 
 ### ScrollController — position + edge animation
 
 ```dart
 final controller = ScrollController();
-controller.atTop;        // false when no client attached, then true at top
-controller.atBottom;
+controller.atTop();        // true when every attached view is at the top
+controller.atBottom();
 await controller.animateToBottom();                // 250ms easeOut by default
 await controller.animateToTop(duration: const Duration(milliseconds: 400));
 ```
+
+Like `ScrollController.position`, every member throws `StateError` when no
+scroll view is attached; check `controller.hasClients` first if it may not be.
 
 ### TextEditingController — caret-preserving replace
 
@@ -160,7 +168,8 @@ controller.setTextAndCaret('hello', caret: 0);  // caret at start
 ```
 
 Setting `controller.text = ...` directly resets the caret to `0` — this
-puts it where you asked instead.
+puts it where you asked instead. A `caret` outside `0..text.length` throws
+`RangeError`.
 
 ### `Grid` — non-scrolling grid
 
@@ -230,8 +239,8 @@ TextField(
 ```
 
 `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` cover the rate-limit
-variants. All four expose `dispose()` and throw `StateError` if called
-after disposal.
+variants. All four throw `ArgumentError` for a negative duration, expose
+`dispose()`, and throw `StateError` if called after disposal.
 
 ### `LRUCache` / `DisposableBag`
 
@@ -250,12 +259,14 @@ await bag.dispose();
 ```
 
 Async disposers start in registration order but are awaited together;
-dependent steps (flush, then close) go in one closure.
+dependent steps (flush, then close) go in one closure. Every `dispose()`
+call returns the same future; `add` after it settled throws `StateError`.
 
 ### Static helpers
 
 ```dart
-if (await NetworkProbe.checkConnection()) { /* online */ } // web: navigator.onLine
+if (await NetworkProbe.checkConnection()) { /* online */ } // native only (TCP)
+if (NetworkProbe.isBrowserOnline()) { /* not known offline */ } // web only
 
 final h = FastHash.fnv1a('input'); // FNV-1a-64 over UTF-16BE code units (≠ FNV-1a over UTF-8); throws on JS web, VM/Wasm fine
 

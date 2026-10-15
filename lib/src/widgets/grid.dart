@@ -216,9 +216,9 @@ class RenderGrid({
   double _mainContentFor(SliverGridLayout layout) =>
       childCount == 0 ? 0.0 : layout.computeMaxScrollOffset(childCount);
 
-  bool _debugHasBoundedCrossAxis(BoxConstraints constraints) {
+  void _checkBoundedCrossAxis(BoxConstraints constraints) {
     if ((_isVertical ? constraints.maxWidth : constraints.maxHeight).isFinite) {
-      return true;
+      return;
     }
     throw FlutterError.fromParts(<DiagnosticsNode>[
       ErrorSummary(
@@ -251,13 +251,13 @@ class RenderGrid({
 
   @override
   Size computeDryLayout(BoxConstraints constraints) {
-    assert(_debugHasBoundedCrossAxis(constraints), 'unbounded cross axis');
+    _checkBoundedCrossAxis(constraints);
     return _layoutSize(constraints);
   }
 
   @override
   void performLayout() {
-    assert(_debugHasBoundedCrossAxis(constraints), 'unbounded cross axis');
+    _checkBoundedCrossAxis(constraints);
     final p = _resolvedPadding;
     final crossMax = _isVertical ? constraints.maxWidth : constraints.maxHeight;
     final layout = _layoutFor(_crossContentFor(crossMax));
@@ -316,7 +316,7 @@ class RenderGrid({
     BoxConstraints constraints,
     TextBaseline baseline,
   ) {
-    assert(_debugHasBoundedCrossAxis(constraints), 'unbounded cross axis');
+    _checkBoundedCrossAxis(constraints);
     final crossMax = _isVertical ? constraints.maxWidth : constraints.maxHeight;
     final layout = _layoutFor(_crossContentFor(crossMax));
     final paddingTop = _resolvedPadding.top;
