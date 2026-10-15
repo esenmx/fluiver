@@ -21,3 +21,8 @@ Future<bool> probeConnection({
     return false;
   }
 }
+
+/// Native implementation of `NetworkProbe.isBrowserOnline`.
+bool browserOnline() => throw UnsupportedError(
+  'NetworkProbe.isBrowserOnline is web-only; use checkConnection.',
+);

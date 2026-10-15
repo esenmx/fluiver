@@ -40,18 +40,22 @@ void main() {
       check(c.selection.baseOffset).equals(3);
     });
 
-    test('caret below 0 is clamped to 0', () {
-      final c = newTextEditingController()..setTextAndCaret('hello', caret: -5);
-
-      check(c.selection.baseOffset).equals(0);
-      check(c.selection.extentOffset).equals(0);
-    });
-
-    test('caret beyond length is clamped to length', () {
-      final c = newTextEditingController()..setTextAndCaret('hello', caret: 10);
+    test('caret at length is the end', () {
+      final c = newTextEditingController()..setTextAndCaret('hello', caret: 5);
 
       check(c.selection.baseOffset).equals(5);
       check(c.selection.extentOffset).equals(5);
+    });
+
+    test('caret outside 0..length throws RangeError and keeps the value', () {
+      for (final caret in const [-5, -1, 6, 10]) {
+        final c = newTextEditingController()..setTextAndCaret('before');
+        check(
+          because: '$caret',
+          () => c.setTextAndCaret('hello', caret: caret),
+        ).throws<RangeError>().has((e) => e.name, 'name').equals('caret');
+        check(because: '$caret', c.text).equals('before');
+      }
     });
   });
 }

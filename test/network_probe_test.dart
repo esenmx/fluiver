@@ -9,6 +9,10 @@ import 'package:fluiver/fluiver.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('isBrowserOnline throws UnsupportedError off the web', () {
+    check(NetworkProbe.isBrowserOnline).throws<UnsupportedError>();
+  });
+
   group('checkConnection', () {
     test('returns true when the endpoint accepts', () async {
       final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
