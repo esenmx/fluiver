@@ -24,6 +24,13 @@ jobs:
         with: { channel: stable, cache: true }
       - run: git ls-files -z -- '*.dart' | xargs -0 dart format --output=none --set-exit-if-changed
 
+  markdown:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - run: npx --yes markdownlint-cli2@0.23.3
+
   analyze:
     runs-on: ubuntu-latest
     timeout-minutes: 15
