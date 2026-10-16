@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.1 - 2026-10-16
+
+### Changed
+
+- The README opens with what the package does, why to use it and a short
+  example. Every Dart sample in the README and the agent skill is analyzed
+  with the package's lints and fits pub.dev without scrolling sideways.
+
 ## 5.0.0 - 2026-10-15
 
 ### Breaking
