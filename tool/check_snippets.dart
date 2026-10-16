@@ -3,12 +3,26 @@ import 'dart:io';
 
 const String _usage = '''
 Analyzes the ```dart blocks of README.md and skills/*/SKILL.md against this
-package and fails on analyzer errors. A block whose previous non-blank line is
-<!-- no-compile --> is skipped.
+package with its analysis_options.yaml and fails on any diagnostic, except
+those that only fire because a block is a fragment. A block whose previous
+non-blank line is <!-- no-compile --> is skipped.
 
 dart run tool/check_snippets.dart [--import <uri>]... [--dep <package>]... [file]...''';
 
 const String _noCompile = '<!-- no-compile -->';
+
+const List<String> _fragmentDiagnostics = [
+  'unused_element',
+  'unused_field',
+  'unused_import',
+  'unused_local_variable',
+];
+
+const List<String> _fragmentLints = [
+  'depend_on_referenced_packages',
+  'directives_ordering',
+  'public_member_api_docs',
+];
 
 final RegExp _declaration = RegExp(
   '^(import |export |library|part |class |abstract |base |final class |'
@@ -38,7 +52,7 @@ _Rendered _render(_Snippet snippet, List<String> imports) {
   var inDeclaration = false;
   for (final (i, line) in snippet.lines.indexed) {
     final atColumnZero = line.isNotEmpty && !line.startsWith(RegExp(r'\s'));
-    if (atColumnZero && !line.startsWith('}')) {
+    if (atColumnZero && !line.startsWith(RegExp(r'[})\]]'))) {
       inDeclaration =
           _declaration.hasMatch(line) ||
           (hasDeclarations && _variable.hasMatch(line));
@@ -122,6 +136,28 @@ Future<void> main(List<String> args) async {
     stderr.writeln('pubspec.yaml has no name or environment sdk constraint');
     exit(65);
   }
+  final options = File('analysis_options.yaml');
+  if (!options.existsSync()) {
+    stderr.writeln('analysis_options.yaml not found; snippets use its lints');
+    exit(65);
+  }
+  final included = RegExp(
+    r'^include:\s*package:(\w+)/',
+    multiLine: true,
+  ).firstMatch(options.readAsStringSync())?.group(1);
+  final includedConstraint = included == null
+      ? null
+      : RegExp(
+          '^\\s+$included:\\s*(\\S+)',
+          multiLine: true,
+        ).firstMatch(pubspec)?.group(1);
+  if (included != null && includedConstraint == null) {
+    stderr.writeln(
+      'analysis_options.yaml includes package:$included, which pubspec.yaml '
+      'does not depend on',
+    );
+    exit(65);
+  }
   final usesFlutter = RegExp(
     r'^\s+sdk:\s*flutter\s*$',
     multiLine: true,
@@ -162,25 +198,36 @@ Future<void> main(List<String> args) async {
   final workspace = Directory.systemTemp.createTempSync('check_snippets_');
   try {
     final repo = Directory.current.absolute.path;
-    final pubspecOut = StringBuffer()
-      ..writeln('name: snippets')
-      ..writeln('publish_to: none')
-      ..writeln('environment:')
-      ..writeln("  sdk: '$sdk'")
-      ..writeln('dependencies:')
-      ..writeln('  $name:')
-      ..writeln('    path: ${jsonEncode(repo)}');
-    if (usesFlutter) {
-      pubspecOut
-        ..writeln('  flutter:')
-        ..writeln('    sdk: flutter');
-    }
-    for (final dep in deps) {
-      pubspecOut.writeln('  $dep: any');
-    }
-    File('${workspace.path}/pubspec.yaml')
-        .writeAsStringSync(pubspecOut.toString());
-    File('${workspace.path}/analysis_options.yaml').writeAsStringSync('');
+    final dependencies = <String, String>{
+      for (final dep in deps) dep: ' any',
+      ?included: ' $includedConstraint',
+      if (usesFlutter) 'flutter': '\n    sdk: flutter',
+      name: '\n    path: ${jsonEncode(repo)}',
+    };
+    File('${workspace.path}/pubspec.yaml').writeAsStringSync(
+      [
+        'name: snippets',
+        'publish_to: none',
+        'environment:',
+        "  sdk: '$sdk'",
+        'dependencies:',
+        for (final dep in dependencies.keys.toList()..sort())
+          '  $dep:${dependencies[dep]}',
+        '',
+      ].join('\n'),
+    );
+    File('${workspace.path}/analysis_options.yaml').writeAsStringSync(
+      [
+        'include: ${jsonEncode(options.absolute.path)}',
+        'analyzer:',
+        '  errors:',
+        for (final code in _fragmentDiagnostics) '    $code: ignore',
+        'linter:',
+        '  rules:',
+        for (final rule in _fragmentLints) '    $rule: false',
+        '',
+      ].join('\n'),
+    );
 
     final rendered = <String, _Rendered>{};
     for (final (index, snippet) in snippets.indexed) {
@@ -210,45 +257,47 @@ Future<void> main(List<String> args) async {
       '.',
     ], workingDirectory: workspace.path);
 
-    var errors = 0;
+    var issues = 0;
     for (final line in '${analyze.stdout}\n${analyze.stderr}'.split('\n')) {
       final fields = line.split('|');
-      if (fields.length < 8 || fields[0] != 'ERROR') {
+      if (fields.length < 8 ||
+          !const {'ERROR', 'WARNING', 'INFO'}.contains(fields[0])) {
         continue;
       }
+      issues++;
+      final severity = fields[0].toLowerCase();
+      final code = fields[2].toLowerCase();
+      final message = fields.sublist(7).join('|');
       final target =
           rendered[File(fields[3]).absolute.path] ??
           rendered[_resolve(fields[3])];
       if (target == null) {
+        stdout.writeln(
+          '${fields[3]}:${fields[4]}: $severity: $message ($code)',
+        );
         continue;
       }
-      errors++;
       final renderedLine = int.parse(fields[4]) - 1;
       final origin = renderedLine < target.origins.length
           ? target.origins[renderedLine]
           : -1;
       final mdLine = target.snippet.fenceLine + origin + 1;
-      final message = fields.sublist(7).join('|');
       stdout.writeln(
-        '${target.snippet.file}:$mdLine: error: $message '
-        '(${fields[2].toLowerCase()})',
+        '${target.snippet.file}:$mdLine: $severity: $message ($code)',
       );
     }
-    if (analyze.exitCode != 0 && errors == 0) {
+    if (analyze.exitCode != 0 && issues == 0) {
       stderr
-        ..writeln(
-          'dart analyze exited ${analyze.exitCode} with no mapped '
-          'error:',
-        )
+        ..writeln('dart analyze exited ${analyze.exitCode} with no diagnostic:')
         ..writeln(analyze.stdout)
         ..writeln(analyze.stderr);
       exit(1);
     }
     stdout.writeln(
       'check_snippets: ${snippets.length} block(s) analyzed, $skipped '
-      'marked $_noCompile, $errors error(s).',
+      'marked $_noCompile, $issues issue(s).',
     );
-    if (errors > 0) {
+    if (issues > 0) {
       exit(1);
     }
   } finally {
