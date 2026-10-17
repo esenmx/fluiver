@@ -164,8 +164,8 @@ final class DisposableBagException implements Exception {
   /// Creates a [DisposableBagException] with unmodifiable [errors] and
   /// [stackTraces] lists.
   new(List<Object> errors, {List<StackTrace> stackTraces = const []})
-    : errors = List.unmodifiable(errors),
-      stackTraces = List.unmodifiable(stackTraces);
+    : errors = .unmodifiable(errors),
+      stackTraces = .unmodifiable(stackTraces);
 
   /// The errors thrown by individual disposers.
   final List<Object> errors;

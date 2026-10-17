@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui' show ColorSpace;
 
 import 'package:checks/checks.dart';
 import 'package:fluiver/fluiver.dart';
@@ -117,9 +116,9 @@ void main() {
         red: 1,
         green: 0,
         blue: 0,
-        colorSpace: ColorSpace.displayP3,
+        colorSpace: .displayP3,
       );
-      check(p3.darken(0).colorSpace).equals(ColorSpace.displayP3);
+      check(p3.darken(0).colorSpace).equals(.displayP3);
     });
 
     test('darken(0) preserves sub-8-bit precision', () {
@@ -142,7 +141,7 @@ void main() {
           red: red,
           green: green,
           blue: blue,
-          colorSpace: ColorSpace.extendedSRGB,
+          colorSpace: .extendedSRGB,
         );
         for (final (name, shift) in <(String, Color Function())>[
           ('darken', wide.darken),
@@ -163,14 +162,14 @@ void main() {
         red: 1,
         green: 0.5,
         blue: 0.5,
-        colorSpace: ColorSpace.extendedSRGB,
+        colorSpace: .extendedSRGB,
       );
       final darker = inRange.darken();
-      check(darker.colorSpace).equals(ColorSpace.extendedSRGB);
+      check(darker.colorSpace).equals(.extendedSRGB);
       check(darker).channelsCloseTo(
-        HSLColor.fromColor(
-          const Color.from(alpha: 1, red: 1, green: 0.5, blue: 0.5),
-        ).withLightness(0.65).toColor(),
+        HSLColor.fromColor(const .from(alpha: 1, red: 1, green: 0.5, blue: 0.5))
+            .withLightness(0.65)
+            .toColor(),
         'darken',
       );
     });

@@ -43,7 +43,7 @@ void main() {
       });
 
       test('$name accepts Duration.zero', () {
-        check(create(Duration.zero)).isNotNull();
+        check(create(.zero)).isNotNull();
       });
     }
   });

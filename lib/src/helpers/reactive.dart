@@ -8,7 +8,7 @@ mixin _TimerMixin {
   bool _disposed = false;
 
   void _checkDuration(Duration duration) {
-    if (duration < Duration.zero) {
+    if (duration < .zero) {
       throw ArgumentError.value(duration, 'duration', 'must not be negative');
     }
   }
