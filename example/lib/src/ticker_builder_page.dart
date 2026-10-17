@@ -46,7 +46,7 @@ class _TickerBuilderPageState extends State<TickerBuilderPage> {
                 mainAxisAlignment: .center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    padding: const .symmetric(horizontal: 32),
                     child: TextField(
                       controller: _controller,
                       textAlign: .center,

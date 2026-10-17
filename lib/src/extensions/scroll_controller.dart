@@ -30,7 +30,7 @@ extension ScrollControllerPosition on ScrollController {
     Curve curve = Curves.easeOut,
   }) {
     _checkAttached();
-    return Future.wait([
+    return .wait([
       for (final p in positions)
         p.animateTo(p.minScrollExtent, duration: duration, curve: curve),
     ]);
@@ -44,7 +44,7 @@ extension ScrollControllerPosition on ScrollController {
     Curve curve = Curves.easeOut,
   }) {
     _checkAttached();
-    return Future.wait([
+    return .wait([
       for (final p in positions)
         p.animateTo(p.maxScrollExtent, duration: duration, curve: curve),
     ]);

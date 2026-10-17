@@ -79,7 +79,7 @@ extension ColorTransform on Color {
     final scale = span == 0 ? 0.0 : (1 - (2 * target - 1).abs()) / span;
     double shift(double c) =>
         (target + (c - lightness) * scale).clamp(0.0, 1.0);
-    return Color.from(
+    return .from(
       alpha: a,
       red: shift(r),
       green: shift(g),

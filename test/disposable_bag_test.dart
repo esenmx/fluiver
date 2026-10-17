@@ -309,11 +309,11 @@ void main() {
     test('errors and stackTraces lists are unmodifiable', () {
       final exception = DisposableBagException(
         [Exception('e')],
-        stackTraces: [StackTrace.current],
+        stackTraces: [.current],
       );
 
       check(() => exception.errors.add('x')).throws<UnsupportedError>();
-      check(() => exception.stackTraces.add(StackTrace.current))
+      check(() => exception.stackTraces.add(.current))
           .throws<UnsupportedError>();
     });
   });
