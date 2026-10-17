@@ -12,7 +12,7 @@ void main() {
 
     test('preserves UTC flag', () {
       final result = DateTime.utc(1990, 6, 26, 8, 30).truncateTime();
-      check(result).equals(DateTime.utc(1990, 6, 26));
+      check(result).equals(.utc(1990, 6, 26));
       check(result.isUtc).isTrue();
     });
   });
@@ -46,7 +46,7 @@ void main() {
       final eve = DateTime(2026, 10, 3, 23);
       check(saved.toLocal().age(at: eve)).equals(29);
       check(saved.toLocal().age(at: DateTime(2026, 10, 4))).equals(30);
-      final eastOfUtc = saved.toLocal().timeZoneOffset > Duration.zero;
+      final eastOfUtc = saved.toLocal().timeZoneOffset > .zero;
       check(saved.age(at: eve)).equals(eastOfUtc ? 30 : 29);
     });
 

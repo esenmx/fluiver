@@ -123,7 +123,7 @@ void main() {
         tester,
         .count(
           crossAxisCount: 2,
-          padding: const EdgeInsets.all(16),
+          padding: const .all(16),
           children: .generate(2, _cell),
         ),
       );
@@ -297,7 +297,7 @@ void main() {
         tester,
         .count(
           crossAxisCount: 2,
-          padding: const EdgeInsets.all(16),
+          padding: const .all(16),
           children: .generate(2, _cell),
         ),
         width: 20,
@@ -370,7 +370,7 @@ void main() {
               child: Grid.count(
                 crossAxisCount: 3,
                 crossAxisSpacing: 10,
-                padding: const EdgeInsets.all(8),
+                padding: const .all(8),
               ),
             ),
           ),
@@ -460,7 +460,7 @@ void main() {
         tester,
         .extent(
           maxCrossAxisExtent: 100,
-          padding: const EdgeInsets.all(8),
+          padding: const .all(8),
           children: cells(),
         ),
       );

@@ -31,7 +31,7 @@ class _GridPageState extends State<GridPage> {
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const .all(16),
               decoration: BoxDecoration(
                 border: Border(right: BorderSide(color: Colors.grey.shade300)),
               ),

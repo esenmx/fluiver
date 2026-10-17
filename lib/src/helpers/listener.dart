@@ -29,7 +29,7 @@ final class LocaleListener(
     _binding.addObserver(_observer);
   }
 
-  final WidgetsBinding _binding = WidgetsBinding.instance;
+  final WidgetsBinding _binding = .instance;
   final _observer = _LocaleObserver(onLocalesChanged);
 
   /// Stops reporting locale changes.
@@ -85,7 +85,7 @@ final class BrightnessListener(
     _binding.addObserver(_observer);
   }
 
-  final WidgetsBinding _binding = WidgetsBinding.instance;
+  final WidgetsBinding _binding = .instance;
   final _observer = _BrightnessObserver(onPlatformBrightnessChanged);
 
   /// Stops reporting brightness changes.
