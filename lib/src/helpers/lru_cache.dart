@@ -13,8 +13,9 @@ import 'dart:collection';
 /// cache.clear();
 /// ```
 ///
-/// Backed by [LinkedHashMap] insertion order — O(1) reads, writes, and
-/// eviction. Not thread-safe; isolates each have their own cache.
+/// Backed by a [HashMap] plus a doubly linked list — O(1) reads, writes, and
+/// eviction, whatever the capacity. Not thread-safe; isolates each have their
+/// own cache.
 final class LRUCache<K, V>({
   /// Maximum number of entries the cache holds before evicting.
   required final int maxEntries,
@@ -27,44 +28,39 @@ final class LRUCache<K, V>({
       throw ArgumentError('maxEntries must be greater than 0');
     }
   }
-  final LinkedHashMap<K, V> _entries = LinkedHashMap<K, V>();
+  final HashMap<K, _LRUNode<K, V>> _nodes = HashMap<K, _LRUNode<K, V>>();
+  _LRUNode<K, V>? _leastRecent;
+  _LRUNode<K, V>? _mostRecent;
 
   /// Number of entries currently held.
-  int get length => _entries.length;
+  int get length => _nodes.length;
 
   /// Whether the cache holds no entries.
-  bool get isEmpty => _entries.isEmpty;
+  bool get isEmpty => _nodes.isEmpty;
 
   /// Whether the cache holds at least one entry.
-  bool get isNotEmpty => _entries.isNotEmpty;
+  bool get isNotEmpty => _nodes.isNotEmpty;
 
   /// Returns the value for [key], promoting it to most-recently-used, or
   /// `null` if absent.
   V? operator [](K key) {
-    if (null is V) {
-      if (!_entries.containsKey(key)) {
-        return null;
-      }
-      final value = _entries.remove(key) as V;
-      _entries[key] = value;
-      return value;
+    final node = _take(key);
+    if (node == null) {
+      return null;
     }
-
-    final value = _entries.remove(key);
-    if (value != null) {
-      _entries[key] = value;
-      return value;
-    }
-    return null;
+    _insertMostRecent(node..key = key);
+    return node.value;
   }
 
   /// Inserts or replaces [value] for [key] and marks it most-recently-used.
   /// Evicts the least-recently-used entry when [maxEntries] is exceeded.
   void operator []=(K key, V value) {
-    _entries.remove(key);
-    _entries[key] = value;
-    if (_entries.length > maxEntries) {
-      _entries.remove(_entries.keys.first);
+    _take(key);
+    _insertMostRecent(_LRUNode(key, value));
+    if (_nodes.length > maxEntries) {
+      if (_leastRecent case final evicted?) {
+        _take(evicted.key);
+      }
     }
   }
 
@@ -78,9 +74,9 @@ final class LRUCache<K, V>({
   /// [ifAbsent] runs synchronously; for async loads keep the cache typed on
   /// the future (`LRUCache<K, Future<V>>`) so concurrent misses dedupe.
   V putIfAbsent(K key, V Function() ifAbsent) {
-    final hit = this[key];
-    if (hit != null || (null is V && _entries.containsKey(key))) {
-      return hit as V;
+    if (_take(key) case final node?) {
+      _insertMostRecent(node..key = key);
+      return node.value;
     }
     final value = ifAbsent();
     this[key] = value;
@@ -88,23 +84,74 @@ final class LRUCache<K, V>({
   }
 
   /// Returns `true` if [key] is present (without promoting it).
-  bool containsKey(K key) => _entries.containsKey(key);
+  bool containsKey(K key) => _nodes.containsKey(key);
 
   /// Removes [key] and returns its value, or `null` if absent.
-  V? remove(K key) => _entries.remove(key);
+  V? remove(K key) => _take(key)?.value;
 
   /// Empties the cache.
-  void clear() => _entries.clear();
+  void clear() {
+    _nodes.clear();
+    _leastRecent = null;
+    _mostRecent = null;
+  }
 
   /// Returns the value for [key] without promoting it, or `null` if absent.
-  V? peek(K key) => _entries[key];
+  V? peek(K key) => _nodes[key]?.value;
 
   /// Keys in least- to most-recently-used order, as a snapshot.
-  Iterable<K> get keys => List.unmodifiable(_entries.keys);
+  Iterable<K> get keys => List.unmodifiable(_nodesInOrder().map((n) => n.key));
 
   /// Values in least- to most-recently-used order, as a snapshot.
-  Iterable<V> get values => List.unmodifiable(_entries.values);
+  Iterable<V> get values =>
+      List.unmodifiable(_nodesInOrder().map((n) => n.value));
 
   /// Entries in least- to most-recently-used order, as a snapshot.
-  Iterable<MapEntry<K, V>> get entries => List.unmodifiable(_entries.entries);
+  Iterable<MapEntry<K, V>> get entries =>
+      List.unmodifiable(_nodesInOrder().map((n) => MapEntry(n.key, n.value)));
+
+  Iterable<_LRUNode<K, V>> _nodesInOrder() sync* {
+    for (var node = _leastRecent; node != null; node = node.moreRecent) {
+      yield node;
+    }
+  }
+
+  _LRUNode<K, V>? _take(K key) {
+    final node = _nodes.remove(key);
+    if (node == null) {
+      return null;
+    }
+    final lessRecent = node.lessRecent;
+    final moreRecent = node.moreRecent;
+    if (lessRecent == null) {
+      _leastRecent = moreRecent;
+    } else {
+      lessRecent.moreRecent = moreRecent;
+    }
+    if (moreRecent == null) {
+      _mostRecent = lessRecent;
+    } else {
+      moreRecent.lessRecent = lessRecent;
+    }
+    return node
+      ..lessRecent = null
+      ..moreRecent = null;
+  }
+
+  void _insertMostRecent(_LRUNode<K, V> node) {
+    _nodes[node.key] = node;
+    final previous = _mostRecent;
+    node.lessRecent = previous;
+    if (previous == null) {
+      _leastRecent = node;
+    } else {
+      previous.moreRecent = node;
+    }
+    _mostRecent = node;
+  }
+}
+
+final class _LRUNode<K, V>(var K key, final V value) {
+  _LRUNode<K, V>? lessRecent;
+  _LRUNode<K, V>? moreRecent;
 }
