@@ -34,6 +34,10 @@ class Grid extends MultiChildRenderObjectWidget {
   });
 
   /// A fixed-column grid — mirrors [GridView.count].
+  ///
+  /// Throws [ArgumentError] unless [crossAxisCount] and [childAspectRatio] are
+  /// positive, and the spacings and [mainAxisExtent] are finite and not
+  /// negative.
   new count({
     required int crossAxisCount,
     super.children,
@@ -44,7 +48,7 @@ class Grid extends MultiChildRenderObjectWidget {
     this.direction = .vertical,
     this.padding = .zero,
     super.key,
-  }) : gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+  }) : gridDelegate = _checkedCountDelegate(
          crossAxisCount: crossAxisCount,
          mainAxisSpacing: mainAxisSpacing,
          crossAxisSpacing: crossAxisSpacing,
@@ -53,6 +57,10 @@ class Grid extends MultiChildRenderObjectWidget {
        );
 
   /// A max-cell-extent responsive grid — mirrors [GridView.extent].
+  ///
+  /// Throws [ArgumentError] unless [maxCrossAxisExtent] and [childAspectRatio]
+  /// are positive, and the spacings and [mainAxisExtent] are finite and not
+  /// negative.
   new extent({
     required double maxCrossAxisExtent,
     super.children,
@@ -63,13 +71,93 @@ class Grid extends MultiChildRenderObjectWidget {
     this.direction = .vertical,
     this.padding = .zero,
     super.key,
-  }) : gridDelegate = SliverGridDelegateWithMaxCrossAxisExtent(
+  }) : gridDelegate = _checkedExtentDelegate(
          maxCrossAxisExtent: maxCrossAxisExtent,
          mainAxisSpacing: mainAxisSpacing,
          crossAxisSpacing: crossAxisSpacing,
          childAspectRatio: childAspectRatio,
          mainAxisExtent: mainAxisExtent,
        );
+
+  // These run ahead of the delegate constructors, whose asserts would otherwise
+  // answer first in debug and stay silent in release.
+  static SliverGridDelegate _checkedCountDelegate({
+    required int crossAxisCount,
+    required double mainAxisSpacing,
+    required double crossAxisSpacing,
+    required double childAspectRatio,
+    required double? mainAxisExtent,
+  }) {
+    if (crossAxisCount <= 0) {
+      throw ArgumentError.value(
+        crossAxisCount,
+        'crossAxisCount',
+        'must be greater than 0',
+      );
+    }
+    _checkCellMetrics(
+      mainAxisSpacing: mainAxisSpacing,
+      crossAxisSpacing: crossAxisSpacing,
+      childAspectRatio: childAspectRatio,
+      mainAxisExtent: mainAxisExtent,
+    );
+    return SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: crossAxisCount,
+      mainAxisSpacing: mainAxisSpacing,
+      crossAxisSpacing: crossAxisSpacing,
+      childAspectRatio: childAspectRatio,
+      mainAxisExtent: mainAxisExtent,
+    );
+  }
+
+  static SliverGridDelegate _checkedExtentDelegate({
+    required double maxCrossAxisExtent,
+    required double mainAxisSpacing,
+    required double crossAxisSpacing,
+    required double childAspectRatio,
+    required double? mainAxisExtent,
+  }) {
+    _checkPositive(maxCrossAxisExtent, 'maxCrossAxisExtent');
+    _checkCellMetrics(
+      mainAxisSpacing: mainAxisSpacing,
+      crossAxisSpacing: crossAxisSpacing,
+      childAspectRatio: childAspectRatio,
+      mainAxisExtent: mainAxisExtent,
+    );
+    return SliverGridDelegateWithMaxCrossAxisExtent(
+      maxCrossAxisExtent: maxCrossAxisExtent,
+      mainAxisSpacing: mainAxisSpacing,
+      crossAxisSpacing: crossAxisSpacing,
+      childAspectRatio: childAspectRatio,
+      mainAxisExtent: mainAxisExtent,
+    );
+  }
+
+  static void _checkCellMetrics({
+    required double mainAxisSpacing,
+    required double crossAxisSpacing,
+    required double childAspectRatio,
+    required double? mainAxisExtent,
+  }) {
+    _checkFiniteNotNegative(mainAxisSpacing, 'mainAxisSpacing');
+    _checkFiniteNotNegative(crossAxisSpacing, 'crossAxisSpacing');
+    _checkPositive(childAspectRatio, 'childAspectRatio');
+    if (mainAxisExtent != null) {
+      _checkFiniteNotNegative(mainAxisExtent, 'mainAxisExtent');
+    }
+  }
+
+  static void _checkPositive(double value, String name) {
+    if (!(value > 0)) {
+      throw ArgumentError.value(value, name, 'must be greater than 0');
+    }
+  }
+
+  static void _checkFiniteNotNegative(double value, String name) {
+    if (!value.isFinite || value < 0) {
+      throw ArgumentError.value(value, name, 'must be finite and not negative');
+    }
+  }
 
   /// Sizing policy — any [SliverGridDelegate], exactly as in [GridView].
   final SliverGridDelegate gridDelegate;
@@ -128,9 +216,19 @@ class RenderGrid({
 }) extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _GridParentData>,
-        RenderBoxContainerDefaultsMixin<RenderBox, _GridParentData> {
+        RenderBoxContainerDefaultsMixin<RenderBox, _GridParentData>,
+        DebugOverflowIndicatorMixin {
   /// Creates the [Grid] render object.
   this;
+
+  /// The box, grown on each side where a child paints past it by more than
+  /// rounding.
+  Rect _childrenBounds = .zero;
+
+  final LayerHandle<ClipRectLayer> _clipRectLayer =
+      LayerHandle<ClipRectLayer>();
+
+  bool get _hasOverflow => _childrenBounds != Offset.zero & size;
 
   /// Sizing policy; relayout follows [SliverGridDelegate.shouldRelayout].
   SliverGridDelegate get gridDelegate => _gridDelegate;
@@ -263,17 +361,15 @@ class RenderGrid({
     final layout = _layoutFor(_crossContentFor(crossMax));
     size = _layoutSize(constraints);
 
+    var bounds = Offset.zero & size;
     var index = 0;
     var child = firstChild;
     while (child != null) {
       final geometry = layout.getGeometryForChildIndex(index);
-      child.layout(
-        BoxConstraints.tight(
-          _isVertical
-              ? Size(geometry.crossAxisExtent, geometry.mainAxisExtent)
-              : Size(geometry.mainAxisExtent, geometry.crossAxisExtent),
-        ),
-      );
+      final cellSize = _isVertical
+          ? Size(geometry.crossAxisExtent, geometry.mainAxisExtent)
+          : Size(geometry.mainAxisExtent, geometry.crossAxisExtent);
+      child.layout(BoxConstraints.tight(cellSize));
 
       // Vertical RTL is reversed by the delegate's own layout (via
       // crossAxisDirection); horizontal RTL reverses the main axis here,
@@ -290,16 +386,73 @@ class RenderGrid({
         parentData.offset = _isVertical
             ? Offset(p.left + geometry.crossAxisOffset, p.top + mainOffset)
             : Offset(p.left + mainOffset, p.top + geometry.crossAxisOffset);
+        if (!cellSize.isEmpty) {
+          bounds = bounds.expandToInclude(parentData.offset & cellSize);
+        }
       }
 
       child = childAfter(child);
       index++;
     }
+    _childrenBounds = .fromLTRB(
+      bounds.left < -precisionErrorTolerance ? bounds.left : 0,
+      bounds.top < -precisionErrorTolerance ? bounds.top : 0,
+      bounds.right > size.width + precisionErrorTolerance
+          ? bounds.right
+          : size.width,
+      bounds.bottom > size.height + precisionErrorTolerance
+          ? bounds.bottom
+          : size.height,
+    );
   }
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    defaultPaint(context, offset);
+    if (!_hasOverflow) {
+      _clipRectLayer.layer = null;
+      defaultPaint(context, offset);
+      return;
+    }
+    if (size.isEmpty) {
+      _clipRectLayer.layer = null;
+      return;
+    }
+    _clipRectLayer.layer = context.pushClipRect(
+      needsCompositing,
+      offset,
+      Offset.zero & size,
+      defaultPaint,
+      oldLayer: _clipRectLayer.layer,
+    );
+    assert(() {
+      paintOverflowIndicator(
+        context,
+        offset,
+        Offset.zero & size,
+        _childrenBounds,
+        overflowHints: <DiagnosticsNode>[
+          ErrorDescription(
+            'The cells of this Grid need more room than its parent allows, '
+            'so they are clipped. Children outside the box also miss taps.',
+          ),
+          ErrorHint(
+            'Give the grid more room, for example a scrollable parent or a '
+            'smaller cell, or reduce the number of children.',
+          ),
+        ],
+      );
+      return true;
+    }(), 'debug-only overflow report');
+  }
+
+  @override
+  Rect? describeApproximatePaintClip(RenderObject child) =>
+      _hasOverflow ? Offset.zero & size : null;
+
+  @override
+  void dispose() {
+    _clipRectLayer.layer = null;
+    super.dispose();
   }
 
   @override
