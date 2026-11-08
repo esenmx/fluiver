@@ -7,13 +7,13 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write
   contents: read
 
 jobs:
   verify:
     name: Verify tag matches pubspec
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
       - name: Check tag matches pubspec version
@@ -29,15 +29,15 @@ jobs:
     name: Publish to pub.dev
     needs: verify
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     environment: pub.dev
     permissions:
       id-token: write
       contents: read
     steps:
       - uses: actions/checkout@v7
-      - uses: dart-lang/setup-dart@v1
       - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
+        with: { channel: stable }
       - run: flutter pub get
+      - uses: dart-lang/setup-dart@v1
       - run: flutter pub publish --force
