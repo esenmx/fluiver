@@ -11,6 +11,7 @@ Widget _app({
   ScrollController? controller,
   double scrollOffset = 0,
   Duration duration = const Duration(milliseconds: 200),
+  Curve curve = Curves.easeInOut,
 }) {
   return MaterialApp(
     home: Scaffold(
@@ -23,6 +24,7 @@ Widget _app({
               isExpanded: isExpanded,
               scrollOffset: scrollOffset,
               duration: duration,
+              curve: curve,
               child: const SizedBox(height: 300, width: 100),
             ),
             const SizedBox(height: 100),
@@ -278,17 +280,24 @@ void main() {
     });
 
     testWidgets(
-      'a toggle during a rejected duration applies once it is valid',
+      'a toggle and curve change during a rejected duration apply once valid',
       (tester) async {
-        await tester.pumpWidget(_app(isExpanded: false));
+        await tester.pumpWidget(_app(isExpanded: false, curve: Curves.linear));
         await tester.pumpWidget(
-          _app(isExpanded: true, duration: const Duration(milliseconds: -1)),
+          _app(
+            isExpanded: true,
+            duration: const Duration(milliseconds: -1),
+            curve: Curves.easeIn,
+          ),
         );
         check(tester.takeException()).isA<ArgumentError>();
 
-        await tester.pumpWidget(_app(isExpanded: true));
-        await tester.pumpAndSettle();
+        await tester.pumpWidget(_app(isExpanded: true, curve: Curves.easeIn));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        check(_size(tester).height).isLessThan(150);
 
+        await tester.pumpAndSettle();
         check(_size(tester).height).equals(300);
       },
     );

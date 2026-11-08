@@ -93,10 +93,10 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
     super.didUpdateWidget(oldWidget);
     // build reports it; the controller only asserts against it in debug.
     if (widget.duration.isNegative) return;
-    if (widget.duration != oldWidget.duration) {
+    if (widget.duration != _controller.duration) {
       _controller.duration = widget.duration;
     }
-    if (widget.curve != oldWidget.curve) {
+    if (widget.curve != _animation.curve) {
       _animation.dispose();
       _updateAnimation();
     }
