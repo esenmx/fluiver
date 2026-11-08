@@ -107,6 +107,48 @@ void main() {
         ).equals(best);
       }
     });
+
+    test('in-range extendedSRGB picks what its sRGB twin picks', () {
+      for (final channel in const [0.0, 0.1, 0.18, 0.2, 0.5, 0.9, 1.0]) {
+        final twin = Color.from(
+          alpha: 1,
+          red: channel,
+          green: channel,
+          blue: channel,
+        );
+        final wide = Color.from(
+          alpha: 1,
+          red: channel,
+          green: channel,
+          blue: channel,
+          colorSpace: .extendedSRGB,
+        );
+        check(
+          because: '$channel',
+          wide.contrastText(),
+        ).equals(twin.contrastText());
+      }
+    });
+
+    test('throws ArgumentError when a channel is outside [0, 1]', () {
+      for (final (red, green, blue) in const [
+        (1.5, 0.5, 0.5),
+        (-0.2, 0.5, 1.0),
+        (0.5, double.nan, 0.5),
+      ]) {
+        final wide = Color.from(
+          alpha: 1,
+          red: red,
+          green: green,
+          blue: blue,
+          colorSpace: .extendedSRGB,
+        );
+        check(
+          because: '($red, $green, $blue)',
+          wide.contrastText,
+        ).throws<ArgumentError>();
+      }
+    });
   });
 
   group('lightness shift', () {
