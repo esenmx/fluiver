@@ -4,27 +4,27 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('separated', () {
-    List<Widget> separated(int n) {
+  group('intersperse', () {
+    List<Widget> interspersed(int n) {
       final logos = <Widget>[for (var i = 0; i < n; i++) const FlutterLogo()];
-      return logos.separated((_) => const SizedBox()).toList();
+      return logos.intersperse((_) => const SizedBox()).toList();
     }
 
-    test('empty', () => check(separated(0)).isEmpty());
+    test('empty', () => check(interspersed(0)).isEmpty());
     test('single', () {
-      final result = separated(1);
+      final result = interspersed(1);
       check(result).length.equals(1);
       check(result.single).isA<FlutterLogo>();
     });
     test('two elements', () {
-      final result = separated(2);
+      final result = interspersed(2);
       check(result).length.equals(3);
       check(result[0]).isA<FlutterLogo>();
       check(result[1]).isA<SizedBox>();
       check(result[2]).isA<FlutterLogo>();
     });
     test('alternates correctly', () {
-      final result = separated(100);
+      final result = interspersed(100);
       for (var i = 0; i < result.length; i++) {
         if (i.isEven) {
           check(result[i]).isA<FlutterLogo>();
