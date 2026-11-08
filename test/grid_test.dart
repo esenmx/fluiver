@@ -24,6 +24,14 @@ Future<void> _pump(
   );
 }
 
+final bool _assertsEnabled = () {
+  var enabled = false;
+  assert(enabled = true, '');
+  return enabled;
+}();
+
+Finder _cellFinder(int i) => find.byKey(ValueKey(i));
+
 Rect _rectOf(WidgetTester tester, int i) {
   return tester.getRect(find.byKey(ValueKey(i)));
 }
@@ -526,6 +534,249 @@ void main() {
       );
 
       check(tester.takeException()).isNull();
+    });
+  });
+
+  group('constructor misuse', () {
+    for (final (name, argument, build) in <(String, String, Grid Function())>[
+      ('count 0', 'crossAxisCount', () => .count(crossAxisCount: 0)),
+      ('count -1', 'crossAxisCount', () => .count(crossAxisCount: -1)),
+      for (final value in const <double>[-1, .nan, .infinity]) ...[
+        (
+          'count mainAxisSpacing $value',
+          'mainAxisSpacing',
+          () => .count(crossAxisCount: 1, mainAxisSpacing: value),
+        ),
+        (
+          'count crossAxisSpacing $value',
+          'crossAxisSpacing',
+          () => .count(crossAxisCount: 1, crossAxisSpacing: value),
+        ),
+        (
+          'count mainAxisExtent $value',
+          'mainAxisExtent',
+          () => .count(crossAxisCount: 1, mainAxisExtent: value),
+        ),
+        (
+          'extent mainAxisSpacing $value',
+          'mainAxisSpacing',
+          () => .extent(maxCrossAxisExtent: 1, mainAxisSpacing: value),
+        ),
+        (
+          'extent crossAxisSpacing $value',
+          'crossAxisSpacing',
+          () => .extent(maxCrossAxisExtent: 1, crossAxisSpacing: value),
+        ),
+        (
+          'extent mainAxisExtent $value',
+          'mainAxisExtent',
+          () => .extent(maxCrossAxisExtent: 1, mainAxisExtent: value),
+        ),
+      ],
+      for (final value in const [0.0, -1.0, double.nan]) ...[
+        (
+          'count childAspectRatio $value',
+          'childAspectRatio',
+          () => .count(crossAxisCount: 1, childAspectRatio: value),
+        ),
+        (
+          'extent childAspectRatio $value',
+          'childAspectRatio',
+          () => .extent(maxCrossAxisExtent: 1, childAspectRatio: value),
+        ),
+        (
+          'extent maxCrossAxisExtent $value',
+          'maxCrossAxisExtent',
+          () => .extent(maxCrossAxisExtent: value),
+        ),
+      ],
+    ]) {
+      test('$name throws ArgumentError naming $argument', () {
+        check(build)
+            .throws<ArgumentError>()
+            .has((e) => e.name, 'name')
+            .equals(argument);
+      });
+    }
+
+    testWidgets('an unlimited maxCrossAxisExtent stays one column', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        .extent(
+          maxCrossAxisExtent: .infinity,
+          mainAxisExtent: 0,
+          children: .generate(2, _cell),
+        ),
+      );
+
+      check(tester.takeException()).isNull();
+      check(_rectOf(tester, 1).width).equals(300);
+    });
+  });
+
+  group('overflow in a bounded box', () {
+    Grid rows(int count, {EdgeInsetsGeometry padding = .zero}) => .count(
+      crossAxisCount: 1,
+      mainAxisExtent: 100,
+      padding: padding,
+      children: .generate(count, _cell),
+    );
+
+    List<Rect> clipsPaintedBy(RenderGrid grid) {
+      final canvas = TestRecordingCanvas();
+      grid.paint(TestRecordingPaintingContext(canvas), .zero);
+      return [
+        for (final call in canvas.invocations)
+          if (call.invocation.memberName == #clipRect)
+            call.invocation.positionalArguments.first as Rect,
+      ];
+    }
+
+    RenderGrid gridIn(WidgetTester tester) =>
+        tester.renderObject<RenderGrid>(find.byType(Grid));
+
+    testWidgets('clips the paint to the box', (tester) async {
+      await _pump(tester, rows(3), height: 100);
+      tester.takeException();
+      final grid = gridIn(tester);
+
+      const box = Rect.fromLTWH(0, 0, 300, 100);
+      check(clipsPaintedBy(grid)).deepEquals([box]);
+      check(
+        grid.describeApproximatePaintClip(tester.renderObject(_cellFinder(2))),
+      ).equals(box);
+      tester.takeException();
+    });
+
+    testWidgets('clips through a layer when a child composites', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        .count(
+          crossAxisCount: 1,
+          mainAxisExtent: 100,
+          children: .generate(3, (_) => const RepaintBoundary()),
+        ),
+        height: 100,
+      );
+      tester.takeException();
+
+      check(tester.layers.whereType<ClipRectLayer>().single.clipRect)
+          .equals(const .fromLTWH(0, 0, 300, 100));
+
+      await tester.pumpWidget(const SizedBox());
+      check(tester.takeException()).isNull();
+    });
+
+    testWidgets('reports a FlutterError in debug naming the side', (
+      tester,
+    ) async {
+      await _pump(tester, rows(3), height: 100);
+
+      check(tester.takeException())
+          .isA<FlutterError>()
+          .has((e) => e.toString(), 'text')
+          .contains('overflowed by 200 pixels on the bottom');
+    }, skip: !_assertsEnabled);
+
+    testWidgets('horizontal RTL reports the overflow on the left', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        .count(
+          crossAxisCount: 1,
+          mainAxisExtent: 100,
+          direction: .horizontal,
+          children: .generate(3, _cell),
+        ),
+        width: 100,
+        height: 300,
+        textDirection: .rtl,
+      );
+
+      check(tester.takeException())
+          .isA<FlutterError>()
+          .has((e) => e.toString(), 'text')
+          .contains('overflowed by 200 pixels on the left');
+    }, skip: !_assertsEnabled);
+
+    testWidgets('a child inside the box is still tappable', (tester) async {
+      final taps = <int>[];
+      await _pump(
+        tester,
+        .count(
+          crossAxisCount: 1,
+          mainAxisExtent: 100,
+          children: [
+            for (var i = 0; i < 3; i++)
+              GestureDetector(
+                key: ValueKey(i),
+                behavior: .opaque,
+                onTap: () => taps.add(i),
+              ),
+          ],
+        ),
+        height: 100,
+      );
+      tester.takeException();
+
+      await tester.tapAt(const Offset(150, 50));
+      check(taps).deepEquals([0]);
+      await tester.tapAt(const Offset(150, 250));
+      check(taps).deepEquals([0]);
+    });
+
+    testWidgets('content that fits neither clips nor reports', (tester) async {
+      await _pump(tester, rows(3), height: 300);
+      final grid = gridIn(tester);
+
+      check(tester.takeException()).isNull();
+      check(clipsPaintedBy(grid)).isEmpty();
+      check(
+        grid.describeApproximatePaintClip(tester.renderObject(_cellFinder(0))),
+      ).isNull();
+    });
+
+    testWidgets('padding squeezed by the box is not overflow', (tester) async {
+      await _pump(tester, rows(1, padding: const .all(10)), height: 110);
+
+      check(tester.takeException()).isNull();
+      check(clipsPaintedBy(gridIn(tester))).isEmpty();
+    });
+
+    testWidgets('fractional cells that round past the edge are not overflow', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        .count(crossAxisCount: 7, children: .generate(49, _cell)),
+        width: 93,
+        height: 93,
+      );
+
+      check(tester.takeException()).isNull();
+      check(clipsPaintedBy(gridIn(tester))).isEmpty();
+    });
+
+    testWidgets('an empty cell placed past the edge is not overflow', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        .count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 400,
+          children: .generate(2, _cell),
+        ),
+        height: 100,
+      );
+
+      check(tester.takeException()).isNull();
+      check(clipsPaintedBy(gridIn(tester))).isEmpty();
     });
   });
 }
