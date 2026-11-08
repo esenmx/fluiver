@@ -1,2 +1,4 @@
 tags:
   web:
+  perf:
+    skip: "Wall-clock ratio, too noisy for CI. Run: flutter test --run-skipped --tags perf"
