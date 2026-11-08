@@ -1,6 +1,6 @@
 ---
 name: fluiver-usage
-description: SDK gap-fillers via package:fluiver — use instead of reinventing. Grid (non-scroll grid, GridView API), TickerBuilder, ScrollTrackingExpandable (expand/collapse pinned into view), Debounce/Throttle*, Locale/Brightness listeners, DateTime/TimeOfDay predicates, Enum.byNameOrNull, Iterable separated/slidingWindows, Map.entryOf, Object.into, Color darken/lighten/contrastText, ScrollController atTop/animateTo*, Future.timeoutOrNull, TextEditingController.setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
+description: SDK gap-fillers via package:fluiver — use instead of reinventing. Grid (non-scroll grid, GridView API), TickerBuilder, ScrollTrackingExpandable (expand/collapse pinned into view), Debounce/Throttle*, Locale/Brightness listeners, DateTime/TimeOfDay predicates, Enum.byNameOrNull, Iterable intersperse/slidingWindows, Map.entryOf, Object.into, Color darken/lighten/contrastText, ScrollController atTop/animateTo*, Future.timeoutOrNull, TextEditingController.setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
 ---
 
 # fluiver-usage
@@ -16,7 +16,10 @@ Reach for these instead of hand-rolling. **No overlap with `package:collection`
   any `SliverGridDelegate`. All ctors also take `direction:` (main axis) and
   `padding:`. Drop-in for `GridView(shrinkWrap: true)` inside a `ListView` /
   `Column`; unlike that, intrinsics/dry layout work. Real `GridView` only when
-  the grid itself scrolls.
+  the grid itself scrolls. `.count`/`.extent` throw `ArgumentError` for a count,
+  ratio or max extent that isn't positive, and for negative or non-finite
+  spacing or `mainAxisExtent`. Overflow in a bounded box is clipped to it, and
+  reported with the striped indicator in debug.
 - `TickerBuilder(builder: (context, Duration elapsed) => …, onTick:)` — rebuilds
   per frame, `elapsed` = running time since first frame (paused time excluded);
   `onTick` for per-frame side effects; `enabled: false` pauses (no frames,
@@ -26,14 +29,15 @@ Reach for these instead of hand-rolling. **No overlap with `package:collection`
   `scrollOffset:`) — expand/collapse that keeps the growing bottom edge visible
   in the nearest `Scrollable`. Collapse never scrolls; collapsed child is
   offstage (unfocusable, out of semantics, tickers muted). Use over
-  `AnimatedSize`/`ExpansionTile` for tiles low in a scrollable.
+  `AnimatedSize`/`ExpansionTile` for tiles low in a scrollable. A negative
+  `duration` reports `ArgumentError` on build (the constructor is `const`).
 
 ## Debounce / Throttle
 
 `Debounce(Duration)`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` —
 callable (`d(() => …)`), throw `ArgumentError` for a negative duration, all
-expose `dispose()` and throw `StateError` if called after disposal. Run in the
-widget, never inside a notifier.
+expose `dispose()` and throw `StateError` if called or disposed again after
+disposal. Run in the widget, never inside a notifier.
 
 | Variant | Fires |
 | --- | --- |
@@ -74,10 +78,10 @@ final listener = LocaleListener((next) => locales.value = next);
 - **Enum**: `with EnumIndexComparable<MyEnum>` adds `<`/`>`/`compareTo` by index
   type-safely. `values.byNameOrNull(name)` → nullable, for untrusted input
   (stdlib `byName` throws); chain `?? .fallback`.
-- **Iterable**: `separated((i) => sep)` (interleave by index slot);
-  `slidingWindows(size, {step})` (Kotlin's `windowed`; dartx's same-named member
-  would clash), **drops the partial trailing window** (vs non-overlapping
-  `collection.slices`).
+- **Iterable**: `intersperse((i) => sep)` (interleave by index slot; takes a
+  builder, unlike `collection.separated(value)`); `slidingWindows(size, {step})`
+  (Kotlin's `windowed`; dartx's same-named member would clash), **drops the
+  partial trailing window** (vs non-overlapping `collection.slices`).
 - **Map**: `where` over `(k, v)`; `whereKeyType<T>()`, `whereValueType<T>()`
   (narrowed static type); `entryOf(key)` → `MapEntry?`, null **only when the key
   is absent** (present-with-null ≠ missing).
@@ -85,25 +89,29 @@ final listener = LocaleListener((next) => locales.value = next);
   `?.into(...)` for null-aware (`env['PORT']?.into(int.parse)`). Skip for
   side-effect-only calls, multi-line bodies, chains beyond three.
 - **Color** (HSL): `darken([amount])`, `lighten([amount])` (default ±0.1;
-  `RangeError` unless `amount` is within `[0, 1]`; `ArgumentError` when a
-  channel is outside `[0, 1]` — map extended sRGB into gamut first),
-  `contrastText()` (black/white with the higher contrast ratio).
+  `RangeError` unless `amount` is within `[0, 1]`), `contrastText()`
+  (black/white with the higher contrast ratio). All three throw `ArgumentError`
+  when a channel is outside `[0, 1]` — map extended sRGB into gamut first.
 - **ScrollController**: `atTop()`, `atBottom()`,
   `animateToTop({duration, curve})`, `animateToBottom(...)` — throw `StateError`
   when unattached (check `hasClients`), like `position`; `atTop()`/`atBottom()`
-  true only when every attached view is at that edge.
+  true only when every attached view is at that edge; `animateTo*` throw
+  `ArgumentError` unless `duration` is positive.
 - **Future**: `timeoutOrNull(Duration)` → `Future<T?>` — null on timeout
   **only**; underlying errors still throw. Non-nullable `Future<T>` only.
+  `ArgumentError` if negative.
 - **TextEditingController**: `setTextAndCaret(text, {caret})` — text + caret in
-  one shot (`.text =` resets caret to 0); `RangeError` if `caret` is outside
-  `0..text.length`.
+  one shot, valid focused or not (`.text =` drops the selection to invalid,
+  offset -1; a focused field then repairs it: caret at the end on mobile and
+  multiline, select-all on single-line desktop); `RangeError` if `caret` is
+  outside `0..text.length`.
 
 ## Helpers
 
 | API | Note |
 | --- | --- |
 | `FastHash.fnv1a(String)` → `int` | FNV-1a-64 over UTF-16BE code units (≠ FNV-1a over UTF-8). **Throws on JS web**; VM/Wasm fine. NOT cryptographic. |
-| `NetworkProbe.checkConnection({host, port, timeout})` | `false` on `SocketException`/`TimeoutException`. Defaults `1.0.0.1:53`, 3s; `host` = literal IP. Web → `UnsupportedError`. |
+| `NetworkProbe.checkConnection({host, port, timeout})` | `false` on `SocketException`/`TimeoutException`. Defaults `1.0.0.1:53`, 3s; `host` = literal IP. Negative `timeout` → `ArgumentError`. Web → `UnsupportedError`. |
 | `NetworkProbe.isBrowserOnline()` | web `navigator.onLine` (`false` = known offline); off web → `UnsupportedError`. |
 | `platformDispatch<T>({android, ios, macos, web, …})` | Per-platform value (all params lowercase); throws `UnsupportedError` on platforms without a callback. |
 | `TextFieldBuilders.disabledCounter` | `TextField(buildCounter: TextFieldBuilders.disabledCounter)` hides the counter. |
