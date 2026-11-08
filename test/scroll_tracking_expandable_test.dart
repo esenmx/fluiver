@@ -10,6 +10,7 @@ Widget _app({
   required bool isExpanded,
   ScrollController? controller,
   double scrollOffset = 0,
+  Duration duration = const Duration(milliseconds: 200),
 }) {
   return MaterialApp(
     home: Scaffold(
@@ -21,6 +22,7 @@ Widget _app({
             ScrollTrackingExpandable(
               isExpanded: isExpanded,
               scrollOffset: scrollOffset,
+              duration: duration,
               child: const SizedBox(height: 300, width: 100),
             ),
             const SizedBox(height: 100),
@@ -243,6 +245,92 @@ void main() {
         ),
       );
       check(offstage.offstage).isTrue();
+    });
+
+    testWidgets('duration: Duration.zero expansion reveals the child', (
+      tester,
+    ) async {
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+      await tester.pumpWidget(
+        _app(isExpanded: false, controller: controller, duration: .zero),
+      );
+
+      await tester.pumpWidget(
+        _app(isExpanded: true, controller: controller, duration: .zero),
+      );
+      await tester.pumpAndSettle();
+
+      check(controller.offset).equals(200);
+    });
+
+    testWidgets('mounting expanded does not scroll, whatever the duration', (
+      tester,
+    ) async {
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+      await tester.pumpWidget(
+        _app(isExpanded: true, controller: controller, duration: .zero),
+      );
+      await tester.pumpAndSettle();
+
+      check(controller.offset).equals(0);
+    });
+
+    testWidgets(
+      'a toggle during a rejected duration applies once it is valid',
+      (tester) async {
+        await tester.pumpWidget(_app(isExpanded: false));
+        await tester.pumpWidget(
+          _app(isExpanded: true, duration: const Duration(milliseconds: -1)),
+        );
+        check(tester.takeException()).isA<ArgumentError>();
+
+        await tester.pumpWidget(_app(isExpanded: true));
+        await tester.pumpAndSettle();
+
+        check(_size(tester).height).equals(300);
+      },
+    );
+
+    testWidgets('negative duration reports ArgumentError on mount', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _app(isExpanded: false, duration: const Duration(milliseconds: -1)),
+      );
+
+      check(tester.takeException())
+          .isA<ArgumentError>()
+          .has((e) => e.name, 'name')
+          .equals('duration');
+    });
+
+    testWidgets('negative duration reports ArgumentError on update', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_app(isExpanded: false));
+
+      await tester.pumpWidget(
+        _app(isExpanded: false, duration: const Duration(milliseconds: -1)),
+      );
+
+      check(tester.takeException())
+          .isA<ArgumentError>()
+          .has((e) => e.name, 'name')
+          .equals('duration');
+    });
+
+    testWidgets('negative duration reports ArgumentError while toggling', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_app(isExpanded: false));
+
+      await tester.pumpWidget(
+        _app(isExpanded: true, duration: const Duration(milliseconds: -1)),
+      );
+
+      check(tester.takeException()).isA<ArgumentError>();
     });
 
     testWidgets('rapid true -> false -> true toggle expands to full height', (

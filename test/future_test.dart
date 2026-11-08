@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:checks/checks.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:fluiver/fluiver.dart';
@@ -37,6 +39,25 @@ void main() {
       final f = Future<int>.error(error).timeoutOrNull(timeout);
 
       await check(f).throws<FormatException>();
+    });
+
+    test('throws ArgumentError naming timeout when negative', () {
+      final pending = Completer<int>().future;
+      check(() => pending.timeoutOrNull(const Duration(microseconds: -1)))
+          .throws<ArgumentError>()
+          .has((e) => e.name, 'name')
+          .equals('timeout');
+    });
+
+    test('Duration.zero still means an immediate timeout', () {
+      fakeAsync((async) {
+        int? captured = -1;
+        Completer<int>().future.timeoutOrNull(.zero).then((v) => captured = v);
+
+        async.elapse(.zero);
+
+        check(captured).isNull();
+      });
     });
   });
 }

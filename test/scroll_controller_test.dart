@@ -67,6 +67,28 @@ void main() {
       check(c.animateToTop).throws<StateError>();
       check(c.animateToBottom).throws<StateError>();
     });
+
+    for (final duration in const [Duration.zero, Duration(milliseconds: -1)]) {
+      testWidgets('duration $duration throws ArgumentError and stays put', (
+        tester,
+      ) async {
+        final c = newScrollController();
+        await pumpScrollableList(tester, c);
+        c.jumpTo(100);
+
+        check(() => c.animateToTop(duration: duration))
+            .throws<ArgumentError>()
+            .has((e) => e.name, 'name')
+            .equals('duration');
+        check(() => c.animateToBottom(duration: duration))
+            .throws<ArgumentError>()
+            .has((e) => e.name, 'name')
+            .equals('duration');
+
+        await tester.pumpAndSettle();
+        check(c.offset).equals(100);
+      });
+    }
   });
 
   group('several attached views', () {
