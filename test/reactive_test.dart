@@ -178,6 +178,21 @@ void main() {
       check(() => throttleLast(() => log.add('task'))).throws<StateError>();
       check(log).isEmpty();
     });
+
+    for (final (name, dispose) in <(String, void Function())>[
+      ('Debounce', Debounce(const Duration(milliseconds: 1)).dispose),
+      (
+        'ThrottleLatest',
+        ThrottleLatest(const Duration(milliseconds: 1)).dispose,
+      ),
+      ('ThrottleFirst', ThrottleFirst(const Duration(milliseconds: 1)).dispose),
+      ('ThrottleLast', ThrottleLast(const Duration(milliseconds: 1)).dispose),
+    ]) {
+      test('a second $name.dispose throws StateError', () {
+        dispose();
+        check(dispose).throws<StateError>();
+      });
+    }
   });
 
   group('Throttle re-entrancy', () {

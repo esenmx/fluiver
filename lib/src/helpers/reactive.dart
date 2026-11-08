@@ -20,7 +20,10 @@ mixin _TimerMixin {
   }
 
   /// Cancels any pending task. The object must not be used afterwards.
+  ///
+  /// Throws [StateError] if called a second time.
   void dispose() {
+    _checkNotDisposed();
     _disposed = true;
     _timer?.cancel();
   }
