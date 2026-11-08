@@ -33,6 +33,12 @@ void main() {
     check(NetworkProbe.isBrowserOnline()).isTrue();
   });
 
+  test('checkConnection rejects a negative timeout on web too', () {
+    check(
+      () => NetworkProbe.checkConnection(timeout: const Duration(seconds: -1)),
+    ).throws<ArgumentError>();
+  });
+
   test('checkConnection throws UnsupportedError on web', () {
     check(NetworkProbe.checkConnection).throws<UnsupportedError>();
     check(() => NetworkProbe.checkConnection(host: '10.0.0.5', port: 443))

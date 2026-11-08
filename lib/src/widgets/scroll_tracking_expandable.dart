@@ -16,6 +16,9 @@ class const ScrollTrackingExpandable({
   required final Widget child,
 
   /// The duration of the expansion/collapse animation.
+  ///
+  /// A negative one reports an [ArgumentError] when the widget builds; this
+  /// constructor is `const`, so it can't throw itself.
   final Duration duration = const Duration(milliseconds: 200),
 
   /// The curve of the expansion/collapse animation.
@@ -78,11 +81,18 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
     if (status == .dismissed && !widget.isExpanded && mounted) {
       setState(() {});
     }
+    // A zero duration notifies listeners while the status is still dismissed,
+    // so _trackScroll only sees the expansion here.
+    if (status == .completed) {
+      _trackScroll();
+    }
   }
 
   @override
   void didUpdateWidget(covariant ScrollTrackingExpandable oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // build reports it; the controller only asserts against it in debug.
+    if (widget.duration.isNegative) return;
     if (widget.duration != oldWidget.duration) {
       _controller.duration = widget.duration;
     }
@@ -90,7 +100,7 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
       _animation.dispose();
       _updateAnimation();
     }
-    if (widget.isExpanded != oldWidget.isExpanded) {
+    if (widget.isExpanded != _isExpanding) {
       if (widget.isExpanded) {
         _controller.forward();
       } else {
@@ -142,6 +152,13 @@ class _ScrollTrackingExpandableState extends State<ScrollTrackingExpandable>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.duration.isNegative) {
+      throw ArgumentError.value(
+        widget.duration,
+        'duration',
+        'must not be negative',
+      );
+    }
     final closed = !widget.isExpanded && _controller.isDismissed;
     return ClipRect(
       child: SizeTransition(

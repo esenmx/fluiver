@@ -24,12 +24,14 @@ extension ScrollControllerPosition on ScrollController {
 
   /// Animates every attached view to its minimum scroll extent.
   ///
-  /// Throws [StateError] when no scroll view is attached.
+  /// Throws [StateError] when no scroll view is attached, and [ArgumentError]
+  /// unless [duration] is positive.
   Future<void> animateToTop({
     Duration duration = const Duration(milliseconds: 250),
     Curve curve = Curves.easeOut,
   }) {
     _checkAttached();
+    _checkAnimationDuration(duration);
     return .wait([
       for (final p in positions)
         p.animateTo(p.minScrollExtent, duration: duration, curve: curve),
@@ -38,16 +40,24 @@ extension ScrollControllerPosition on ScrollController {
 
   /// Animates every attached view to its maximum scroll extent.
   ///
-  /// Throws [StateError] when no scroll view is attached.
+  /// Throws [StateError] when no scroll view is attached, and [ArgumentError]
+  /// unless [duration] is positive.
   Future<void> animateToBottom({
     Duration duration = const Duration(milliseconds: 250),
     Curve curve = Curves.easeOut,
   }) {
     _checkAttached();
+    _checkAnimationDuration(duration);
     return .wait([
       for (final p in positions)
         p.animateTo(p.maxScrollExtent, duration: duration, curve: curve),
     ]);
+  }
+
+  void _checkAnimationDuration(Duration duration) {
+    if (duration <= .zero) {
+      throw ArgumentError.value(duration, 'duration', 'must be positive');
+    }
   }
 
   void _checkAttached() {

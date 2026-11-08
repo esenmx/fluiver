@@ -53,6 +53,19 @@ void main() {
       );
     });
 
+    test('throws ArgumentError naming timeout when negative', () async {
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      addTearDown(server.close);
+
+      check(
+        () => NetworkProbe.checkConnection(
+          host: server.address.address,
+          port: server.port,
+          timeout: const Duration(seconds: -1),
+        ),
+      ).throws<ArgumentError>().has((e) => e.name, 'name').equals('timeout');
+    });
+
     test('propagates non-socket errors', () async {
       await check(NetworkProbe.checkConnection(host: 'not-a-literal-ip'))
           .throws<ArgumentError>();

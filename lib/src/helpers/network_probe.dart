@@ -15,7 +15,8 @@ abstract final class NetworkProbe {
   ///
   /// The default [timeout] of 3 seconds covers two lost SYNs (TCP
   /// retransmits at ~1s intervals), so a lossy-but-usable mobile network
-  /// still reports `true`.
+  /// still reports `true`. Throws [ArgumentError] if [timeout] is negative,
+  /// on every platform.
   ///
   /// Throws [UnsupportedError] on web, which has no TCP sockets; use
   /// [isBrowserOnline] there.
@@ -23,7 +24,12 @@ abstract final class NetworkProbe {
     String host = '1.0.0.1',
     int port = 53,
     Duration timeout = const Duration(seconds: 3),
-  }) => probeConnection(host: host, port: port, timeout: timeout);
+  }) {
+    if (timeout.isNegative) {
+      throw ArgumentError.value(timeout, 'timeout', 'must not be negative');
+    }
+    return probeConnection(host: host, port: port, timeout: timeout);
+  }
 
   /// Returns the browser's `navigator.onLine` — `false` only when the
   /// browser knows it is offline, so `true` does not prove any server is
