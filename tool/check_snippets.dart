@@ -248,7 +248,8 @@ Future<void> main(List<String> args) async {
         ..writeln('pub get failed for the snippet package:')
         ..writeln(get.stdout)
         ..writeln(get.stderr);
-      exit(1);
+      exitCode = 1;
+      return;
     }
     final analyze = await Process.run('dart', [
       'analyze',
@@ -291,14 +292,15 @@ Future<void> main(List<String> args) async {
         ..writeln('dart analyze exited ${analyze.exitCode} with no diagnostic:')
         ..writeln(analyze.stdout)
         ..writeln(analyze.stderr);
-      exit(1);
+      exitCode = 1;
+      return;
     }
     stdout.writeln(
       'check_snippets: ${snippets.length} block(s) analyzed, $skipped '
       'marked $_noCompile, $issues issue(s).',
     );
     if (issues > 0) {
-      exit(1);
+      exitCode = 1;
     }
   } finally {
     workspace.deleteSync(recursive: true);
