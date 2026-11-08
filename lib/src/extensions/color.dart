@@ -43,13 +43,33 @@ extension ColorTransform on Color {
   ///   child: Text(label, style: TextStyle(color: tagColor.contrastText())),
   /// )
   /// ```
+  ///
+  /// Throws [ArgumentError] if a channel is outside `[0, 1]` (extended sRGB):
+  /// map such a color into gamut first.
   Color contrastText() {
-    final luminance = computeLuminance();
+    _checkChannels();
+    // computeLuminance asserts against extendedSRGB; in-range channels mean
+    // the same in plain sRGB.
+    final luminance =
+        (colorSpace == .extendedSRGB ? withValues(colorSpace: .sRGB) : this)
+            .computeLuminance();
     final againstBlack = (luminance + .05) / .05;
     final againstWhite = 1.05 / (luminance + .05);
     return againstBlack >= againstWhite
         ? const Color(0xFF000000)
         : const Color(0xFFFFFFFF);
+  }
+
+  void _checkChannels() {
+    for (final channel in [r, g, b]) {
+      if (!(channel >= 0 && channel <= 1)) {
+        throw ArgumentError.value(
+          this,
+          'color',
+          'has a channel outside [0, 1]; map it into gamut first',
+        );
+      }
+    }
   }
 
   static double _checkAmount(double amount) {
@@ -62,15 +82,7 @@ extension ColorTransform on Color {
   // HSL shift at fixed hue/saturation on double channels: keeps precision and
   // colorSpace.
   Color _withLightnessShift(double delta) {
-    for (final channel in [r, g, b]) {
-      if (!(channel >= 0 && channel <= 1)) {
-        throw ArgumentError.value(
-          this,
-          'color',
-          'has a channel outside [0, 1]; map it into gamut first',
-        );
-      }
-    }
+    _checkChannels();
     final max = math.max(r, math.max(g, b));
     final min = math.min(r, math.min(g, b));
     final lightness = (max + min) / 2;
