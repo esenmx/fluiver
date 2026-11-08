@@ -1,5 +1,49 @@
 # Changelog
 
+## Unreleased
+
+### BREAKING
+
+- Renamed `Iterable.separated` to `intersperse`, with no alias.
+  `package:collection` 1.20.0-wip adds its own `Iterable.separated(value)` and
+  `List.separated(value)`, so with both packages imported the old call stops
+  compiling. `intersperse` still takes `(int index) => separator`.
+- `Grid.count` and `Grid.extent` throw `ArgumentError` in every build mode for a
+  `crossAxisCount`, `childAspectRatio` or `maxCrossAxisExtent` that isn't
+  positive, and for a spacing or `mainAxisExtent` that is negative or not finite
+  (previously a debug-only framework assert, or nothing at all, then negative
+  sizes or NaN rects).
+- `Grid` clips children that overflow a bounded box, and debug builds report the
+  overflow and paint the striped indicator. A test that overflowed unnoticed now
+  fails with a `FlutterError`.
+- A negative duration now fails instead of being accepted silently:
+  `Future.timeoutOrNull` and `NetworkProbe.checkConnection` throw
+  `ArgumentError` (on web too, ahead of `UnsupportedError`), and
+  `ScrollTrackingExpandable` reports `ArgumentError` when it builds, because its
+  constructor is `const`.
+- `ScrollController.animateToTop` and `animateToBottom` throw `ArgumentError`
+  unless `duration` is positive. Zero is rejected too: the framework asserts
+  against it in debug, and without asserts it raised a `LateError`.
+- A second `dispose()` on `Debounce`, `ThrottleFirst`, `ThrottleLast` or
+  `ThrottleLatest` throws `StateError`, like `LocaleListener` and
+  `BrightnessListener`.
+- `Color.contrastText` throws `ArgumentError` when a channel is outside
+  `[0, 1]`, as `darken` and `lighten` do (previously a debug-only
+  `AssertionError`, and a guess in release).
+
+### Fixed
+
+- `LRUCache` eviction is truly O(1), on a `HashMap` plus a doubly linked list:
+  it scanned past removed entries, so an evicting write slowed down as the
+  capacity grew. The API, key equality and recency order are unchanged.
+- `ScrollTrackingExpandable` with `duration: Duration.zero` reveals the child on
+  expansion.
+- `Color.contrastText` works on in-range extended sRGB colors in debug too.
+- Docs: `TextEditingController.text = ...` makes the selection invalid (offset
+  `-1`) rather than moving the caret to `0`, and a focused field then repairs
+  it: caret at the end on mobile and multiline, select-all on single-line
+  desktop.
+
 ## 5.0.1 - 2026-10-16
 
 ### Changed

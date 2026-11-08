@@ -1,14 +1,16 @@
 import 'package:flutter/widgets.dart';
 
-/// Caret-preserving text replacement on [TextEditingController].
+/// Text replacement with an explicit caret on [TextEditingController].
 extension TextEditingControllerCaret on TextEditingController {
   /// Replaces the controller text and places the caret at [caret],
   /// or at the end of the new text when [caret] is `null`.
   ///
-  /// Setting [TextEditingController.text] directly resets the caret to
-  /// offset `0` — a well-known SDK papercut. This sets [value] in one
-  /// shot so the caret lands where you asked. Throws [RangeError] if
-  /// [caret] is outside `0..text.length`.
+  /// Setting [TextEditingController.text] directly drops the selection to
+  /// `TextSelection.invalid` (offset `-1`), and a focused field then repairs it
+  /// its own way: the caret at the end on mobile and in multiline fields, the
+  /// whole text selected in a single-line desktop field. This sets [value] in
+  /// one shot, so the caret is valid and where you asked, focused or not.
+  /// Throws [RangeError] if [caret] is outside `0..text.length`.
   ///
   /// ```dart
   /// controller.setTextAndCaret('hello');         // caret at 5 (end)

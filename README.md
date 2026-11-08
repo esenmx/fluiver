@@ -73,6 +73,11 @@ final featured = ListView(
 Every constructor also takes `direction:` (the main axis) and `padding:`. Use
 `GridView` when the grid itself scrolls (viewport recycling matters).
 
+`Grid.count` and `Grid.extent` throw `ArgumentError` for a count, ratio or
+maximum extent that isn't positive, and for spacing or `mainAxisExtent` that is
+negative or not finite. Cells too big for a bounded box are clipped to it, and
+debug builds report the overflow and paint the striped indicator.
+
 ### `TickerBuilder`
 
 Rebuilds every frame, exposes the elapsed running `Duration` (time spent
@@ -108,7 +113,8 @@ Widget shippingDetails({required bool expanded}) {
 ```
 
 Collapse never scrolls; only expansion tracks. If there is no enclosing
-`Scrollable`, the size animation still runs without scroll tracking.
+`Scrollable`, the size animation still runs without scroll tracking. A negative
+`duration` reports an `ArgumentError` when the widget builds.
 
 ## Extensions
 
@@ -161,7 +167,7 @@ final entry = json.entryOf(2);
 final rows = const <Widget>[
   Text('A'),
   Text('B'),
-].separated((i) => const Divider()); // A, Divider, B
+].intersperse((i) => const Divider()); // A, Divider, B
 final windows = [1, 2, 3, 4, 5].slidingWindows(3);
 // ([1, 2, 3], [2, 3, 4], [3, 4, 5])
 ```
@@ -212,7 +218,7 @@ Future<String> greeting(Future<String> Function() fetchName) async {
 
 Only timeout becomes `null`; errors from the underlying future still propagate.
 Available only on futures of non-nullable values, so `null` can't also be a real
-result.
+result. A negative timeout throws `ArgumentError`.
 
 ### Color — HSL transforms
 
@@ -247,8 +253,10 @@ Future<void> backToTop(ScrollController controller) =>
 
 Like `ScrollController.position`, every member throws `StateError` when no
 scroll view is attached; check `controller.hasClients` first if it may not be.
+`animateToTop` and `animateToBottom` throw `ArgumentError` unless `duration` is
+positive.
 
-### TextEditingController — caret-preserving replace
+### TextEditingController — set text and caret together
 
 ```dart
 final controller = TextEditingController()
@@ -256,8 +264,11 @@ final controller = TextEditingController()
   ..setTextAndCaret('hello', caret: 0); // caret at start
 ```
 
-Setting `controller.text = ...` directly resets the caret to `0` — this puts it
-where you asked instead. A `caret` outside `0..text.length` throws `RangeError`.
+Setting `controller.text = ...` directly drops the selection to invalid (offset
+`-1`), and a focused field then repairs it its own way: the caret at the end on
+mobile and in multiline fields, the whole text selected in a single-line desktop
+field. This keeps it valid and puts it where you asked, focused or not. A
+`caret` outside `0..text.length` throws `RangeError`.
 
 ## Helpers
 
@@ -280,7 +291,7 @@ Widget searchField(ValueChanged<String> search) {
 | `ThrottleLatest` | the first call at once, then the latest call of each window as it ends (live preview) |
 
 All four are callable, throw `ArgumentError` for a negative duration, expose
-`dispose()`, and throw `StateError` if called after disposal.
+`dispose()`, and throw `StateError` if called or disposed again after disposal.
 
 ### `LRUCache`
 
@@ -348,6 +359,7 @@ return `PlatformDispatcher.instance.locales`. Same shape for
 
 ```dart
 // Native only (TCP); throws UnsupportedError on web.
+// A negative timeout throws ArgumentError everywhere.
 if (await NetworkProbe.checkConnection()) {
   debugPrint('online');
 }
