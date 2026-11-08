@@ -59,7 +59,7 @@ extension DateTimeCalculator on DateTime {
   /// every zone. A local date saved with `.toUtc()` reads as the previous day
   /// east of UTC; call `.toLocal()` on it first.
   int age({DateTime? at}) {
-    final now = at ?? DateTime.now();
+    final now = at ?? .now();
     var age = now.year - year;
     if (now.month < month || (now.month == month && now.day < day)) {
       age--;
