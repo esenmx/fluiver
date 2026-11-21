@@ -35,7 +35,8 @@ These hold for every change, whoever or whatever writes it.
 - Tests assert with `package:checks` only, never `package:matcher`.
 - Never use `!`.
 - `await` by default; never `unawaited(...)`.
-- Extension members are methods, never getters.
+- Extension members: getters for pure zero-argument reads, methods for actions,
+  arguments, I/O, `toX()` conversions and `Future`/`Stream` wrappers.
 - No explanatory comments: names carry the meaning. Comment only units,
   non-obvious invariants, traps and external contracts.
 - Never `final` on a type that a test doubles: mockito emits `implements`.
