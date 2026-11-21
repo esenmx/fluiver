@@ -36,3 +36,4 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
             --allowedTools "Bash(dart:*),Bash(flutter:*),Bash(git ls-files:*),Bash(xargs:*),Bash(npx --yes markdownlint-cli2@0.23.3:*)"
+            --append-system-prompt "Follow the Rules section of CONTRIBUTING.md."
