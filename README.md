@@ -201,8 +201,8 @@ final launch = nine.onDate(DateTime(2030, 1, 15)); // any date 09:00
 ```
 
 `onDate(date)` takes the calendar day explicitly — no hidden `DateTime.now()`,
-deterministic in tests. Supports both `package:material_ui/material_ui.dart` and
-`package:flutter/material.dart` `TimeOfDay`.
+deterministic in tests. It extends `package:material_ui/material_ui.dart`'s
+`TimeOfDay`.
 
 ### `Future.timeoutOrNull`
 

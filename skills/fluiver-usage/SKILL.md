@@ -71,9 +71,8 @@ final listener = LocaleListener((next) => locales.value = next);
   no zone conversion; `at` defaults to local now; `.toLocal()` a local date
   saved via `.toUtc()`), `truncateTime()` (→ midnight, keeps UTC flag). No
   arithmetic helpers — stdlib `Duration`.
-- **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day (supports
-  both `package:material_ui/material_ui.dart` and
-  `package:flutter/material.dart` `TimeOfDay`). Day passed explicitly —
+- **TimeOfDay**: `tod.onDate(date)` → `DateTime` on that calendar day, for
+  `package:material_ui/material_ui.dart`'s `TimeOfDay`. Day passed explicitly —
   deterministic in tests.
 - **Enum**: `with EnumIndexComparable<MyEnum>` adds `<`/`>`/`compareTo` by index
   type-safely. `values.byNameOrNull(name)` → nullable, for untrusted input

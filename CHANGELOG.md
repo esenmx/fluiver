@@ -4,6 +4,9 @@
 
 ### BREAKING
 
+- Removed `LegacyTimeOfDayOnDate`, the `onDate` extension on
+  `package:flutter/material.dart`'s `TimeOfDay`. Flutter 3.50 deprecates that
+  library; use `TimeOfDayOnDate.onDate` on `package:material_ui`'s `TimeOfDay`.
 - Renamed `Iterable.separated` to `intersperse`, with no alias.
   `package:collection` 1.20.0-wip adds its own `Iterable.separated(value)` and
   `List.separated(value)`, so with both packages imported the old call stops
