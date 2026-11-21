@@ -25,12 +25,12 @@ void _stubOnLine({required bool online}) {
 void main() {
   test('isBrowserOnline reports navigator.onLine = false', () async {
     _stubOnLine(online: false);
-    check(NetworkProbe.isBrowserOnline()).isFalse();
+    check(NetworkProbe.isBrowserOnline()).isFalse;
   });
 
   test('isBrowserOnline reports navigator.onLine = true', () async {
     _stubOnLine(online: true);
-    check(NetworkProbe.isBrowserOnline()).isTrue();
+    check(NetworkProbe.isBrowserOnline()).isTrue;
   });
 
   test('checkConnection rejects a negative timeout on web too', () {

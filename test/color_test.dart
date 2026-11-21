@@ -15,9 +15,9 @@ double _contrast(Color a, Color b) {
 
 extension on Subject<Color> {
   void channelsCloseTo(Color expected, String reason) {
-    has((c) => c.r, '$reason.r').isCloseTo(expected.r, 1 / 255);
-    has((c) => c.g, '$reason.g').isCloseTo(expected.g, 1 / 255);
-    has((c) => c.b, '$reason.b').isCloseTo(expected.b, 1 / 255);
+    has('$reason.r', (c) => c.r).isCloseTo(expected.r, 1 / 255);
+    has('$reason.g', (c) => c.g).isCloseTo(expected.g, 1 / 255);
+    has('$reason.b', (c) => c.b).isCloseTo(expected.b, 1 / 255);
   }
 }
 
@@ -49,7 +49,7 @@ void main() {
         check(
           because: '$amount',
           () => Colors.blue.darken(amount),
-        ).throws<RangeError>().has((e) => e.name, 'name').equals('amount');
+        ).throws<RangeError>().has('name', (e) => e.name).equals('amount');
       }
     });
   });
@@ -71,7 +71,7 @@ void main() {
         check(
           because: '$amount',
           () => Colors.blue.lighten(amount),
-        ).throws<RangeError>().has((e) => e.name, 'name').equals('amount');
+        ).throws<RangeError>().has('name', (e) => e.name).equals('amount');
       }
     });
   });

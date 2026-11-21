@@ -136,7 +136,7 @@ void main() {
       await tester.pumpWidget(_collapsed(TextField(focusNode: hidden)));
 
       await _focusNextAfterVisible(tester);
-      check(hidden.hasFocus).isFalse();
+      check(hidden.hasFocus).isFalse;
     });
 
     testWidgets('child collapsed after expanding is skipped by focus '
@@ -150,7 +150,7 @@ void main() {
       await tester.pumpAndSettle();
 
       await _focusNextAfterVisible(tester);
-      check(hidden.hasFocus).isFalse();
+      check(hidden.hasFocus).isFalse;
     });
 
     testWidgets('collapsed child tickers are muted', (tester) async {
@@ -173,7 +173,7 @@ void main() {
       final handle = tester.ensureSemantics();
       try {
         await tester.pumpWidget(_collapsed(const Text('secret details')));
-        check(find.bySemanticsLabel('secret details').evaluate()).isEmpty();
+        check(find.bySemanticsLabel('secret details').evaluate()).isEmpty;
       } finally {
         handle.dispose();
       }
@@ -189,7 +189,7 @@ void main() {
       );
 
       await _focusNextAfterVisible(tester);
-      check(shown.hasFocus).isTrue();
+      check(shown.hasFocus).isTrue;
     });
 
     testWidgets('expanded child tickers run', (tester) async {
@@ -246,7 +246,7 @@ void main() {
           matching: find.byType(Offstage),
         ),
       );
-      check(offstage.offstage).isTrue();
+      check(offstage.offstage).isTrue;
     });
 
     testWidgets('duration: Duration.zero expansion reveals the child', (
@@ -311,7 +311,7 @@ void main() {
 
       check(tester.takeException())
           .isA<ArgumentError>()
-          .has((e) => e.name, 'name')
+          .has('name', (e) => e.name)
           .equals('duration');
     });
 
@@ -326,7 +326,7 @@ void main() {
 
       check(tester.takeException())
           .isA<ArgumentError>()
-          .has((e) => e.name, 'name')
+          .has('name', (e) => e.name)
           .equals('duration');
     });
 
@@ -358,7 +358,7 @@ void main() {
           matching: find.byType(Offstage),
         ),
       );
-      check(offstage.offstage).isFalse();
+      check(offstage.offstage).isFalse;
     });
   });
 }

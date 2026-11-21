@@ -71,9 +71,9 @@ void main() {
         ..['a'] = 1
         ..['b'] = 2
         ..['c'] = 3;
-      check(cache.containsKey('a')).isFalse();
-      check(cache.containsKey('b')).isTrue();
-      check(cache.containsKey('c')).isTrue();
+      check(cache.containsKey('a')).isFalse;
+      check(cache.containsKey('b')).isTrue;
+      check(cache.containsKey('c')).isTrue;
     });
 
     test('reading an entry promotes it to most-recently-used', () {
@@ -82,9 +82,9 @@ void main() {
         ..['b'] = 2;
       check(cache['a']).equals(1);
       cache['c'] = 3;
-      check(cache.containsKey('a')).isTrue();
-      check(cache.containsKey('b')).isFalse();
-      check(cache.containsKey('c')).isTrue();
+      check(cache.containsKey('a')).isTrue;
+      check(cache.containsKey('b')).isFalse;
+      check(cache.containsKey('c')).isTrue;
     });
 
     test('reassigning a key promotes it', () {
@@ -94,19 +94,19 @@ void main() {
         ..['a'] = 10
         ..['c'] = 3;
       check(cache['a']).equals(10);
-      check(cache.containsKey('b')).isFalse();
+      check(cache.containsKey('b')).isFalse;
     });
 
     test('reads missing key returns null', () {
       final cache = LRUCache<String, int>(maxEntries: 2);
-      check(cache['absent']).isNull();
+      check(cache['absent']).isNull;
     });
 
     test('remove drops entry', () {
       final cache = LRUCache<String, int>(maxEntries: 2)..['a'] = 1;
       check(cache.remove('a')).equals(1);
-      check(cache.containsKey('a')).isFalse();
-      check(cache.remove('a')).isNull();
+      check(cache.containsKey('a')).isFalse;
+      check(cache.remove('a')).isNull;
     });
 
     test('clear empties the cache', () {
@@ -114,7 +114,7 @@ void main() {
         ..['a'] = 1
         ..['b'] = 2
         ..clear();
-      check(cache.isEmpty).isTrue();
+      check(cache.isEmpty).isTrue;
       check(cache.length).equals(0);
     });
 
@@ -162,9 +162,9 @@ void main() {
           ..putIfAbsent('a', () => 99) // hit; should promote 'a'.
           ..['c'] = 3; // evicts 'b', not 'a'.
 
-        check(cache.containsKey('a')).isTrue();
-        check(cache.containsKey('b')).isFalse();
-        check(cache.containsKey('c')).isTrue();
+        check(cache.containsKey('a')).isTrue;
+        check(cache.containsKey('b')).isFalse;
+        check(cache.containsKey('c')).isTrue;
       });
     });
 
@@ -173,10 +173,10 @@ void main() {
         ..['a'] = 1
         ..['b'] = 2;
       check(cache.peek('a')).equals(1);
-      check(cache.peek('z')).isNull();
+      check(cache.peek('z')).isNull;
       cache['c'] = 3;
-      check(cache.containsKey('a')).isFalse();
-      check(cache.containsKey('b')).isTrue();
+      check(cache.containsKey('a')).isFalse;
+      check(cache.containsKey('b')).isTrue;
     });
 
     test('values and entries are snapshots in LRU order', () {
@@ -219,12 +219,12 @@ void main() {
       final cache = LRUCache<String, int?>(maxEntries: 2)
         ..['a'] = null
         ..['b'] = 2;
-      check(cache['a']).isNull();
+      check(cache['a']).isNull;
       cache['c'] = 3;
-      check(cache.containsKey('a')).isTrue();
-      check(cache.containsKey('b')).isFalse();
+      check(cache.containsKey('a')).isTrue;
+      check(cache.containsKey('b')).isFalse;
       var calls = 0;
-      check(cache.putIfAbsent('a', () => ++calls)).isNull();
+      check(cache.putIfAbsent('a', () => ++calls)).isNull;
       check(calls).equals(0);
     });
 
@@ -246,7 +246,7 @@ void main() {
           cache
             ..['d'] = 4
             ..['e'] = 5;
-          check(cache.containsKey(evicted)).isFalse();
+          check(cache.containsKey(evicted)).isFalse;
           check(
             cache.keys.toList(),
           ).deepEquals([...remaining.where((key) => key != evicted), 'd', 'e']);
@@ -256,8 +256,8 @@ void main() {
       test('removing the only entry leaves a usable cache', () {
         final cache = LRUCache<String, int>(maxEntries: 1)..['a'] = 1;
         check(cache.remove('a')).equals(1);
-        check(cache.isEmpty).isTrue();
-        check(cache.keys).isEmpty();
+        check(cache.isEmpty).isTrue;
+        check(cache.keys).isEmpty;
         cache
           ..['b'] = 2
           ..['c'] = 3;
@@ -269,7 +269,7 @@ void main() {
           ..clear()
           ..['x'] = 9;
         check(cache.keys.toList()).deepEquals(['x']);
-        check(cache['a']).isNull();
+        check(cache['a']).isNull;
       });
 
       test('capacity 1 evicts on every new key', () {
@@ -288,8 +288,8 @@ void main() {
           ..[_newKey(2)] = 'two';
         check(cache[_newKey(1)]).equals('one');
         check(cache[_newKey(2)]).equals('two');
-        check(cache[_newKey(3)]).isNull();
-        check(cache.containsKey(_newKey(2))).isTrue();
+        check(cache[_newKey(3)]).isNull;
+        check(cache.containsKey(_newKey(2))).isTrue;
         check(cache.remove(_newKey(1))).equals('one');
         check(cache.length).equals(1);
       });
@@ -315,7 +315,7 @@ void main() {
         final cache = LRUCache<_Key, int>(maxEntries: 2)..[stored] = 1;
 
         check(cache.peek(_newKey(1))).equals(1);
-        check(cache.containsKey(_newKey(1))).isTrue();
+        check(cache.containsKey(_newKey(1))).isTrue;
         check(cache.keys.single).identicalTo(stored);
       });
 
@@ -330,7 +330,7 @@ void main() {
           ..[.nan] = 1
           ..[1] = 2
           ..[2] = 3;
-        check(cache[.nan]).isNull();
+        check(cache[.nan]).isNull;
         check(cache.length).equals(3);
       }, testOn: 'vm');
     });

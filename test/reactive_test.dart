@@ -38,8 +38,8 @@ void main() {
     ]) {
       test('$name throws ArgumentError naming duration', () {
         check(() => create(negative)).throws<ArgumentError>()
-          ..has((e) => e.name, 'name').equals('duration')
-          ..has((e) => e.message, 'message').equals('must not be negative');
+          ..has('name', (e) => e.name).equals('duration')
+          ..has('message', (e) => e.message).equals('must not be negative');
       });
 
       test('$name accepts Duration.zero', () {
@@ -55,12 +55,12 @@ void main() {
       debounce(() => log.add('task1'));
 
       async.elapse(const Duration(milliseconds: 50));
-      check(log).isEmpty();
+      check(log).isEmpty;
 
       debounce(() => log.add('task2'));
 
       async.elapse(const Duration(milliseconds: 99));
-      check(log).isEmpty();
+      check(log).isEmpty;
 
       async.elapse(const Duration(milliseconds: 2));
       check(log).deepEquals(['task2']);
@@ -121,7 +121,7 @@ void main() {
       final throttle = ThrottleLast(const Duration(milliseconds: 100));
 
       throttle(() => log.add('task1'));
-      check(log).isEmpty();
+      check(log).isEmpty;
 
       async.elapse(const Duration(milliseconds: 10));
 
@@ -141,7 +141,7 @@ void main() {
       debounce.dispose();
 
       async.elapse(const Duration(milliseconds: 200));
-      check(log).isEmpty();
+      check(log).isEmpty;
     });
 
     reactiveTest('dispose drops the pending ThrottleLast task', (async, log) {
@@ -151,7 +151,7 @@ void main() {
       throttle.dispose();
 
       async.elapse(const Duration(milliseconds: 200));
-      check(log).isEmpty();
+      check(log).isEmpty;
     });
 
     reactiveTest('dispose drops the queued ThrottleLatest task', (async, log) {
@@ -176,7 +176,7 @@ void main() {
       check(() => throttleLatest(() => log.add('task'))).throws<StateError>();
       check(() => throttleFirst(() => log.add('task'))).throws<StateError>();
       check(() => throttleLast(() => log.add('task'))).throws<StateError>();
-      check(log).isEmpty();
+      check(log).isEmpty;
     });
 
     for (final (name, dispose) in <(String, void Function())>[
@@ -259,7 +259,7 @@ void main() {
       ).deepEquals(['a', 'b']);
       t.dispose();
       async.elapse(const Duration(milliseconds: 500));
-      check(async.pendingTimers, because: 'dispose leaves a timer').isEmpty();
+      check(async.pendingTimers, because: 'dispose leaves a timer').isEmpty;
     });
 
     test('ThrottleLatest dispose cancels every timer it armed', () {
@@ -268,7 +268,7 @@ void main() {
         t(() => t(() {}));
         async.elapse(window);
         t.dispose();
-        check(async.pendingTimers).isEmpty();
+        check(async.pendingTimers).isEmpty;
       });
     });
   });

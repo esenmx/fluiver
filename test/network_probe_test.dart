@@ -22,7 +22,7 @@ void main() {
         host: server.address.address,
         port: server.port,
       );
-      check(result).isTrue();
+      check(result).isTrue;
     });
 
     test('returns false on connection refused', () async {
@@ -34,7 +34,7 @@ void main() {
         host: InternetAddress.loopbackIPv4.address,
         port: port,
       );
-      check(result).isFalse();
+      check(result).isFalse;
     });
 
     test('returns false on connection timeout', () async {
@@ -44,7 +44,7 @@ void main() {
             host: InternetAddress.loopbackIPv4.address,
             port: 80,
           );
-          check(result).isFalse();
+          check(result).isFalse;
         },
         socketConnect:
             (host, port, {sourceAddress, sourcePort = 0, timeout}) async {
@@ -63,7 +63,7 @@ void main() {
           port: server.port,
           timeout: const Duration(seconds: -1),
         ),
-      ).throws<ArgumentError>().has((e) => e.name, 'name').equals('timeout');
+      ).throws<ArgumentError>().has('name', (e) => e.name).equals('timeout');
     });
 
     test('propagates non-socket errors', () async {

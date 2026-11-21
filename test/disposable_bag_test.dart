@@ -24,7 +24,7 @@ void main() {
       await bag.dispose();
       await bag.dispose();
       check(calls).equals(1);
-      check(bag.isDisposed).isTrue();
+      check(bag.isDisposed).isTrue;
     });
 
     test(
@@ -37,7 +37,7 @@ void main() {
         check(() => bag.add(() => calls.add('late'))).throws<StateError>();
         check(() => bag.addAll([() => calls.add('late')])).throws<StateError>();
         await Future<void>.delayed(.zero);
-        check(calls).isEmpty();
+        check(calls).isEmpty;
         check(bag.length).equals(0);
       },
     );
@@ -53,9 +53,12 @@ void main() {
         });
 
       await check(bag.dispose()).throws<DisposableBagException>(
-        (it) => it.has((e) => e.errors, 'errors')
-          ..length.equals(1)
-          ..first.isA<StateError>(),
+        .it()
+          ..has('errors', (e) => e.errors).which(
+            .it()
+              ..length.equals(1)
+              ..first.isA<StateError>(),
+          ),
       );
       check(calls).equals(1);
     });
@@ -66,7 +69,7 @@ void main() {
 
       await check(bag.dispose().timeout(const Duration(seconds: 1)))
           .throws<DisposableBagException>(
-            (it) => it.has((e) => e.errors.single, 'error').isA<StateError>(),
+            .it()..has('error', (e) => e.errors.single).isA<StateError>(),
           );
     });
 
@@ -76,12 +79,12 @@ void main() {
       a.add(() async => await b.dispose());
       b.add(() async => await a.dispose());
 
-      await check(a.dispose().timeout(const Duration(seconds: 1)))
-          .throws<DisposableBagException>(
-            (it) => it
-                .has((e) => e.errors.single, 'error')
-                .isA<DisposableBagException>(),
-          );
+      await check(
+        a.dispose().timeout(const Duration(seconds: 1)),
+      ).throws<DisposableBagException>(
+        .it()
+          ..has('error', (e) => e.errors.single).isA<DisposableBagException>(),
+      );
     });
 
     test(
@@ -102,12 +105,12 @@ void main() {
         check(
           because: 'the slow disposer has not finished',
           secondSettled,
-        ).isFalse();
+        ).isFalse;
 
         gate.complete();
         await Future.wait([first, second]);
-        check(released).isTrue();
-        check(secondSettled).isTrue();
+        check(released).isTrue;
+        check(secondSettled).isTrue;
       },
     );
 
@@ -146,7 +149,7 @@ void main() {
           done = true;
         });
       await bag.dispose();
-      check(done).isTrue();
+      check(done).isTrue;
     });
 
     test('addAll registers each closure in order', () async {
@@ -203,7 +206,7 @@ void main() {
         ..add(() async => throw Exception('async error 1'))
         ..add(() async => throw Exception('async error 2'));
       await check(bag.dispose()).throws<DisposableBagException>(
-        (e) => e.has((e) => e.errors, 'errors').length.equals(2),
+        .it()..has('errors', (e) => e.errors).length.equals(2),
       );
     });
 
@@ -214,16 +217,16 @@ void main() {
         ..add(throwingSyncDisposer)
         ..add(throwingAsyncDisposer);
       await check(bag.dispose()).throws<DisposableBagException>(
-        (e) => e
-          ..has((e) => e.errors.length, 'errors.length').equals(2)
-          ..has((e) => e.stackTraces.length, 'stackTraces.length').equals(2)
+        .it()
+          ..has('errors.length', (e) => e.errors.length).equals(2)
+          ..has('stackTraces.length', (e) => e.stackTraces.length).equals(2)
           ..has(
-            (e) => '${e.stackTraces[0]}',
             'stackTraces[0]',
+            (e) => '${e.stackTraces[0]}',
           ).contains('throwingSyncDisposer')
           ..has(
-            (e) => '${e.stackTraces[1]}',
             'stackTraces[1]',
+            (e) => '${e.stackTraces[1]}',
           ).contains('throwingAsyncDisposer'),
       );
     });
@@ -245,13 +248,15 @@ void main() {
       b.complete();
       a.complete();
       await check(done).throws<DisposableBagException>(
-        (e) => e
-            .has((e) => e.errors.map((o) => o.toString()).toList(), 'errors')
-            .deepEquals([
-              'Exception: first',
-              'Exception: second',
-              'Exception: third',
-            ]),
+        .it()
+          ..has(
+            'errors',
+            (e) => e.errors.map((o) => o.toString()).toList(),
+          ).deepEquals([
+            'Exception: first',
+            'Exception: second',
+            'Exception: third',
+          ]),
       );
     });
 
@@ -273,12 +278,14 @@ void main() {
         ..add(() => calls.add('second'));
 
       await check(bag.dispose()).throws<DisposableBagException>(
-        (e) => e
-            .has((e) => e.errors.map((o) => o.toString()).toList(), 'errors')
-            .deepEquals(['Exception: reentrant failure']),
+        .it()
+          ..has(
+            'errors',
+            (e) => e.errors.map((o) => o.toString()).toList(),
+          ).deepEquals(['Exception: reentrant failure']),
       );
       check(calls).deepEquals(['outer', 'late', 'second', 'reentrant']);
-      check(bag.isDisposed).isTrue();
+      check(bag.isDisposed).isTrue;
       check(bag.length).equals(0);
     });
   });

@@ -29,7 +29,7 @@ void main() {
 
         async.elapse(const Duration(milliseconds: 150));
 
-        check(captured).isNull();
+        check(captured).isNull;
       });
     });
 
@@ -45,7 +45,7 @@ void main() {
       final pending = Completer<int>().future;
       check(() => pending.timeoutOrNull(const Duration(microseconds: -1)))
           .throws<ArgumentError>()
-          .has((e) => e.name, 'name')
+          .has('name', (e) => e.name)
           .equals('timeout');
     });
 
@@ -56,7 +56,7 @@ void main() {
 
         async.elapse(.zero);
 
-        check(captured).isNull();
+        check(captured).isNull;
       });
     });
   });

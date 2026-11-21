@@ -27,7 +27,7 @@ void main() {
         ),
       );
 
-      check(built).isNull();
+      check(built).isNull;
     });
 
     testWidgets('hides counter when wired into TextField', (tester) async {
@@ -44,7 +44,7 @@ void main() {
       );
 
       // Default counter renders as "3/10"; with disabledCounter no such text.
-      check(find.text('3/10').evaluate()).isEmpty();
+      check(find.text('3/10').evaluate()).isEmpty;
     });
   });
 }

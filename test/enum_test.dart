@@ -7,25 +7,25 @@ enum _TestEnum with EnumIndexComparable<_TestEnum> { first, second, third }
 void main() {
   group('EnumIndexComparable', () {
     test('greater than', () {
-      check(_TestEnum.first > .second).isFalse();
-      check(_TestEnum.second > .first).isTrue();
+      check(_TestEnum.first > .second).isFalse;
+      check(_TestEnum.second > .first).isTrue;
     });
 
     test('greater or equal', () {
-      check(_TestEnum.first >= .second).isFalse();
-      check(_TestEnum.second >= .second).isTrue();
-      check(_TestEnum.third >= .second).isTrue();
+      check(_TestEnum.first >= .second).isFalse;
+      check(_TestEnum.second >= .second).isTrue;
+      check(_TestEnum.third >= .second).isTrue;
     });
 
     test('less than', () {
-      check(_TestEnum.second < .first).isFalse();
-      check(_TestEnum.first < .second).isTrue();
+      check(_TestEnum.second < .first).isFalse;
+      check(_TestEnum.first < .second).isTrue;
     });
 
     test('less or equal', () {
-      check(_TestEnum.first <= .second).isTrue();
-      check(_TestEnum.second <= .second).isTrue();
-      check(_TestEnum.third <= .second).isFalse();
+      check(_TestEnum.first <= .second).isTrue;
+      check(_TestEnum.second <= .second).isTrue;
+      check(_TestEnum.third <= .second).isFalse;
     });
 
     test('sortable', () {
@@ -40,7 +40,7 @@ void main() {
     });
 
     test('unknown name returns null', () {
-      check(_TestEnum.values.byNameOrNull('nope')).isNull();
+      check(_TestEnum.values.byNameOrNull('nope')).isNull;
     });
 
     test('?? fallback covers the missing case', () {

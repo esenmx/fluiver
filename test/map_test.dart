@@ -51,18 +51,18 @@ void main() {
   group('entryOf', () {
     test('returns entry for present non-null value', () {
       check(map.entryOf('foo')).isNotNull()
-        ..has((e) => e.key, 'key').equals('foo')
-        ..has((e) => e.value, 'value').equals('bar');
+        ..has('key', (e) => e.key).equals('foo')
+        ..has('value', (e) => e.value).equals('bar');
     });
 
     test('returns entry for present null value', () {
       check(map.entryOf('baz')).isNotNull()
-        ..has((e) => e.key, 'key').equals('baz')
-        ..has((e) => e.value, 'value').isNull();
+        ..has('key', (e) => e.key).equals('baz')
+        ..has('value', (e) => e.value).isNull;
     });
 
     test('returns null for absent key', () {
-      check(map.entryOf('absent')).isNull();
+      check(map.entryOf('absent')).isNull;
     });
   });
 }

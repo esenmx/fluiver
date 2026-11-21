@@ -16,7 +16,7 @@ void main() {
 
     test('chains with null-aware operator', () {
       var nullable = _maybe(null);
-      check(nullable?.into((it) => it.length)).isNull();
+      check(nullable?.into((it) => it.length)).isNull;
 
       nullable = _maybe('hi');
       check(nullable?.into((it) => it.length)).equals(2);
@@ -24,7 +24,7 @@ void main() {
 
     test('accepts named tear-off as transform', () {
       check('42'.into(int.parse)).equals(42);
-      check('abc'.into(int.tryParse)).isNull();
+      check('abc'.into(int.tryParse)).isNull;
     });
 
     test('applies to extension types implementing Object', () {

@@ -21,8 +21,8 @@ void main() {
 
       await pumpScrollableList(tester, c);
 
-      check(c.atTop()).isTrue();
-      check(c.atBottom()).isFalse();
+      check(c.atTop()).isTrue;
+      check(c.atBottom()).isFalse;
     });
 
     testWidgets('atBottom true after jumpTo maxScrollExtent', (tester) async {
@@ -32,8 +32,8 @@ void main() {
       c.jumpTo(c.position.maxScrollExtent);
       await tester.pump();
 
-      check(c.atTop()).isFalse();
-      check(c.atBottom()).isTrue();
+      check(c.atTop()).isFalse;
+      check(c.atBottom()).isTrue;
     });
   });
 
@@ -78,11 +78,11 @@ void main() {
 
         check(() => c.animateToTop(duration: duration))
             .throws<ArgumentError>()
-            .has((e) => e.name, 'name')
+            .has('name', (e) => e.name)
             .equals('duration');
         check(() => c.animateToBottom(duration: duration))
             .throws<ArgumentError>()
-            .has((e) => e.name, 'name')
+            .has('name', (e) => e.name)
             .equals('duration');
 
         await tester.pumpAndSettle();
@@ -127,18 +127,18 @@ void main() {
       final c = newScrollController();
 
       await pumpTwoViews(tester, c, second: 3000);
-      check(c.atTop()).isTrue();
-      check(c.atBottom()).isFalse();
+      check(c.atTop()).isTrue;
+      check(c.atBottom()).isFalse;
 
       c.animateToBottom(duration: const Duration(milliseconds: 100));
       await tester.pumpAndSettle();
-      check(c.atBottom()).isTrue();
-      check(c.atTop()).isFalse();
+      check(c.atBottom()).isTrue;
+      check(c.atTop()).isFalse;
 
       c.animateToTop(duration: const Duration(milliseconds: 100));
       await tester.pumpAndSettle();
-      check(c.atTop()).isTrue();
-      check(c.atBottom()).isFalse();
+      check(c.atTop()).isTrue;
+      check(c.atBottom()).isFalse;
     });
 
     testWidgets('only the first view at the bottom is at neither edge', (
@@ -151,8 +151,8 @@ void main() {
       first.jumpTo(first.maxScrollExtent);
       await tester.pump();
 
-      check(c.atBottom()).isFalse();
-      check(c.atTop()).isFalse();
+      check(c.atBottom()).isFalse;
+      check(c.atTop()).isFalse;
     });
 
     testWidgets('only the last view at the bottom is at neither edge', (
@@ -165,8 +165,8 @@ void main() {
       last.jumpTo(last.maxScrollExtent);
       await tester.pump();
 
-      check(c.atBottom()).isFalse();
-      check(c.atTop()).isFalse();
+      check(c.atBottom()).isFalse;
+      check(c.atTop()).isFalse;
     });
   });
 }

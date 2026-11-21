@@ -311,7 +311,7 @@ void main() {
         width: 20,
       );
 
-      check(tester.takeException()).isNull();
+      check(tester.takeException()).isNull;
       check(_rectOf(tester, 0).width).equals(0);
     });
 
@@ -386,7 +386,7 @@ void main() {
       );
       final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
 
-      check(tester.takeException()).isNull();
+      check(tester.takeException()).isNull;
       check(renderBox.size).equals(const Size(300, 16));
       // Padding only — no phantom crossAxisSpacing from an empty child list.
       check(renderBox.getMinIntrinsicWidth(.infinity)).equals(16);
@@ -533,7 +533,7 @@ void main() {
         ),
       );
 
-      check(tester.takeException()).isNull();
+      check(tester.takeException()).isNull;
     });
   });
 
@@ -594,7 +594,7 @@ void main() {
       test('$name throws ArgumentError naming $argument', () {
         check(build)
             .throws<ArgumentError>()
-            .has((e) => e.name, 'name')
+            .has('name', (e) => e.name)
             .equals(argument);
       });
     }
@@ -611,7 +611,7 @@ void main() {
         ),
       );
 
-      check(tester.takeException()).isNull();
+      check(tester.takeException()).isNull;
       check(_rectOf(tester, 1).width).equals(300);
     });
   });
@@ -668,7 +668,7 @@ void main() {
           .equals(const .fromLTWH(0, 0, 300, 100));
 
       await tester.pumpWidget(const SizedBox());
-      check(tester.takeException()).isNull();
+      check(tester.takeException()).isNull;
     });
 
     testWidgets('reports a FlutterError in debug naming the side', (
@@ -678,7 +678,7 @@ void main() {
 
       check(tester.takeException())
           .isA<FlutterError>()
-          .has((e) => e.toString(), 'text')
+          .has('text', (e) => e.toString())
           .contains('overflowed by 200 pixels on the bottom');
     }, skip: !_assertsEnabled);
 
@@ -700,7 +700,7 @@ void main() {
 
       check(tester.takeException())
           .isA<FlutterError>()
-          .has((e) => e.toString(), 'text')
+          .has('text', (e) => e.toString())
           .contains('overflowed by 200 pixels on the left');
     }, skip: !_assertsEnabled);
 
@@ -734,18 +734,18 @@ void main() {
       await _pump(tester, rows(3), height: 300);
       final grid = gridIn(tester);
 
-      check(tester.takeException()).isNull();
-      check(clipsPaintedBy(grid)).isEmpty();
+      check(tester.takeException()).isNull;
+      check(clipsPaintedBy(grid)).isEmpty;
       check(
         grid.describeApproximatePaintClip(tester.renderObject(_cellFinder(0))),
-      ).isNull();
+      ).isNull;
     });
 
     testWidgets('padding squeezed by the box is not overflow', (tester) async {
       await _pump(tester, rows(1, padding: const .all(10)), height: 110);
 
-      check(tester.takeException()).isNull();
-      check(clipsPaintedBy(gridIn(tester))).isEmpty();
+      check(tester.takeException()).isNull;
+      check(clipsPaintedBy(gridIn(tester))).isEmpty;
     });
 
     testWidgets('fractional cells that round past the edge are not overflow', (
@@ -758,8 +758,8 @@ void main() {
         height: 93,
       );
 
-      check(tester.takeException()).isNull();
-      check(clipsPaintedBy(gridIn(tester))).isEmpty();
+      check(tester.takeException()).isNull;
+      check(clipsPaintedBy(gridIn(tester))).isEmpty;
     });
 
     testWidgets('an empty cell placed past the edge is not overflow', (
@@ -775,8 +775,8 @@ void main() {
         height: 100,
       );
 
-      check(tester.takeException()).isNull();
-      check(clipsPaintedBy(gridIn(tester))).isEmpty();
+      check(tester.takeException()).isNull;
+      check(clipsPaintedBy(gridIn(tester))).isEmpty;
     });
   });
 }

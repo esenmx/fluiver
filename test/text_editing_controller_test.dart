@@ -53,7 +53,7 @@ void main() {
         check(
           because: '$caret',
           () => c.setTextAndCaret('hello', caret: caret),
-        ).throws<RangeError>().has((e) => e.name, 'name').equals('caret');
+        ).throws<RangeError>().has('name', (e) => e.name).equals('caret');
         check(because: '$caret', c.text).equals('before');
       }
     });

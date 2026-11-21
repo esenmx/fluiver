@@ -13,7 +13,7 @@ void main() {
     test('throws UnsupportedError on JS web', () {
       check(() => FastHash.fnv1a('hello'))
           .throws<UnsupportedError>()
-          .has((e) => e.message, 'message')
+          .has('message', (e) => e.message)
           .isNotNull()
           .contains('FastHash.fnv1a needs 64-bit ints');
     }, skip: !isJS);
@@ -24,9 +24,9 @@ void main() {
       });
 
       test('different inputs produce different hashes', () {
-        check(FastHash.fnv1a('a')).not((it) => it.equals(FastHash.fnv1a('b')));
+        check(FastHash.fnv1a('a')).not(.it()..equals(FastHash.fnv1a('b')));
         final upper = FastHash.fnv1a('Hello');
-        check(upper).not((it) => it.equals(FastHash.fnv1a('hello')));
+        check(upper).not(.it()..equals(FastHash.fnv1a('hello')));
       });
 
       test('empty string returns FNV-1a 64 offset basis', () {
@@ -49,7 +49,7 @@ void main() {
       });
 
       test('handles unicode code units', () {
-        check(FastHash.fnv1a('🚀')).not((it) => it.equals(FastHash.fnv1a('a')));
+        check(FastHash.fnv1a('🚀')).not(.it()..equals(FastHash.fnv1a('a')));
       });
     }, skip: isJS ? 'JS 53-bit integers corrupt FNV arithmetic' : false);
   });

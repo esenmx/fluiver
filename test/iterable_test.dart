@@ -10,7 +10,7 @@ void main() {
       return logos.intersperse((_) => const SizedBox()).toList();
     }
 
-    test('empty', () => check(interspersed(0)).isEmpty());
+    test('empty', () => check(interspersed(0)).isEmpty);
     test('single', () {
       final result = interspersed(1);
       check(result).length.equals(1);
@@ -66,7 +66,7 @@ void main() {
     });
 
     test('empty when size exceeds length', () {
-      check([1, 2].slidingWindows(3).toList()).isEmpty();
+      check([1, 2].slidingWindows(3).toList()).isEmpty;
     });
 
     test('size 1 with default step is one window per element', () {
@@ -79,15 +79,15 @@ void main() {
 
     test('size 0 throws naming size', () {
       check(() => [1, 2, 3].slidingWindows(0).toList()).throws<RangeError>()
-        ..has((e) => e.name, 'name').equals('size')
-        ..has((e) => e.message, 'message').equals('must be > 0');
+        ..has('name', (e) => e.name).equals('size')
+        ..has('message', (e) => e.message).equals('must be > 0');
     });
 
     test('step 0 throws naming step', () {
       check(() => [1, 2, 3].slidingWindows(2, step: 0).toList())
           .throws<RangeError>()
-        ..has((e) => e.name, 'name').equals('step')
-        ..has((e) => e.message, 'message').equals('must be > 0');
+        ..has('name', (e) => e.name).equals('step')
+        ..has('message', (e) => e.message).equals('must be > 0');
     });
 
     // A block body: `check(() => it.slidingWindows(0))` passes falsely, because

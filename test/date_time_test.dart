@@ -13,7 +13,7 @@ void main() {
     test('preserves UTC flag', () {
       final result = DateTime.utc(1990, 6, 26, 8, 30).truncateTime();
       check(result).equals(.utc(1990, 6, 26));
-      check(result.isUtc).isTrue();
+      check(result.isUtc).isTrue;
     });
   });
 
@@ -60,66 +60,66 @@ void main() {
 
   group('isToday / isTomorrow / isYesterday', () {
     test('isToday is true for now', () {
-      check(DateTime.now().isToday()).isTrue();
+      check(DateTime.now().isToday()).isTrue;
     });
 
     test('isToday is false for tomorrow', () {
       final now = DateTime.now();
       final tomorrow = DateTime(now.year, now.month, now.day + 1, 12);
-      check(tomorrow.isToday()).isFalse();
+      check(tomorrow.isToday()).isFalse;
     });
 
     test('isTomorrow uses calendar shift not 24h', () {
       final now = DateTime.now();
       final tomorrow = DateTime(now.year, now.month, now.day + 1, 12);
-      check(tomorrow.isTomorrow()).isTrue();
+      check(tomorrow.isTomorrow()).isTrue;
     });
 
     test('isYesterday uses calendar shift not 24h', () {
       final now = DateTime.now();
       final yesterday = DateTime(now.year, now.month, now.day - 1, 12);
-      check(yesterday.isYesterday()).isTrue();
+      check(yesterday.isYesterday()).isTrue;
     });
 
     test('predicates are mutually exclusive', () {
       final now = DateTime.now();
-      check(now.isTomorrow()).isFalse();
-      check(now.isYesterday()).isFalse();
+      check(now.isTomorrow()).isFalse;
+      check(now.isYesterday()).isFalse;
     });
   });
 
   group('inThisYear', () {
     test('current year is true', () {
-      check(DateTime.now().inThisYear()).isTrue();
+      check(DateTime.now().inThisYear()).isTrue;
     });
 
     test('last year is false', () {
       final lastYear = DateTime(DateTime.now().year - 1, 6);
-      check(lastYear.inThisYear()).isFalse();
+      check(lastYear.inThisYear()).isFalse;
     });
   });
 
   group('isWithinFromNow', () {
     test('now is within any duration', () {
       const oneSecond = Duration(seconds: 1);
-      check(DateTime.now().isWithinFromNow(oneSecond)).isTrue();
+      check(DateTime.now().isWithinFromNow(oneSecond)).isTrue;
     });
 
     test('one hour ahead is outside one minute', () {
       final future = DateTime.now().add(const Duration(hours: 1));
-      check(future.isWithinFromNow(const Duration(minutes: 1))).isFalse();
+      check(future.isWithinFromNow(const Duration(minutes: 1))).isFalse;
     });
 
     test('symmetric — past and future', () {
       final past = DateTime.now().subtract(const Duration(seconds: 30));
-      check(past.isWithinFromNow(const Duration(minutes: 1))).isTrue();
+      check(past.isWithinFromNow(const Duration(minutes: 1))).isTrue;
     });
 
     test('throws ArgumentError for negative duration', () {
       check(() => DateTime.now().isWithinFromNow(const Duration(seconds: -1)))
           .throws<ArgumentError>()
-        ..has((e) => e.name, 'name').equals('duration')
-        ..has((e) => e.message, 'message').equals('must not be negative');
+        ..has('name', (e) => e.name).equals('duration')
+        ..has('message', (e) => e.message).equals('must not be negative');
     });
   });
 }
