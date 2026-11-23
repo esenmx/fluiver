@@ -54,9 +54,10 @@ it says, or it doesn't exist.
   package's API live in `skills/*/SKILL.md`.
 - The README is for humans first: what the package does, why to use it, and how
   (install line plus the smallest real example).
-- Markdown stays within 80 columns, code blocks included. Tables are exempt from
-  the lint but must not scroll sideways on pub.dev. Dart blocks in the README
-  and skills are analyzed with the package lints (`tool/check_snippets.dart`).
+- Markdown stays within 80 columns, code blocks included, except tables (must
+  not scroll sideways on pub.dev) and `skills/**/*.md` (unwrapped for token
+  efficiency). Dart blocks in the README and skills are analyzed with the
+  package lints (`tool/check_snippets.dart`).
 
 ### Changes and releases
 

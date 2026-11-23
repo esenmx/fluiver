@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 const String _usage = '''
-Analyzes the ```dart blocks of README.md and skills/*/SKILL.md against this
+Analyzes the ```dart blocks of README.md and skills/**/*.md against this
 package with its analysis_options.yaml and fails on any diagnostic, except
 those that only fire because a block is a fragment. A block whose previous
 non-blank line is <!-- no-compile --> is skipped.
@@ -116,7 +116,7 @@ Future<void> main(List<String> args) async {
               .listSync(recursive: true)
               .whereType<File>()
               .map((f) => f.path)
-              .where((p) => p.endsWith('SKILL.md'))
+              .where((p) => p.endsWith('.md'))
               .toList()
             ..sort();
       files.addAll(found);
