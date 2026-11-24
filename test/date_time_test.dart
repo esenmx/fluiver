@@ -5,15 +5,19 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final dt = DateTime(1990, 6, 26, 8, 30);
 
-  group('truncateTime', () {
+  group('dateOnly', () {
     test('removes time components', () {
-      check(dt.truncateTime()).equals(DateTime(1990, 6, 26));
+      check(dt.dateOnly).equals(DateTime(1990, 6, 26));
     });
 
     test('preserves UTC flag', () {
-      final result = DateTime.utc(1990, 6, 26, 8, 30).truncateTime();
+      final result = DateTime.utc(1990, 6, 26, 8, 30).dateOnly;
       check(result).equals(.utc(1990, 6, 26));
       check(result.isUtc).isTrue;
+    });
+
+    test('is reachable through the DateTimeDateOnly extension', () {
+      check(DateTimeDateOnly(dt).dateOnly).equals(DateTime(1990, 6, 26));
     });
   });
 
@@ -60,42 +64,42 @@ void main() {
 
   group('isToday / isTomorrow / isYesterday', () {
     test('isToday is true for now', () {
-      check(DateTime.now().isToday()).isTrue;
+      check(DateTime.now().isToday).isTrue;
     });
 
     test('isToday is false for tomorrow', () {
       final now = DateTime.now();
       final tomorrow = DateTime(now.year, now.month, now.day + 1, 12);
-      check(tomorrow.isToday()).isFalse;
+      check(tomorrow.isToday).isFalse;
     });
 
     test('isTomorrow uses calendar shift not 24h', () {
       final now = DateTime.now();
       final tomorrow = DateTime(now.year, now.month, now.day + 1, 12);
-      check(tomorrow.isTomorrow()).isTrue;
+      check(tomorrow.isTomorrow).isTrue;
     });
 
     test('isYesterday uses calendar shift not 24h', () {
       final now = DateTime.now();
       final yesterday = DateTime(now.year, now.month, now.day - 1, 12);
-      check(yesterday.isYesterday()).isTrue;
+      check(yesterday.isYesterday).isTrue;
     });
 
     test('predicates are mutually exclusive', () {
       final now = DateTime.now();
-      check(now.isTomorrow()).isFalse;
-      check(now.isYesterday()).isFalse;
+      check(now.isTomorrow).isFalse;
+      check(now.isYesterday).isFalse;
     });
   });
 
   group('inThisYear', () {
     test('current year is true', () {
-      check(DateTime.now().inThisYear()).isTrue;
+      check(DateTime.now().inThisYear).isTrue;
     });
 
     test('last year is false', () {
       final lastYear = DateTime(DateTime.now().year - 1, 6);
-      check(lastYear.inThisYear()).isFalse;
+      check(lastYear.inThisYear).isFalse;
     });
   });
 

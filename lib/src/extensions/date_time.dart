@@ -1,16 +1,10 @@
-/// Merging time components with [DateTime].
-extension DateTimeMerge on DateTime {
-  /// Returns this date with hour/minute/second/millisecond/microsecond
-  /// zeroed.
-  DateTime truncateTime() {
-    return copyWith(
-      hour: 0,
-      minute: 0,
-      second: 0,
-      millisecond: 0,
-      microsecond: 0,
-    );
-  }
+/// Reading the calendar day of a [DateTime].
+extension DateTimeDateOnly on DateTime {
+  /// Midnight of this date's calendar day, keeping [isUtc].
+  ///
+  /// Unlike `DateUtils.dateOnly`, a UTC date stays UTC.
+  DateTime get dateOnly =>
+      copyWith(hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
 }
 
 /// Checking date conditions on [DateTime].
@@ -25,16 +19,16 @@ extension DateTimeCheck on DateTime {
   }
 
   /// Whether this date is the current local calendar day.
-  bool isToday() => _offsetChecker(0);
+  bool get isToday => _offsetChecker(0);
 
   /// Whether this date is the next local calendar day.
-  bool isTomorrow() => _offsetChecker(1);
+  bool get isTomorrow => _offsetChecker(1);
 
   /// Whether this date is the previous local calendar day.
-  bool isYesterday() => _offsetChecker(-1);
+  bool get isYesterday => _offsetChecker(-1);
 
   /// Whether this date is in the current local calendar year.
-  bool inThisYear() => toLocal().year == DateTime.now().year;
+  bool get inThisYear => toLocal().year == DateTime.now().year;
 
   /// Whether this date is within [duration] of `DateTime.now()`, in either
   /// direction.

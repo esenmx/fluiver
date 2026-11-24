@@ -10,8 +10,8 @@ void main() {
     test('both throw StateError when controller has no clients', () {
       final c = newScrollController();
 
-      check(c.atTop).throws<StateError>();
-      check(c.atBottom).throws<StateError>();
+      check(() => c.atTop).throws<StateError>();
+      check(() => c.atBottom).throws<StateError>();
     });
   });
 
@@ -21,8 +21,8 @@ void main() {
 
       await pumpScrollableList(tester, c);
 
-      check(c.atTop()).isTrue;
-      check(c.atBottom()).isFalse;
+      check(c.atTop).isTrue;
+      check(c.atBottom).isFalse;
     });
 
     testWidgets('atBottom true after jumpTo maxScrollExtent', (tester) async {
@@ -32,8 +32,8 @@ void main() {
       c.jumpTo(c.position.maxScrollExtent);
       await tester.pump();
 
-      check(c.atTop()).isFalse;
-      check(c.atBottom()).isTrue;
+      check(c.atTop).isFalse;
+      check(c.atBottom).isTrue;
     });
   });
 
@@ -69,9 +69,7 @@ void main() {
     });
 
     for (final duration in const [Duration.zero, Duration(milliseconds: -1)]) {
-      testWidgets('duration $duration throws ArgumentError and stays put', (
-        tester,
-      ) async {
+      testWidgets('duration $duration throws, stays put', (tester) async {
         final c = newScrollController();
         await pumpScrollableList(tester, c);
         c.jumpTo(100);
@@ -120,30 +118,28 @@ void main() {
 
       await pumpTwoViews(tester, c);
 
-      check(c.atTop).returnsNormally();
+      check(() => c.atTop).returnsNormally();
     });
 
     testWidgets('edge helpers cover every attached view', (tester) async {
       final c = newScrollController();
 
       await pumpTwoViews(tester, c, second: 3000);
-      check(c.atTop()).isTrue;
-      check(c.atBottom()).isFalse;
+      check(c.atTop).isTrue;
+      check(c.atBottom).isFalse;
 
       c.animateToBottom(duration: const Duration(milliseconds: 100));
       await tester.pumpAndSettle();
-      check(c.atBottom()).isTrue;
-      check(c.atTop()).isFalse;
+      check(c.atBottom).isTrue;
+      check(c.atTop).isFalse;
 
       c.animateToTop(duration: const Duration(milliseconds: 100));
       await tester.pumpAndSettle();
-      check(c.atTop()).isTrue;
-      check(c.atBottom()).isFalse;
+      check(c.atTop).isTrue;
+      check(c.atBottom).isFalse;
     });
 
-    testWidgets('only the first view at the bottom is at neither edge', (
-      tester,
-    ) async {
+    testWidgets('first view at bottom: neither edge', (tester) async {
       final c = newScrollController();
 
       await pumpTwoViews(tester, c, second: 3000);
@@ -151,13 +147,11 @@ void main() {
       first.jumpTo(first.maxScrollExtent);
       await tester.pump();
 
-      check(c.atBottom()).isFalse;
-      check(c.atTop()).isFalse;
+      check(c.atBottom).isFalse;
+      check(c.atTop).isFalse;
     });
 
-    testWidgets('only the last view at the bottom is at neither edge', (
-      tester,
-    ) async {
+    testWidgets('last view at bottom: neither edge', (tester) async {
       final c = newScrollController();
 
       await pumpTwoViews(tester, c, second: 3000);
@@ -165,8 +159,8 @@ void main() {
       last.jumpTo(last.maxScrollExtent);
       await tester.pump();
 
-      check(c.atBottom()).isFalse;
-      check(c.atTop()).isFalse;
+      check(c.atBottom).isFalse;
+      check(c.atTop).isFalse;
     });
   });
 }

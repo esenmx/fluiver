@@ -6,47 +6,53 @@ import 'dart:ui';
 
 /// HSL-based [Color] transforms and contrast-text picker.
 extension ColorTransform on Color {
-  /// Returns a darker variant by subtracting [amount] from HSL lightness.
+  /// Returns a darker variant: [amount] subtracted from HSL lightness, hue and
+  /// saturation kept; lightness stops at 0 (black).
   ///
-  /// [amount] must be within `[0, 1]`. Default `0.1` (10% darker).
+  /// [amount] is on the `[0, 1]` lightness scale of [HSLColor.lightness], not a
+  /// percentage: `0.1` (the default) lowers lightness by a tenth, `1` always
+  /// gives black.
   /// Throws [RangeError] if [amount] is outside `[0, 1]` or `NaN`, and
   /// [ArgumentError] if a channel is outside `[0, 1]` (extended sRGB): map
   /// such a color into gamut first.
   ///
   /// ```dart
-  /// final pressed = Theme.of(context).colorScheme.primary.darken();
+  /// final pressed = Theme.of(context).colorScheme.primary.darker();
   /// ```
-  Color darken([double amount = .1]) =>
+  Color darker([double amount = .1]) =>
       _withLightnessShift(-_checkAmount(amount));
 
-  /// Returns a lighter variant by adding [amount] to HSL lightness.
+  /// Returns a lighter variant: [amount] added to HSL lightness, hue and
+  /// saturation kept; lightness stops at 1 (white).
   ///
-  /// [amount] must be within `[0, 1]`. Default `0.1` (10% lighter).
+  /// [amount] is on the `[0, 1]` lightness scale of [HSLColor.lightness], not a
+  /// percentage: `0.1` (the default) raises lightness by a tenth, `1` always
+  /// gives white.
   /// Throws [RangeError] if [amount] is outside `[0, 1]` or `NaN`, and
   /// [ArgumentError] if a channel is outside `[0, 1]` (extended sRGB): map
   /// such a color into gamut first.
   ///
   /// ```dart
-  /// final hover = Theme.of(context).colorScheme.primary.lighten();
+  /// final hover = Theme.of(context).colorScheme.primary.lighter();
   /// ```
-  Color lighten([double amount = .1]) =>
+  Color lighter([double amount = .1]) =>
       _withLightnessShift(_checkAmount(amount));
 
-  /// Returns [Colors.black] or [Colors.white] — whichever has the higher
-  /// WCAG contrast ratio against this color.
+  /// [Colors.black] or [Colors.white], whichever has the higher WCAG contrast
+  /// ratio against this color.
   ///
   /// Use as a foreground text color over an arbitrary background:
   ///
   /// ```dart
   /// Container(
   ///   color: tagColor,
-  ///   child: Text(label, style: TextStyle(color: tagColor.contrastText())),
+  ///   child: Text(label, style: TextStyle(color: tagColor.contrastText)),
   /// )
   /// ```
   ///
   /// Throws [ArgumentError] if a channel is outside `[0, 1]` (extended sRGB):
   /// map such a color into gamut first.
-  Color contrastText() {
+  Color get contrastText {
     _checkChannels();
     // computeLuminance asserts against extendedSRGB; in-range channels mean
     // the same in plain sRGB.

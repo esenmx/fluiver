@@ -95,8 +95,7 @@ void main() {
       check(_size(tester).height).equals(0);
     });
 
-    testWidgets('tracks bottom edge during expansion and lands fully '
-        'visible', (tester) async {
+    testWidgets('tracks the bottom edge while expanding', (tester) async {
       final controller = ScrollController();
       addTearDown(controller.dispose);
       await tester.pumpWidget(_app(isExpanded: false, controller: controller));
@@ -112,9 +111,7 @@ void main() {
       check(controller.offset).equals(200);
     });
 
-    testWidgets('scrollOffset reveals extra space below the bottom edge', (
-      tester,
-    ) async {
+    testWidgets('scrollOffset reveals space below the edge', (tester) async {
       final controller = ScrollController();
       addTearDown(controller.dispose);
       await tester.pumpWidget(
@@ -128,9 +125,7 @@ void main() {
       check(controller.offset).equals(250);
     });
 
-    testWidgets('collapsed child is skipped by focus traversal', (
-      tester,
-    ) async {
+    testWidgets('collapsed child is skipped by focus', (tester) async {
       final hidden = FocusNode();
       addTearDown(hidden.dispose);
       await tester.pumpWidget(_collapsed(TextField(focusNode: hidden)));
@@ -139,8 +134,7 @@ void main() {
       check(hidden.hasFocus).isFalse;
     });
 
-    testWidgets('child collapsed after expanding is skipped by focus '
-        'traversal', (tester) async {
+    testWidgets('re-collapsed child is skipped by focus', (tester) async {
       final hidden = FocusNode();
       addTearDown(hidden.dispose);
       await tester.pumpWidget(
@@ -179,9 +173,7 @@ void main() {
       }
     });
 
-    testWidgets('expanded child is reachable by focus traversal', (
-      tester,
-    ) async {
+    testWidgets('expanded child is reachable by focus', (tester) async {
       final shown = FocusNode();
       addTearDown(shown.dispose);
       await tester.pumpWidget(
@@ -219,8 +211,7 @@ void main() {
         ..isLessThan(300);
     });
 
-    testWidgets('duration: Duration.zero collapse immediately marks child '
-        'offstage on next frame', (tester) async {
+    testWidgets('zero duration collapse: offstage next frame', (tester) async {
       final hidden = FocusNode();
       addTearDown(hidden.dispose);
       Widget build({required bool isExpanded}) => MaterialApp(
@@ -249,9 +240,7 @@ void main() {
       check(offstage.offstage).isTrue;
     });
 
-    testWidgets('duration: Duration.zero expansion reveals the child', (
-      tester,
-    ) async {
+    testWidgets('zero duration expansion reveals the child', (tester) async {
       final controller = ScrollController();
       addTearDown(controller.dispose);
       await tester.pumpWidget(
@@ -266,9 +255,7 @@ void main() {
       check(controller.offset).equals(200);
     });
 
-    testWidgets('mounting expanded does not scroll, whatever the duration', (
-      tester,
-    ) async {
+    testWidgets('mounting expanded never scrolls', (tester) async {
       final controller = ScrollController();
       addTearDown(controller.dispose);
       await tester.pumpWidget(
@@ -279,32 +266,27 @@ void main() {
       check(controller.offset).equals(0);
     });
 
-    testWidgets(
-      'a toggle and curve change during a rejected duration apply once valid',
-      (tester) async {
-        await tester.pumpWidget(_app(isExpanded: false, curve: Curves.linear));
-        await tester.pumpWidget(
-          _app(
-            isExpanded: true,
-            duration: const Duration(milliseconds: -1),
-            curve: Curves.easeIn,
-          ),
-        );
-        check(tester.takeException()).isA<ArgumentError>();
+    testWidgets('toggle + curve apply once duration is valid', (tester) async {
+      await tester.pumpWidget(_app(isExpanded: false, curve: Curves.linear));
+      await tester.pumpWidget(
+        _app(
+          isExpanded: true,
+          duration: const Duration(milliseconds: -1),
+          curve: Curves.easeIn,
+        ),
+      );
+      check(tester.takeException()).isA<ArgumentError>();
 
-        await tester.pumpWidget(_app(isExpanded: true, curve: Curves.easeIn));
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 100));
-        check(_size(tester).height).isLessThan(150);
+      await tester.pumpWidget(_app(isExpanded: true, curve: Curves.easeIn));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      check(_size(tester).height).isLessThan(150);
 
-        await tester.pumpAndSettle();
-        check(_size(tester).height).equals(300);
-      },
-    );
+      await tester.pumpAndSettle();
+      check(_size(tester).height).equals(300);
+    });
 
-    testWidgets('negative duration reports ArgumentError on mount', (
-      tester,
-    ) async {
+    testWidgets('negative duration fails on mount', (tester) async {
       await tester.pumpWidget(
         _app(isExpanded: false, duration: const Duration(milliseconds: -1)),
       );
@@ -315,9 +297,7 @@ void main() {
           .equals('duration');
     });
 
-    testWidgets('negative duration reports ArgumentError on update', (
-      tester,
-    ) async {
+    testWidgets('negative duration fails on update', (tester) async {
       await tester.pumpWidget(_app(isExpanded: false));
 
       await tester.pumpWidget(
@@ -330,9 +310,7 @@ void main() {
           .equals('duration');
     });
 
-    testWidgets('negative duration reports ArgumentError while toggling', (
-      tester,
-    ) async {
+    testWidgets('negative duration fails while toggling', (tester) async {
       await tester.pumpWidget(_app(isExpanded: false));
 
       await tester.pumpWidget(
@@ -342,9 +320,7 @@ void main() {
       check(tester.takeException()).isA<ArgumentError>();
     });
 
-    testWidgets('rapid true -> false -> true toggle expands to full height', (
-      tester,
-    ) async {
+    testWidgets('rapid on-off-on toggle expands fully', (tester) async {
       await tester.pumpWidget(_app(isExpanded: true));
       await tester.pumpWidget(_app(isExpanded: false));
       await tester.pump(const Duration(milliseconds: 50));

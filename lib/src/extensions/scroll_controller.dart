@@ -9,7 +9,7 @@ extension ScrollControllerPosition on ScrollController {
   /// `true` when every attached view is scrolled to its minimum extent.
   ///
   /// Throws [StateError] when no scroll view is attached.
-  bool atTop() {
+  bool get atTop {
     _checkAttached();
     return positions.every((p) => p.pixels <= p.minScrollExtent);
   }
@@ -17,7 +17,7 @@ extension ScrollControllerPosition on ScrollController {
   /// `true` when every attached view is scrolled to its maximum extent.
   ///
   /// Throws [StateError] when no scroll view is attached.
-  bool atBottom() {
+  bool get atBottom {
     _checkAttached();
     return positions.every((p) => p.pixels >= p.maxScrollExtent);
   }

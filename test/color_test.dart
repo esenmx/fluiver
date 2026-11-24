@@ -22,55 +22,59 @@ extension on Subject<Color> {
 }
 
 void main() {
-  group('darken', () {
+  group('darker', () {
     test('default amount lowers HSL lightness by 0.1', () {
       const blue = Color(0xFF2196F3);
 
-      final darkened = lightnessOf(blue.darken());
-      check(darkened).isCloseTo(lightnessOf(blue) - 0.1, 1e-6);
+      final lowered = lightnessOf(blue.darker());
+      check(lowered).isCloseTo(lightnessOf(blue) - 0.1, 1e-6);
     });
 
-    test('custom amount darkens further', () {
+    test('custom amount lowers lightness further', () {
       const c = Color(0xFF888888);
 
-      check(lightnessOf(c.darken(0.4))).isLessThan(lightnessOf(c));
+      check(lightnessOf(c.darker(0.4))).isLessThan(lightnessOf(c));
     });
 
     test('amount 1 reaches black', () {
-      check(lightnessOf(const Color(0xFF888888).darken(1))).equals(0);
+      check(lightnessOf(const Color(0xFF888888).darker(1))).equals(0);
     });
 
     test('clamps result lightness to [0, 1]', () {
-      check(lightnessOf(Colors.black.darken())).equals(0);
+      check(lightnessOf(Colors.black.darker())).equals(0);
     });
 
     test('throws RangeError when amount is outside [0, 1] or NaN', () {
       for (final amount in const [-0.3, -1.0, 1.01, 5.0, double.nan]) {
         check(
           because: '$amount',
-          () => Colors.blue.darken(amount),
+          () => Colors.blue.darker(amount),
         ).throws<RangeError>().has('name', (e) => e.name).equals('amount');
       }
     });
   });
 
-  group('lighten', () {
+  group('lighter', () {
     test('default amount raises HSL lightness by 0.1', () {
       const blue = Color(0xFF2196F3);
 
-      final lightened = lightnessOf(blue.lighten());
-      check(lightened).isCloseTo(lightnessOf(blue) + 0.1, 1e-6);
+      final raised = lightnessOf(blue.lighter());
+      check(raised).isCloseTo(lightnessOf(blue) + 0.1, 1e-6);
+    });
+
+    test('amount 1 reaches white', () {
+      check(lightnessOf(const Color(0xFF888888).lighter(1))).equals(1);
     });
 
     test('clamps result lightness to [0, 1]', () {
-      check(lightnessOf(Colors.white.lighten())).equals(1);
+      check(lightnessOf(Colors.white.lighter())).equals(1);
     });
 
     test('throws RangeError when amount is outside [0, 1] or NaN', () {
       for (final amount in const [-0.5, -1.0, 1.01, 10.0, double.nan]) {
         check(
           because: '$amount',
-          () => Colors.blue.lighten(amount),
+          () => Colors.blue.lighter(amount),
         ).throws<RangeError>().has('name', (e) => e.name).equals('amount');
       }
     });
@@ -78,13 +82,13 @@ void main() {
 
   group('contrastText', () {
     test('returns white over dark background', () {
-      check(Colors.black.contrastText()).equals(Colors.white);
-      check(const Color(0xFF1F1F1F).contrastText()).equals(Colors.white);
+      check(Colors.black.contrastText).equals(Colors.white);
+      check(const Color(0xFF1F1F1F).contrastText).equals(Colors.white);
     });
 
     test('returns black over light background', () {
-      check(Colors.white.contrastText()).equals(Colors.black);
-      check(const Color(0xFFEEEEEE).contrastText()).equals(Colors.black);
+      check(Colors.white.contrastText).equals(Colors.black);
+      check(const Color(0xFFEEEEEE).contrastText).equals(Colors.black);
     });
 
     test('picks the higher-contrast of black/white', () {
@@ -99,7 +103,7 @@ void main() {
             ? Colors.black
             : Colors.white;
         check(
-          bg.contrastText(),
+          bg.contrastText,
           because:
               'bg=$bg lum=${bg.computeLuminance().toStringAsFixed(3)} '
               'black=${_contrast(bg, Colors.black).toStringAsFixed(2)} '
@@ -123,10 +127,7 @@ void main() {
           blue: channel,
           colorSpace: .extendedSRGB,
         );
-        check(
-          because: '$channel',
-          wide.contrastText(),
-        ).equals(twin.contrastText());
+        check(because: '$channel', wide.contrastText).equals(twin.contrastText);
       }
     });
 
@@ -145,14 +146,14 @@ void main() {
         );
         check(
           because: '($red, $green, $blue)',
-          wide.contrastText,
+          () => wide.contrastText,
         ).throws<ArgumentError>();
       }
     });
   });
 
   group('lightness shift', () {
-    test('darken(0) keeps a Display-P3 color space', () {
+    test('darker(0) keeps a Display-P3 color space', () {
       const p3 = Color.from(
         alpha: 1,
         red: 1,
@@ -160,12 +161,12 @@ void main() {
         blue: 0,
         colorSpace: .displayP3,
       );
-      check(p3.darken(0).colorSpace).equals(.displayP3);
+      check(p3.darker(0).colorSpace).equals(.displayP3);
     });
 
-    test('darken(0) preserves sub-8-bit precision', () {
+    test('darker(0) preserves sub-8-bit precision', () {
       const c = Color.from(alpha: 0.5, red: 0.3, green: 0.5, blue: 0.7);
-      final out = c.darken(0);
+      final out = c.darker(0);
       check(out.a).isCloseTo(c.a, 1e-6);
       check(out.r).isCloseTo(c.r, 1e-6);
     });
@@ -186,9 +187,9 @@ void main() {
           colorSpace: .extendedSRGB,
         );
         for (final (name, shift) in <(String, Color Function())>[
-          ('darken', wide.darken),
-          ('lighten', wide.lighten),
-          ('darken(0)', () => wide.darken(0)),
+          ('darker', wide.darker),
+          ('lighter', wide.lighter),
+          ('darker(0)', () => wide.darker(0)),
         ]) {
           check(
             because: '$name ($red, $green, $blue)',
@@ -206,17 +207,17 @@ void main() {
         blue: 0.5,
         colorSpace: .extendedSRGB,
       );
-      final darker = inRange.darken();
+      final darker = inRange.darker();
       check(darker.colorSpace).equals(.extendedSRGB);
       check(darker).channelsCloseTo(
         HSLColor.fromColor(const .from(alpha: 1, red: 1, green: 0.5, blue: 0.5))
             .withLightness(0.65)
             .toColor(),
-        'darken',
+        'darker',
       );
     });
 
-    test('darken/lighten match HSLColor within 1/255 across primaries', () {
+    test('both match HSLColor within 1/255 across primaries', () {
       for (final swatch in Colors.primaries) {
         for (final shade in const [100, 300, 500, 700, 900]) {
           final c = swatch[shade] ?? swatch;
@@ -225,10 +226,10 @@ void main() {
           for (final amount in const [.05, .1, .3]) {
             final darker = hsl.withLightness((l - amount).clamp(0.0, 1.0));
             final lighter = hsl.withLightness((l + amount).clamp(0.0, 1.0));
-            check(c.darken(amount))
-                .channelsCloseTo(darker.toColor(), 'darken $c by $amount');
-            check(c.lighten(amount))
-                .channelsCloseTo(lighter.toColor(), 'lighten $c by $amount');
+            check(c.darker(amount))
+                .channelsCloseTo(darker.toColor(), 'darker $c by $amount');
+            check(c.lighter(amount))
+                .channelsCloseTo(lighter.toColor(), 'lighter $c by $amount');
           }
         }
       }
