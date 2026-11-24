@@ -4,6 +4,26 @@
 
 ### BREAKING
 
+- Zero-argument reads are getters again, reverting 5.0.0: `DateTime.isToday`,
+  `isTomorrow`, `isYesterday`, `inThisYear`, `ScrollController.atTop`,
+  `atBottom` and `Color.contrastText`. Migration: drop the `()` at each call
+  site (`date.isToday`, `controller.atTop`, `color.contrastText`).
+  `DateTime.truncateTime()` becomes the getter `dateOnly`: `d.truncateTime()` →
+  `d.dateOnly`; its extension `DateTimeMerge` is renamed `DateTimeDateOnly`
+  (`DateTimeMerge(d)` → `DateTimeDateOnly(d)`). The generic `whereKeyType<T>()`
+  and `whereValueType<T>()` stay methods, since a getter can't take a type
+  argument. The README and the agent skill use the getters.
+- Renamed `Color.darken` to `darker` and `Color.lighten` to `lighter`, with no
+  alias. `package:flex_color_scheme` exports its own `darken([int amount = 10])`
+  and `lighten` on `Color`, so an app importing both could not call either
+  without an extension override (`ambiguous_extension_member_access`). The two
+  are not the same operation: flex takes a whole percent, silently returns the
+  color for amounts of 0 or less and opaque black or white above 100, rounds to
+  8 bits and returns sRGB; fluiver's `amount` is a lightness fraction in
+  `[0, 1]`, keeps the color space and full precision, and throws on misuse. The
+  same `color.darken(1)` meant 1% darker in flex and black in fluiver.
+  Migration: `c.darken()` → `c.darker()`, `c.lighten(0.2)` → `c.lighter(0.2)`;
+  the amount keeps its meaning.
 - Removed `LegacyTimeOfDayOnDate`, the `onDate` extension on
   `package:flutter/material.dart`'s `TimeOfDay`. Flutter 3.50 deprecates that
   library; use `TimeOfDayOnDate.onDate` on `package:material_ui`'s `TimeOfDay`.
@@ -31,8 +51,30 @@
   `ThrottleLatest` throws `StateError`, like `LocaleListener` and
   `BrightnessListener`.
 - `Color.contrastText` throws `ArgumentError` when a channel is outside
-  `[0, 1]`, as `darken` and `lighten` do (previously a debug-only
+  `[0, 1]`, as `darker` and `lighter` do (previously a debug-only
   `AssertionError`, and a guess in release).
+
+### Added
+
+- `ViewInsetsPadding` pads its child by the keyboard insets no ancestor has
+  consumed and removes them below, so nothing pads twice: modal sheet content, a
+  `Scaffold(resizeToAvoidBottomInset: false)` body without a bottom bar or with
+  `extendBody: true`, or an input bar in `Scaffold.bottomNavigationBar`. It pads
+  nothing in a resizing `Scaffold` body, a `Dialog` or a nested
+  `ViewInsetsPadding`, keeps exactly the home-indicator padding the keyboard
+  leaves uncovered, and throws `StateError` without a `MediaQuery`.
+  Widgets-only, so Cupertino apps can use it.
+- `StatusBarHeader(color:, child:)` is an opaque header for a screen without an
+  `AppBar`: it paints `color` behind the status bar, pads `child` below it and
+  side cutouts, and sets status-bar icons that contrast `color` on iOS and
+  Android, following `Color.contrastText`. It throws `ArgumentError` for a
+  translucent or out-of-gamut color and `StateError` when an ancestor already
+  consumed the status-bar inset (a `SafeArea`, an `AppBar`, a `ListView`'s
+  padding, a modal sheet).
+- `StatusBarIcons.light` and `StatusBarIcons.dark`: status-bar-only
+  `SystemUiOverlayStyle`s equal to what a Material 3 `AppBar` derives. Unlike
+  `SystemUiOverlayStyle.light` and `.dark`, they leave the Android navigation
+  bar alone.
 
 ### Fixed
 

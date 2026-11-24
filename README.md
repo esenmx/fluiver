@@ -5,15 +5,16 @@
 
 fluiver is a set of small widgets, extensions and helpers that the Flutter SDK
 leaves out: a grid that doesn't scroll, debounce and throttle, an LRU cache,
-date checks like `isToday()`, and more.
+date checks like `isToday`, and more.
 
 ## Why
 
 Without it, you write these yourself in every app: a `Timer` and its cancel
 logic behind each debounced search field, a `GridView` with `shrinkWrap: true`
 and `NeverScrollableScrollPhysics` for every grid inside a `ListView` (and it
-still throws inside `IntrinsicHeight`), calendar math for "today" and
-"yesterday", an LRU cache. fluiver gives you each one, tested, and throws
+still throws inside `IntrinsicHeight`), system insets that pad a sheet above the
+keyboard without doubling under a resizing `Scaffold`, calendar math for "today"
+and "yesterday", an LRU cache. fluiver gives you each one, tested, and throws
 (`ArgumentError`, `RangeError`, `StateError`) when it's misused instead of
 quietly clamping. Nothing here duplicates `package:collection`, `package:async`
 or `flutter_hooks`, so it works alongside them.
@@ -37,7 +38,7 @@ Widget agenda(List<DateTime> meetings) {
         crossAxisCount: 3,
         children: [
           for (final start in meetings)
-            Text(start.isToday() ? 'Today' : '${start.month}/${start.day}'),
+            Text(start.isToday ? 'Today' : '${start.month}/${start.day}'),
         ],
       ),
     ],
@@ -116,6 +117,116 @@ Collapse never scrolls; only expansion tracks. If there is no enclosing
 `Scrollable`, the size animation still runs without scroll tracking. A negative
 `duration` reports an `ArgumentError` when the widget builds.
 
+### Insets: keyboard and status bar
+
+The keyboard covers the fields of a bottom sheet. A form padded by
+`MediaQuery.viewInsetsOf` pads twice under a resizing `Scaffold`, or leaves a
+34px gap above the keyboard. A header color stops below the status bar, and the
+status-bar icons stay white on a white screen. These three pieces get each case
+right on iOS and Android.
+
+`ViewInsetsPadding` lifts its child above the keyboard and tells everything
+below that it did, so nothing pads twice:
+
+```dart
+Future<void> rename(BuildContext context) {
+  return showModalBottomSheet<void>(
+    context: context,
+    // Without it the sheet stops at 9/16 of the screen and the field overflows.
+    isScrollControlled: true,
+    builder: (context) => const ViewInsetsPadding(
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: .min,
+          children: [Text('Rename'), TextField(autofocus: true)],
+        ),
+      ),
+    ),
+  );
+}
+```
+
+It pads nothing where a `Scaffold` already resized for the keyboard, so a
+reusable form is safe in a sheet, a page or a dialog. On a `Scaffold` that
+doesn't resize and has a `bottomNavigationBar`, add `extendBody: true`, or it
+pads the bar height twice. A chat composer goes in the bottom bar slot and rides
+the keyboard, resizing `Scaffold` or not:
+
+```dart
+Widget chat(Widget messages, Widget composer) {
+  return Scaffold(
+    body: messages,
+    bottomNavigationBar: ViewInsetsPadding(child: composer),
+  );
+}
+```
+
+`StatusBarHeader` is a colored header for a screen without an `AppBar`: the
+color reaches behind the status bar, the child sits below it, and the status-bar
+icons contrast the color:
+
+```dart
+Widget profile(String name) {
+  return Scaffold(
+    body: Column(
+      // The header is as wide as its child; stretch it across the screen.
+      crossAxisAlignment: .stretch,
+      children: [
+        StatusBarHeader(
+          color: Colors.indigo,
+          child: Padding(
+            padding: const .all(16),
+            child: Text(
+              name,
+              style: TextStyle(color: Colors.indigo.contrastText),
+            ),
+          ),
+        ),
+        const Expanded(child: Placeholder()),
+      ],
+    ),
+  );
+}
+```
+
+It throws `ArgumentError` for a translucent color, and `StateError` under a
+`SafeArea`, an `AppBar`, a `ListView` or a modal sheet, where it can't reach the
+status bar. A `ListView` below it in the `Column` still pads for the status bar;
+with a list, make the header the first sliver of a `CustomScrollView`. For a
+gradient or an image, use `StatusBarIcons` below.
+
+`StatusBarIcons.light` and `.dark` set the status-bar icons on iOS and Android,
+exactly as an `AppBar` derives them. `SystemUiOverlayStyle.light` and `.dark`
+also paint the Android navigation bar black.
+
+```dart
+final blackAppBar = AppBar(
+  backgroundColor: Colors.black,
+  systemOverlayStyle: StatusBarIcons.light,
+);
+
+// A dark hero image at the top of a page without an AppBar.
+Widget hero(ImageProvider image) {
+  return AnnotatedRegion(
+    value: StatusBarIcons.light,
+    child: Image(image: image, height: 300, fit: .cover),
+  );
+}
+```
+
+A colored bottom bar needs no widget: put the color outside the `SafeArea`, so
+it reaches under the home indicator.
+
+```dart
+Widget bottomBar(Widget actions) {
+  return ColoredBox(
+    color: Colors.indigo,
+    child: SafeArea(top: false, child: actions),
+  );
+}
+```
+
 ## Extensions
 
 ### `Object.into` — Kotlin's `let`
@@ -176,21 +287,23 @@ final windows = [1, 2, 3, 4, 5].slidingWindows(3);
 
 ```dart
 final dt = DateTime.now();
-final today = dt.isToday();
-final tomorrow = dt.isTomorrow();
-final yesterday = dt.isYesterday();
-final thisYear = dt.inThisYear();
+final today = dt.isToday;
+final tomorrow = dt.isTomorrow;
+final yesterday = dt.isYesterday;
+final thisYear = dt.inThisYear;
 final recent = dt.isWithinFromNow(const Duration(minutes: 5));
 
 final birthday = DateTime(1990, 5, 17);
 final age = birthday.age(); // full years as of now
 final ageIn2030 = birthday.age(at: DateTime(2030));
 
-final midnight = dt.truncateTime();
+final midnight = dt.dateOnly; // keeps UTC, unlike DateUtils.dateOnly
 final nineToday = const TimeOfDay(hour: 9, minute: 0).onDate(dt);
 ```
 
-Arithmetic stays on stdlib: `dt.add(const Duration(days: 7))`.
+Arithmetic stays on stdlib. `dt.copyWith(day: dt.day + 7)` moves seven calendar
+days and keeps UTC; `dt.add(const Duration(days: 7))` adds 168 hours, so the
+wall-clock time shifts by an hour across a DST change.
 
 ### TimeOfDay
 
@@ -224,25 +337,27 @@ result. A negative timeout throws `ArgumentError`.
 
 ```dart
 const brand = Color(0xFF6750A4);
-final pressed = brand.darken();
-final hover = brand.lighten();
+final pressed = brand.darker();
+final hover = brand.lighter();
 
 final tag = ColoredBox(
   color: brand,
-  child: Text('New', style: TextStyle(color: brand.contrastText())),
+  child: Text('New', style: TextStyle(color: brand.contrastText)),
 );
 ```
 
-`amount` must be within `[0, 1]` (`RangeError` otherwise). A color with a
-channel outside `[0, 1]` (extended sRGB) throws `ArgumentError`: map it into
-gamut first, the way you want.
+`darker` and `lighter` shift HSL lightness by `amount`, a fraction on its
+`[0, 1]` scale (default `0.1`), not a percentage. `amount` must be within
+`[0, 1]` (`RangeError` otherwise). A color with a channel outside `[0, 1]`
+(extended sRGB) throws `ArgumentError`: map it into gamut first, the way you
+want.
 
 ### ScrollController — position + edge animation
 
 ```dart
 Future<void> showLatest(ScrollController controller) async {
-  // atTop() / atBottom(): true when every attached view is at that edge.
-  if (!controller.atBottom()) {
+  // atTop / atBottom: true when every attached view is at that edge.
+  if (!controller.atBottom) {
     await controller.animateToBottom(); // 250ms easeOut by default
   }
 }

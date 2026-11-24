@@ -25,8 +25,7 @@ These hold for every change, whoever or whatever writes it.
 - CI (`.github/workflows/ci.yaml`) is the gate, and a pull request merges only
   when every CI job is green. Run its format, analyze, snippet and test steps on
   the stable channel and fix what fails.
-- Format tracked Dart files only:
-  `git ls-files -z -- '*.dart' | xargs -0 dart format`.
+- Format with `dart format .`; it covers every file the CI format job checks.
 - New behaviour ships with a test that fails without the change.
 - Never skip hooks (`--no-verify`) or weaken a check to get green.
 

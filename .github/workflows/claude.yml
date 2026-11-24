@@ -35,5 +35,5 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
-            --allowedTools "Bash(dart:*),Bash(flutter:*),Bash(git ls-files:*),Bash(xargs:*),Bash(npx --yes markdownlint-cli2@0.23.3:*)"
+            --allowedTools "Bash(dart:*),Bash(flutter:*),Bash(git ls-files:*),Bash(npx --yes markdownlint-cli2@0.23.3:*)"
             --append-system-prompt-file CONTRIBUTING.md
