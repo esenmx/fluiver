@@ -1,4 +1,5 @@
 import 'package:example/src/grid_page.dart';
+import 'package:example/src/system_insets_page.dart';
 import 'package:example/src/ticker_builder_page.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -15,6 +16,17 @@ class const IndexPage({super.key}) extends StatelessWidget {
               MaterialPageRoute<void>(
                 builder: (context) {
                   return const GridPage();
+                },
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.keyboard),
+            title: const Text('System insets'),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (context) {
+                  return const SystemInsetsPage();
                 },
               ),
             ),
