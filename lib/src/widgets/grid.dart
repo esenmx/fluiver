@@ -48,12 +48,12 @@ class Grid extends MultiChildRenderObjectWidget {
     this.direction = .vertical,
     this.padding = .zero,
     super.key,
-  }) : gridDelegate = _checkedCountDelegate(
-         crossAxisCount: crossAxisCount,
-         mainAxisSpacing: mainAxisSpacing,
-         crossAxisSpacing: crossAxisSpacing,
-         childAspectRatio: childAspectRatio,
-         mainAxisExtent: mainAxisExtent,
+  }) : gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+         crossAxisCount: _positive(crossAxisCount, 'crossAxisCount'),
+         mainAxisSpacing: _distance(mainAxisSpacing, 'mainAxisSpacing'),
+         crossAxisSpacing: _distance(crossAxisSpacing, 'crossAxisSpacing'),
+         childAspectRatio: _positive(childAspectRatio, 'childAspectRatio'),
+         mainAxisExtent: _distance(mainAxisExtent, 'mainAxisExtent'),
        );
 
   /// A max-cell-extent responsive grid — mirrors [GridView.extent].
@@ -71,92 +71,31 @@ class Grid extends MultiChildRenderObjectWidget {
     this.direction = .vertical,
     this.padding = .zero,
     super.key,
-  }) : gridDelegate = _checkedExtentDelegate(
-         maxCrossAxisExtent: maxCrossAxisExtent,
-         mainAxisSpacing: mainAxisSpacing,
-         crossAxisSpacing: crossAxisSpacing,
-         childAspectRatio: childAspectRatio,
-         mainAxisExtent: mainAxisExtent,
+  }) : gridDelegate = SliverGridDelegateWithMaxCrossAxisExtent(
+         maxCrossAxisExtent: _positive(
+           maxCrossAxisExtent,
+           'maxCrossAxisExtent',
+         ),
+         mainAxisSpacing: _distance(mainAxisSpacing, 'mainAxisSpacing'),
+         crossAxisSpacing: _distance(crossAxisSpacing, 'crossAxisSpacing'),
+         childAspectRatio: _positive(childAspectRatio, 'childAspectRatio'),
+         mainAxisExtent: _distance(mainAxisExtent, 'mainAxisExtent'),
        );
 
-  // These run ahead of the delegate constructors, whose asserts would otherwise
-  // answer first in debug and stay silent in release.
-  static SliverGridDelegate _checkedCountDelegate({
-    required int crossAxisCount,
-    required double mainAxisSpacing,
-    required double crossAxisSpacing,
-    required double childAspectRatio,
-    required double? mainAxisExtent,
-  }) {
-    if (crossAxisCount <= 0) {
-      throw ArgumentError.value(
-        crossAxisCount,
-        'crossAxisCount',
-        'must be greater than 0',
-      );
-    }
-    _checkCellMetrics(
-      mainAxisSpacing: mainAxisSpacing,
-      crossAxisSpacing: crossAxisSpacing,
-      childAspectRatio: childAspectRatio,
-      mainAxisExtent: mainAxisExtent,
-    );
-    return SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: crossAxisCount,
-      mainAxisSpacing: mainAxisSpacing,
-      crossAxisSpacing: crossAxisSpacing,
-      childAspectRatio: childAspectRatio,
-      mainAxisExtent: mainAxisExtent,
-    );
-  }
-
-  static SliverGridDelegate _checkedExtentDelegate({
-    required double maxCrossAxisExtent,
-    required double mainAxisSpacing,
-    required double crossAxisSpacing,
-    required double childAspectRatio,
-    required double? mainAxisExtent,
-  }) {
-    _checkPositive(maxCrossAxisExtent, 'maxCrossAxisExtent');
-    _checkCellMetrics(
-      mainAxisSpacing: mainAxisSpacing,
-      crossAxisSpacing: crossAxisSpacing,
-      childAspectRatio: childAspectRatio,
-      mainAxisExtent: mainAxisExtent,
-    );
-    return SliverGridDelegateWithMaxCrossAxisExtent(
-      maxCrossAxisExtent: maxCrossAxisExtent,
-      mainAxisSpacing: mainAxisSpacing,
-      crossAxisSpacing: crossAxisSpacing,
-      childAspectRatio: childAspectRatio,
-      mainAxisExtent: mainAxisExtent,
-    );
-  }
-
-  static void _checkCellMetrics({
-    required double mainAxisSpacing,
-    required double crossAxisSpacing,
-    required double childAspectRatio,
-    required double? mainAxisExtent,
-  }) {
-    _checkFiniteNotNegative(mainAxisSpacing, 'mainAxisSpacing');
-    _checkFiniteNotNegative(crossAxisSpacing, 'crossAxisSpacing');
-    _checkPositive(childAspectRatio, 'childAspectRatio');
-    if (mainAxisExtent != null) {
-      _checkFiniteNotNegative(mainAxisExtent, 'mainAxisExtent');
-    }
-  }
-
-  static void _checkPositive(double value, String name) {
+  // Arguments evaluate ahead of the delegate constructors, whose asserts would
+  // otherwise answer first in debug and stay silent in release.
+  static T _positive<T extends num>(T value, String name) {
     if (!(value > 0)) {
       throw ArgumentError.value(value, name, 'must be greater than 0');
     }
+    return value;
   }
 
-  static void _checkFiniteNotNegative(double value, String name) {
-    if (!value.isFinite || value < 0) {
-      throw ArgumentError.value(value, name, 'must be finite and not negative');
+  static T _distance<T extends double?>(T value, String name) {
+    if (value case final v? when !v.isFinite || v < 0) {
+      throw ArgumentError.value(v, name, 'must be finite and not negative');
     }
+    return value;
   }
 
   /// Sizing policy — any [SliverGridDelegate], exactly as in [GridView].

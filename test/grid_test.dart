@@ -59,9 +59,7 @@ class _RegularTileDelegate extends SliverGridDelegate {
 
 void main() {
   group('Grid layout', () {
-    testWidgets('vertical 3-col places children in row-major order', (
-      tester,
-    ) async {
+    testWidgets('vertical 3-col places children row-major', (tester) async {
       await _pump(
         tester,
         .count(crossAxisCount: 3, children: .generate(6, _cell)),
@@ -143,9 +141,7 @@ void main() {
       check(r0.top).isCloseTo(16, 0.01);
     });
 
-    testWidgets('extent constructor picks column count from width', (
-      tester,
-    ) async {
+    testWidgets('Grid.extent picks column count from width', (tester) async {
       await _pump(
         tester,
         .extent(maxCrossAxisExtent: 100, children: .generate(4, _cell)),
@@ -185,9 +181,7 @@ void main() {
       check(_rectOf(tester, 2).left).isCloseTo(0, 0.01);
     });
 
-    testWidgets('intrinsic dimensions match layout calculations', (
-      tester,
-    ) async {
+    testWidgets('intrinsic dimensions match layout', (tester) async {
       final grid = Grid.count(
         crossAxisCount: 2,
         childAspectRatio: 2,
@@ -211,9 +205,7 @@ void main() {
       check(renderBox.getMaxIntrinsicHeight(300)).isCloseTo(155.0, 0.01);
     });
 
-    testWidgets('min and max intrinsic width diverge with child intrinsics', (
-      tester,
-    ) async {
+    testWidgets('min and max intrinsic width diverge', (tester) async {
       // Wrap: min intrinsic width = widest child (40), max = sum (70).
       Widget cell() => const Wrap(
         children: [
@@ -231,9 +223,7 @@ void main() {
       check(renderBox.getMaxIntrinsicWidth(.infinity)).equals(140);
     });
 
-    testWidgets('intrinsic height for unbounded width shrink-wraps children', (
-      tester,
-    ) async {
+    testWidgets('unbounded intrinsic height shrink-wraps', (tester) async {
       await _pump(
         tester,
         .count(
@@ -249,9 +239,7 @@ void main() {
       check(renderBox.getMaxIntrinsicHeight(.infinity)).equals(80);
     });
 
-    testWidgets('dry layout matches real layout without laying out children', (
-      tester,
-    ) async {
+    testWidgets('dry layout matches, children not laid out', (tester) async {
       final grid = Grid.count(
         crossAxisCount: 2,
         childAspectRatio: 2,
@@ -298,9 +286,7 @@ void main() {
           .throws<FlutterError>();
     });
 
-    testWidgets('degenerate constraints clamp cells to zero, not negative', (
-      tester,
-    ) async {
+    testWidgets('degenerate constraints clamp cells to zero', (tester) async {
       await _pump(
         tester,
         .count(
@@ -341,9 +327,7 @@ void main() {
         ..equals(actual);
     });
 
-    testWidgets('horizontal grid anchors to the trailing edge under RTL', (
-      tester,
-    ) async {
+    testWidgets('horizontal RTL anchors to the trailing edge', (tester) async {
       await _pump(
         tester,
         .count(
@@ -393,9 +377,7 @@ void main() {
       check(renderBox.getMaxIntrinsicWidth(.infinity)).equals(16);
     });
 
-    testWidgets('delegate swap relayouts through shouldRelayout', (
-      tester,
-    ) async {
+    testWidgets('delegate swap relayouts via shouldRelayout', (tester) async {
       Grid gridWith(int count) => Grid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: count,
@@ -431,9 +413,7 @@ void main() {
       check(taps).deepEquals([3]);
     });
 
-    testWidgets('directional padding resolves against ambient direction', (
-      tester,
-    ) async {
+    testWidgets('directional padding follows Directionality', (tester) async {
       await _pump(
         tester,
         .count(
@@ -461,9 +441,7 @@ void main() {
     List<Widget> cells() =>
         .generate(4, (i) => const SizedBox(width: 40, height: 10));
 
-    testWidgets('Grid.extent cross intrinsics are the widest child', (
-      tester,
-    ) async {
+    testWidgets('extent cross intrinsic is the widest child', (tester) async {
       await _pump(
         tester,
         .extent(
@@ -479,9 +457,7 @@ void main() {
       check(renderBox.getMaxIntrinsicWidth(.infinity)).equals(56);
     });
 
-    testWidgets('Grid.extent main intrinsic for unbounded cross resolves', (
-      tester,
-    ) async {
+    testWidgets('extent main intrinsic, unbounded cross', (tester) async {
       await _pump(tester, .extent(maxCrossAxisExtent: 100, children: cells()));
       final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
 
@@ -490,9 +466,7 @@ void main() {
       check(renderBox.getMinIntrinsicHeight(.infinity)).equals(160);
     });
 
-    testWidgets('horizontal Grid.extent cross intrinsic is the tallest child', (
-      tester,
-    ) async {
+    testWidgets('horizontal extent cross is the tallest child', (tester) async {
       await _pump(
         tester,
         .extent(
@@ -506,9 +480,7 @@ void main() {
       check(renderBox.getMinIntrinsicHeight(.infinity)).equals(10);
     });
 
-    testWidgets('custom SliverGridDelegate falls back to the widest child', (
-      tester,
-    ) async {
+    testWidgets('custom delegate falls back to widest child', (tester) async {
       await _pump(
         tester,
         Grid(gridDelegate: const _RegularTileDelegate(), children: cells()),
@@ -518,9 +490,7 @@ void main() {
       check(renderBox.getMinIntrinsicWidth(.infinity)).equals(40);
     });
 
-    testWidgets('IntrinsicWidth over Grid.extent lays out without error', (
-      tester,
-    ) async {
+    testWidgets('IntrinsicWidth over Grid.extent lays out', (tester) async {
       await tester.pumpWidget(
         Directionality(
           textDirection: .ltr,
@@ -599,9 +569,7 @@ void main() {
       });
     }
 
-    testWidgets('an unlimited maxCrossAxisExtent stays one column', (
-      tester,
-    ) async {
+    testWidgets('infinite maxCrossAxisExtent: one column', (tester) async {
       await _pump(
         tester,
         .extent(
@@ -650,9 +618,7 @@ void main() {
       tester.takeException();
     });
 
-    testWidgets('clips through a layer when a child composites', (
-      tester,
-    ) async {
+    testWidgets('clips via a layer when a child composites', (tester) async {
       await _pump(
         tester,
         .count(
@@ -671,9 +637,7 @@ void main() {
       check(tester.takeException()).isNull;
     });
 
-    testWidgets('reports a FlutterError in debug naming the side', (
-      tester,
-    ) async {
+    testWidgets('debug FlutterError names the side', (tester) async {
       await _pump(tester, rows(3), height: 100);
 
       check(tester.takeException())
@@ -682,9 +646,7 @@ void main() {
           .contains('overflowed by 200 pixels on the bottom');
     }, skip: !_assertsEnabled);
 
-    testWidgets('horizontal RTL reports the overflow on the left', (
-      tester,
-    ) async {
+    testWidgets('horizontal RTL reports overflow on the left', (tester) async {
       await _pump(
         tester,
         .count(
@@ -748,9 +710,7 @@ void main() {
       check(clipsPaintedBy(gridIn(tester))).isEmpty;
     });
 
-    testWidgets('fractional cells that round past the edge are not overflow', (
-      tester,
-    ) async {
+    testWidgets('cells rounding past the edge: no overflow', (tester) async {
       await _pump(
         tester,
         .count(crossAxisCount: 7, children: .generate(49, _cell)),
@@ -762,9 +722,7 @@ void main() {
       check(clipsPaintedBy(gridIn(tester))).isEmpty;
     });
 
-    testWidgets('an empty cell placed past the edge is not overflow', (
-      tester,
-    ) async {
+    testWidgets('empty cell past the edge: no overflow', (tester) async {
       await _pump(
         tester,
         .count(
