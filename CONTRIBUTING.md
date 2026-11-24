@@ -55,8 +55,8 @@ it says, or it doesn't exist.
   (install line plus the smallest real example).
 - Markdown stays within 80 columns, code blocks included, except tables (must
   not scroll sideways on pub.dev) and `skills/**/*.md` (unwrapped for token
-  efficiency). Dart blocks in the README and skills are analyzed with the
-  package lints (`tool/check_snippets.dart`).
+  efficiency). Dart blocks in the README, `doc/` and skills are analyzed with
+  the package lints (`tool/check_snippets.dart`).
 
 ### Changes and releases
 

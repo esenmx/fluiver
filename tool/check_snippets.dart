@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 const String _usage = '''
-Analyzes the ```dart blocks of README.md and skills/**/*.md against this
-package with its analysis_options.yaml and fails on any diagnostic, except
-those that only fire because a block is a fragment. A block whose previous
-non-blank line is <!-- no-compile --> is skipped.
+Analyzes the ```dart blocks of README.md, doc/**/*.md and skills/**/*.md
+against this package with its analysis_options.yaml and fails on any
+diagnostic, except those that only fire because a block is a fragment. A block
+whose previous non-blank line is <!-- no-compile --> is skipped.
 
 dart run tool/check_snippets.dart [--import <uri>]... [--dep <package>]... [file]...''';
 
@@ -109,17 +109,19 @@ Future<void> main(List<String> args) async {
   }
   if (files.isEmpty) {
     files.add('README.md');
-    final skills = Directory('skills');
-    if (skills.existsSync()) {
-      final found =
-          skills
-              .listSync(recursive: true)
-              .whereType<File>()
-              .map((f) => f.path)
-              .where((p) => p.endsWith('.md'))
-              .toList()
-            ..sort();
-      files.addAll(found);
+    for (final name in const ['doc', 'skills']) {
+      final dir = Directory(name);
+      if (dir.existsSync()) {
+        final found =
+            dir
+                .listSync(recursive: true)
+                .whereType<File>()
+                .map((f) => f.path)
+                .where((p) => p.endsWith('.md'))
+                .toList()
+              ..sort();
+        files.addAll(found);
+      }
     }
   }
 
