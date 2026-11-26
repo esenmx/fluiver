@@ -4,6 +4,7 @@ library;
 import 'dart:math' as math;
 
 import 'package:fluiver/src/extensions/color.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -16,7 +17,7 @@ import 'package:flutter/widgets.dart';
 /// `extendBody: true`, or an input bar in `Scaffold.bottomNavigationBar`. Where
 /// an ancestor already lifted its content (a resizing [Scaffold] body, a
 /// [Dialog], another [ViewInsetsPadding]) it pads nothing, so a reusable form
-/// is safe anywhere.
+/// is safe in a sheet, a page or a dialog.
 ///
 /// ```dart
 /// showModalBottomSheet<void>(
@@ -34,16 +35,15 @@ import 'package:flutter/widgets.dart';
 /// Traps it can't detect:
 ///
 /// * Without `isScrollControlled: true` a modal sheet is capped at 9/16 of the
-///   screen height and the lifted content overflows (reported in debug only).
+///   screen height; content taller than what that leaves above the keyboard
+///   overflows (reported in debug only).
 /// * `SafeArea(maintainBottomViewPadding: true)` belongs inside it; outside, it
 ///   leaves a gap the height of the home indicator.
 /// * In [Scaffold.bottomSheet] of a resizing [Scaffold] it pads twice: that
 ///   slot is already lifted above the keyboard but still reports it.
-/// * In the body of a `Scaffold(resizeToAvoidBottomInset: false)` that has a
-///   `bottomNavigationBar`, it pads the bar height twice: the body ends at the
-///   bar but still reports the keyboard from the screen bottom. Add
-///   `extendBody: true` (with a [SafeArea] inside it) or let the [Scaffold]
-///   resize.
+/// * In a non-resizing [Scaffold] body above a `bottomNavigationBar` it pads
+///   the bar height twice: add `extendBody: true` (with a [SafeArea] inside
+///   it) or let the [Scaffold] resize.
 ///
 /// Throws [StateError] when it builds without a [MediaQuery] ancestor.
 class const ViewInsetsPadding({
@@ -62,9 +62,13 @@ class const ViewInsetsPadding({
     final insets = data.viewInsets;
     // padding is net of the keyboard at the root but gross when a Scaffold
     // slot or bar raises it.
-    double below(double padding, double viewPadding, double inset) => inset > 0
-        ? math.max(0, math.max(padding, viewPadding) - inset)
-        : padding;
+    final bottom = insets.bottom > 0
+        ? math.max<double>(
+            0,
+            math.max(data.padding.bottom, data.viewPadding.bottom) -
+                insets.bottom,
+          )
+        : data.padding.bottom;
     return Padding(
       padding: insets,
       child: MediaQuery(
@@ -75,18 +79,7 @@ class const ViewInsetsPadding({
               removeRight: true,
               removeBottom: true,
             )
-            .copyWith(
-              padding: EdgeInsets.fromLTRB(
-                below(data.padding.left, data.viewPadding.left, insets.left),
-                below(data.padding.top, data.viewPadding.top, insets.top),
-                below(data.padding.right, data.viewPadding.right, insets.right),
-                below(
-                  data.padding.bottom,
-                  data.viewPadding.bottom,
-                  insets.bottom,
-                ),
-              ),
-            ),
+            .copyWith(padding: data.padding.copyWith(bottom: bottom)),
         child: child,
       ),
     );
@@ -95,7 +88,6 @@ class const ViewInsetsPadding({
 
 /// Status-bar-only [SystemUiOverlayStyle]s, equal to what a Material 3
 /// `AppBar` derives; for `AppBar.systemOverlayStyle` and [AnnotatedRegion].
-/// Nav-bar fields stay null.
 ///
 /// Unlike [SystemUiOverlayStyle.light] and [SystemUiOverlayStyle.dark], which
 /// also paint the Android navigation bar black with light icons, these leave
@@ -107,18 +99,18 @@ class const ViewInsetsPadding({
 /// final appBar = AppBar(systemOverlayStyle: StatusBarIcons.light);
 /// ```
 abstract final class StatusBarIcons {
-  /// Light icons, for dark backgrounds (iOS and Android).
+  /// Light icons, for dark backgrounds.
   static const SystemUiOverlayStyle light = SystemUiOverlayStyle(
     statusBarColor: Color(0x00000000),
-    statusBarIconBrightness: Brightness.light,
-    statusBarBrightness: Brightness.dark,
+    statusBarIconBrightness: .light,
+    statusBarBrightness: .dark,
   );
 
   /// Dark icons, for light backgrounds.
   static const SystemUiOverlayStyle dark = SystemUiOverlayStyle(
     statusBarColor: Color(0x00000000),
-    statusBarIconBrightness: Brightness.dark,
-    statusBarBrightness: Brightness.light,
+    statusBarIconBrightness: .dark,
+    statusBarBrightness: .light,
   );
 }
 
@@ -128,14 +120,12 @@ abstract final class StatusBarIcons {
 ///
 /// Place it where it reaches the status bar: first in the [Column] of a
 /// [Scaffold] body without `appBar`, or as the first sliver through
-/// [SliverToBoxAdapter]. It is as wide as [child], so give it the full width:
-/// `crossAxisAlignment: .stretch` in a [Column]. Side cutouts then pad [child]
-/// while [color] fills them.
+/// [SliverToBoxAdapter]. It fills the width its parent allows, [child]
+/// included; side cutouts pad [child] while [color] fills them.
 ///
 /// ```dart
 /// Scaffold(
 ///   body: Column(
-///     crossAxisAlignment: .stretch,
 ///     children: [
 ///       StatusBarHeader(color: Colors.indigo, child: Text('Profile')),
 ///     ],
@@ -150,15 +140,18 @@ abstract final class StatusBarIcons {
 /// [StatusBarIcons], a [DecoratedBox] and `SafeArea(bottom: false)`.
 ///
 /// Traps it can't detect: placed below other content, it neither paints behind
-/// the status bar nor sets its icons; narrower than the screen, it misses the
-/// screen center where the icons are read; around a [Scaffold] that has an
-/// [AppBar], the AppBar's icons win.
+/// the status bar nor sets its icons; in a parent narrower than the screen, it
+/// can miss the screen center where the icons are read; wrapped around a
+/// [Scaffold] that has an [AppBar], it pushes the AppBar below the status bar
+/// and the header's icons win.
 ///
 /// Throws [ArgumentError] when [color] isn't opaque or has a channel outside
-/// `[0, 1]`, and [StateError] when the status bar is shown but an ancestor
-/// already consumed its inset (a [SafeArea], an [AppBar], a [ListView]'s
-/// automatic padding, a modal bottom sheet route). Both happen when it builds,
-/// because the constructor is `const`.
+/// `[0, 1]`, [StateError] without a [MediaQuery] ancestor or when the status
+/// bar is shown but an ancestor already consumed its inset (a [SafeArea], an
+/// [AppBar], a [ListView]'s automatic padding, a modal bottom sheet route),
+/// and [FlutterError] under an unbounded width (a [Row] without [Expanded], a
+/// horizontal scroll view). All happen when it builds or lays out, because the
+/// constructor is `const`.
 class const StatusBarHeader({
   /// The opaque background, painted behind the status bar too.
   required final Color color,
@@ -178,8 +171,10 @@ class const StatusBarHeader({
     final icons = color.contrastText == const Color(0xFFFFFFFF)
         ? StatusBarIcons.light
         : StatusBarIcons.dark;
-    if (View.of(context).padding.top > 0 &&
-        MediaQuery.paddingOf(context).top == 0) {
+    final padding =
+        MediaQuery.maybePaddingOf(context) ??
+        (throw StateError('StatusBarHeader needs a MediaQuery ancestor'));
+    if (View.of(context).padding.top > 0 && padding.top == 0) {
       throw StateError(
         'StatusBarHeader found the status bar inset already consumed by an '
         'ancestor (SafeArea, AppBar, ListView padding or a modal sheet); '
@@ -189,9 +184,11 @@ class const StatusBarHeader({
     }
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: icons,
-      child: ColoredBox(
-        color: color,
-        child: SafeArea(bottom: false, child: child),
+      child: _FillWidth(
+        child: ColoredBox(
+          color: color,
+          child: SafeArea(bottom: false, child: child),
+        ),
       ),
     );
   }
@@ -200,5 +197,43 @@ class const StatusBarHeader({
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(ColorProperty('color', color));
+  }
+}
+
+class const _FillWidth({required super.child})
+    extends SingleChildRenderObjectWidget {
+  @override
+  RenderObject createRenderObject(BuildContext context) => _RenderFillWidth();
+}
+
+class _RenderFillWidth extends RenderConstrainedBox {
+  new() : super(additionalConstraints: const .tightFor(width: .infinity));
+
+  void _checkBoundedWidth(BoxConstraints constraints) {
+    if (constraints.hasBoundedWidth) return;
+    throw FlutterError.fromParts(<DiagnosticsNode>[
+      ErrorSummary('StatusBarHeader requires a bounded width.'),
+      ErrorDescription(
+        'It fills the width its parent allows, which is impossible under '
+        'unbounded constraints.',
+      ),
+      ErrorHint(
+        'This typically happens when the header sits in a Row or a '
+        'horizontal scrollable. Give it a bounded width — e.g. via Expanded '
+        'or SizedBox.',
+      ),
+    ]);
+  }
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) {
+    _checkBoundedWidth(constraints);
+    return super.computeDryLayout(constraints);
+  }
+
+  @override
+  void performLayout() {
+    _checkBoundedWidth(constraints);
+    super.performLayout();
   }
 }

@@ -203,7 +203,6 @@ Widget _header(Color color) => StatusBarHeader(
 Widget _headerPage(Color color) => MaterialApp(
   home: Scaffold(
     body: Column(
-      crossAxisAlignment: .stretch,
       children: [
         _header(color),
         const Expanded(child: SizedBox.expand()),
@@ -755,12 +754,8 @@ void main() {
 
       Navigator.of(tester.element(find.byType(AppBar))).push(
         MaterialPageRoute<void>(
-          builder: (_) => Scaffold(
-            body: Column(
-              crossAxisAlignment: .stretch,
-              children: [_header(Colors.indigo)],
-            ),
-          ),
+          builder: (_) =>
+              Scaffold(body: Column(children: [_header(Colors.indigo)])),
         ),
       );
       await tester.pumpAndSettle();
@@ -768,7 +763,7 @@ void main() {
       check(SystemChrome.latestStyle).equals(StatusBarIcons.light);
     });
 
-    testWidgets('is as wide as its child without stretch', (tester) async {
+    testWidgets('fills the width around a narrow child', (tester) async {
       _view(tester);
       await tester.pumpWidget(
         const MaterialApp(
@@ -786,23 +781,32 @@ void main() {
       );
 
       check(tester.getRect(find.byType(StatusBarHeader)))
-          .equals(const Rect.fromLTWH(0, 0, 100, 103));
+          .equals(const Rect.fromLTWH(0, 0, 400, 103));
     });
 
-    testWidgets('lays out in an unbounded-width Row', (tester) async {
+    testWidgets('answers intrinsic height queries', (tester) async {
       _view(tester);
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              scrollDirection: .horizontal,
-              child: Row(children: [_header(Colors.indigo)]),
-            ),
-          ),
+          home: Scaffold(body: IntrinsicHeight(child: _header(Colors.indigo))),
         ),
       );
 
       check(tester.takeException()).isNull;
+      check(tester.getSize(find.byType(StatusBarHeader)))
+          .equals(const Size(400, 103));
+    });
+
+    testWidgets('unbounded width reports a FlutterError', (tester) async {
+      _view(tester);
+      await tester.pumpWidget(_headerPage(Colors.indigo));
+      final header = tester.renderObject<RenderBox>(
+        find.byType(StatusBarHeader),
+      );
+
+      // Dry layout throws it without the cascade a real layout pass produces.
+      check(() => header.getDryLayout(const BoxConstraints()))
+          .throws<FlutterError>();
     });
 
     testWidgets('sets no icons below the status bar', (tester) async {
@@ -819,6 +823,22 @@ void main() {
       );
 
       check(style).equals(_materialAppFallback);
+    });
+
+    testWidgets('keeps its icons around an AppBar Scaffold', (tester) async {
+      _view(tester);
+      final style = await _styleOf(
+        tester,
+        MaterialApp(
+          home: StatusBarHeader(
+            color: Colors.black,
+            child: Scaffold(appBar: AppBar(backgroundColor: Colors.white)),
+          ),
+        ),
+      );
+
+      check(tester.getTopLeft(find.byType(AppBar)).dy).equals(47);
+      check(style).equals(StatusBarIcons.light);
     });
 
     group('throws StateError when the status bar inset is consumed', () {
@@ -867,6 +887,18 @@ void main() {
 
         check(tester.takeException()).isA<StateError>();
       });
+    });
+
+    testWidgets('throws StateError without a MediaQuery', (tester) async {
+      await tester.pumpWidget(
+        wrapWithView: false,
+        RawView(view: tester.view, child: _header(Colors.indigo)),
+      );
+
+      check(tester.takeException())
+          .isA<StateError>()
+          .has('message', (e) => e.message)
+          .equals('StatusBarHeader needs a MediaQuery ancestor');
     });
 
     test('reports its color in diagnostics', () {
