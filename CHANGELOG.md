@@ -36,6 +36,13 @@
   positive, and for a spacing or `mainAxisExtent` that is negative or not finite
   (previously a debug-only framework assert, or nothing at all, then negative
   sizes or NaN rects).
+- `TickerBuilder.builder` takes a third argument, `Widget? child`: the new
+  optional `TickerBuilder.child`, built once and handed back every frame, as in
+  `AnimatedBuilder`. Migration: add the parameter to each builder
+  (`(context, elapsed) =>` → `(context, elapsed, _) =>`).
+- A negative `Grid.padding` reports `ArgumentError` when the grid builds, and
+  `RenderGrid` throws it from its constructor and its `padding` setter
+  (previously a debug-only overflow report, and nothing in release).
 - `Grid` clips children that overflow a bounded box, and debug builds report the
   overflow and paint the striped indicator. A test that overflowed unnoticed now
   fails with a `FlutterError`.
@@ -65,16 +72,22 @@
   leaves uncovered, and throws `StateError` without a `MediaQuery`.
   Widgets-only, so Cupertino apps can use it.
 - `StatusBarHeader(color:, child:)` is an opaque header for a screen without an
-  `AppBar`: it paints `color` behind the status bar, pads `child` below it and
-  side cutouts, and sets status-bar icons that contrast `color` on iOS and
-  Android, following `Color.contrastText`. It throws `ArgumentError` for a
-  translucent or out-of-gamut color and `StateError` when an ancestor already
-  consumed the status-bar inset (a `SafeArea`, an `AppBar`, a `ListView`'s
-  padding, a modal sheet).
+  `AppBar`: it fills the width its parent allows, paints `color` behind the
+  status bar, pads `child` below it and side cutouts, and sets status-bar icons
+  that contrast `color` on iOS and Android, following `Color.contrastText`. It
+  throws `ArgumentError` for a translucent or out-of-gamut color, `StateError`
+  without a `MediaQuery` or when an ancestor already consumed the status-bar
+  inset (a `SafeArea`, an `AppBar`, a `ListView`'s padding, a modal sheet), and
+  `FlutterError` under an unbounded width, like `Grid`.
 - `StatusBarIcons.light` and `StatusBarIcons.dark`: status-bar-only
   `SystemUiOverlayStyle`s equal to what a Material 3 `AppBar` derives. Unlike
   `SystemUiOverlayStyle.light` and `.dark`, they leave the Android navigation
   bar alone.
+
+### Changed
+
+- Requires `material_ui: ^1.11.1` (was `^1.6.0`). Its Dart and Flutter floors
+  are the same, so fluiver's are unchanged.
 
 ### Fixed
 
@@ -84,6 +97,12 @@
 - `ScrollTrackingExpandable` with `duration: Duration.zero` reveals the child on
   expansion.
 - `Color.contrastText` works on in-range extended sRGB colors in debug too.
+- `LRUCache` names `maxEntries` in the `ArgumentError` it throws.
+- Docs: `NetworkProbe.checkConnection` returns `false` on `SocketException`
+  alone. A connect timeout is one; the `TimeoutException` the docs also named is
+  never thrown.
+- Docs: `TickerBuilder`'s elapsed time keeps counting while an ancestor
+  `TickerMode` mutes it; only `enabled: false` holds it.
 - Docs: `TextEditingController.text = ...` makes the selection invalid (offset
   `-1`) rather than moving the caret to `0`, and a focused field then repairs
   it: caret at the end on mobile and multiline, select-all on single-line

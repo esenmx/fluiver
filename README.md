@@ -76,25 +76,28 @@ Every constructor also takes `direction:` (the main axis) and `padding:`. Use
 
 `Grid.count` and `Grid.extent` throw `ArgumentError` for a count, ratio or
 maximum extent that isn't positive, and for spacing or `mainAxisExtent` that is
-negative or not finite. Cells too big for a bounded box are clipped to it, and
-debug builds report the overflow and paint the striped indicator.
+negative or not finite. A negative `padding` reports one when the grid builds.
+Cells too big for a bounded box are clipped to it, and debug builds report the
+overflow and paint the striped indicator.
 
 ### `TickerBuilder`
 
 Rebuilds every frame, exposes the elapsed running `Duration` (time spent
-disabled excluded).
+disabled excluded; time muted by an ancestor `TickerMode` still counts).
 
 ```dart
 Widget stopwatch({required bool done}) {
   return TickerBuilder(
     enabled: !done,
-    builder: (context, elapsed) => Text('${elapsed.inSeconds}s'),
+    builder: (context, elapsed, _) => Text('${elapsed.inSeconds}s'),
   );
 }
 ```
 
 `enabled: false` pauses it — no frames, `elapsed` held — e.g. once a countdown
-ends. For per-frame side effects, pass `onTick` and keep `builder` pure.
+ends. For per-frame side effects, pass `onTick` and keep `builder` pure. Pass
+the part that doesn't change as `child`: `builder` gets it back every frame as
+its third argument, built once.
 
 ### `ScrollTrackingExpandable`
 
@@ -132,7 +135,7 @@ below that it did, so nothing pads twice:
 Future<void> rename(BuildContext context) {
   return showModalBottomSheet<void>(
     context: context,
-    // Without it the sheet stops at 9/16 of the screen and the field overflows.
+    // Without it the sheet stops at 9/16 of the screen: a long form overflows.
     isScrollControlled: true,
     builder: (context) => const ViewInsetsPadding(
       child: SafeArea(
@@ -170,8 +173,6 @@ icons contrast the color:
 Widget profile(String name) {
   return Scaffold(
     body: Column(
-      // The header is as wide as its child; stretch it across the screen.
-      crossAxisAlignment: .stretch,
       children: [
         StatusBarHeader(
           color: Colors.indigo,
@@ -190,11 +191,13 @@ Widget profile(String name) {
 }
 ```
 
-It throws `ArgumentError` for a translucent color, and `StateError` under a
-`SafeArea`, an `AppBar`, a `ListView` or a modal sheet, where it can't reach the
-status bar. A `ListView` below it in the `Column` still pads for the status bar;
-with a list, make the header the first sliver of a `CustomScrollView`. For a
-gradient or an image, use `StatusBarIcons` below.
+It fills the width its parent allows. It throws `ArgumentError` for a
+translucent color, `StateError` under a `SafeArea`, an `AppBar`, a `ListView`
+or a modal sheet, where it can't reach the status bar, and `FlutterError` in a
+`Row` without `Expanded`, where it has no width to fill. A `ListView` below it
+in the `Column` still pads for the status bar; with a list, make the header the
+first sliver of a `CustomScrollView`. For a gradient or an image, use
+`StatusBarIcons` below.
 
 `StatusBarIcons.light` and `.dark` set the status-bar icons on iOS and Android,
 exactly as an `AppBar` derives them. `SystemUiOverlayStyle.light` and `.dark`
