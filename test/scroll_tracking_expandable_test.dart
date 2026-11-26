@@ -153,7 +153,7 @@ void main() {
         _collapsed(
           TickerBuilder(
             onTick: (_) => ticks++,
-            builder: (_, _) => const SizedBox(),
+            builder: (_, _, _) => const SizedBox(),
           ),
         ),
       );
@@ -190,7 +190,7 @@ void main() {
         _withField(
           TickerBuilder(
             onTick: (_) => ticks++,
-            builder: (_, _) => const SizedBox(),
+            builder: (_, _, _) => const SizedBox(),
           ),
           isExpanded: true,
         ),

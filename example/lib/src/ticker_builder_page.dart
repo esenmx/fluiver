@@ -41,7 +41,7 @@ class _TickerBuilderPageState extends State<TickerBuilderPage> {
               final formattedValue = _formatDuration(elapsed);
               _controller.setTextAndCaret(formattedValue);
             },
-            builder: (context, elapsed) {
+            builder: (context, elapsed, _) {
               return Column(
                 mainAxisAlignment: .center,
                 children: [

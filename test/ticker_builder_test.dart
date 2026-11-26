@@ -9,7 +9,7 @@ void main() {
       Duration? captured;
       await tester.pumpWidget(
         TickerBuilder(
-          builder: (context, elapsed) {
+          builder: (context, elapsed, _) {
             captured = elapsed;
             return const SizedBox.shrink();
           },
@@ -24,7 +24,7 @@ void main() {
       final samples = <Duration>[];
       await tester.pumpWidget(
         TickerBuilder(
-          builder: (context, elapsed) {
+          builder: (context, elapsed, _) {
             samples.add(elapsed);
             return const SizedBox.shrink();
           },
@@ -41,11 +41,49 @@ void main() {
       await tester.pumpWidget(
         TickerBuilder(
           onTick: (elapsed) => ticked = elapsed,
-          builder: (context, elapsed) => const SizedBox.shrink(),
+          builder: (context, elapsed, _) => const SizedBox.shrink(),
         ),
       );
       await tester.pump(const Duration(milliseconds: 16));
       check(ticked).isNotNull();
+    });
+
+    testWidgets('hands child to builder without rebuilding it', (tester) async {
+      var builds = 0;
+      var childBuilds = 0;
+      await tester.pumpWidget(
+        TickerBuilder(
+          builder: (context, elapsed, child) {
+            builds++;
+            return SizedBox(child: child);
+          },
+          child: Builder(
+            builder: (context) {
+              childBuilds++;
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 16));
+      await tester.pump(const Duration(milliseconds: 16));
+      check(builds).isGreaterThan(1);
+      check(childBuilds).equals(1);
+    });
+
+    testWidgets('hands builder a null child when none is given', (
+      tester,
+    ) async {
+      Widget? captured = const SizedBox.shrink();
+      await tester.pumpWidget(
+        TickerBuilder(
+          builder: (context, elapsed, child) {
+            captured = child;
+            return const SizedBox.shrink();
+          },
+        ),
+      );
+      check(captured).isNull;
     });
 
     testWidgets('enabled: false schedules no frames and never ticks', (
@@ -56,7 +94,7 @@ void main() {
         TickerBuilder(
           enabled: false,
           onTick: (_) => ticks++,
-          builder: (context, elapsed) => const SizedBox.shrink(),
+          builder: (context, elapsed, _) => const SizedBox.shrink(),
         ),
       );
       check(tester.binding.transientCallbackCount).equals(0);
@@ -71,7 +109,7 @@ void main() {
       Widget app({required bool enabled}) => TickerBuilder(
         enabled: enabled,
         onTick: (elapsed) => last = elapsed,
-        builder: (context, elapsed) => const SizedBox.shrink(),
+        builder: (context, elapsed, _) => const SizedBox.shrink(),
       );
 
       await tester.pumpWidget(app(enabled: true));

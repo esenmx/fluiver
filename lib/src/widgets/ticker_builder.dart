@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 /// A widget that rebuilds on every frame, providing the elapsed running
 /// [Duration]: time since the first frame, minus any time spent disabled.
+/// Time muted by an ancestor [TickerMode] still counts.
 ///
 /// Owns a [Ticker] internally; starts it in `initState` and stops it in
 /// `dispose`. Drop in when you need per-frame rebuilds (e.g. a countdown
@@ -13,10 +14,18 @@ import 'package:flutter/widgets.dart';
 /// rebuilds and `pumpAndSettle` settles.
 class const TickerBuilder({
   /// Called every frame with the elapsed running time (time spent disabled
-  /// excluded). Keep [builder] pure; put per-frame controller or notifier
-  /// mutations in [onTick].
-  required final Widget Function(BuildContext context, Duration elapsed)
+  /// excluded) and [child]. Keep [builder] pure; put per-frame controller or
+  /// notifier mutations in [onTick].
+  required final Widget Function(
+    BuildContext context,
+    Duration elapsed,
+    Widget? child,
+  )
   builder,
+
+  /// The part of the subtree that doesn't depend on the elapsed time: built
+  /// once and handed to [builder] every frame, as in [AnimatedBuilder].
+  final Widget? child,
 
   /// Optional side-effect callback invoked on every ticker frame with the
   /// updated elapsed running time (not called on the initial build before the
@@ -95,6 +104,6 @@ class _TickerBuilderState extends State<TickerBuilder>
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, elapsed);
+    return widget.builder(context, elapsed, widget.child);
   }
 }
