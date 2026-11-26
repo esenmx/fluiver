@@ -286,6 +286,38 @@ void main() {
           .throws<FlutterError>();
     });
 
+    testWidgets('negative padding reports an ArgumentError', (tester) async {
+      await _pump(
+        tester,
+        .count(
+          crossAxisCount: 2,
+          padding: const .only(left: -8),
+          children: .generate(2, _cell),
+        ),
+      );
+
+      check(tester.takeException())
+          .isA<ArgumentError>()
+          .has('name', (e) => e.name)
+          .equals('padding');
+    });
+
+    testWidgets('negative padding set later throws ArgumentError', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        .count(crossAxisCount: 2, children: .generate(2, _cell)),
+      );
+      final renderBox = tester.renderObject<RenderGrid>(find.byType(Grid));
+
+      check(() => renderBox.padding = const EdgeInsetsDirectional.only(end: -1))
+          .throws<ArgumentError>()
+          .has('name', (e) => e.name)
+          .equals('padding');
+      check(renderBox.padding).equals(EdgeInsets.zero);
+    });
+
     testWidgets('degenerate constraints clamp cells to zero', (tester) async {
       await _pump(
         tester,

@@ -106,6 +106,9 @@ class Grid extends MultiChildRenderObjectWidget {
   final Axis direction;
 
   /// The padding around the grid.
+  ///
+  /// A negative one reports an [ArgumentError] when the grid builds; the
+  /// unnamed constructor is `const`, so it can't throw itself.
   final EdgeInsetsGeometry padding;
 
   @override
@@ -158,7 +161,17 @@ class RenderGrid({
         RenderBoxContainerDefaultsMixin<RenderBox, _GridParentData>,
         DebugOverflowIndicatorMixin {
   /// Creates the [Grid] render object.
-  this;
+  ///
+  /// Throws [ArgumentError] if the padding is negative.
+  this {
+    _checkPadding(_padding);
+  }
+
+  static void _checkPadding(EdgeInsetsGeometry value) {
+    if (!value.isNonNegative) {
+      throw ArgumentError.value(value, 'padding', 'must not be negative');
+    }
+  }
 
   /// The box, grown on each side where a child paints past it by more than
   /// rounding.
@@ -188,10 +201,11 @@ class RenderGrid({
     markNeedsLayout();
   }
 
-  /// Padding around the grid.
+  /// Padding around the grid. Setting a negative one throws [ArgumentError].
   EdgeInsetsGeometry get padding => _padding;
   set padding(EdgeInsetsGeometry value) {
     if (_padding == value) return;
+    _checkPadding(value);
     _padding = value;
     markNeedsLayout();
   }
