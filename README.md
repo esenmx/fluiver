@@ -403,13 +403,54 @@ Widget searchField(ValueChanged<String> search) {
 
 | Variant | Fires |
 | --- | --- |
-| `Debounce` | once calls stop for the duration (search-as-you-type, autosave) |
+| `Debounce` | once calls stop for the duration (autosave; search-as-you-type together with `LatestOnly`) |
 | `ThrottleFirst` | the first call, then drops calls until the window ends (submit, anti rage-click) |
 | `ThrottleLast` | the last call made during the window, when it ends (scroll position save, slider end) |
 | `ThrottleLatest` | the first call at once, then the latest call of each window as it ends (live preview) |
 
 All four are callable, throw `ArgumentError` for a negative duration, expose
 `dispose()`, and throw `StateError` if called or disposed again after disposal.
+
+`dispose()` drops a task that is still waiting. `Debounce`, `ThrottleLast` and
+`ThrottleLatest` can hold one: `flush()` runs it now, so an autosave keeps its
+last edit; `cancel()` drops it and keeps the object; `isPending` tells whether
+one is waiting.
+
+```dart
+final autosave = Debounce(const Duration(seconds: 2));
+
+void closeEditor() {
+  autosave
+    ..flush()
+    ..dispose();
+}
+```
+
+### `LatestOnly`
+
+A debounce alone doesn't stop a slow old response from replacing a newer one.
+`LatestOnly` delivers only the newest call's result: a superseded call, or one
+still running at `dispose()`, returns `null`.
+
+```dart
+final debounce = Debounce(const Duration(milliseconds: 300));
+final latest = LatestOnly();
+
+void onQueryChanged(
+  String query,
+  Future<List<String>> Function(String query) search,
+  void Function(List<String> hits) show,
+) {
+  debounce(() async {
+    final hits = await latest(() => search(query));
+    if (hits != null) show(hits);
+  });
+}
+```
+
+The superseded request keeps running; only its result, or its error, is
+dropped. The newest call's error is thrown, so catch it inside the debounced
+closure. Results must be non-nullable, so `null` always means superseded.
 
 ### `LRUCache`
 

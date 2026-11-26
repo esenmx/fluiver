@@ -79,6 +79,17 @@
   without a `MediaQuery` or when an ancestor already consumed the status-bar
   inset (a `SafeArea`, an `AppBar`, a `ListView`'s padding, a modal sheet), and
   `FlutterError` under an unbounded width, like `Grid`.
+- `Debounce`, `ThrottleLast` and `ThrottleLatest` gain `flush()`, `cancel()` and
+  `isPending` for the task they hold: `flush()` runs it now, `cancel()` drops it
+  and keeps the object, `isPending` tells whether one is waiting. `dispose()`
+  still drops a waiting task, so `flush()` first where the last call must not be
+  lost (autosave, saving a scroll position). On `ThrottleLatest`, `flush()`
+  starts a new window and `cancel()` leaves the current one running.
+- `LatestOnly` delivers only the newest call's outcome:
+  `await latest(() => api.search(query))` returns `null` when a newer call
+  started or `dispose()` ran before it answered, so a slow old response can't
+  replace a newer one. A superseded call's error is dropped as well; results
+  must be non-nullable.
 - `StatusBarIcons.light` and `StatusBarIcons.dark`: status-bar-only
   `SystemUiOverlayStyle`s equal to what a Material 3 `AppBar` derives. Unlike
   `SystemUiOverlayStyle.light` and `.dark`, they leave the Android navigation

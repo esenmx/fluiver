@@ -1,6 +1,6 @@
 ---
 name: fluiver-usage
-description: SDK gap-fillers via package:fluiver — use instead of hand-rolling. Grid, TickerBuilder, ScrollTrackingExpandable, keyboard/status-bar insets (ViewInsetsPadding, StatusBarHeader, StatusBarIcons), Debounce/Throttle*, Locale/Brightness listeners, DateTime/TimeOfDay helpers, byNameOrNull, intersperse/slidingWindows, Map.entryOf, Object.into, Color darker/lighter/contrastText, ScrollController atTop/animateTo*, timeoutOrNull, setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
+description: SDK gap-fillers via package:fluiver — use instead of hand-rolling. Grid, TickerBuilder, ScrollTrackingExpandable, keyboard/status-bar insets (ViewInsetsPadding, StatusBarHeader, StatusBarIcons), Debounce/Throttle*, LatestOnly (stale async results), Locale/Brightness listeners, DateTime/TimeOfDay helpers, byNameOrNull, intersperse/slidingWindows, Map.entryOf, Object.into, Color darker/lighter/contrastText, ScrollController atTop/animateTo*, timeoutOrNull, setTextAndCaret, FastHash, NetworkProbe, platformDispatch, LRUCache, DisposableBag.
 ---
 
 # fluiver-usage
@@ -25,14 +25,16 @@ description: SDK gap-fillers via package:fluiver — use instead of hand-rolling
 
 ## Debounce / Throttle
 
-`Debounce(Duration)`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` — callable (`d(() => ...)`), throw `ArgumentError` on negative duration, expose `dispose()` and throw `StateError` if called or disposed again after dispose. Run in widget, never inside a notifier.
+`Debounce(Duration)`, `ThrottleFirst`, `ThrottleLast`, `ThrottleLatest` — callable (`d(() => ...)`), throw `ArgumentError` on negative duration, expose `dispose()` and throw `StateError` if called or disposed again after dispose. Run in widget, never inside a notifier. `dispose()` drops a waiting task: on `Debounce`/`ThrottleLast`/`ThrottleLatest` call `d..flush()..dispose()` when the last call must run (autosave, scroll save); `flush()` runs pending now (no-op if none), `cancel()` drops it, `isPending` reads it.
 
 |Variant|Fires|
 |-|-|
-|`Debounce`|after calls stop (search-as-you-type, autosave)|
+|`Debounce`|after calls stop (autosave; search-as-you-type only together with `LatestOnly`, below)|
 |`ThrottleFirst`|first call wins, drops rest (submit/nav anti rage-click)|
 |`ThrottleLast`|drops intermediates, keeps last (scroll save, slider end)|
 |`ThrottleLatest`|first call immediately, then latest per window end (live preview)|
+
+`LatestOnly()` — any request that can be re-triggered before it answers (search-as-you-type, filter, refresh): debounce alone still lets a slow old response overwrite a newer one. `final hits = await latest(() => api.search(q)); if (hits != null) setState(...)` — `null` = superseded or `latest.dispose()` ran (call it in `State.dispose`; then no stale `setState`). Stale errors dropped too, newest call's error throws — `try`/`catch` it inside the debounced closure (a debounced task's error is otherwise unhandled); non-nullable results only; work itself is not cancelled. Never hand-roll a call counter.
 
 ## Listeners (outside widgets)
 
