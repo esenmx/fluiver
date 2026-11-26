@@ -40,8 +40,8 @@ final class DisposableBag {
       Zone.current[_runningKey] as Set<DisposableBag>? ?? const {};
 
   final List<FutureOr<void> Function()> _disposers = [];
-  List<(Object, StackTrace)?>? _inFlightSlots;
-  List<Future<void>>? _inFlightFutures;
+  final List<(Object, StackTrace)?> _slots = [];
+  final List<Future<void>> _futures = [];
   Completer<void>? _disposal;
   bool _disposed = false;
 
@@ -59,11 +59,8 @@ final class DisposableBag {
     if (_disposed) {
       throw StateError('DisposableBag was used after being disposed.');
     }
-    if ((_inFlightSlots, _inFlightFutures) case (
-      final slots?,
-      final futures?,
-    )) {
-      _runDisposer(disposer, slots, futures);
+    if (isDisposed) {
+      _runDisposer(disposer);
       return;
     }
     _disposers.add(disposer);
@@ -84,13 +81,9 @@ final class DisposableBag {
     disposers.forEach(add);
   }
 
-  void _runDisposer(
-    FutureOr<void> Function() disposer,
-    List<(Object, StackTrace)?> slots,
-    List<Future<void>> futures,
-  ) {
-    final slotIndex = slots.length;
-    slots.add(null);
+  void _runDisposer(FutureOr<void> Function() disposer) {
+    final slotIndex = _slots.length;
+    _slots.add(null);
     try {
       final result = runZoned(
         disposer,
@@ -99,15 +92,15 @@ final class DisposableBag {
         },
       );
       if (result is Future) {
-        futures.add(
+        _futures.add(
           result.then(
             (_) {},
-            onError: (Object e, StackTrace s) => slots[slotIndex] = (e, s),
+            onError: (Object e, StackTrace s) => _slots[slotIndex] = (e, s),
           ),
         );
       }
     } on Object catch (e, s) {
-      slots[slotIndex] = (e, s);
+      _slots[slotIndex] = (e, s);
     }
   }
 
@@ -131,24 +124,16 @@ final class DisposableBag {
   }
 
   Future<void> _dispose() async {
-    final slots = <(Object, StackTrace)?>[];
-    final futures = <Future<void>>[];
-    _inFlightSlots = slots;
-    _inFlightFutures = futures;
     final initial = List<FutureOr<void> Function()>.of(_disposers);
     _disposers.clear();
-    for (final disposer in initial) {
-      _runDisposer(disposer, slots, futures);
-    }
-    while (futures.isNotEmpty) {
-      final batch = List<Future<void>>.of(futures);
-      futures.clear();
+    initial.forEach(_runDisposer);
+    while (_futures.isNotEmpty) {
+      final batch = List<Future<void>>.of(_futures);
+      _futures.clear();
       await Future.wait(batch);
     }
-    _inFlightSlots = null;
-    _inFlightFutures = null;
     _disposed = true;
-    final failures = slots.nonNulls.toList();
+    final failures = _slots.nonNulls.toList();
     if (failures.isNotEmpty) {
       throw DisposableBagException(
         [for (final (e, _) in failures) e],

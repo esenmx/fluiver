@@ -37,9 +37,6 @@ extension ObjectInto<T extends Object> on T {
   ///   Text(title),
   ///   ...?subtitle?.into((s) => [const SizedBox(height: 4), Text(s)]),
   /// ]);
-  ///
-  /// // 5. Static method as a transform — no lambda needed
-  /// final id = rawId?.into(int.tryParse);
   /// ```
   ///
   /// Anti-patterns: side-effect-only calls (`.into` returns a value — wasted

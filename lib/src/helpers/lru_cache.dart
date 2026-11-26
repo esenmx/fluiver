@@ -25,7 +25,11 @@ final class LRUCache<K, V>({
   /// [maxEntries] must be strictly positive.
   this {
     if (maxEntries <= 0) {
-      throw ArgumentError('maxEntries must be greater than 0');
+      throw ArgumentError.value(
+        maxEntries,
+        'maxEntries',
+        'must be greater than 0',
+      );
     }
   }
   final HashMap<K, _LRUNode<K, V>> _nodes = HashMap<K, _LRUNode<K, V>>();

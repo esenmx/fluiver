@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io' show InternetAddress, Socket, SocketException;
 
 /// Native implementation of `NetworkProbe.checkConnection`.
@@ -16,8 +15,6 @@ Future<bool> probeConnection({
     socket.destroy();
     return true;
   } on SocketException {
-    return false;
-  } on TimeoutException {
     return false;
   }
 }

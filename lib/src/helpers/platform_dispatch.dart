@@ -25,23 +25,18 @@ T platformDispatch<T>({
   T Function()? windows,
   T Function()? web,
 }) {
-  final T Function()? callback;
-  if (kIsWeb) {
-    callback = web;
-  } else {
-    callback = switch (defaultTargetPlatform) {
-      .android => android,
-      .fuchsia => fuchsia,
-      .iOS => ios,
-      .linux => linux,
-      .macOS => macos,
-      .windows => windows,
-    };
+  final callback = kIsWeb
+      ? web
+      : switch (defaultTargetPlatform) {
+          .android => android,
+          .fuchsia => fuchsia,
+          .iOS => ios,
+          .linux => linux,
+          .macOS => macos,
+          .windows => windows,
+        };
+  if (callback == null) {
+    throw UnsupportedError(kIsWeb ? 'web' : defaultTargetPlatform.name);
   }
-
-  if (callback != null) {
-    return callback();
-  }
-
-  throw UnsupportedError(kIsWeb ? 'web' : defaultTargetPlatform.name);
+  return callback();
 }

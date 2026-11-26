@@ -10,8 +10,8 @@ abstract final class NetworkProbe {
   /// reliable than HTTP probes. [host] must be a literal IPv4/IPv6 address;
   /// point it at your own endpoint when Cloudflare is unreachable by policy
   /// (corporate networks, some regions). Returns `false` on
-  /// `SocketException` or `TimeoutException`; other errors propagate (let
-  /// bugs escape).
+  /// `SocketException`, which a connect timeout is too; other errors
+  /// propagate (let bugs escape).
   ///
   /// The default [timeout] of 3 seconds covers two lost SYNs (TCP
   /// retransmits at ~1s intervals), so a lossy-but-usable mobile network

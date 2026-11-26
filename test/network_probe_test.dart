@@ -1,7 +1,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:checks/checks.dart';
@@ -48,7 +47,10 @@ void main() {
         },
         socketConnect:
             (host, port, {sourceAddress, sourcePort = 0, timeout}) async {
-              throw TimeoutException('Simulated timeout');
+              throw const SocketException(
+                'Connection timed out',
+                osError: OSError('Connection timed out', 110),
+              );
             },
       );
     });
