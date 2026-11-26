@@ -42,10 +42,11 @@ These hold for every change, whoever or whatever writes it.
 
 ### API design
 
-Natural APIs, no cover-ups. Misuse throws `StateError`, `ArgumentError` or
-`RangeError` in every build mode, not a debug-only assert. Never clamp, ignore,
-migrate or quietly degrade on the caller's behalf. A callback or name does what
-it says, or it doesn't exist.
+Natural APIs, no cover-ups. Misuse throws in every build mode, with the error
+type that fits the failure (`ArgumentError` for a bad argument, `RangeError` for
+a value out of range, `StateError` for an invalid state), not a debug-only
+assert. Never clamp, ignore, migrate or quietly degrade on the caller's behalf.
+A callback or name does what it says, or it doesn't exist.
 
 ### Docs
 

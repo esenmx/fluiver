@@ -15,9 +15,9 @@ and `NeverScrollableScrollPhysics` for every grid inside a `ListView` (and it
 still throws inside `IntrinsicHeight`), system insets that pad a sheet above the
 keyboard without doubling under a resizing `Scaffold`, calendar math for "today"
 and "yesterday", an LRU cache. fluiver gives you each one, tested, and throws
-(`ArgumentError`, `RangeError`, `StateError`) when it's misused instead of
-quietly clamping. Nothing here duplicates `package:collection`, `package:async`
-or `flutter_hooks`, so it works alongside them.
+when it's misused instead of quietly clamping. Nothing here duplicates
+`package:collection`, `package:async` or `flutter_hooks`, so it works alongside
+them.
 
 ## Quick start
 
