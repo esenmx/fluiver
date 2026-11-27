@@ -1,5 +1,18 @@
 # Changelog
 
+## 6.1.0 - 2026-11-27
+
+### Added
+
+- `UnfocusOnTapOutside` unfocuses the active text field on outside touch tap-up
+  without interfering with scrolling, dragging, or gesture disambiguation. On
+  touch, it waits for pointer up and cancels if the pointer moves past touch
+  slop, is cancelled, is held for `kLongPressTimeout` or longer, or stops a
+  moving scrollable (a fling or `animateTo`); mouse and other pointers keep
+  Flutter's default pointer-down behavior, and `TextFieldTapRegion` / per-field
+  `onTapOutside` continue to work as usual. Supports `enabled: false` for
+  subtree opt-out.
+
 ## 6.0.0 - 2026-11-26
 
 ### BREAKING

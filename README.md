@@ -230,6 +230,29 @@ Widget bottomBar(Widget actions) {
 }
 ```
 
+### `UnfocusOnTapOutside`
+
+Unfocuses the active text field on outside touch taps without blocking
+scrolling, dragging, or accessibility. Unlike wrapping a screen in a
+`GestureDetector`, it overrides `EditableText`'s tap-outside intents: touch
+waits for pointer up and cancels if the pointer moves past touch slop, is
+cancelled, is held as a long press, or stops a flinging list, while mouse and
+stylus keep Flutter's pointer-down behavior.
+
+```dart
+Widget app(Widget home) {
+  return UnfocusOnTapOutside(child: MaterialApp(home: home));
+}
+```
+
+Switching between text fields, tapping `InputDecoration` icons, selection
+handles, or context menus keeps focus via `TextFieldTapRegion`. Wrap any
+companion button that should keep the keyboard open (such as a chat send
+button) in `TextFieldTapRegion`, or wrap a subtree in
+`UnfocusOnTapOutside(enabled: false, ...)` to opt back out. For drag-to-dismiss
+in scrollables, pair with `ScrollViewKeyboardDismissBehavior.onDrag` on your
+`ScrollBehavior` or `ListView`.
+
 ## Extensions
 
 ### `Object.into` — Kotlin's `let`
