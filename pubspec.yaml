@@ -1,6 +1,6 @@
 name: fluiver
 description: Flutter SDK gap-fillers — non-scrolling Grid, system insets, TickerBuilder, Debounce/Throttle, LRUCache, DisposableBag, DateTime/Iterable/Color extensions. Ships an agent skill.
-version: 6.0.0
+version: 6.1.0
 repository: https://github.com/esenmx/fluiver
 issue_tracker: https://github.com/esenmx/fluiver/issues
 
